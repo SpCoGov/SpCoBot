@@ -28,7 +28,7 @@ import top.spco.base.api.message.Message;
  * @since 1.0
  */
 public class MiraiMessage implements Message {
-    private final net.mamoe.mirai.message.data.MessageChain message;
+    public final net.mamoe.mirai.message.data.MessageChain message;
 
     @Override
     public String toMessageContext() {

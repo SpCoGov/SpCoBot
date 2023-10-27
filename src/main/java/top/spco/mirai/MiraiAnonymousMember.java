@@ -28,12 +28,7 @@ import top.spco.base.api.MemberPermission;
  * @version 1.0
  * @since 1.0
  */
-public class MiraiAnonymousMember implements AnonymousMember {
-    private final net.mamoe.mirai.contact.AnonymousMember member;
-
-    public MiraiAnonymousMember(net.mamoe.mirai.contact.AnonymousMember member) {
-        this.member = member;
-    }
+public record MiraiAnonymousMember(net.mamoe.mirai.contact.AnonymousMember member) implements AnonymousMember {
 
     @Override
     public Group getGroup() {

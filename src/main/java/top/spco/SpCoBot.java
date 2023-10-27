@@ -16,9 +16,7 @@
 package top.spco;
 
 import top.spco.base.Logger;
-import top.spco.events.BotEvents;
-import top.spco.events.MessageEvents;
-import top.spco.events.PluginEvents;
+import top.spco.events.*;
 
 /**
  * <p>
@@ -32,6 +30,8 @@ import top.spco.events.PluginEvents;
 public class SpCoBot {
     private static SpCoBot instance;
     public static Logger logger;
+    public final long BOT_ID = 2758532041L;
+    public final long BOT_OWNER_ID = 2247381667L;
 
     private SpCoBot() {
         PluginEvents.ENABLE_PLUGIN_TICK.register(this::onEnable);
@@ -39,8 +39,12 @@ public class SpCoBot {
         MessageEvents.GROUP_MESSAGE.register((source, sender, message, time) -> {
         });
         BotEvents.NUDGED_TICK.register((from, target, subject, action, suffix) -> {
-            subject.sendMessage("告知: 机器人正常运行中");
+            if (target.getId() == this.BOT_ID) {
+                subject.sendMessage("告知: 机器人正常运行中");
+            }
         });
+        FriendEvents.REQUESTED_AS_FRIEND.register((eventId, message, fromId, fromGroupId, fromGroup, behavior) -> behavior.accept());
+        GroupEvents.INVITED_JOIN_GROUP.register((eventId, invitorId, groupId, invitor, behavior) -> behavior.accept());
     }
 
     private void onEnable() {

@@ -27,12 +27,7 @@ import top.spco.base.api.Identifiable;
  * @version 1.0
  * @since 1.0
  */
-public class MiraiIdentifiable implements Identifiable {
-    private final ContactOrBot contactOrBot;
-
-    public MiraiIdentifiable(ContactOrBot contactOrBot) {
-        this.contactOrBot = contactOrBot;
-    }
+public record MiraiIdentifiable(ContactOrBot contactOrBot) implements Identifiable {
 
     @Override
     public long getId() {

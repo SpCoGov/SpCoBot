@@ -16,59 +16,48 @@
 package top.spco.mirai;
 
 import net.mamoe.mirai.message.code.MiraiCode;
-import top.spco.base.api.Group;
-import top.spco.base.api.MemberPermission;
-import top.spco.base.api.NormalMember;
+import top.spco.base.api.Friend;
+import top.spco.base.api.FriendGroup;
 import top.spco.base.api.message.Message;
 
 /**
  * <p>
- * Created on 2023/10/26 0026 15:35
+ * Created on 2023/10/27 0027 0:56
  * <p>
  *
  * @author SpCo
  * @version 1.0
  * @since 1.0
  */
-public record MiraiGroup(net.mamoe.mirai.contact.Group group) implements Group {
-
-    @Override
-    public String getName() {
-        return this.group.getName();
-    }
+public record MiraiFriend(net.mamoe.mirai.contact.Friend friend) implements Friend {
 
     @Override
     public long getId() {
-        return this.group.getId();
-    }
-
-    @Override
-    public NormalMember getOwner() {
-        return new MiraiNormalMember(this.group.getOwner());
-    }
-
-    @Override
-    public void sendMessage(Message message) {
-        this.group.sendMessage(MiraiCode.deserializeMiraiCode(message.serialize()));
+        return this.friend.getId();
     }
 
     @Override
     public void sendMessage(String message) {
-        this.group.sendMessage(message);
+        this.friend.sendMessage(message);
     }
 
     @Override
-    public boolean quit() {
-        return this.group.quit();
+    public void sendMessage(Message message) {
+        this.friend.sendMessage(MiraiCode.deserializeMiraiCode(message.serialize()));
     }
 
     @Override
-    public MemberPermission botPermission() {
-        return MemberPermission.byLevel(this.group.getBotPermission().getLevel());
+    public String getRemark() {
+        return this.friend.getRemark();
     }
 
     @Override
-    public NormalMember botAsMember() {
-        return new MiraiNormalMember(this.group.getBotAsMember());
+    public void nudge() {
+        this.friend.nudge();
+    }
+
+    @Override
+    public FriendGroup getFriendGroup() {
+        return new MiraiFriendGroup(this.friend.getFriendGroup());
     }
 }

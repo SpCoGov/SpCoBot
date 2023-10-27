@@ -26,12 +26,7 @@ import top.spco.base.api.Bot;
  * @version 1.0
  * @since 1.0
  */
-public class MiraiBot implements Bot {
-    private final net.mamoe.mirai.Bot bot;
-
-    public MiraiBot(net.mamoe.mirai.Bot bot) {
-        this.bot = bot;
-    }
+public record MiraiBot(net.mamoe.mirai.Bot bot) implements Bot {
 
     @Override
     public boolean isOnline() {

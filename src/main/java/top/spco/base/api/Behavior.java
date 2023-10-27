@@ -16,14 +16,18 @@
 package top.spco.base.api;
 
 /**
- * 代表一位好友<p>
+ * <p>
+ * Created on 2023/10/27 0027 11:26
+ * <p>
  *
  * @author SpCo
  * @version 1.0
  * @since 1.0
  */
-public interface Friend extends User {
-    FriendGroup getFriendGroup();
+public interface Behavior {
+    void accept();
 
-    
+    void ignore();
+
+    void reject(boolean block);
 }

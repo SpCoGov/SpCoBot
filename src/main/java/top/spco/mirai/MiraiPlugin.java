@@ -14,9 +14,8 @@ import net.mamoe.mirai.event.events.*;
 import net.mamoe.mirai.message.data.MessageChain;
 import org.jetbrains.annotations.NotNull;
 import top.spco.SpCoBot;
-import top.spco.events.BotEvents;
-import top.spco.events.MessageEvents;
-import top.spco.events.PluginEvents;
+import top.spco.base.api.Behavior;
+import top.spco.events.*;
 import top.spco.mirai.message.MiraiMessage;
 
 public final class MiraiPlugin extends JavaPlugin {
@@ -44,18 +43,78 @@ public final class MiraiPlugin extends JavaPlugin {
                 MessageEvents.GROUP_MESSAGE.invoker().onGroupMessage(new MiraiGroup(group), new MiraiAnonymousMember(anonymousMember), new MiraiMessage(messages), g.getTime());
             }
         });
-        e.subscribeAlways(GroupTempMessageEvent.class, gt -> {
-            Group group = gt.getGroup();
-            NormalMember member = gt.getSender();
-            MessageChain messages = gt.getMessage();
-            MessageEvents.GROUP_TEMP_MESSAGE.invoker().onGroupTempMessage(new MiraiGroup(group), new MiraiNormalMember(member), new MiraiMessage(messages), gt.getTime());
-        });
-        e.subscribeAlways(NudgeEvent.class, n -> BotEvents.NUDGED_TICK.invoker().onNudgedTick(new MiraiIdentifiable(n.getFrom()), new MiraiIdentifiable(n.getTarget()), new MiraiInteractive(n.getSubject()), n.getAction(), n.getSuffix()));
-        e.subscribeAlways(BotOnlineEvent.class, bo -> BotEvents.ONLINE_TICK.invoker().onOnlineTick(new MiraiBot(bo.getBot())));
-        e.subscribeAlways(BotOfflineEvent.Active.class, bofa -> BotEvents.ACTIVE_OFFLINE_TICK.invoker().onActiveOfflineTick(new MiraiBot(bofa.getBot())));
-        e.subscribeAlways(BotOfflineEvent.Force.class, boff -> BotEvents.FORCE_OFFLINE_TICK.invoker().onForceOfflineTick(new MiraiBot(boff.getBot())));
-        e.subscribeAlways(BotOfflineEvent.Dropped.class, bofd -> BotEvents.DROPPED_OFFLINE_TICK.invoker().onDroppedOfflineTick(new MiraiBot(bofd.getBot())));
-        e.subscribeAlways(BotOfflineEvent.RequireReconnect.class, bofr -> BotEvents.REQUIRE_RECONNECT_OFFLINE_TICK.invoker().onRequireReconnectOfflineTick(new MiraiBot(bofr.getBot())));
+        e.subscribeAlways(GroupTempMessageEvent.class,
+                gt -> {
+                    Group group = gt.getGroup();
+                    NormalMember member = gt.getSender();
+                    MessageChain messages = gt.getMessage();
+                    MessageEvents.GROUP_TEMP_MESSAGE.invoker().
+                            onGroupTempMessage(new MiraiGroup(group), new MiraiNormalMember(member), new MiraiMessage(messages), gt.getTime());
+                });
+        e.subscribeAlways(NudgeEvent.class,
+                n -> BotEvents.NUDGED_TICK.invoker().
+                        onNudgedTick(new MiraiIdentifiable(n.getFrom()), new MiraiIdentifiable(n.getTarget()), new MiraiInteractive(n.getSubject()), n.getAction(), n.getSuffix()));
+        e.subscribeAlways(BotOnlineEvent.class,
+                bo -> BotEvents.ONLINE_TICK.invoker().
+                        onOnlineTick(new MiraiBot(bo.getBot())));
+        e.subscribeAlways(BotOfflineEvent.Active.class,
+                bofa -> BotEvents.ACTIVE_OFFLINE_TICK.invoker().
+                        onActiveOfflineTick(new MiraiBot(bofa.getBot())));
+        e.subscribeAlways(BotOfflineEvent.Force.class,
+                boff -> BotEvents.FORCE_OFFLINE_TICK.invoker().
+                        onForceOfflineTick(new MiraiBot(boff.getBot())));
+        e.subscribeAlways(BotOfflineEvent.Dropped.class,
+                bofd -> BotEvents.DROPPED_OFFLINE_TICK.invoker().
+                        onDroppedOfflineTick(new MiraiBot(bofd.getBot())));
+        e.subscribeAlways(BotOfflineEvent.RequireReconnect.class,
+                bofr -> BotEvents.REQUIRE_RECONNECT_OFFLINE_TICK.invoker().
+                        onRequireReconnectOfflineTick(new MiraiBot(bofr.getBot())));
+        e.subscribeAlways(BotInvitedJoinGroupRequestEvent.class,
+                bi -> GroupEvents.INVITED_JOIN_GROUP.invoker().
+                        invitedJoinGroup(bi.getEventId(), bi.getInvitorId(), bi.getGroupId(), new MiraiFriend(bi.getInvitor()), new Behavior() {
+                            @Override
+                            public void accept() {
+                                bi.accept();
+                            }
+
+                            @Override
+                            public void ignore() {
+                                bi.ignore();
+                            }
+
+                            /**
+                             * @see #ignore()
+                             * @deprecated 无法拒绝入群请求
+                             */
+                            @Deprecated
+                            @Override
+                            public void reject(boolean block) {
+
+                            }
+                        }));
+        e.subscribeAlways(NewFriendRequestEvent.class,
+                nf -> FriendEvents.REQUESTED_AS_FRIEND.invoker().
+                        requestedAsFriend(nf.getEventId(), nf.getMessage(), nf.getFromId(), nf.getFromGroupId(), new MiraiGroup(nf.getFromGroup()), new Behavior() {
+                            @Override
+                            public void accept() {
+                                nf.accept();
+                            }
+
+                            /**
+                             * @see #reject(boolean)
+                             * @deprecated 无法忽略好友请求
+                             */
+                            @Deprecated
+                            @Override
+                            public void ignore() {
+
+                            }
+
+                            @Override
+                            public void reject(boolean block) {
+                                nf.reject(block);
+                            }
+                        }));
     }
 
     @Override

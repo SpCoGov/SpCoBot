@@ -27,10 +27,14 @@ import top.spco.base.api.message.At;
  * @since 1.0
  */
 public class MiraiAt implements At {
-    private final net.mamoe.mirai.message.data.At at;
+    public final net.mamoe.mirai.message.data.At at;
 
     public MiraiAt(long target) {
         this.at = new net.mamoe.mirai.message.data.At(target);
+    }
+
+    public MiraiAt(net.mamoe.mirai.message.data.At target) {
+        this.at = target;
     }
 
     @Override

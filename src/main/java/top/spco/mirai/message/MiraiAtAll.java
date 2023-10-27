@@ -27,7 +27,7 @@ import top.spco.base.api.message.AtAll;
  * @since 1.0
  */
 public class MiraiAtAll implements AtAll {
-    private final net.mamoe.mirai.message.data.AtAll atAll = net.mamoe.mirai.message.data.AtAll.INSTANCE;
+    public final net.mamoe.mirai.message.data.AtAll atAll = net.mamoe.mirai.message.data.AtAll.INSTANCE;
 
     @Override
     public String toMessageContext() {
