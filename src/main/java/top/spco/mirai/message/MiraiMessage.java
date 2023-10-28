@@ -15,7 +15,7 @@
  */
 package top.spco.mirai.message;
 
-import net.mamoe.mirai.message.code.MiraiCode;
+import net.mamoe.mirai.message.code.CodableMessage;
 import top.spco.base.api.message.Message;
 
 /**
@@ -27,9 +27,7 @@ import top.spco.base.api.message.Message;
  * @version 1.0
  * @since 1.0
  */
-public class MiraiMessage implements Message {
-    public final net.mamoe.mirai.message.data.MessageChain message;
-
+public record MiraiMessage(net.mamoe.mirai.message.data.MessageChain message) implements Message {
     @Override
     public String toMessageContext() {
         return message.contentToString();
@@ -38,13 +36,5 @@ public class MiraiMessage implements Message {
     @Override
     public String serialize() {
         return this.message.serializeToMiraiCode();
-    }
-
-    public MiraiMessage(net.mamoe.mirai.message.data.MessageChain message) {
-        this.message = message;
-    }
-
-    public MiraiMessage(String message) {
-        this.message = MiraiCode.deserializeMiraiCode(message);
     }
 }

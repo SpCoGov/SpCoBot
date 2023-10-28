@@ -15,6 +15,8 @@
  */
 package top.spco.base.api;
 
+import top.spco.base.InteractiveList;
+
 /**
  * <p>
  * Created on 2023/10/26 0026 17:56
@@ -30,5 +32,39 @@ public interface Bot extends Identifiable {
      */
     boolean isOnline();
 
+    /**
+     * 全部的好友分组
+     */
+    FriendGroups getFriendGroups();
 
+    /**
+     * 好友列表
+     */
+    InteractiveList<Friend> getFriends();
+
+    /**
+     * 群列表
+     */
+    InteractiveList<Group> getGroups();
+
+    /**
+     * 获取一个好友对象, 在获取失败时返回 {@code null}
+     *
+     * @param id 对方 QQ 号码
+     */
+    Friend getFriend(long id);
+
+    /**
+     * 当 {@link Bot} 拥有 {@link Friend#getId()} 为 id 的好友时返回 {@code true}
+     *
+     * @param id 好友的id
+     */
+    boolean hasFriend(long id);
+
+    /**
+     * 当 {@link Bot} 拥有 {@link Group#getId()} 为 id 的群组时返回 {@code true}
+     *
+     * @param id 群组的id
+     */
+    boolean hasGroup(long id);
 }

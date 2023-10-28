@@ -13,30 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco.mirai.message;
-
-import top.spco.base.api.message.AtAll;
-import top.spco.base.api.message.Message;
+package top.spco.base.api.message;
 
 /**
  * <p>
- * Created on 2023/10/26 0026 15:18
+ * Created on 2023/10/27 0027 19:24
  * <p>
  *
  * @author SpCo
  * @version 1.0
  * @since 1.0
  */
-public class MiraiAtAll implements AtAll {
-    public final net.mamoe.mirai.message.data.AtAll atAll = net.mamoe.mirai.message.data.AtAll.INSTANCE;
+public interface MessageChainBuilder {
+    MessageChainBuilder append(Message message);
 
-    @Override
-    public String toMessageContext() {
-        return this.atAll.contentToString();
-    }
+    MessageChainBuilder append(String message);
 
-    @Override
-    public String serialize() {
-        return this.atAll.serializeToMiraiCode();
-    }
+    Message build();
 }

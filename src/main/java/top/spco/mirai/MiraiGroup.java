@@ -15,11 +15,11 @@
  */
 package top.spco.mirai;
 
-import net.mamoe.mirai.message.code.MiraiCode;
 import top.spco.base.api.Group;
 import top.spco.base.api.MemberPermission;
 import top.spco.base.api.NormalMember;
 import top.spco.base.api.message.Message;
+import top.spco.mirai.message.MiraiMessage;
 
 /**
  * <p>
@@ -49,7 +49,7 @@ public record MiraiGroup(net.mamoe.mirai.contact.Group group) implements Group {
 
     @Override
     public void sendMessage(Message message) {
-        this.group.sendMessage(MiraiCode.deserializeMiraiCode(message.serialize()));
+        this.group.sendMessage(((MiraiMessage) message).message());
     }
 
     @Override

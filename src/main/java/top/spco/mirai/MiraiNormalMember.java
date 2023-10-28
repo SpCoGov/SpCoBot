@@ -20,6 +20,7 @@ import top.spco.base.api.Group;
 import top.spco.base.api.MemberPermission;
 import top.spco.base.api.NormalMember;
 import top.spco.base.api.message.Message;
+import top.spco.mirai.message.MiraiMessage;
 
 /**
  * <p>
@@ -30,12 +31,7 @@ import top.spco.base.api.message.Message;
  * @version 1.0
  * @since 1.0
  */
-public class MiraiNormalMember implements NormalMember {
-    private final net.mamoe.mirai.contact.NormalMember member;
-
-    public MiraiNormalMember(net.mamoe.mirai.contact.NormalMember member) {
-        this.member = member;
-    }
+public record MiraiNormalMember(net.mamoe.mirai.contact.NormalMember member) implements NormalMember {
 
     @Override
     public Group getGroup() {
@@ -108,7 +104,7 @@ public class MiraiNormalMember implements NormalMember {
 
     @Override
     public void sendMessage(Message message) {
-        this.member.sendMessage(MiraiCode.deserializeMiraiCode(message.serialize()));
+        this.member.sendMessage(((MiraiMessage) message).message());
     }
 
     @Override

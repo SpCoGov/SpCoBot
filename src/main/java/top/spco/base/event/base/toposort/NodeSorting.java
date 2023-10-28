@@ -17,7 +17,7 @@ package top.spco.base.event.base.toposort;
 
 import org.jetbrains.annotations.VisibleForTesting;
 import top.spco.SpCoBot;
-import top.spco.base.Logger;
+import top.spco.base.api.Logger;
 
 import java.util.*;
 

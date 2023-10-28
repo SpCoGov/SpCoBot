@@ -34,13 +34,14 @@ public final class MiraiPlugin extends JavaPlugin {
         PluginEvents.ENABLE_PLUGIN_TICK.invoker().onEnableTick();
         EventChannel<Event> e = GlobalEventChannel.INSTANCE.parentScope(this);
         e.subscribeAlways(GroupMessageEvent.class, g -> {
+            MiraiBot bot = new MiraiBot(g.getBot());
             Group group = g.getGroup();
             Member sender = g.getSender();
             MessageChain messages = g.getMessage();
             if (sender instanceof NormalMember normalMember) {
-                MessageEvents.GROUP_MESSAGE.invoker().onGroupMessage(new MiraiGroup(group), new MiraiNormalMember(normalMember), new MiraiMessage(messages), g.getTime());
+                MessageEvents.GROUP_MESSAGE.invoker().onGroupMessage(bot, new MiraiGroup(group), new MiraiNormalMember(normalMember), new MiraiMessage(messages), g.getTime());
             } else if (sender instanceof AnonymousMember anonymousMember) {
-                MessageEvents.GROUP_MESSAGE.invoker().onGroupMessage(new MiraiGroup(group), new MiraiAnonymousMember(anonymousMember), new MiraiMessage(messages), g.getTime());
+                MessageEvents.GROUP_MESSAGE.invoker().onGroupMessage(bot, new MiraiGroup(group), new MiraiAnonymousMember(anonymousMember), new MiraiMessage(messages), g.getTime());
             }
         });
         e.subscribeAlways(GroupTempMessageEvent.class,
@@ -49,7 +50,7 @@ public final class MiraiPlugin extends JavaPlugin {
                     NormalMember member = gt.getSender();
                     MessageChain messages = gt.getMessage();
                     MessageEvents.GROUP_TEMP_MESSAGE.invoker().
-                            onGroupTempMessage(new MiraiGroup(group), new MiraiNormalMember(member), new MiraiMessage(messages), gt.getTime());
+                            onGroupTempMessage(new MiraiBot(gt.getBot()), new MiraiGroup(group), new MiraiNormalMember(member), new MiraiMessage(messages), gt.getTime());
                 });
         e.subscribeAlways(NudgeEvent.class,
                 n -> BotEvents.NUDGED_TICK.invoker().
@@ -88,7 +89,7 @@ public final class MiraiPlugin extends JavaPlugin {
                              */
                             @Deprecated
                             @Override
-                            public void reject(boolean block) {
+                            public void reject(boolean block, String message) {
 
                             }
                         }));
@@ -101,7 +102,7 @@ public final class MiraiPlugin extends JavaPlugin {
                             }
 
                             /**
-                             * @see #reject(boolean)
+                             * @see #reject(boolean, String)
                              * @deprecated 无法忽略好友请求
                              */
                             @Deprecated
@@ -111,10 +112,31 @@ public final class MiraiPlugin extends JavaPlugin {
                             }
 
                             @Override
-                            public void reject(boolean block) {
+                            public void reject(boolean block, String message) {
                                 nf.reject(block);
                             }
                         }));
+        e.subscribeAlways(MemberJoinRequestEvent.class,
+                mj -> GroupEvents.REQUEST_JOIN_GROUP.invoker().
+                        requestJoinGroup(mj.getEventId(), mj.getFromId(), new MiraiGroup(mj.getGroup()), new Behavior() {
+                            @Override
+                            public void accept() {
+                                mj.accept();
+                            }
+
+                            @Override
+                            public void ignore() {
+
+                            }
+
+                            @Override
+                            public void reject(boolean block, String message) {
+                                mj.reject(block, message);
+                            }
+                        }));
+        e.subscribeAlways(FriendMessageEvent.class, fm ->
+                MessageEvents.FRIEND_MESSAGE.invoker().
+                        onFriendMessage(new MiraiBot(fm.getBot()), new MiraiFriend(fm.getSender()), new MiraiMessage(fm.getMessage()), fm.getTime()));
     }
 
     @Override

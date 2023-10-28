@@ -13,39 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco.base;
+package top.spco.base.api.message;
 
 /**
  * <p>
- * Created on 2023/10/25 0025 19:23
+ * Created on 2023/10/27 0027 18:42
  * <p>
  *
  * @author SpCo
  * @version 1.0
  * @since 1.0
  */
-public interface Logger {
-    void debug(String message);
-
-    void debug(Throwable e);
-
-    void debug(String message, Throwable e);
-
-    void info(String message);
-
-    void info(Throwable e);
-
-    void info(String message, Throwable e);
-
-    void warn(String message);
-
-    void warn(Throwable e);
-
-    void warn(String message, Throwable e);
-
-    void error(String message);
-
-    void error(Throwable e);
-
-    void error(String message, Throwable e);
+public interface Codable {
+    String serialize();
 }

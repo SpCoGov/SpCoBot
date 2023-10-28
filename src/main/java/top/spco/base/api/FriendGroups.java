@@ -13,30 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco.mirai.message;
+package top.spco.base.api;
 
-import top.spco.base.api.message.AtAll;
-import top.spco.base.api.message.Message;
+import java.util.Collection;
 
 /**
  * <p>
- * Created on 2023/10/26 0026 15:18
+ * Created on 2023/10/27 0027 15:37
  * <p>
  *
  * @author SpCo
  * @version 1.0
  * @since 1.0
  */
-public class MiraiAtAll implements AtAll {
-    public final net.mamoe.mirai.message.data.AtAll atAll = net.mamoe.mirai.message.data.AtAll.INSTANCE;
+public interface FriendGroups {
+    /**
+     * 获取 {@link FriendGroup#getId() id} 为 {@code 0} 的默认分组 ("我的好友")
+     */
+    FriendGroup getDefault();
 
-    @Override
-    public String toMessageContext() {
-        return this.atAll.contentToString();
-    }
+    /**
+     * 新建一个好友分组<p>
+     * 允许名称重复, 当新建一个已存在名称的分组时, 服务器会返回一个拥有重复名字的新分组
+     */
+    FriendGroup create(String name);
 
-    @Override
-    public String serialize() {
-        return this.atAll.serializeToMiraiCode();
-    }
+    /**
+     * 获取指定 ID 的好友分组, 不存在时返回 {@code null}
+     */
+    FriendGroup get(int id);
+
+    Collection<FriendGroup> asCollection();
 }

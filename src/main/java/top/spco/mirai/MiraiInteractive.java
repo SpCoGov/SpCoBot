@@ -19,6 +19,7 @@ import net.mamoe.mirai.contact.Contact;
 import net.mamoe.mirai.message.code.MiraiCode;
 import top.spco.base.api.Interactive;
 import top.spco.base.api.message.Message;
+import top.spco.mirai.message.MiraiMessage;
 
 /**
  * <p>
@@ -29,12 +30,7 @@ import top.spco.base.api.message.Message;
  * @version 1.0
  * @since 1.0
  */
-public class MiraiInteractive implements Interactive {
-    private final Contact contact;
-
-    public MiraiInteractive(Contact contact) {
-        this.contact = contact;
-    }
+public record MiraiInteractive(Contact contact) implements Interactive {
 
     @Override
     public long getId() {
@@ -48,6 +44,6 @@ public class MiraiInteractive implements Interactive {
 
     @Override
     public void sendMessage(Message message) {
-        this.contact.sendMessage(MiraiCode.deserializeMiraiCode(message.serialize()));
+        this.contact.sendMessage(((MiraiMessage) message).message());
     }
 }

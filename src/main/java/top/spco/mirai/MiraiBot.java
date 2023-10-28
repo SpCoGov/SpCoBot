@@ -16,6 +16,10 @@
 package top.spco.mirai;
 
 import top.spco.base.api.Bot;
+import top.spco.base.api.Friend;
+import top.spco.base.api.FriendGroups;
+import top.spco.base.api.Group;
+import top.spco.base.InteractiveList;
 
 /**
  * <p>
@@ -31,6 +35,44 @@ public record MiraiBot(net.mamoe.mirai.Bot bot) implements Bot {
     @Override
     public boolean isOnline() {
         return this.bot.isOnline();
+    }
+
+    @Override
+    public FriendGroups getFriendGroups() {
+        return new MiraiFriendGroups(this.bot.getFriendGroups());
+    }
+
+    @Override
+    public InteractiveList<Friend> getFriends() {
+        InteractiveList<Friend> n = new InteractiveList<>();
+        for (var friend : this.bot.getFriends().delegate) {
+            n.add(new MiraiFriend(friend));
+        }
+        return n;
+    }
+
+    @Override
+    public InteractiveList<Group> getGroups() {
+        InteractiveList<Group> n = new InteractiveList<>();
+        for (var group : this.bot.getGroups().delegate) {
+            n.add(new MiraiGroup(group));
+        }
+        return n;
+    }
+
+    @Override
+    public Friend getFriend(long id) {
+        return new MiraiFriend(this.bot.getFriend(id));
+    }
+
+    @Override
+    public boolean hasFriend(long id) {
+        return this.bot.getFriends().contains(id);
+    }
+
+    @Override
+    public boolean hasGroup(long id) {
+        return this.bot.getGroups().contains(id);
     }
 
     @Override

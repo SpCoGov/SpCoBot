@@ -16,6 +16,7 @@
 package top.spco.mirai.message;
 
 import top.spco.base.api.message.At;
+import top.spco.base.api.message.Message;
 
 /**
  * <p>

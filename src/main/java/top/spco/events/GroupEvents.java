@@ -17,6 +17,7 @@ package top.spco.events;
 
 import top.spco.base.api.Behavior;
 import top.spco.base.api.Friend;
+import top.spco.base.api.Group;
 import top.spco.base.event.Event;
 import top.spco.base.event.EventFactory;
 
@@ -45,5 +46,19 @@ public class GroupEvents {
     @FunctionalInterface
     public interface InvitedJoinGroup {
         void invitedJoinGroup(long eventId, long invitorId, long groupId, Friend invitor, Behavior behavior);
+    }
+
+    /**
+     * Called when an account requests to join the group.
+     */
+    public static final Event<RequestJoinGroup> REQUEST_JOIN_GROUP = EventFactory.createArrayBacked(RequestJoinGroup.class, callbacks -> (eventId, fromId, group, behavior) -> {
+        for (RequestJoinGroup event : callbacks) {
+            event.requestJoinGroup(eventId, fromId, group, behavior);
+        }
+    });
+
+    @FunctionalInterface
+    public interface RequestJoinGroup {
+        void requestJoinGroup(long eventId, long fromId, Group group, Behavior behavior);
     }
 }

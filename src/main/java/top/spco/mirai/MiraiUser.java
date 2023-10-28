@@ -15,9 +15,9 @@
  */
 package top.spco.mirai;
 
-import net.mamoe.mirai.message.code.MiraiCode;
 import top.spco.base.api.User;
 import top.spco.base.api.message.Message;
+import top.spco.mirai.message.MiraiMessage;
 
 /**
  * <p>
@@ -28,12 +28,7 @@ import top.spco.base.api.message.Message;
  * @version 1.0
  * @since 1.0
  */
-public class MiraiUser implements User {
-    private final net.mamoe.mirai.contact.User user;
-
-    public MiraiUser(net.mamoe.mirai.contact.User user) {
-        this.user = user;
-    }
+public record MiraiUser(net.mamoe.mirai.contact.User user) implements User {
 
     @Override
     public long getId() {
@@ -52,7 +47,7 @@ public class MiraiUser implements User {
 
     @Override
     public void sendMessage(Message message) {
-        this.user.sendMessage(MiraiCode.deserializeMiraiCode(message.serialize()));
+        this.user.sendMessage(((MiraiMessage) message).message());
     }
 
     @Override

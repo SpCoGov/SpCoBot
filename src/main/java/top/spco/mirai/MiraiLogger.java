@@ -15,7 +15,7 @@
  */
 package top.spco.mirai;
 
-import top.spco.base.Logger;
+import top.spco.base.api.Logger;
 
 /**
  * <p>
@@ -26,12 +26,7 @@ import top.spco.base.Logger;
  * @version 1.0
  * @since 1.0
  */
-public class MiraiLogger implements Logger {
-    net.mamoe.mirai.utils.MiraiLogger miraiLogger;
-
-    public MiraiLogger(net.mamoe.mirai.utils.MiraiLogger miraiLogger) {
-        this.miraiLogger = miraiLogger;
-    }
+public record MiraiLogger(net.mamoe.mirai.utils.MiraiLogger miraiLogger) implements Logger {
 
     @Override
     public void debug(String message) {

@@ -23,7 +23,13 @@ package top.spco.base.api;
  * @since 1.0
  */
 public interface Friend extends User {
+    /**
+     * 该好友所在的好友分组
+     */
     FriendGroup getFriendGroup();
 
-    
+    /**
+     * 删除并屏蔽该好友, 屏蔽后对方将无法发送临时会话消息
+     */
+    void delete();
 }

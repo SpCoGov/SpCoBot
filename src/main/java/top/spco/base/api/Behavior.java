@@ -29,5 +29,5 @@ public interface Behavior {
 
     void ignore();
 
-    void reject(boolean block);
+    void reject(boolean block, String message);
 }

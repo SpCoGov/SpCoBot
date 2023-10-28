@@ -19,6 +19,7 @@ import net.mamoe.mirai.message.code.MiraiCode;
 import top.spco.base.api.Friend;
 import top.spco.base.api.FriendGroup;
 import top.spco.base.api.message.Message;
+import top.spco.mirai.message.MiraiMessage;
 
 /**
  * <p>
@@ -43,7 +44,7 @@ public record MiraiFriend(net.mamoe.mirai.contact.Friend friend) implements Frie
 
     @Override
     public void sendMessage(Message message) {
-        this.friend.sendMessage(MiraiCode.deserializeMiraiCode(message.serialize()));
+        this.friend.sendMessage(((MiraiMessage) message).message());
     }
 
     @Override
@@ -59,5 +60,10 @@ public record MiraiFriend(net.mamoe.mirai.contact.Friend friend) implements Frie
     @Override
     public FriendGroup getFriendGroup() {
         return new MiraiFriendGroup(this.friend.getFriendGroup());
+    }
+
+    @Override
+    public void delete() {
+        this.friend.delete();
     }
 }

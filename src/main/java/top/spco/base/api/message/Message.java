@@ -24,11 +24,9 @@ package top.spco.base.api.message;
  * @version 1.0
  * @since 1.0
  */
-public interface Message {
+public interface Message extends Codable{
     /**
      * 转为接近官方格式的字符串, 即 "内容". 如 At(member) + "test" 将转为 "@QQ test"
      */
     String toMessageContext();
-
-    String serialize();
 }
