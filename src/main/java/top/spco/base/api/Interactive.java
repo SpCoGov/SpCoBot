@@ -30,4 +30,18 @@ public interface Interactive extends Identifiable {
     void sendMessage(String message);
 
     void sendMessage(Message message);
+
+    void handleException(Message sourceMessage, String message, Throwable throwable);
+
+    void handleException(Message sourceMessage, Throwable throwable);
+
+    void handleException(String message, Throwable throwable);
+
+    void handleException(Throwable throwable);
+
+    void handleException(String message);
+
+    void quoteReply(Message sourceMessage, Message message);
+
+    void quoteReply(Message sourceMessage, String message);
 }

@@ -15,12 +15,10 @@
  */
 package top.spco.mirai;
 
-import net.mamoe.mirai.message.code.MiraiCode;
 import top.spco.base.api.Group;
 import top.spco.base.api.MemberPermission;
 import top.spco.base.api.NormalMember;
 import top.spco.base.api.message.Message;
-import top.spco.mirai.message.MiraiMessage;
 
 /**
  * <p>
@@ -31,7 +29,7 @@ import top.spco.mirai.message.MiraiMessage;
  * @version 1.0
  * @since 1.0
  */
-public record MiraiNormalMember(net.mamoe.mirai.contact.NormalMember member) implements NormalMember {
+record MiraiNormalMember(net.mamoe.mirai.contact.NormalMember member) implements NormalMember {
 
     @Override
     public Group getGroup() {
@@ -108,7 +106,42 @@ public record MiraiNormalMember(net.mamoe.mirai.contact.NormalMember member) imp
     }
 
     @Override
+    public void handleException(Message sourceMessage, String message, Throwable throwable) {
+        this.sendMessage(new MiraiMessageChainBuilder(sourceMessage).append("[错误发生] " + message + ": " + throwable.getMessage()).build());
+    }
+
+    @Override
+    public void handleException(Message sourceMessage, Throwable throwable) {
+        this.sendMessage(new MiraiMessageChainBuilder(sourceMessage).append("[错误发生] SpCoBot运行时抛出了意料之外的异常: " + throwable.getMessage()).build());
+    }
+
+    @Override
+    public void handleException(String message, Throwable throwable) {
+        this.handleException("[错误发生] " + message + ":" + throwable.getMessage());
+    }
+
+    @Override
+    public void handleException(Throwable throwable) {
+        this.handleException("[错误发生] SpCoBot运行时抛出了意料之外的异常: " + throwable.getMessage());
+    }
+
+    @Override
+    public void handleException(String message) {
+        this.sendMessage(message);
+    }
+
+    @Override
     public void nudge() {
         this.member.nudge();
+    }
+
+    @Override
+    public void quoteReply(Message sourceMessage, Message message) {
+        this.sendMessage(new MiraiMessageChainBuilder(sourceMessage).append(message).build());
+    }
+
+    @Override
+    public void quoteReply(Message sourceMessage, String message) {
+        this.sendMessage(new MiraiMessageChainBuilder(sourceMessage).append(message).build());
     }
 }

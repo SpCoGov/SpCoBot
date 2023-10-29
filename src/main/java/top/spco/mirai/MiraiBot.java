@@ -15,10 +15,7 @@
  */
 package top.spco.mirai;
 
-import top.spco.base.api.Bot;
-import top.spco.base.api.Friend;
-import top.spco.base.api.FriendGroups;
-import top.spco.base.api.Group;
+import top.spco.base.api.*;
 import top.spco.base.InteractiveList;
 
 /**
@@ -30,7 +27,7 @@ import top.spco.base.InteractiveList;
  * @version 1.0
  * @since 1.0
  */
-public record MiraiBot(net.mamoe.mirai.Bot bot) implements Bot {
+record MiraiBot(net.mamoe.mirai.Bot bot) implements Bot {
 
     @Override
     public boolean isOnline() {
@@ -73,6 +70,11 @@ public record MiraiBot(net.mamoe.mirai.Bot bot) implements Bot {
     @Override
     public boolean hasGroup(long id) {
         return this.bot.getGroups().contains(id);
+    }
+
+    @Override
+    public User getUser(long id) {
+        return new MiraiUser(this.bot.getStranger(id));
     }
 
     @Override

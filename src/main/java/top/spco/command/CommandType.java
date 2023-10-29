@@ -13,24 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco.mirai;
-
-import net.mamoe.mirai.contact.ContactOrBot;
-import top.spco.base.api.Identifiable;
+package top.spco.command;
 
 /**
  * <p>
- * Created on 2023/10/26 0026 17:38
+ * Created on 2023/10/28 0028 18:27
  * <p>
  *
  * @author SpCo
  * @version 1.0
  * @since 1.0
  */
-record MiraiIdentifiable(ContactOrBot contactOrBot) implements Identifiable {
-
-    @Override
-    public long getId() {
-        return this.contactOrBot.getId();
-    }
+public enum CommandType {
+    /**
+     * 仅可以在好友聊天中发送
+     */
+    ONLY_FRIEND,
+    /**
+     * 仅可以在私聊(如好友聊天, 群临时消息)中发送
+     */
+    ONLY_PRIVATE,
+    /**
+     * 仅可以在群中发送
+     */
+    ONLY_GROUP,
+    /**
+     * 可以在任何来源中发送
+     */
+    ALL
 }

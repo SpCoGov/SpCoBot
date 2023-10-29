@@ -50,4 +50,39 @@ public interface AnonymousMember extends Member {
     @Deprecated
     default void nudge() {
     }
+
+    @Deprecated
+    @Override
+    default void handleException(Message sourceMessage, String message, Throwable throwable) {
+    }
+
+    @Deprecated
+    @Override
+    default void handleException(Message sourceMessage, Throwable throwable) {
+    }
+
+    @Deprecated
+    @Override
+    default void handleException(String message, Throwable throwable) {
+    }
+
+    @Deprecated
+    @Override
+    default void handleException(Throwable throwable) {
+    }
+
+    @Deprecated
+    @Override
+    default void handleException(String message) {
+    }
+
+    @Deprecated
+    @Override
+    default void quoteReply(Message sourceMessage, Message message) {
+    }
+
+    @Deprecated
+    @Override
+    default void quoteReply(Message sourceMessage, String message) {
+    }
 }

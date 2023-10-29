@@ -15,16 +15,36 @@
  */
 package top.spco;
 
+import top.spco.base.api.Bot;
 import top.spco.base.api.Logger;
+import top.spco.command.CommandSystem;
 import top.spco.events.*;
-import top.spco.mirai.message.MiraiMessageChainBuilder;
 
+import java.io.File;
 import java.util.Locale;
 
 /**
- * <p>
- * Created on 2023/10/25 0025 18:07
- * <p>
+ * <pre>
+ *                   _oo0oo_
+ *                  o8888888o
+ *                  88" . "88
+ *                  (| -_- |)
+ *                  0\  =  /0
+ *                ___/`---'\___
+ *              .' \\|     |// '.
+ *             / \\|||  :  |||// \
+ *            / _||||| -:- |||||- \
+ *           |   | \\\  -  /// |   |
+ *           | \_|  ''\---/''  |_/ |
+ *           \  .-\__  '-'  ___/-. /
+ *         ___'. .'  /--.--\  `. .'___
+ *      ."" '<  `.___\_<|>_/___.' >' "".
+ *     | | :  `- \`.;`\ _ /`;.`/ - ` : | |
+ *     \  \ `_.   \_ __\ /__ _/   .-` /  /
+ * =====`-.____`.___ \_____/___.-`___.-'=====
+ *                   `=---='
+ *            佛祖保佑机器人不被腾讯风控
+ * </pre>
  *
  * @author SpCo
  * @version 1.0
@@ -33,11 +53,19 @@ import java.util.Locale;
 public class SpCoBot {
     private static SpCoBot instance;
     public static Logger logger;
+    public static File dataFolder;
     public final long BOT_ID = 2758532041L;
     public final long BOT_OWNER_ID = 2247381667L;
+    public final CommandSystem commandSystem = CommandSystem.getInstance();
+    private DataBase dataBase = null;
+    private Bot bot = null;
 
     private SpCoBot() {
         init();
+    }
+
+    public void initDataBase() {
+        this.dataBase = new DataBase();
     }
 
     private void init() {
@@ -48,18 +76,15 @@ public class SpCoBot {
         // 机器人被拍一拍时的提示
         BotEvents.NUDGED_TICK.register((from, target, subject, action, suffix) -> {
             if (target.getId() == this.BOT_ID) {
-                subject.sendMessage("告知: 机器人正常运行中");
+
+                subject.sendMessage("机器人正常运行中");
             }
         });
         // 自动接受好友请求
         FriendEvents.REQUESTED_AS_FRIEND.register((eventId, message, fromId, fromGroupId, fromGroup, behavior) -> behavior.accept());
         // 自动接受群邀请
         GroupEvents.INVITED_JOIN_GROUP.register((eventId, invitorId, groupId, invitor, behavior) -> behavior.accept());
-        MessageEvents.GROUP_MESSAGE.register((bot, source, sender, message, time) -> {
-            if (message.toMessageContext().equals("reply")) {
-                source.sendMessage(new MiraiMessageChainBuilder(message).append("回复测试").build());
-            }
-        });
+        // 处理好友命令
         MessageEvents.FRIEND_MESSAGE.register((bot, sender, message, time) -> {
             String context = message.toMessageContext();
             if (context.startsWith("/")) {
@@ -71,14 +96,60 @@ public class SpCoBot {
                     String[] args = new String[parts.length - 1];
                     // 将parts数组中从第二个元素开始的所有元素复制到新的数组中
                     System.arraycopy(parts, 1, args, 0, parts.length - 1);
-                    String label = parts[0].toLowerCase(Locale.ENGLISH);
-                    CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, context, label, args);
-                    CommandEvents.FRIEND_COMMAND.invoker().onFriendCommand(bot, sender, context, label, args);
+                    String label = parts[0].toLowerCase(Locale.ENGLISH).substring(1);
+                    CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, context, label, args);
+                    CommandEvents.FRIEND_COMMAND.invoker().onFriendCommand(bot, sender, message, time, context, label, args);
                 }
             }
-
-
         });
+        // 处理群聊命令
+        MessageEvents.GROUP_MESSAGE.register((bot, source, sender, message, time) -> {
+            String context = message.toMessageContext();
+            if (context.startsWith("/")) {
+                // 将用户的输入以 空格 为分隔符分割
+                String[] parts = context.split(" ");
+                // 检查parts数组是否为空
+                if (parts.length > 0) {
+                    // 创建一个长度为parts数组的长度减一的数组, 用于存储命令的参数
+                    String[] args = new String[parts.length - 1];
+                    // 将parts数组中从第二个元素开始的所有元素复制到新的数组中
+                    System.arraycopy(parts, 1, args, 0, parts.length - 1);
+                    String label = parts[0].toLowerCase(Locale.ENGLISH).substring(1);
+                    CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, context, label, args);
+                    CommandEvents.GROUP_COMMAND.invoker().onGroupCommand(bot, source, sender, message, time, context, label, args);
+                }
+            }
+        });
+        // 处理群临时消息命令
+        MessageEvents.GROUP_TEMP_MESSAGE.register((bot, source, sender, message, time) -> {
+            String context = message.toMessageContext();
+            if (context.startsWith("/")) {
+                // 将用户的输入以 空格 为分隔符分割
+                String[] parts = context.split(" ");
+                // 检查parts数组是否为空
+                if (parts.length > 0) {
+                    // 创建一个长度为parts数组的长度减一的数组, 用于存储命令的参数
+                    String[] args = new String[parts.length - 1];
+                    // 将parts数组中从第二个元素开始的所有元素复制到新的数组中
+                    System.arraycopy(parts, 1, args, 0, parts.length - 1);
+                    String label = parts[0].toLowerCase(Locale.ENGLISH).substring(1);
+                    CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, context, label, args);
+                    CommandEvents.GROUP_TEMP_COMMAND.invoker().onGroupTempCommand(bot, source, message, time, context, label, args);
+                }
+            }
+        });
+    }
+
+    public void setBot(Bot bot) {
+        this.bot = bot;
+    }
+
+    public Bot getBot() {
+        return bot;
+    }
+
+    public DataBase getDataBase() {
+        return dataBase;
     }
 
     private void onEnable() {

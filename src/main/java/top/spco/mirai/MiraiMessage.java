@@ -15,22 +15,25 @@
  */
 package top.spco.mirai;
 
-import net.mamoe.mirai.contact.ContactOrBot;
-import top.spco.base.api.Identifiable;
+import top.spco.base.api.message.Message;
 
 /**
  * <p>
- * Created on 2023/10/26 0026 17:38
+ * Created on 2023/10/26 0026 15:12
  * <p>
  *
  * @author SpCo
  * @version 1.0
  * @since 1.0
  */
-record MiraiIdentifiable(ContactOrBot contactOrBot) implements Identifiable {
+record MiraiMessage(net.mamoe.mirai.message.data.MessageChain message) implements Message {
+    @Override
+    public String toMessageContext() {
+        return message.contentToString();
+    }
 
     @Override
-    public long getId() {
-        return this.contactOrBot.getId();
+    public String serialize() {
+        return this.message.serializeToMiraiCode();
     }
 }

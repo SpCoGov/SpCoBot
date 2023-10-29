@@ -30,7 +30,7 @@ import java.util.Collection;
  * @version 1.0
  * @since 1.0
  */
-public record MiraiFriendGroups(net.mamoe.mirai.contact.friendgroup.FriendGroups friendGroups) implements FriendGroups {
+record MiraiFriendGroups(net.mamoe.mirai.contact.friendgroup.FriendGroups friendGroups) implements FriendGroups {
 
     @Override
     public FriendGroup getDefault() {

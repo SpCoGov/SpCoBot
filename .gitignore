@@ -126,6 +126,7 @@ src/test/kotlin/RunTerminal.kt
 /data
 /plugins
 /bots
+.run/
 
 # Local Test Launch Point working directory
 /debug-sandbox

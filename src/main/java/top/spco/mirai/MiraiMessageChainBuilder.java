@@ -13,11 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco.mirai.message;
+package top.spco.mirai;
 
-import net.mamoe.mirai.message.code.MiraiCode;
-import net.mamoe.mirai.message.data.MessageSource;
-import net.mamoe.mirai.message.data.MessageSourceBuilder;
 import net.mamoe.mirai.message.data.QuoteReply;
 import top.spco.base.api.message.Message;
 import top.spco.base.api.message.MessageChainBuilder;
@@ -31,7 +28,7 @@ import top.spco.base.api.message.MessageChainBuilder;
  * @version 1.0
  * @since 1.0
  */
-public class MiraiMessageChainBuilder implements MessageChainBuilder {
+class MiraiMessageChainBuilder implements MessageChainBuilder {
     public final net.mamoe.mirai.message.data.MessageChainBuilder builder;
 
     public MiraiMessageChainBuilder(Message toQuote) {

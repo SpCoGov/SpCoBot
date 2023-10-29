@@ -13,43 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco.mirai.message;
+package top.spco.command;
 
-import top.spco.base.api.message.At;
+import top.spco.base.api.Bot;
+import top.spco.base.api.Interactive;
 import top.spco.base.api.message.Message;
+import top.spco.user.BotUser;
+import top.spco.user.UserPermission;
 
 /**
  * <p>
- * Created on 2023/10/26 0026 15:15
+ * Created on 2023/10/28 0028 18:27
  * <p>
  *
  * @author SpCo
  * @version 1.0
  * @since 1.0
  */
-public class MiraiAt implements At {
-    public final net.mamoe.mirai.message.data.At at;
+public interface Command {
+    String[] getLabels();
 
-    public MiraiAt(long target) {
-        this.at = new net.mamoe.mirai.message.data.At(target);
-    }
+    CommandType getType();
 
-    public MiraiAt(net.mamoe.mirai.message.data.At target) {
-        this.at = target;
-    }
+    UserPermission needPermission();
 
-    @Override
-    public String toMessageContext() {
-        return this.at.contentToString();
-    }
+    boolean hasPermission(BotUser user);
 
-    @Override
-    public String serialize() {
-        return this.at.serializeToMiraiCode();
-    }
-
-    @Override
-    public long getTarget() {
-        return this.at.getTarget();
-    }
+    void onCommand(Bot bot, Interactive from, BotUser sender, Message message, int time, String command, String label, String[] args);
 }

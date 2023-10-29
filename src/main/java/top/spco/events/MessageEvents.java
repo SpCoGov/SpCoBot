@@ -61,7 +61,7 @@ public class MessageEvents {
 
     @FunctionalInterface
     public interface GroupTempMessage {
-        void onGroupTempMessage(Bot bot, Group source, Member sender, Message message, int time);
+        void onGroupTempMessage(Bot bot, Member source, Member sender, Message message, int time);
     }
 
     /**

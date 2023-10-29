@@ -13,24 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco.mirai;
+package top.spco.command;
 
-import net.mamoe.mirai.contact.ContactOrBot;
-import top.spco.base.api.Identifiable;
+import top.spco.base.api.Bot;
+import top.spco.base.api.Interactive;
+import top.spco.base.api.message.Message;
+import top.spco.user.BotUser;
 
 /**
  * <p>
- * Created on 2023/10/26 0026 17:38
+ * Created on 2023/10/29 0029 1:10
  * <p>
  *
  * @author SpCo
  * @version 1.0
  * @since 1.0
  */
-record MiraiIdentifiable(ContactOrBot contactOrBot) implements Identifiable {
+public class GetmeCommand extends BaseCommand {
+    @Override
+    public String[] getLabels() {
+        return new String[]{"getme"};
+    }
 
     @Override
-    public long getId() {
-        return this.contactOrBot.getId();
+    public void onCommand(Bot bot, Interactive from, BotUser sender, Message message, int time, String command, String label, String[] args) {
+        super.onCommand(bot, from, sender, message, time, command, label, args);
     }
 }

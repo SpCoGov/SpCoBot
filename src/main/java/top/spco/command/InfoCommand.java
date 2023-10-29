@@ -13,30 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco.mirai.message;
+package top.spco.command;
 
-import top.spco.base.api.message.AtAll;
+import top.spco.base.api.Bot;
+import top.spco.base.api.Interactive;
 import top.spco.base.api.message.Message;
+import top.spco.user.BotUser;
 
 /**
  * <p>
- * Created on 2023/10/26 0026 15:18
+ * Created on 2023/10/28 0028 18:16
  * <p>
  *
  * @author SpCo
  * @version 1.0
  * @since 1.0
  */
-public class MiraiAtAll implements AtAll {
-    public final net.mamoe.mirai.message.data.AtAll atAll = net.mamoe.mirai.message.data.AtAll.INSTANCE;
-
+public final class InfoCommand extends BaseCommand {
     @Override
-    public String toMessageContext() {
-        return this.atAll.contentToString();
+    public String[] getLabels() {
+        return new String[]{"i", "info"};
     }
 
     @Override
-    public String serialize() {
-        return this.atAll.serializeToMiraiCode();
+    public CommandType getType() {
+        return CommandType.ONLY_GROUP;
+    }
+
+    @Override
+    public void onCommand(Bot bot, Interactive from, BotUser sender, Message message, int time, String command, String label, String[] args) {
+        from.quoteReply(message, "机器人正常运行中");
     }
 }

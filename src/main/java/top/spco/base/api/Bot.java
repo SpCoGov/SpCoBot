@@ -67,4 +67,6 @@ public interface Bot extends Identifiable {
      * @param id 群组的id
      */
     boolean hasGroup(long id);
+
+    User getUser(long id);
 }
