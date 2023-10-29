@@ -17,8 +17,11 @@ package top.spco;
 
 import top.spco.base.api.Bot;
 import top.spco.base.api.Logger;
+import top.spco.command.Command;
 import top.spco.command.CommandSystem;
 import top.spco.events.*;
+import top.spco.user.BotUser;
+import top.spco.user.UserFetchException;
 
 import java.io.File;
 import java.util.Locale;
@@ -118,6 +121,18 @@ public class SpCoBot {
                     CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, context, label, args);
                     CommandEvents.GROUP_COMMAND.invoker().onGroupCommand(bot, source, sender, message, time, context, label, args);
                 }
+            }
+            if (context.equals("签到")) {
+                Command command = this.commandSystem.getGroupCommand("sign");
+                try {
+                    BotUser botUser = BotUser.getOrCreate(sender.getId());
+                    if (command.hasPermission(botUser)) {
+                        command.onCommand(bot, source, botUser, message, time, context, "sign", new String[]{});
+                    }
+                } catch (UserFetchException e) {
+                    source.handleException("SpCoBot获取用户时失败", e);
+                }
+                return;
             }
         });
         // 处理群临时消息命令

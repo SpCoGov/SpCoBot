@@ -50,6 +50,14 @@ public class CommandSystem {
         registerCommand(new OwnerInfoCommand());
         registerCommand(new SignCommand());
         registerCommand(new GetmeCommand());
+        registerCommand(new DataCommand());
+    }
+
+    public Command getGroupCommand(String label) {
+        if (groupCommands.containsKey(label)) {
+            return groupCommands.get(label);
+        }
+        return null;
     }
 
     private void init() {
@@ -64,7 +72,7 @@ public class CommandSystem {
                     }
                     object.onCommand(bot, interactor, sender, message, time, command, label, args);
                 } catch (UserFetchException e) {
-                    interactor.handleException(message, "[错误发生] SpCoBot获取用户时失败.", e);
+                    interactor.handleException(message, "SpCoBot获取用户时失败", e);
                 } catch (Exception e) {
                     interactor.handleException(message, e);
                 }
@@ -81,7 +89,7 @@ public class CommandSystem {
                     }
                     object.onCommand(bot, from, sender2, message, time, command, label, args);
                 } catch (UserFetchException e) {
-                    from.handleException(message, "[错误发生] SpCoBot获取用户时失败.", e);
+                    from.handleException(message, "SpCoBot获取用户时失败", e);
                 } catch (Exception e) {
                     from.handleException(message, e);
                 }
@@ -98,7 +106,7 @@ public class CommandSystem {
                     }
                     object.onCommand(bot, interactor, sender, message, time, command, label, args);
                 } catch (UserFetchException e) {
-                    interactor.handleException(message, "[错误发生] SpCoBot获取用户时失败.", e);
+                    interactor.handleException(message, "SpCoBot获取用户时失败", e);
                 } catch (Exception e) {
                     interactor.handleException(message, e);
                 }

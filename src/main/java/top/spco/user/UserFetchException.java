@@ -24,7 +24,7 @@ package top.spco.user;
  * @version 1.0
  * @since 1.0
  */
-public class UserFetchException extends Exception{
+public class UserFetchException extends Exception {
     /**
      * 带有详细消息的构造函数。
      *
@@ -38,7 +38,7 @@ public class UserFetchException extends Exception{
      * 带有详细消息和原因的构造函数。
      *
      * @param message 详细的异常信息。
-     * @param cause 引发此异常的原因。
+     * @param cause   引发此异常的原因。
      */
     public UserFetchException(String message, Throwable cause) {
         super(message, cause);
