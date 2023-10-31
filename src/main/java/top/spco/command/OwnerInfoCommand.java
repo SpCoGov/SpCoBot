@@ -15,6 +15,7 @@
  */
 package top.spco.command;
 
+import top.spco.SpCoBot;
 import top.spco.base.api.Bot;
 import top.spco.base.api.Interactive;
 import top.spco.base.api.message.Message;
@@ -49,7 +50,6 @@ public final class OwnerInfoCommand extends BaseCommand {
     @Override
     public void onCommand(Bot bot, Interactive from, BotUser sender, Message message, int time, String command, String label, String[] args) {
         from.quoteReply(message,
-                "机器人运行状态: 正常\n" +
-                        "CAATP连接状态: 连接断开");
+                "机器人运行状态: 正常\n" + (SpCoBot.getInstance().getCAATP().isConnected() ? "CAATP连接状态: 已连接" : "CAATP连接状态: 连接断开"));
     }
 }

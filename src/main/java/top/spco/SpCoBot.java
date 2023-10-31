@@ -62,13 +62,15 @@ public class SpCoBot {
     public final CommandSystem commandSystem = CommandSystem.getInstance();
     private DataBase dataBase = null;
     private Bot bot = null;
+    private CAATP caatp = null;
 
     private SpCoBot() {
         init();
     }
 
-    public void initDataBase() {
+    public void initOthers() {
         this.dataBase = new DataBase();
+        this.caatp = CAATP.getInstance();
     }
 
     private void init() {
@@ -79,7 +81,6 @@ public class SpCoBot {
         // 机器人被拍一拍时的提示
         BotEvents.NUDGED_TICK.register((from, target, subject, action, suffix) -> {
             if (target.getId() == this.BOT_ID) {
-
                 subject.sendMessage("机器人正常运行中");
             }
         });
@@ -153,6 +154,10 @@ public class SpCoBot {
                 }
             }
         });
+    }
+
+    public CAATP getCAATP() {
+        return caatp;
     }
 
     public void setBot(Bot bot) {

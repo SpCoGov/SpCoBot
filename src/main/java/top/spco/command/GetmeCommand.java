@@ -37,6 +37,6 @@ public class GetmeCommand extends BaseCommand {
 
     @Override
     public void onCommand(Bot bot, Interactive from, BotUser sender, Message message, int time, String command, String label, String[] args) {
-        super.onCommand(bot, from, sender, message, time, command, label, args);
+        from.quoteReply(message, "QQ: " + sender.getId() + "\n海绵山币: " + sender.getSmfCoin());
     }
 }

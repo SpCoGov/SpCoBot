@@ -15,8 +15,6 @@
  */
 package top.spco.user;
 
-import top.spco.base.api.MemberPermission;
-
 /**
  * <p>
  * Created on 2023/10/28 0028 18:32

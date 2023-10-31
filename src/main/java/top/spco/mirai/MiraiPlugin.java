@@ -28,12 +28,11 @@ public final class MiraiPlugin extends JavaPlugin {
         super(new JvmPluginDescriptionBuilder("top.spco.spcobot", "0.1.0").name("SpCoBot").author("SpCo").build());
         SpCoBot.dataFolder = getDataFolder();
         SpCoBot.logger = new MiraiLogger(getLogger());
-        BOT.initDataBase();
+        BOT.initOthers();
     }
 
     @Override
     public void onEnable() {
-        System.out.println("onEnable");
         PluginEvents.ENABLE_PLUGIN_TICK.invoker().onEnableTick();
         EventChannel<Event> e = GlobalEventChannel.INSTANCE.parentScope(this);
         e.subscribeAlways(GroupMessageEvent.class, g -> {
@@ -52,10 +51,7 @@ public final class MiraiPlugin extends JavaPlugin {
             MessageChain messages = gt.getMessage();
             MessageEvents.GROUP_TEMP_MESSAGE.invoker().onGroupTempMessage(new MiraiBot(gt.getBot()), new MiraiNormalMember(member), new MiraiNormalMember(member), new MiraiMessage(messages), gt.getTime());
         });
-        e.subscribeAlways(NudgeEvent.class, n -> {
-            System.out.println("被拍一拍");
-            BotEvents.NUDGED_TICK.invoker().onNudgedTick(new MiraiIdentifiable(n.getFrom()), new MiraiIdentifiable(n.getTarget()), new MiraiInteractive(n.getSubject()), n.getAction(), n.getSuffix());
-        });
+        e.subscribeAlways(NudgeEvent.class, n -> BotEvents.NUDGED_TICK.invoker().onNudgedTick(new MiraiIdentifiable(n.getFrom()), new MiraiIdentifiable(n.getTarget()), new MiraiInteractive(n.getSubject()), n.getAction(), n.getSuffix()));
         e.subscribeAlways(BotOnlineEvent.class, bo -> {
             Bot bot = new MiraiBot(bo.getBot());
             SpCoBot.getInstance().setBot(bot);
