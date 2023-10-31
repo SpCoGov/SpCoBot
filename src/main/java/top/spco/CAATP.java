@@ -35,36 +35,17 @@ import java.util.concurrent.TimeUnit;
  */
 public class CAATP {
     private static CAATP instance;
-    private final String caatpAddr = "192.168.50.2";
-    private final int caatpPort = 8900;
     // 重连间隔, 单位为毫秒
     private final int operationInterval = 5;
     private Socket socket;
     private PrintWriter out;
     private boolean isConnected = false;
-    private volatile boolean stopRequested = false;
-    private final Thread receiveThread = new Thread(() -> {
-        while (!stopRequested) {
-            try {
-                while (true) {
-                    byte[] buffer = new byte[1024];
-                    int bytesRead = socket.getInputStream().read(buffer);
-                    if (bytesRead == -1) {
-                        continue;
-                    }
-                    String message = new String(buffer, 0, bytesRead, StandardCharsets.UTF_8);
-                    CAATPEvents.RECEIVE.invoker().onReceive(message);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    });
 
     private CAATP() {
         CAATPEvents.RECEIVE.register(message -> {
             SpCoBot.logger.info("收到CAATP发送的消息: " + message);
             if (message.equals("hello")) {
+
                 this.sendMessage("register qqspcobot");
             }
             if (message.equals("connected")) {
@@ -86,22 +67,36 @@ public class CAATP {
         while (true)
             try {
                 SpCoBot.logger.info("开始尝试连接CAATP.");
-                this.socket = new Socket(this.caatpAddr, this.caatpPort);
+                String caatpAddr = "192.168.50.2";
+                int caatpPort = 8900;
+                this.socket = new Socket(caatpAddr, caatpPort);
                 this.out = new PrintWriter(new OutputStreamWriter(this.socket.getOutputStream(), StandardCharsets.UTF_8), true);
                 isConnected = true;
                 CAATPEvents.CONNECT.invoker().onConnect();
-
-                // 停止 receiveThread（如果它正在运行）
-                if (receiveThread.isAlive()) {
-                    stopRequested = true; // 设置停止标志
-                    receiveThread.join(); // 等待 receiveThread 完全停止
-                }
-
-                receiveThread.start();
-
+                new Thread(() -> {
+                    while (true) {
+                        try {
+                            byte[] buffer = new byte[1024];
+                            int bytesRead = socket.getInputStream().read(buffer);
+                            if (bytesRead == -1) {
+                                continue;
+                            }
+                            String message = new String(buffer, 0, bytesRead, StandardCharsets.UTF_8);
+                            CAATPEvents.RECEIVE.invoker().onReceive(message);
+                        } catch (IOException e) {
+                            SpCoBot.logger.info("无法连接至CAATP: " + e.getMessage() + ", 将在5秒后重连.");
+                            this.isConnected = false;
+                            try {
+                                TimeUnit.SECONDS.sleep(operationInterval);
+                            } catch (InterruptedException ex) {
+                                ex.printStackTrace();
+                            }
+                            autoReconnect();
+                        }
+                    }
+                }).start();
                 break;
             } catch (IOException e) {
-                stopRequested = true;
                 isConnected = false;
                 SpCoBot.logger.info("无法连接至CAATP: " + e.getMessage() + ", 将在5秒后重连.");
                 try {
@@ -109,10 +104,7 @@ public class CAATP {
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
                 }
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
             }
-
     }
 
     /**
