@@ -135,6 +135,18 @@ public class SpCoBot {
                 }
                 return;
             }
+            if (context.equals("个人信息")) {
+                Command command = this.commandSystem.getGroupCommand("getme");
+                try {
+                    BotUser botUser = BotUser.getOrCreate(sender.getId());
+                    if (command.hasPermission(botUser)) {
+                        command.onCommand(bot, source, botUser, message, time, context, "getme", new String[]{});
+                    }
+                } catch (UserFetchException e) {
+                    source.handleException("SpCoBot获取用户时失败", e);
+                }
+                return;
+            }
         });
         // 处理群临时消息命令
         MessageEvents.GROUP_TEMP_MESSAGE.register((bot, source, sender, message, time) -> {

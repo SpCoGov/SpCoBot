@@ -51,7 +51,7 @@ public class DataBase {
                     if (!file.createNewFile()) {
                         throw new IOException("无法创建数据库文件");
                     }
-                    LOGGER.info("已成功创建数据库文件.");
+                    LOGGER.info("已成功创建数据库文件");
                 } catch (IOException e) {
                     throw new RuntimeException("创建数据库文件 (试图于位置" + dbFilePath + " ) 时发生错误: " + e.getMessage());
                 }

@@ -17,7 +17,9 @@ package top.spco;
 
 import top.spco.events.CAATPEvents;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.Executors;
@@ -45,7 +47,6 @@ public class CAATP {
         CAATPEvents.RECEIVE.register(message -> {
             SpCoBot.logger.info("收到CAATP发送的消息: " + message);
             if (message.equals("hello")) {
-
                 this.sendMessage("register qqspcobot");
             }
             if (message.equals("connected")) {
@@ -62,14 +63,11 @@ public class CAATP {
     }
 
     private synchronized void autoReconnect() {
-
         isConnected = false;
         while (true)
             try {
                 SpCoBot.logger.info("开始尝试连接CAATP.");
-                String caatpAddr = "192.168.50.2";
-                int caatpPort = 8900;
-                this.socket = new Socket(caatpAddr, caatpPort);
+                this.socket = new Socket("192.168.50.2", 8900);
                 this.out = new PrintWriter(new OutputStreamWriter(this.socket.getOutputStream(), StandardCharsets.UTF_8), true);
                 isConnected = true;
                 CAATPEvents.CONNECT.invoker().onConnect();

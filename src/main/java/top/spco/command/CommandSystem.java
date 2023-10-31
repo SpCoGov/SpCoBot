@@ -47,7 +47,6 @@ public class CommandSystem {
     @SneakyThrows
     private void registerCommands() {
         registerCommand(new InfoCommand());
-        registerCommand(new OwnerInfoCommand());
         registerCommand(new SignCommand());
         registerCommand(new GetmeCommand());
         registerCommand(new DataCommand());
