@@ -55,7 +55,7 @@ public class DivineCommand extends BaseCommand {
                 sb.append("汝今天行大运概率是 ").append(100 - probability).append("%");
             }
         } else {
-            String event = command.substring(7);
+            String event = command.substring(8);
             sb.append("所求事项：").append(event).append("\n");
             if (isHentai(event)) {
                 if (randomBoolean(sender.getId() + "在" + LocalDate.now(ZoneId.of("Asia/Shanghai")) + "做" + event)) {
