@@ -51,6 +51,10 @@ public class DataCommand extends BaseCommand {
      */
     @Override
     public void onCommand(Bot bot, Interactive from, BotUser sender, Message message, int time, String command, String label, String[] args) {
+        if (args.length < 5) {
+            from.quoteReply(message, "[告知] 语法错误");
+            return;
+        }
         String subcommand = args[0];
         switch (subcommand) {
             case "get" -> {

@@ -50,6 +50,8 @@ public class CommandSystem {
         registerCommand(new SignCommand());
         registerCommand(new GetmeCommand());
         registerCommand(new DataCommand());
+        registerCommand(new AboutCommand());
+        registerCommand(new DivineCommand());
     }
 
     public Command getGroupCommand(String label) {
@@ -64,7 +66,7 @@ public class CommandSystem {
             if (friendCommands.containsKey(label)) {
                 try {
                     Command object = friendCommands.get(label);
-                    BotUser sender = BotUser.getOrCreate(interactor.getId());
+                    BotUser sender = BotUser.getOrCreate(bot, interactor.getId());
                     if (!object.hasPermission(sender)) {
                         interactor.quoteReply(message, "[告知] 您无权使用此命令.");
                         return;
@@ -81,7 +83,7 @@ public class CommandSystem {
             if (groupCommands.containsKey(label)) {
                 try {
                     Command object = groupCommands.get(label);
-                    BotUser sender2 = BotUser.getOrCreate(sender.getId());
+                    BotUser sender2 = BotUser.getOrCreate(bot, sender.getId());
                     if (!object.hasPermission(sender2)) {
                         sender.quoteReply(message, "[告知] 您无权使用此命令.");
                         return;
@@ -98,7 +100,7 @@ public class CommandSystem {
             if (groupTempCommands.containsKey(label)) {
                 try {
                     Command object = groupTempCommands.get(label);
-                    BotUser sender = BotUser.getOrCreate(interactor.getId());
+                    BotUser sender = BotUser.getOrCreate(bot, interactor.getId());
                     if (!object.hasPermission(sender)) {
                         interactor.quoteReply(message, "[告知] 您无权使用此命令.");
                         return;

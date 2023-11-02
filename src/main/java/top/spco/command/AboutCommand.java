@@ -40,8 +40,9 @@ public class AboutCommand extends BaseCommand {
     public void onCommand(Bot bot, Interactive from, BotUser sender, Message message, int time, String command, String label, String[] args) {
         StringBuilder sb = new StringBuilder();
         sb.append("你好，这里是SpCoBot。").append("\n");
-        sb.append("开源地址：" + "https://github.com/SpCoGov/SpCoBot").append("\n");
+        sb.append("Github:" + "https://github.com/SpCoGov/SpCoBot").append("\n");
         sb.append("Version: " + SpCoBot.VERSION).append("\n");
         sb.append("Updated: " + SpCoBot.UPDATED_TIME).append("\n");
+        from.quoteReply(message, sb.toString());
     }
 }

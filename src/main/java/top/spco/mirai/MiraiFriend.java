@@ -56,6 +56,11 @@ record MiraiFriend(net.mamoe.mirai.contact.Friend friend) implements Friend {
     }
 
     @Override
+    public String getNick() {
+        return this.friend.getNick();
+    }
+
+    @Override
     public FriendGroup getFriendGroup() {
         return new MiraiFriendGroup(this.friend.getFriendGroup());
     }
@@ -72,7 +77,7 @@ record MiraiFriend(net.mamoe.mirai.contact.Friend friend) implements Friend {
 
     @Override
     public void handleException(String message, Throwable throwable) {
-        this.handleException("[错误发生] " + message + ":" + throwable.getMessage());
+        this.handleException("[错误发生] " + message + ": " + throwable.getMessage());
     }
 
     @Override

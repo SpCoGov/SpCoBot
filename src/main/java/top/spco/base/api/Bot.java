@@ -16,6 +16,7 @@
 package top.spco.base.api;
 
 import top.spco.base.InteractiveList;
+import top.spco.user.UserFetchException;
 
 /**
  * <p>
@@ -68,5 +69,5 @@ public interface Bot extends Identifiable {
      */
     boolean hasGroup(long id);
 
-    User getUser(long id);
+    User getUser(long id) throws UserFetchException;
 }

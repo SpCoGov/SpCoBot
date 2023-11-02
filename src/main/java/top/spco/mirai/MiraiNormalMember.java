@@ -117,7 +117,7 @@ record MiraiNormalMember(net.mamoe.mirai.contact.NormalMember member) implements
 
     @Override
     public void handleException(String message, Throwable throwable) {
-        this.handleException("[错误发生] " + message + ":" + throwable.getMessage());
+        this.handleException("[错误发生] " + message + ": " + throwable.getMessage());
     }
 
     @Override
@@ -133,6 +133,11 @@ record MiraiNormalMember(net.mamoe.mirai.contact.NormalMember member) implements
     @Override
     public void nudge() {
         this.member.nudge();
+    }
+
+    @Override
+    public String getNick() {
+        return this.member.getNick();
     }
 
     @Override

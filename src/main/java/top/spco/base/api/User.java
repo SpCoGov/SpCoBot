@@ -31,4 +31,6 @@ public interface User extends Interactive {
     String getRemark();
 
     void nudge();
+
+    String getNick();
 }

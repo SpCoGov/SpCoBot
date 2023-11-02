@@ -41,20 +41,27 @@ public class BotUser {
     private final long id;
     private UserPermission permission;
     private int smfCoin;
-    private User qq;
     private String sign;
+    private String nick;
 
-    public BotUser(long id, UserPermission permission, int smfCoin, String sign, User qq) {
+    public BotUser(long id, UserPermission permission, int smfCoin, String sign) throws UserFetchException {
         this.id = id;
         this.permission = permission;
         this.smfCoin = smfCoin;
         this.sign = sign;
-        this.qq = qq;
     }
 
     public UserPermission getPermission() {
         this.permission = UserPermission.byLevel(SpCoBot.getInstance().getDataBase().selectInt("user", "permission", "id", this.id));
         return this.permission;
+    }
+
+    public void setNick(String nick) {
+        this.nick = nick;
+    }
+
+    public String getNick() {
+        return nick;
     }
 
     public long getId() {
@@ -89,12 +96,14 @@ public class BotUser {
         return this.smfCoin;
     }
 
-    public static BotUser getOrCreate(long id) throws UserFetchException {
+    public static BotUser getOrCreate(Bot bot, long id) throws UserFetchException {
+        BotUser botUser;
         if (isUserExists(id)) {
             int permission = SpCoBot.getInstance().getDataBase().selectInt("user", "permission", "id", id);
             int smfCoin = SpCoBot.getInstance().getDataBase().selectInt("user", "smf_coin", "id", id);
             String sign = SpCoBot.getInstance().getDataBase().select("user", "sign", "id", id);
-            return new BotUser(id, UserPermission.byLevel(permission), smfCoin, sign, getUser(id));
+            botUser = new BotUser(id, UserPermission.byLevel(permission), smfCoin, sign);
+            return botUser;
         }
         UserPermission userPermission = UserPermission.NORMAL;
         if (id == SpCoBot.getInstance().BOT_ID || id == SpCoBot.getInstance().BOT_OWNER_ID) {
@@ -103,7 +112,8 @@ public class BotUser {
         SpCoBot.getInstance().getDataBase().insertData("insert into user(id,permission) values (?,?)", id, userPermission.getLevel());
         int smfCoin = SpCoBot.getInstance().getDataBase().selectInt("user", "smf_coin", "id", id);
         String sign = SpCoBot.getInstance().getDataBase().select("user", "sign", "id", id);
-        return new BotUser(id, userPermission, smfCoin, sign, getUser(id));
+        botUser = new BotUser(id, userPermission, smfCoin, sign);
+        return botUser;
     }
 
     /**
@@ -129,8 +139,7 @@ public class BotUser {
         return false;
     }
 
-    private static User getUser(long id) throws UserFetchException {
-        Bot bot = SpCoBot.getInstance().getBot();
+    private static User getUser(Bot bot, long id) throws UserFetchException {
         if (bot == null) {
             throw new UserFetchException("Bot instance is null while trying to fetch user.");
         } else {

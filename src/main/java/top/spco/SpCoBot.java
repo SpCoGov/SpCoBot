@@ -63,8 +63,8 @@ public class SpCoBot {
     private DataBase dataBase = null;
     private Bot bot = null;
     private CAATP caatp = null;
-    public static final String VERSION = "v0.1.0-112A";
-    public static final String UPDATED_TIME = "2023-11-02 12:41";
+    public static final String VERSION = "v0.1.0-113A";
+    public static final String UPDATED_TIME = "2023-11-03 00:00";
 
     private SpCoBot() {
         init();
@@ -128,24 +128,24 @@ public class SpCoBot {
             if (context.equals("签到")) {
                 Command command = this.commandSystem.getGroupCommand("sign");
                 try {
-                    BotUser botUser = BotUser.getOrCreate(sender.getId());
+                    BotUser botUser = BotUser.getOrCreate(bot, sender.getId());
                     if (command.hasPermission(botUser)) {
                         command.onCommand(bot, source, botUser, message, time, context, "sign", new String[]{});
                     }
                 } catch (UserFetchException e) {
-                    source.handleException("SpCoBot获取用户时失败", e);
+                    source.handleException(message, "SpCoBot获取用户时失败", e);
                 }
                 return;
             }
             if (context.equals("个人信息")) {
                 Command command = this.commandSystem.getGroupCommand("getme");
                 try {
-                    BotUser botUser = BotUser.getOrCreate(sender.getId());
+                    BotUser botUser = BotUser.getOrCreate(bot, sender.getId());
                     if (command.hasPermission(botUser)) {
                         command.onCommand(bot, source, botUser, message, time, context, "getme", new String[]{});
                     }
                 } catch (UserFetchException e) {
-                    source.handleException("SpCoBot获取用户时失败", e);
+                    source.handleException(message, "SpCoBot获取用户时失败", e);
                 }
                 return;
             }

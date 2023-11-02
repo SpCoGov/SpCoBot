@@ -66,7 +66,7 @@ record MiraiUser(net.mamoe.mirai.contact.User user) implements User {
 
     @Override
     public void handleException(String message, Throwable throwable) {
-        this.handleException("[错误发生] " + message + ":" + throwable.getMessage());
+        this.handleException("[错误发生] " + message + ": " + throwable.getMessage());
     }
 
     @Override
@@ -87,5 +87,10 @@ record MiraiUser(net.mamoe.mirai.contact.User user) implements User {
     @Override
     public void quoteReply(Message sourceMessage, String message) {
         this.sendMessage(new MiraiMessageChainBuilder(sourceMessage).append(message).build());
+    }
+
+    @Override
+    public String getNick() {
+        return this.user.getNick();
     }
 }

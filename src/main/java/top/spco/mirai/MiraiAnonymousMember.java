@@ -64,4 +64,9 @@ record MiraiAnonymousMember(net.mamoe.mirai.contact.AnonymousMember member) impl
     public String getRemark() {
         return this.member.getRemark();
     }
+
+    @Override
+    public String getNick() {
+        return this.member.getNick();
+    }
 }
