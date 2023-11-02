@@ -38,11 +38,6 @@ public class DataCommand extends BaseCommand {
     }
 
     @Override
-    public CommandType getType() {
-        return CommandType.ONLY_FRIEND;
-    }
-
-    @Override
     public UserPermission needPermission() {
         return UserPermission.OWNER;
     }
