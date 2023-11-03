@@ -40,7 +40,14 @@ jobs:
         
     - name: Get project version from build.gradle
       id: get_project_version
-      run: echo "::set-output name=project_version::$(grep -oP 'version "\K[^"]+'/home/runner/work/SpCoBot/SpCoBot/buil6d.gradle)"
+      run: echo "::set-output name=project_version::$(grep -oP 'version "\K[^"]+'/home/runner/work/SpCoBot/SpCoBot/build.gradle)"
+
+    - name: Set Default Version
+      id: set_default_version
+      run: |
+          if [ -z "${{ steps.get_project_version.outputs.project_version }}" ]; then
+            echo "Setting default version to 0.1.0"
+            echo "::set-output name=project_version::0.1.0"
       
     - name: Create Git Tag
       run: git config --global user.name "SpCo" && git config --global user.email "you@example.com" && git tag -a -m "Release v${{ steps.get_project_version.outputs.project_version }}" "v${{ steps.get_project_version.outputs.project_version }}"
