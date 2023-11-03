@@ -37,7 +37,10 @@ jobs:
       uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
       with:
         arguments: buildPluginLegacy
-        
+
+    - name: Output File Content
+      run: cat /home/runner/work/SpCoBot/SpCoBot/build.gradle
+
     - name: Set project version as an environment variable
       run: echo "PROJECT_VERSION=$(grep -oP 'version \"\K[^\"]+' /home/runner/work/SpCoBot/SpCoBot/build.gradle)" >> $GITHUB_ENV
 
