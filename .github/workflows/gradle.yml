@@ -49,6 +49,8 @@ jobs:
           echo "Setting project version to $version" > project_version.txt
           echo "project_version=$version" >> $GITHUB_ENV
         fi
+        # 创建 project_version.txt 文件
+        touch project_version.txt
       shell: bash
       env:
         JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.9-9/x64
@@ -56,9 +58,10 @@ jobs:
         GRADLE_BUILD_ACTION_SETUP_COMPLETED: true
         GRADLE_BUILD_ACTION_CACHE_RESTORED: true
 
+
       
     - name: Create Git Tag
-      run: git config --global user.name "SpCo" && git config --global user.email "you@example.com" && git tag -a -m "Release v${{ steps.get_project_version.outputs.project_version }}" "v${{ steps.get_project_version.outputs.project_version }}"
+      run: git config --global user.name "SpCo" && git config --global user.email "you@example.com" && git tag -a -m "v${{ steps.get_project_version.outputs.project_version }}" "v${{ steps.get_project_version.outputs.project_version }}"
       env:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
         
