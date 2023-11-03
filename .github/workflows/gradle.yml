@@ -45,7 +45,7 @@ jobs:
       run: echo "The project version is $PROJECT_VERSION"
 
     - name: Create Git Tag
-      run: git config --global user.name "SpCo" && git config --global user.email "you@example.com" && git tag -a -m "v${{ steps.get_project_version.outputs.project_version }}" "v${{ steps.get_project_version.outputs.project_version }}"
+      run: git config --global user.name "SpCo" && git config --global user.email "you@example.com" && git tag -a -m "v$PROJECT_VERSION" "v$PROJECT_VERSION"
       env:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
         
@@ -53,9 +53,9 @@ jobs:
       id: create_release
       uses: actions/create-release@v1
       with:
-        tag_name: v${{ steps.get_project_version.outputs.project_version }}
+        tag_name: v$PROJECT_VERSION
         files: /home/runner/work/SpCoBot/SpCoBot/build/mirai
-        release_name: Release-${{ steps.get_project_version.outputs.project_version }}  # 使用项目版本作为文件名
+        release_name: Release-$PROJECT_VERSION  # 使用项目版本作为文件名
       env:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
@@ -64,8 +64,8 @@ jobs:
       uses: actions/upload-release-asset@v1
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: /home/runner/work/SpCoBot/SpCoBot/build/mirai/SpCoBot-${{ steps.get_project_version.outputs.project_version }}.mirai.jar
-        asset_name: SpCoBot-${{ steps.get_project_version.outputs.project_version }}.mirai.jar
+        asset_path: /home/runner/work/SpCoBot/SpCoBot/build/mirai/SpCoBot-$PROJECT_VERSION.mirai.jar
+        asset_name: SpCoBot-$PROJECT_VERSION.mirai.jar
         asset_content_type: application/zip
       env:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
