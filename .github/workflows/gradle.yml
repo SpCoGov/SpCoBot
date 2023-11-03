@@ -40,7 +40,8 @@ jobs:
 
     - name: Read version from build.gradle
       id: readversion
-      run: echo "gradle_version=$(cat /home/runner/work/SpCoBot/SpCoBot/build.gradle | grep "version = '" | cut -d "'" -f 2)" >> $GITHUB_ENV
+      run: result=$(cat /home/runner/work/SpCoBot/SpCoBot/build.gradle | grep "version = '" | cut -d "'" -f 2)
+           && echo "The result is: $result"
 
     - name: Set project version as an environment variable
       run: echo "PROJECT_VERSION=$(grep -oP 'version \"\K[^\"]+' /home/runner/work/SpCoBot/SpCoBot/build.gradle)" >> $GITHUB_ENV
