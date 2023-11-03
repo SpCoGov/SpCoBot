@@ -63,8 +63,8 @@ public class SpCoBot {
     private DataBase dataBase = null;
     private Bot bot = null;
     private CAATP caatp = null;
-    public static final String VERSION = "v0.1.0-113D";
-    public static final String UPDATED_TIME = "2023-11-03 14:29";
+    public static final String VERSION = "v0.1.0-Final";
+    public static final String UPDATED_TIME = "2023-11-03 19:59";
 
     private SpCoBot() {
         init();
