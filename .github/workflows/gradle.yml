@@ -39,9 +39,9 @@ jobs:
         arguments: buildPluginLegacy
 
     - name: Read version from build.gradle
-      id: readversion
-      run: result=$(cat /home/runner/work/SpCoBot/SpCoBot/build.gradle | grep "version = '" | cut -d "'" -f 2)
-           && echo "The result is: $result"
+      run: |
+        result=$(cat /home/runner/work/SpCoBot/SpCoBot/build.gradle | grep "version = '" | cut -d "'" -f 2)
+        echo "The result is: $result"
 
     - name: Set project version as an environment variable
       run: echo "PROJECT_VERSION=$(grep -oP 'version \"\K[^\"]+' /home/runner/work/SpCoBot/SpCoBot/build.gradle)" >> $GITHUB_ENV
