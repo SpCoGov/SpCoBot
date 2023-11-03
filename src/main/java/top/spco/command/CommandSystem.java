@@ -52,6 +52,7 @@ public class CommandSystem {
         toBeRegistered.add(new DataCommand());
         toBeRegistered.add(new AboutCommand());
         toBeRegistered.add(new DivineCommand());
+        toBeRegistered.add(new HelpCommand());
         for (var command : toBeRegistered) {
             boolean success = registerCommand(command);
             if (success) {
@@ -162,7 +163,6 @@ public class CommandSystem {
                     if (groupCommands.containsKey(label)) {
                         throw new CommandRegistrationException("The command: " + label + " is registered in the group command.");
                     } else {
-                        allCommands.add(command);
                         groupCommands.put(label, command);
                     }
                 }
@@ -172,7 +172,6 @@ public class CommandSystem {
                     } else if (friendCommands.containsKey(label)) {
                         throw new CommandRegistrationException("The command: " + label + " is registered in the friend command.");
                     } else {
-                        allCommands.add(command);
                         friendCommands.put(label, command);
                     }
                 }
@@ -182,7 +181,6 @@ public class CommandSystem {
                     } else if (friendCommands.containsKey(label)) {
                         throw new CommandRegistrationException("The command: " + label + " is registered in the friend command.");
                     } else {
-                        allCommands.add(command);
                         friendCommands.put(label, command);
                         groupTempCommands.put(label, command);
                     }
@@ -192,8 +190,25 @@ public class CommandSystem {
                 }
             }
         }
-        allCommands.add(command);
         return true;
     }
 
+    public static List<String> getHelpList() {
+        List<String> helpList = new ArrayList<>();
+        for (Command command : allCommands) {
+            int index = 0;
+            String mainLabel = "MainLabel";
+            for (String label : command.getLabels()) {
+                if (index == 0) {
+                    mainLabel = label;
+                    helpList.add(mainLabel + " - " + command.getDescriptions());
+                } else {
+                    helpList.add(label + " -> " + mainLabel);
+                }
+                index += 1;
+            }
+        }
+        helpList.sort(String::compareToIgnoreCase);
+        return helpList;
+    }
 }

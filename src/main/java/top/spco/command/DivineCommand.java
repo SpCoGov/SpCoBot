@@ -42,6 +42,11 @@ public class DivineCommand extends BaseCommand {
     }
 
     @Override
+    public String getDescriptions() {
+        return "占卜";
+    }
+
+    @Override
     public void onCommand(Bot bot, Interactive from, BotUser sender, Message message, int time, String command, String label, String[] args) {
         StringBuilder sb = new StringBuilder();
         sb.append("你好，").append(sender.getId()).append("\n");

@@ -34,7 +34,12 @@ import top.spco.user.UserPermission;
 public final class InfoCommand extends BaseCommand {
     @Override
     public String[] getLabels() {
-        return new String[]{"i", "info"};
+        return new String[]{"info", "i"};
+    }
+
+    @Override
+    public String getDescriptions() {
+        return "获取机器人运行状态";
     }
 
     @Override

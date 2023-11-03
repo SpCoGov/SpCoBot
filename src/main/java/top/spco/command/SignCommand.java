@@ -36,6 +36,11 @@ public final class SignCommand extends BaseCommand {
     }
 
     @Override
+    public String getDescriptions() {
+        return "签到";
+    }
+
+    @Override
     public void onCommand(Bot bot, Interactive from, BotUser sender, Message message, int time, String command, String label, String[] args) {
         int i = sender.sign();
         if (i == -1) {

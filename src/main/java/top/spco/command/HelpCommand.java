@@ -29,7 +29,7 @@ import top.spco.user.BotUser;
  * @version 1.0
  * @since 1.0
  */
-public class HelpCommand extends BaseCommand {
+public final class HelpCommand extends BaseCommand {
     @Override
     public String[] getLabels() {
         return new String[]{"help", "?"};
@@ -42,5 +42,10 @@ public class HelpCommand extends BaseCommand {
 
     @Override
     public void onCommand(Bot bot, Interactive from, BotUser sender, Message message, int time, String command, String label, String[] args) {
+        StringBuilder sb = new StringBuilder();
+        for (String help : CommandSystem.getHelpList()) {
+            sb.append(help).append("\n");
+        }
+        from.quoteReply(message, sb.toString());
     }
 }

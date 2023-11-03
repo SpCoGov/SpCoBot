@@ -30,11 +30,6 @@ import top.spco.user.UserPermission;
 public abstract class BaseCommand implements Command {
 
     @Override
-    public String getDescriptions() {
-        return null;
-    }
-
-    @Override
     public CommandType getType() {
         return CommandType.ALL;
     }

@@ -31,10 +31,15 @@ import top.spco.user.UserPermission;
  * @version 1.0
  * @since 1.0
  */
-public class DataCommand extends BaseCommand {
+public final class DataCommand extends BaseCommand {
     @Override
     public String[] getLabels() {
         return new String[]{"data"};
+    }
+
+    @Override
+    public String getDescriptions() {
+        return "操作数据";
     }
 
     @Override

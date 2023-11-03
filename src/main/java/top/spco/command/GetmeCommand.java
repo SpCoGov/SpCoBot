@@ -29,10 +29,15 @@ import top.spco.user.BotUser;
  * @version 1.0
  * @since 1.0
  */
-public class GetmeCommand extends BaseCommand {
+public final class GetmeCommand extends BaseCommand {
     @Override
     public String[] getLabels() {
         return new String[]{"getme"};
+    }
+
+    @Override
+    public String getDescriptions() {
+        return "获取个人信息";
     }
 
     @Override

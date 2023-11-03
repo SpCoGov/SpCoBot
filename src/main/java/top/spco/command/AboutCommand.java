@@ -30,7 +30,13 @@ import top.spco.user.BotUser;
  * @version 1.0
  * @since 1.0
  */
-public class AboutCommand extends BaseCommand {
+public final class AboutCommand extends BaseCommand {
+
+    @Override
+    public String getDescriptions() {
+        return "获取机器人信息";
+    }
+
     @Override
     public String[] getLabels() {
         return new String[]{"about"};
