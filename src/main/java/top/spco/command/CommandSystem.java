@@ -48,7 +48,6 @@ public class CommandSystem {
         List<Command> toBeRegistered = new ArrayList<>();
         toBeRegistered.add(new InfoCommand());
         toBeRegistered.add(new SignCommand());
-        toBeRegistered.add(new SignCommand());
         toBeRegistered.add(new GetmeCommand());
         toBeRegistered.add(new DataCommand());
         toBeRegistered.add(new AboutCommand());
