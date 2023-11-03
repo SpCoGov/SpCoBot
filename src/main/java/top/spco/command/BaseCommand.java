@@ -15,9 +15,6 @@
  */
 package top.spco.command;
 
-import top.spco.base.api.Bot;
-import top.spco.base.api.Interactive;
-import top.spco.base.api.message.Message;
 import top.spco.user.BotUser;
 import top.spco.user.UserPermission;
 
@@ -30,9 +27,10 @@ import top.spco.user.UserPermission;
  * @version 1.0
  * @since 1.0
  */
-public class BaseCommand implements Command {
+public abstract class BaseCommand implements Command {
+
     @Override
-    public String[] getLabels() {
+    public String getDescriptions() {
         return null;
     }
 
@@ -52,6 +50,7 @@ public class BaseCommand implements Command {
     }
 
     @Override
-    public void onCommand(Bot bot, Interactive from, BotUser sender, Message message, int time, String command, String label, String[] args) {
+    public void init() {
+
     }
 }

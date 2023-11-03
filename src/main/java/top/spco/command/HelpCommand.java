@@ -15,7 +15,6 @@
  */
 package top.spco.command;
 
-import top.spco.SpCoBot;
 import top.spco.base.api.Bot;
 import top.spco.base.api.Interactive;
 import top.spco.base.api.message.Message;
@@ -23,26 +22,25 @@ import top.spco.user.BotUser;
 
 /**
  * <p>
- * Created on 2023/11/2 0002 12:24
+ * Created on 2023/11/3 0003 0:16
  * <p>
  *
  * @author SpCo
  * @version 1.0
  * @since 1.0
  */
-public class AboutCommand extends BaseCommand {
+public class HelpCommand extends BaseCommand {
     @Override
     public String[] getLabels() {
-        return new String[]{"about"};
+        return new String[]{"help", "?"};
+    }
+
+    @Override
+    public String getDescriptions() {
+        return "显示帮助信息";
     }
 
     @Override
     public void onCommand(Bot bot, Interactive from, BotUser sender, Message message, int time, String command, String label, String[] args) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("你好，这里是SpCoBot。").append("\n");
-        sb.append("Github: ").append("https://github.com/SpCoGov/SpCoBot").append("\n");
-        sb.append("Version: ").append(SpCoBot.VERSION).append("\n");
-        sb.append("Updated: ").append(SpCoBot.UPDATED_TIME).append("\n");
-        from.quoteReply(message, sb.toString());
     }
 }

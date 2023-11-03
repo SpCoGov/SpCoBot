@@ -20,9 +20,7 @@ import top.spco.events.CommandEvents;
 import top.spco.user.BotUser;
 import top.spco.user.UserFetchException;
 
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>
@@ -35,6 +33,7 @@ import java.util.Map;
  */
 public class CommandSystem {
     private static CommandSystem instance;
+    private static final List<Command> allCommands = new ArrayList<>();
     private static final Map<String, Command> friendCommands = new HashMap<>();
     private static final Map<String, Command> groupTempCommands = new HashMap<>();
     private static final Map<String, Command> groupCommands = new HashMap<>();
@@ -45,13 +44,24 @@ public class CommandSystem {
     }
 
     @SneakyThrows
-    private void registerCommands() {
-        registerCommand(new InfoCommand());
-        registerCommand(new SignCommand());
-        registerCommand(new GetmeCommand());
-        registerCommand(new DataCommand());
-        registerCommand(new AboutCommand());
-        registerCommand(new DivineCommand());
+    public void registerCommands() {
+        List<Command> toBeRegistered = new ArrayList<>();
+        toBeRegistered.add(new InfoCommand());
+        toBeRegistered.add(new SignCommand());
+        toBeRegistered.add(new SignCommand());
+        toBeRegistered.add(new GetmeCommand());
+        toBeRegistered.add(new DataCommand());
+        toBeRegistered.add(new AboutCommand());
+        toBeRegistered.add(new DivineCommand());
+        for (var command : toBeRegistered) {
+            boolean success = registerCommand(command);
+            if (success) {
+                allCommands.add(command);
+                command.init();
+            } else {
+                throw new CommandRegistrationException("The command: " + command.getLabels()[0] + " registration failed.");
+            }
+        }
     }
 
     public Command getGroupCommand(String label) {
@@ -122,7 +132,13 @@ public class CommandSystem {
         return instance;
     }
 
-    public static void registerCommand(Command command) throws CommandRegistrationException {
+    /**
+     * 注册一个命令
+     *
+     * @param command 待注册的命令
+     * @return 注册是否成功
+     */
+    public static boolean registerCommand(Command command) throws CommandRegistrationException {
         String[] labels = command.getLabels();
         for (String label : labels) {
             label = label.toLowerCase(Locale.ENGLISH);
@@ -147,6 +163,7 @@ public class CommandSystem {
                     if (groupCommands.containsKey(label)) {
                         throw new CommandRegistrationException("The command: " + label + " is registered in the group command.");
                     } else {
+                        allCommands.add(command);
                         groupCommands.put(label, command);
                     }
                 }
@@ -156,6 +173,7 @@ public class CommandSystem {
                     } else if (friendCommands.containsKey(label)) {
                         throw new CommandRegistrationException("The command: " + label + " is registered in the friend command.");
                     } else {
+                        allCommands.add(command);
                         friendCommands.put(label, command);
                     }
                 }
@@ -165,12 +183,18 @@ public class CommandSystem {
                     } else if (friendCommands.containsKey(label)) {
                         throw new CommandRegistrationException("The command: " + label + " is registered in the friend command.");
                     } else {
+                        allCommands.add(command);
                         friendCommands.put(label, command);
                         groupTempCommands.put(label, command);
                     }
                 }
+                default -> {
+                    return false;
+                }
             }
         }
+        allCommands.add(command);
+        return true;
     }
 
 }

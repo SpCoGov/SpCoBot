@@ -41,7 +41,7 @@ public class CAATP {
     private final int operationInterval = 5;
     private Socket socket;
     private PrintWriter out;
-    private boolean isConnected = false;
+    private volatile boolean isConnected = false;
 
     private CAATP() {
         CAATPEvents.RECEIVE.register(message -> {

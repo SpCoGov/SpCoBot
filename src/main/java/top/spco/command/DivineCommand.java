@@ -86,9 +86,10 @@ public class DivineCommand extends BaseCommand {
      * 获取倒大霉的概率
      */
     private double getProbability(String seed) {
-        double probability = new Random(seed.hashCode()).nextInt(101);
-        probability += ((double) new Random(seed.hashCode()).nextInt(101) / 100);
-        return probability;
+        Random random = new Random(seed.hashCode());
+        double range = 100.00 - 0.00;
+        double randomValue = random.nextDouble() * range;
+        return Math.round(randomValue * 100.0) / 100.0; // 保留两位小数
     }
 
     private boolean randomBoolean(String seed) {
@@ -96,15 +97,15 @@ public class DivineCommand extends BaseCommand {
     }
 
     private String getFortune(double number) {
-        if (number >= 0 && number <= 20) {
+        if (number >= 0.00 && number <= 20.00) {
             return "大吉";
-        } else if (number >= 21 && number <= 40) {
+        } else if (number > 20.00 && number <= 40.00) {
             return "吉";
-        } else if (number >= 41 && number <= 60) {
+        } else if (number > 40.00 && number <= 60.00) {
             return "尚可";
-        } else if (number >= 61 && number <= 80) {
+        } else if (number > 60.00 && number <= 80.00) {
             return "凶";
-        } else if (number >= 81 && number <= 100) {
+        } else if (number > 80.00 && number <= 100.00) {
             return "大凶";
         } else {
             return "？？？";
