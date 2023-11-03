@@ -37,6 +37,8 @@ public final class AboutCommand extends BaseCommand {
         return "获取机器人信息";
     }
 
+
+
     @Override
     public String[] getLabels() {
         return new String[]{"about"};

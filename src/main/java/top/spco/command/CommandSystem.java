@@ -93,12 +93,12 @@ public class CommandSystem {
             if (groupCommands.containsKey(label)) {
                 try {
                     Command object = groupCommands.get(label);
-                    BotUser sender2 = BotUser.getOrCreate(bot, sender.getId());
-                    if (!object.hasPermission(sender2)) {
-                        sender.quoteReply(message, "[告知] 您无权使用此命令.");
+                    BotUser user = BotUser.getOrCreate(bot, sender.getId());
+                    if (!object.hasPermission(user)) {
+                        from.quoteReply(message, "[告知] 您无权使用此命令.");
                         return;
                     }
-                    object.onCommand(bot, from, sender2, message, time, command, label, args);
+                    object.onCommand(bot, from, user, message, time, command, label, args);
                 } catch (UserFetchException e) {
                     from.handleException(message, "SpCoBot获取用户时失败", e);
                 } catch (Exception e) {

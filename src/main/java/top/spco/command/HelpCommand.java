@@ -37,7 +37,7 @@ public final class HelpCommand extends BaseCommand {
 
     @Override
     public String getDescriptions() {
-        return "显示帮助信息";
+        return "获取帮助信息";
     }
 
     @Override
