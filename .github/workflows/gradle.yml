@@ -41,7 +41,7 @@ jobs:
     - name: Get project version from build.gradle
       id: get_project_version
       run: |
-        version=$(cat /home/runner/work/SpCoBot/SpCoBot/build.gradle && grep -o 'version "\K[^"]+' /home/runner/work/SpCoBot/SpCoBot/build.gradle)
+        version=$(cat /home/runner/work/SpCoBot/SpCoBot/build.gradle | grep -o 'version "\K[^"]+' || true)
         if [ -z "$version" ]; then
           echo "Setting default version to 0.1.0" > default_version.txt
           echo "project_version=0.1.0" >> $GITHUB_ENV
@@ -49,9 +49,6 @@ jobs:
           echo "Setting project version to $version" > project_version.txt
           echo "project_version=$version" >> $GITHUB_ENV
         fi
-        # 创建 project_version.txt 文件
-        touch project_version.txt
-      shell: bash
       env:
         JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.9-9/x64
         JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.9-9/x64
