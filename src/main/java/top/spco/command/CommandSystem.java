@@ -76,12 +76,12 @@ public class CommandSystem {
             if (friendCommands.containsKey(label)) {
                 try {
                     Command object = friendCommands.get(label);
-                    BotUser sender = BotUser.getOrCreate(bot, interactor.getId());
-                    if (!object.hasPermission(sender)) {
+                    BotUser user = BotUser.getOrCreate(bot, interactor.getId());
+                    if (!object.hasPermission(user)) {
                         interactor.quoteReply(message, "[告知] 您无权使用此命令.");
                         return;
                     }
-                    object.onCommand(bot, interactor, sender, message, time, command, label, args);
+                    object.onCommand(bot, interactor, user, message, time, command, label, args);
                 } catch (UserFetchException e) {
                     interactor.handleException(message, "SpCoBot获取用户时失败", e);
                 } catch (Exception e) {
@@ -110,12 +110,12 @@ public class CommandSystem {
             if (groupTempCommands.containsKey(label)) {
                 try {
                     Command object = groupTempCommands.get(label);
-                    BotUser sender = BotUser.getOrCreate(bot, interactor.getId());
-                    if (!object.hasPermission(sender)) {
+                    BotUser user = BotUser.getOrCreate(bot, interactor.getId());
+                    if (!object.hasPermission(user)) {
                         interactor.quoteReply(message, "[告知] 您无权使用此命令.");
                         return;
                     }
-                    object.onCommand(bot, interactor, sender, message, time, command, label, args);
+                    object.onCommand(bot, interactor, user, message, time, command, label, args);
                 } catch (UserFetchException e) {
                     interactor.handleException(message, "SpCoBot获取用户时失败", e);
                 } catch (Exception e) {
