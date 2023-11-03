@@ -19,7 +19,9 @@ import top.spco.base.api.Bot;
 import top.spco.base.api.Interactive;
 import top.spco.base.api.message.Message;
 import top.spco.user.BotUser;
+import top.spco.util.HashUtil;
 
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.HashSet;
@@ -48,56 +50,62 @@ public class DivineCommand extends BaseCommand {
 
     @Override
     public void onCommand(Bot bot, Interactive from, BotUser sender, Message message, int time, String command, String label, String[] args) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("你好，").append(sender.getId()).append("\n");
-        if (args.length == 0) {
-            double probability = getProbability(sender.getId() + "在" + LocalDate.now(ZoneId.of("Asia/Shanghai")));
-            String fortune = getFortune(probability);
-            sb.append("汝的今日运势：").append(fortune).append("\n");
-            if (fortune.equals("大凶") || fortune.equals("凶")) {
-                sb.append("汝今天倒大霉概率是 ").append(probability).append("%");
-            } else {
-                sb.append("汝今天行大运概率是 ").append(100 - probability).append("%");
-            }
-        } else {
-            String event = command.substring(8);
-            sb.append("所求事项：").append(event).append("\n");
-            if (isHentai(event)) {
-                if (randomBoolean(sender.getId() + "在" + LocalDate.now(ZoneId.of("Asia/Shanghai")) + "做" + event)) {
-                    sb.append("结果：").append("好变态哦!").append("\n");
-                } else {
-                    sb.append("结果：").append("变态!").append("\n");
-                }
-                if (randomBoolean(sender.getId() + "在" + LocalDate.now(ZoneId.of("Asia/Shanghai")) + "做2" + event)) {
-                    sb.append("此事有 ").append("0.00").append("% 的概率不发生");
-                } else {
-                    sb.append("此事有 ").append("100.00").append("% 的概率发生");
-                }
-            } else {
-                double probability = getProbability(sender.getId() + "在" + LocalDate.now(ZoneId.of("Asia/Shanghai")) + "做" + event);
+        try {
+            StringBuilder sb = new StringBuilder();
+            sb.append("你好，").append(sender.getId()).append("\n");
+            if (args.length == 0) {
+                double probability = getProbability(sender.getId() + "在" + LocalDate.now(ZoneId.of("Asia/Shanghai")));
                 String fortune = getFortune(probability);
-                sb.append("结果：").append(fortune).append("\n");
+                sb.append("汝的今日运势：").append(fortune).append("\n");
                 if (fortune.equals("大凶") || fortune.equals("凶")) {
-                    sb.append("此事有 ").append(probability).append("% 的概率不发生");
+                    sb.append("汝今天倒大霉概率是 ").append(probability).append("%");
                 } else {
-                    sb.append("此事有 ").append(100 - probability).append("% 的概率发生");
+                    sb.append("汝今天行大运概率是 ").append(100.00 - probability).append("%");
+                }
+            } else {
+                String event = command.substring(8);
+                sb.append("所求事项：").append(event).append("\n");
+                if (isHentai(event)) {
+                    if (randomBoolean(sender.getId() + "在" + LocalDate.now(ZoneId.of("Asia/Shanghai")) + "做" + event)) {
+                        sb.append("结果：").append("好变态哦!").append("\n");
+                    } else {
+                        sb.append("结果：").append("变态!").append("\n");
+                    }
+                    if (randomBoolean(sender.getId() + "在" + LocalDate.now(ZoneId.of("Asia/Shanghai")) + "做2" + event)) {
+                        sb.append("此事有 ").append("0.00").append("% 的概率不发生");
+                    } else {
+                        sb.append("此事有 ").append("100.00").append("% 的概率发生");
+                    }
+                } else {
+                    double probability = getProbability(sender.getId() + "在" + LocalDate.now(ZoneId.of("Asia/Shanghai")) + "做" + event);
+                    String fortune = getFortune(probability);
+                    sb.append("结果：").append(fortune).append("\n");
+                    if (fortune.equals("大凶") || fortune.equals("凶")) {
+                        sb.append("此事有 ").append(probability).append("% 的概率不发生");
+                    } else {
+                        sb.append("此事有 ").append(100.00 - probability).append("% 的概率发生");
+                    }
                 }
             }
+            from.quoteReply(message, sb.toString());
+        } catch (NoSuchAlgorithmException e) {
+            from.quoteReply(message, "[错误发生] 占卜失败，占卜师说：" + e.getMessage());
         }
-        from.quoteReply(message, sb.toString());
+
     }
 
     /**
      * 获取倒大霉的概率
      */
-    private double getProbability(String seed) {
+    private double getProbability(String seed) throws NoSuchAlgorithmException {
+        seed = HashUtil.sha256(seed);
         Random random = new Random(seed.hashCode());
-        double range = 100.00 - 0.00;
-        double randomValue = random.nextDouble() * range;
+        double randomValue = random.nextDouble() * 100.00;
         return Math.round(randomValue * 100.0) / 100.0; // 保留两位小数
     }
 
-    private boolean randomBoolean(String seed) {
+    private boolean randomBoolean(String seed) throws NoSuchAlgorithmException {
+        seed = HashUtil.sha256(seed);
         return new Random(seed.hashCode()).nextBoolean();
     }
 
@@ -118,7 +126,7 @@ public class DivineCommand extends BaseCommand {
     }
 
     private static boolean isHentai(String event) {
-        if (event.contains("手冲")) {
+        if (event.contains("手冲") || event.contains("帮我口")) {
             return true;
         }
         Set<String> hentaiEvents = new HashSet<>();

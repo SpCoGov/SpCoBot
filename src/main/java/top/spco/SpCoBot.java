@@ -63,8 +63,8 @@ public class SpCoBot {
     private DataBase dataBase = null;
     private Bot bot = null;
     private CAATP caatp = null;
-    public static final String VERSION = "v0.1.0-113C";
-    public static final String UPDATED_TIME = "2023-11-03 12:24";
+    public static final String VERSION = "v0.1.0-113D";
+    public static final String UPDATED_TIME = "2023-11-03 14:29";
 
     private SpCoBot() {
         init();
@@ -128,7 +128,7 @@ public class SpCoBot {
             if (context.equals("签到")) {
                 Command command = this.commandSystem.getGroupCommand("sign");
                 try {
-                    BotUser botUser = BotUser.getOrCreate(bot, sender.getId());
+                    BotUser botUser = BotUser.getOrCreate(sender.getId());
                     if (command.hasPermission(botUser)) {
                         command.onCommand(bot, source, botUser, message, time, context, "sign", new String[]{});
                     }
@@ -140,7 +140,7 @@ public class SpCoBot {
             if (context.equals("个人信息")) {
                 Command command = this.commandSystem.getGroupCommand("getme");
                 try {
-                    BotUser botUser = BotUser.getOrCreate(bot, sender.getId());
+                    BotUser botUser = BotUser.getOrCreate(sender.getId());
                     if (command.hasPermission(botUser)) {
                         command.onCommand(bot, source, botUser, message, time, context, "getme", new String[]{});
                     }

@@ -76,7 +76,7 @@ public class CommandSystem {
             if (friendCommands.containsKey(label)) {
                 try {
                     Command object = friendCommands.get(label);
-                    BotUser user = BotUser.getOrCreate(bot, interactor.getId());
+                    BotUser user = BotUser.getOrCreate(interactor.getId());
                     if (!object.hasPermission(user)) {
                         interactor.quoteReply(message, "[告知] 您无权使用此命令.");
                         return;
@@ -93,7 +93,7 @@ public class CommandSystem {
             if (groupCommands.containsKey(label)) {
                 try {
                     Command object = groupCommands.get(label);
-                    BotUser user = BotUser.getOrCreate(bot, sender.getId());
+                    BotUser user = BotUser.getOrCreate(sender.getId());
                     if (!object.hasPermission(user)) {
                         from.quoteReply(message, "[告知] 您无权使用此命令.");
                         return;
@@ -110,7 +110,7 @@ public class CommandSystem {
             if (groupTempCommands.containsKey(label)) {
                 try {
                     Command object = groupTempCommands.get(label);
-                    BotUser user = BotUser.getOrCreate(bot, interactor.getId());
+                    BotUser user = BotUser.getOrCreate(interactor.getId());
                     if (!object.hasPermission(user)) {
                         interactor.quoteReply(message, "[告知] 您无权使用此命令.");
                         return;

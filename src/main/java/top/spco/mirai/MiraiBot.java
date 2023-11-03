@@ -15,10 +15,8 @@
  */
 package top.spco.mirai;
 
-import net.mamoe.mirai.contact.Stranger;
-import top.spco.base.api.*;
 import top.spco.base.InteractiveList;
-import top.spco.user.UserFetchException;
+import top.spco.base.api.*;
 
 /**
  * <p>
