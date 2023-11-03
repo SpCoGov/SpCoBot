@@ -21,9 +21,13 @@ import top.spco.base.api.message.Message;
 import top.spco.user.BotUser;
 import top.spco.util.HashUtil;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -51,16 +55,17 @@ public class DivineCommand extends BaseCommand {
     @Override
     public void onCommand(Bot bot, Interactive from, BotUser sender, Message message, int time, String command, String label, String[] args) {
         try {
+            BigDecimal hundred = new BigDecimal("100.00");
             StringBuilder sb = new StringBuilder();
             sb.append("你好，").append(sender.getId()).append("\n");
             if (args.length == 0) {
-                double probability = getProbability(sender.getId() + "在" + LocalDate.now(ZoneId.of("Asia/Shanghai")));
-                String fortune = getFortune(probability);
+                BigDecimal probability = getProbability(sender.getId() + "在" + LocalDate.now(ZoneId.of("Asia/Shanghai")));
+                String fortune = getFortune(probability.doubleValue());
                 sb.append("汝的今日运势：").append(fortune).append("\n");
                 if (fortune.equals("大凶") || fortune.equals("凶")) {
                     sb.append("汝今天倒大霉概率是 ").append(probability).append("%");
                 } else {
-                    sb.append("汝今天行大运概率是 ").append(100.00 - probability).append("%");
+                    sb.append("汝今天行大运概率是 ").append(hundred.subtract(probability)).append("%");
                 }
             } else {
                 String event = command.substring(8);
@@ -77,13 +82,13 @@ public class DivineCommand extends BaseCommand {
                         sb.append("此事有 ").append("100.00").append("% 的概率发生");
                     }
                 } else {
-                    double probability = getProbability(sender.getId() + "在" + LocalDate.now(ZoneId.of("Asia/Shanghai")) + "做" + event);
-                    String fortune = getFortune(probability);
+                    BigDecimal probability = getProbability(sender.getId() + "在" + LocalDate.now(ZoneId.of("Asia/Shanghai")) + "做" + event);
+                    String fortune = getFortune(probability.doubleValue());
                     sb.append("结果：").append(fortune).append("\n");
                     if (fortune.equals("大凶") || fortune.equals("凶")) {
                         sb.append("此事有 ").append(probability).append("% 的概率不发生");
                     } else {
-                        sb.append("此事有 ").append(100.00 - probability).append("% 的概率发生");
+                        sb.append("此事有 ").append(hundred.subtract(probability)).append("% 的概率发生");
                     }
                 }
             }
@@ -97,11 +102,16 @@ public class DivineCommand extends BaseCommand {
     /**
      * 获取倒大霉的概率
      */
-    private double getProbability(String seed) throws NoSuchAlgorithmException {
-        seed = HashUtil.sha256(seed);
-        Random random = new Random(seed.hashCode());
-        double randomValue = random.nextDouble() * 100.00;
-        return Math.round(randomValue * 100.0) / 100.0; // 保留两位小数
+    private BigDecimal getProbability(String seed) throws NoSuchAlgorithmException {
+        // 将种子进行 SHA-256 加密
+        MessageDigest sha256Digest = MessageDigest.getInstance("SHA-256");
+        byte[] inputBytes = seed.getBytes();
+        byte[] hashBytes = sha256Digest.digest(inputBytes);
+        // 将加密结果作为种子
+        Random random = new Random();
+        random.setSeed(Arrays.hashCode(hashBytes));
+        BigDecimal bigDecimal = BigDecimal.valueOf(random.nextDouble() * 100.00);
+        return bigDecimal.setScale(2, RoundingMode.HALF_UP);
     }
 
     private boolean randomBoolean(String seed) throws NoSuchAlgorithmException {

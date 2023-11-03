@@ -27,10 +27,6 @@ package top.spco;
 public class Test {
     public static void main(String[] args) {
         try {
-            System.out.println("ADWDAQWDWERAa".hashCode());
-            System.out.println("ADWDAQWDWERAb".hashCode());
-            System.out.println("ADWDAQWDWERAc".hashCode());
-            System.out.println("ADWDAQWDWERAd".hashCode());
         } catch (Exception e) {
             e.printStackTrace();
         }
