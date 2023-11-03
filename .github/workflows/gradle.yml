@@ -41,7 +41,7 @@ jobs:
     - name: Get project version from build.gradle
       id: get_project_version
       run: |
-        version=$(grep -oP 'version "\K[^"]+' /home/runner/work/SpCoBot/SpCoBot/build.gradle)
+        version=$(grep -o 'version "\K[^"]+' /home/runner/work/SpCoBot/SpCoBot/build.gradle)
         if [ -z "$version" ]; then
           echo "Setting default version to 0.1.0" > default_version.txt
           echo "project_version=0.1.0" >> $GITHUB_ENV
