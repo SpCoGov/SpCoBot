@@ -41,7 +41,7 @@ jobs:
     - name: Get project version from build.gradle
       id: get_project_version
       run: |
-        version=$(grep -o 'version "\K[^"]+' /home/runner/work/SpCoBot/SpCoBot/build.gradle)
+        version=$(cat /home/runner/work/SpCoBot/SpCoBot/build.gradle && grep -o 'version "\K[^"]+' /home/runner/work/SpCoBot/SpCoBot/build.gradle)
         if [ -z "$version" ]; then
           echo "Setting default version to 0.1.0" > default_version.txt
           echo "project_version=0.1.0" >> $GITHUB_ENV
@@ -58,8 +58,6 @@ jobs:
         GRADLE_BUILD_ACTION_SETUP_COMPLETED: true
         GRADLE_BUILD_ACTION_CACHE_RESTORED: true
 
-
-      
     - name: Create Git Tag
       run: git config --global user.name "SpCo" && git config --global user.email "you@example.com" && git tag -a -m "v${{ steps.get_project_version.outputs.project_version }}" "v${{ steps.get_project_version.outputs.project_version }}"
       env:
