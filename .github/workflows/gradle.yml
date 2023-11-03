@@ -34,3 +34,25 @@ jobs:
       uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
       with:
         arguments: buildPluginLegacy
+    - name: Get project version from build.gradle
+      id: get_project_version
+      run: echo "::set-output name=project_version::$(grep -oP 'version "\K[^"]+'/home/runner/work/SpCoBot/SpCoBot/build.gradle)"
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      with:
+        files: /home/runner/work/SpCoBot/SpCoBot/build/mirai
+        release_name: Release-${{ steps.get_project_version.outputs.project_version }}  # 使用项目版本作为文件名
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload Release Asset
+      id: upload-release-asset
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: /home/runner/work/SpCoBot/SpCoBot/build/mirai  # 指定构建生成的文件目录
+        asset_name: SpCoBot-${{ steps.get_project_version.outputs.project_version }}.mirai.jar  # 使用项目版本和后缀作为文件名
+        asset_content_type: application/zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
