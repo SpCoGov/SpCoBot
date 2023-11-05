@@ -74,7 +74,6 @@ public class BalancetopCommand extends BaseCommand {
         } catch (SQLException e) {
             from.handleException("查询记录失败", e);
         }
-
     }
 
     private static Map<Long, Integer> getRecords() throws SQLException {
