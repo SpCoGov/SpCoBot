@@ -13,12 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco.command;
+package top.spco.command.commands;
 
 import top.spco.base.api.Bot;
 import top.spco.base.api.Interactive;
 import top.spco.base.api.message.Message;
+import top.spco.command.BaseCommand;
 import top.spco.user.BotUser;
+
+import java.sql.SQLException;
 
 /**
  * <p>
@@ -42,6 +45,10 @@ public final class GetmeCommand extends BaseCommand {
 
     @Override
     public void onCommand(Bot bot, Interactive from, BotUser sender, Message message, int time, String command, String label, String[] args) {
-        from.quoteReply(message, "QQ: " + sender.getId() + "\n海绵山币: " + sender.getSmfCoin());
+        try {
+            from.quoteReply(message, "QQ: " + sender.getId() + "\n海绵山币: " + sender.getSmfCoin());
+        } catch (SQLException e) {
+            from.handleException(message, "获取个人信息失败", e);
+        }
     }
 }

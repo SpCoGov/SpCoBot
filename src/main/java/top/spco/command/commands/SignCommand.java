@@ -13,44 +13,47 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco.command;
+package top.spco.command.commands;
 
-import top.spco.SpCoBot;
 import top.spco.base.api.Bot;
 import top.spco.base.api.Interactive;
 import top.spco.base.api.message.Message;
+import top.spco.command.BaseCommand;
 import top.spco.user.BotUser;
+
+import java.sql.SQLException;
 
 /**
  * <p>
- * Created on 2023/11/2 0002 12:24
+ * Created on 2023/10/29 0029 0:51
  * <p>
  *
  * @author SpCo
  * @version 1.0
  * @since 1.0
  */
-public final class AboutCommand extends BaseCommand {
+public final class SignCommand extends BaseCommand {
+    @Override
+    public String[] getLabels() {
+        return new String[]{"sign"};
+    }
 
     @Override
     public String getDescriptions() {
-        return "获取机器人信息";
-    }
-
-
-
-    @Override
-    public String[] getLabels() {
-        return new String[]{"about"};
+        return "签到";
     }
 
     @Override
     public void onCommand(Bot bot, Interactive from, BotUser sender, Message message, int time, String command, String label, String[] args) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("你好，这里是SpCoBot。").append("\n");
-        sb.append("Github: ").append("https://github.com/SpCoGov/SpCoBot").append("\n");
-        sb.append("Version: ").append(SpCoBot.VERSION).append("\n");
-        sb.append("Updated: ").append(SpCoBot.UPDATED_TIME).append("\n");
-        from.quoteReply(message, sb.toString());
+        try {
+            int i = sender.sign();
+            if (i == -1) {
+                from.quoteReply(message, "签到失败。您今天已经签到过了。");
+            } else {
+                from.quoteReply(message, String.format("签到成功。您今天签到获得了%d海绵山币，您现在拥有%d海绵山币。", i, sender.getSmfCoin()));
+            }
+        } catch (SQLException e) {
+            from.handleException(message, "签到失败", e);
+        }
     }
 }

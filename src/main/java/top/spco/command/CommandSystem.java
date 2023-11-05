@@ -16,10 +16,12 @@
 package top.spco.command;
 
 import lombok.SneakyThrows;
+import top.spco.command.commands.*;
 import top.spco.events.CommandEvents;
 import top.spco.user.BotUser;
 import top.spco.user.UserFetchException;
 
+import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -53,6 +55,7 @@ public class CommandSystem {
         toBeRegistered.add(new AboutCommand());
         toBeRegistered.add(new DivineCommand());
         toBeRegistered.add(new HelpCommand());
+        toBeRegistered.add(new BalancetopCommand());
         for (var command : toBeRegistered) {
             boolean success = registerCommand(command);
             if (success) {
@@ -77,12 +80,16 @@ public class CommandSystem {
                 try {
                     Command object = friendCommands.get(label);
                     BotUser user = BotUser.getOrCreate(interactor.getId());
-                    if (!object.hasPermission(user)) {
-                        interactor.quoteReply(message, "[告知] 您无权使用此命令.");
-                        return;
+                    try {
+                        if (!object.hasPermission(user)) {
+                            interactor.quoteReply(message, "[告知] 您无权使用此命令.");
+                            return;
+                        }
+                    } catch (SQLException e) {
+                        interactor.handleException(message, "获取用户权限失败", e);
                     }
                     object.onCommand(bot, interactor, user, message, time, command, label, args);
-                } catch (UserFetchException e) {
+                } catch (UserFetchException | SQLException e) {
                     interactor.handleException(message, "SpCoBot获取用户时失败", e);
                 } catch (Exception e) {
                     interactor.handleException(message, e);
@@ -94,12 +101,16 @@ public class CommandSystem {
                 try {
                     Command object = groupCommands.get(label);
                     BotUser user = BotUser.getOrCreate(sender.getId());
-                    if (!object.hasPermission(user)) {
-                        from.quoteReply(message, "[告知] 您无权使用此命令.");
-                        return;
+                    try {
+                        if (!object.hasPermission(user)) {
+                            from.quoteReply(message, "[告知] 您无权使用此命令.");
+                            return;
+                        }
+                    } catch (SQLException e) {
+                        from.handleException(message, "获取用户权限失败", e);
                     }
                     object.onCommand(bot, from, user, message, time, command, label, args);
-                } catch (UserFetchException e) {
+                } catch (UserFetchException | SQLException e) {
                     from.handleException(message, "SpCoBot获取用户时失败", e);
                 } catch (Exception e) {
                     from.handleException(message, e);
@@ -111,12 +122,16 @@ public class CommandSystem {
                 try {
                     Command object = groupTempCommands.get(label);
                     BotUser user = BotUser.getOrCreate(interactor.getId());
-                    if (!object.hasPermission(user)) {
-                        interactor.quoteReply(message, "[告知] 您无权使用此命令.");
-                        return;
+                    try {
+                        if (!object.hasPermission(user)) {
+                            interactor.quoteReply(message, "[告知] 您无权使用此命令.");
+                            return;
+                        }
+                    } catch (SQLException e) {
+                        interactor.handleException(message, "获取用户权限失败", e);
                     }
                     object.onCommand(bot, interactor, user, message, time, command, label, args);
-                } catch (UserFetchException e) {
+                } catch (UserFetchException | SQLException e) {
                     interactor.handleException(message, "SpCoBot获取用户时失败", e);
                 } catch (Exception e) {
                     interactor.handleException(message, e);

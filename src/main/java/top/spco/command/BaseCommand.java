@@ -18,6 +18,8 @@ package top.spco.command;
 import top.spco.user.BotUser;
 import top.spco.user.UserPermission;
 
+import java.sql.SQLException;
+
 /**
  * <p>
  * Created on 2023/10/28 0028 18:53
@@ -40,7 +42,7 @@ public abstract class BaseCommand implements Command {
     }
 
     @Override
-    public boolean hasPermission(BotUser user) {
+    public boolean hasPermission(BotUser user) throws SQLException {
         return user.getPermission().getLevel() >= needPermission().getLevel();
     }
 

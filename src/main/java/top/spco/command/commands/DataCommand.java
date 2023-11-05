@@ -13,14 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco.command;
+package top.spco.command.commands;
 
 import top.spco.SpCoBot;
 import top.spco.base.api.Bot;
 import top.spco.base.api.Interactive;
 import top.spco.base.api.message.Message;
+import top.spco.command.BaseCommand;
 import top.spco.user.BotUser;
 import top.spco.user.UserPermission;
+
+import java.sql.SQLException;
 
 /**
  * <p>
@@ -71,8 +74,12 @@ public final class DataCommand extends BaseCommand {
                 String columns = args[4];
                 String whereClause = args[2];
                 String whereValues = args[3];
-                String value = SpCoBot.getInstance().getDataBase().select(table, columns, whereClause, whereValues);
-                from.quoteReply(message, "[告知] 您查询的数据为: " + value);
+                try {
+                    String value = SpCoBot.getInstance().getDataBase().select(table, columns, whereClause, whereValues);
+                    from.quoteReply(message, "[告知] 您查询的数据为: " + value);
+                } catch (SQLException e) {
+                    from.handleException(message, "数据查询失败", e);
+                }
             }
             case "set" -> {
                 if (args.length != 6) {
@@ -84,9 +91,13 @@ public final class DataCommand extends BaseCommand {
                 String whereClause = args[2];
                 String whereValues = args[3];
                 String toChange = args[5];
-                String value = SpCoBot.getInstance().getDataBase().select(table, columns, whereClause, whereValues);
-                SpCoBot.getInstance().getDataBase().update("update " + table + " set " + columns + "=? where " + whereClause + "=?", toChange, whereValues);
-                from.quoteReply(message, "[告知] 已将数据从 " + value + " 修改为 " + toChange + "");
+                try {
+                    String value = SpCoBot.getInstance().getDataBase().select(table, columns, whereClause, whereValues);
+                    SpCoBot.getInstance().getDataBase().update("update " + table + " set " + columns + "=? where " + whereClause + "=?", toChange, whereValues);
+                    from.quoteReply(message, "[告知] 已将数据从 " + value + " 修改为 " + toChange);
+                } catch (SQLException e) {
+                    from.handleException(message, "数据更新失败", e);
+                }
             }
         }
     }

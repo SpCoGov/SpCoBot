@@ -48,7 +48,7 @@ public class BotUser {
         this.smfCoin = smfCoin;
     }
 
-    public UserPermission getPermission() {
+    public UserPermission getPermission() throws SQLException {
         this.permission = UserPermission.byLevel(SpCoBot.getInstance().getDataBase().selectInt("user", "permission", "id", this.id));
         return this.permission;
     }
@@ -62,7 +62,7 @@ public class BotUser {
      *
      * @return 成功时返回签到获得的海绵山币数量, 已签到返回-1
      */
-    public int sign() {
+    public int sign() throws SQLException {
         LocalDate today = LocalDate.now(ZoneId.of("Asia/Shanghai"));
         String signDate = SpCoBot.getInstance().getDataBase().select("user", "sign", "id", id);
         if (Objects.equals(signDate, today.toString())) {
@@ -75,17 +75,17 @@ public class BotUser {
     }
 
 
-    public void setSmfCoin(int smfCoin) {
+    public void setSmfCoin(int smfCoin) throws SQLException {
         this.smfCoin = smfCoin;
         SpCoBot.getInstance().getDataBase().update("update user set smf_coin=? where id=?", this.smfCoin, this.id);
     }
 
-    public int getSmfCoin() {
+    public int getSmfCoin() throws SQLException {
         this.smfCoin = SpCoBot.getInstance().getDataBase().selectInt("user", "smf_coin", "id", this.id);
         return this.smfCoin;
     }
 
-    public static BotUser getOrCreate(long id) throws UserFetchException {
+    public static BotUser getOrCreate(long id) throws UserFetchException, SQLException {
         BotUser botUser;
         if (isUserExists(id)) {
             int permission = SpCoBot.getInstance().getDataBase().selectInt("user", "permission", "id", id);

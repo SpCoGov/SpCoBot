@@ -22,7 +22,10 @@ import top.spco.base.api.Logger;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -36,8 +39,6 @@ import java.sql.*;
 public class DataBase {
     private static final Logger LOGGER = SpCoBot.logger;
     private Connection conn;
-    private PreparedStatement pstmt;
-    private ResultSet rs;
 
     public DataBase() {
         try {
@@ -78,15 +79,13 @@ public class DataBase {
         return conn;
     }
 
-    @SneakyThrows
-    public Connection openConn() {
+    public Connection openConn() throws SQLException {
         String dbFilePath = SpCoBot.dataFolder.getAbsolutePath() + File.separator + "spcobot.db";
         conn = DriverManager.getConnection("jdbc:sqlite:" + dbFilePath);
         return conn;
     }
 
-    @SneakyThrows
-    private void createTables() {
+    private void createTables() throws SQLException {
         if (conn == null || conn.isClosed()) {
             openConn();
         }
@@ -111,8 +110,7 @@ public class DataBase {
      * @param whereValues 查询条件中占位符的值
      * @return 指定字段的值. 如果结果集中没有数据, 则返回null
      */
-    @SneakyThrows
-    public String select(String table, String columns, String whereClause, Object whereValues) {
+    public String select(String table, String columns, String whereClause, Object whereValues) throws SQLException {
         ResultSet rs = select(table, new String[]{columns}, whereClause + " = ?", new Object[]{whereValues});
         if (rs.next()) {
             return rs.getString(columns);
@@ -130,8 +128,7 @@ public class DataBase {
      * @param whereValues 查询条件中占位符的值
      * @return 指定字段的值. 如果结果集中没有数据, 则返回null
      */
-    @SneakyThrows
-    public Integer selectInt(String table, String columns, String whereClause, Object whereValues) {
+    public Integer selectInt(String table, String columns, String whereClause, Object whereValues) throws SQLException {
         ResultSet rs = select(table, new String[]{columns}, whereClause + " = ?", new Object[]{whereValues});
         if (rs.next()) {
             return rs.getInt(columns);
@@ -140,8 +137,7 @@ public class DataBase {
         }
     }
 
-    @SneakyThrows
-    public ResultSet select(String table, String[] columns, String whereClause, Object[] whereValues) {
+    public ResultSet select(String table, String[] columns, String whereClause, Object[] whereValues) throws SQLException {
         if (conn == null || conn.isClosed()) {
             openConn();
         }
@@ -154,12 +150,11 @@ public class DataBase {
         }
         sql.append(" FROM ").append(table).append(" WHERE ").append(whereClause);
         try {
-            pstmt = conn.prepareStatement(sql.toString());
+            PreparedStatement pstmt = conn.prepareStatement(sql.toString());
             for (int i = 0; i < whereValues.length; i++) {
                 pstmt.setObject(i + 1, whereValues[i]);
             }
-            rs = pstmt.executeQuery();
-            return rs;
+            return pstmt.executeQuery();
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
@@ -173,8 +168,7 @@ public class DataBase {
      * @param params 参数数组
      * @return 影响行数
      */
-    @SneakyThrows
-    public int update(String sql, Object... params) {
+    public int update(String sql, Object... params) throws SQLException {
         if (conn == null || conn.isClosed()) {
             openConn();
         }
@@ -194,8 +188,7 @@ public class DataBase {
      * @param <T>    实体类类型
      * @return 实体类对象
      */
-    @SneakyThrows
-    public <T> T queryForObject(String sql, Class<T> clazz, Object... params) {
+    public <T> T queryForObject(String sql, Class<T> clazz, Object... params) throws SQLException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         if (conn == null || conn.isClosed()) {
             openConn();
         }
@@ -238,8 +231,7 @@ public class DataBase {
      *
      * @param rs 结果集
      */
-    @SneakyThrows
-    private void closeResultSet(ResultSet rs) {
+    private void closeResultSet(ResultSet rs) throws SQLException {
         if (rs != null) {
             rs.close();
         }
@@ -250,8 +242,7 @@ public class DataBase {
      *
      * @param pstmt PreparedStatement
      */
-    @SneakyThrows
-    private void closeStatement(PreparedStatement pstmt) {
+    private void closeStatement(PreparedStatement pstmt) throws SQLException {
         if (pstmt != null) {
             pstmt.close();
         }
@@ -264,8 +255,7 @@ public class DataBase {
      * @param propertyName 属性名
      * @param value        属性值
      */
-    @SneakyThrows
-    private void setProperty(Object obj, String propertyName, Object value) {
+    private void setProperty(Object obj, String propertyName, Object value) throws IllegalAccessException {
         Field field = getFieldByName(obj.getClass(), propertyName);
         if (ObjectUtil.isNotEmpty(field)) {
             field.setAccessible(true);
@@ -321,8 +311,7 @@ public class DataBase {
      * @param columnName 需要检查的列名
      * @return 如果列存在则返回 true，否则返回 false
      */
-    @SneakyThrows
-    public boolean columnExistsInTable(String tableName, String columnName) {
+    public boolean columnExistsInTable(String tableName, String columnName) throws SQLException {
         if (conn == null || conn.isClosed()) {
             openConn();
         }
@@ -338,8 +327,36 @@ public class DataBase {
         }
     }
 
-    @SneakyThrows
-    public void insertData(String sql, Object... params) {
+    /**
+     * 获取指定字段的所有记录。
+     *
+     * @param fieldName 要获取的字段名称
+     * @param tableName 数据表名称
+     * @param condition 查询条件，可以为 SQL WHERE 子句的一部分
+     * @return 包含字段值的列表
+     */
+    public List<String> getFieldValues(String fieldName, String tableName, String condition) throws SQLException {
+        if (conn == null || conn.isClosed()) {
+            openConn();
+        }
+        List<String> fieldValues = new ArrayList<>();
+        // 创建查询语句
+        String sql = "SELECT " + fieldValues + " FROM " + tableName + " WHERE " + condition;
+        // 执行查询
+        Statement statement = this.conn.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+        // 处理结果
+        while (resultSet.next()) {
+            String fieldValue = resultSet.getString(fieldName);
+            fieldValues.add(fieldValue);
+        }
+        resultSet.close();
+        statement.close();
+
+        return fieldValues;
+    }
+
+    public void insertData(String sql, Object... params) throws SQLException {
         if (conn == null || conn.isClosed()) {
             openConn();
         }

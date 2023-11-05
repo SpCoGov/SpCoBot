@@ -18,9 +18,12 @@ package top.spco.command;
 import top.spco.base.api.Bot;
 import top.spco.base.api.Interactive;
 import top.spco.base.api.message.Message;
+import top.spco.command.commands.HelpCommand;
 import top.spco.events.CommandEvents;
 import top.spco.user.BotUser;
 import top.spco.user.UserPermission;
+
+import java.sql.SQLException;
 
 /**
  * 这个接口代表一个命令的定义，用于处理用户输入的命令。每个命令都包括{@link #getLabels 标签}、{@link #getDescriptions 描述}、{@link #getType 作用域}、{@link #needPermission 所需权限}等信息，
@@ -67,11 +70,11 @@ public interface Command {
 
     /**
      * 命令发送用户是否有足够的权限触发该命令<p>
-     * 默认情况下与 {@link #needPermission()} 有关。<p>
+     * 默认情况下与 {@link #needPermission()} 有关。
      *
      * @return 如果返回 {@code false} 则命令发送用户会被提示：{@code "[告知] 您无权使用此命令."}
      */
-    boolean hasPermission(BotUser user);
+    boolean hasPermission(BotUser user) throws SQLException;
 
     /**
      * 初始化命令<p>

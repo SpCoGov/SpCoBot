@@ -18,13 +18,14 @@ package top.spco;
 import top.spco.base.api.Bot;
 import top.spco.base.api.Logger;
 import top.spco.command.Command;
+import top.spco.command.CommandMeta;
 import top.spco.command.CommandSystem;
 import top.spco.events.*;
 import top.spco.user.BotUser;
 import top.spco.user.UserFetchException;
 
 import java.io.File;
-import java.util.Locale;
+import java.sql.SQLException;
 
 /**
  * <pre>
@@ -50,7 +51,7 @@ import java.util.Locale;
  * </pre>
  *
  * @author SpCo
- * @version 1.0
+ * @version 1.1
  * @since 1.0
  */
 public class SpCoBot {
@@ -63,8 +64,18 @@ public class SpCoBot {
     private DataBase dataBase = null;
     private Bot bot = null;
     private CAATP caatp = null;
-    public static final String VERSION = "v0.1.0-Final";
-    public static final String UPDATED_TIME = "2023-11-03 19:59";
+    /**
+     * 版本号格式采用语义版本号(X.Y.Z)
+     * <ul>
+     * <li>X: 主版本号 (表示重大的、不兼容的变更)</li>
+     * <li>Y: 次版本号 (表示向后兼容的新功能或改进)</li>
+     * <li>Z: 修订号 (表示向后兼容的错误修复或小的改进)</li>
+     * </ul>
+     * <b>更新版本号(仅限核心的 Feature)时请不要忘记在 build.gradle 中同步修改版本号</b>
+     */
+    public static final String MAIN_VERSION = "0.1.1";
+    public static final String VERSION = "v" + MAIN_VERSION + "-alpha.2";
+    public static final String UPDATED_TIME = "2023-11-05 13:05";
 
     private SpCoBot() {
         init();
@@ -93,37 +104,19 @@ public class SpCoBot {
         // 处理好友命令
         MessageEvents.FRIEND_MESSAGE.register((bot, sender, message, time) -> {
             String context = message.toMessageContext();
-            if (context.startsWith("/")) {
-                // 将用户的输入以 空格 为分隔符分割
-                String[] parts = context.split(" ");
-                // 检查parts数组是否为空
-                if (parts.length > 0) {
-                    // 创建一个长度为parts数组的长度减一的数组, 用于存储命令的参数
-                    String[] args = new String[parts.length - 1];
-                    // 将parts数组中从第二个元素开始的所有元素复制到新的数组中
-                    System.arraycopy(parts, 1, args, 0, parts.length - 1);
-                    String label = parts[0].toLowerCase(Locale.ENGLISH).substring(1);
-                    CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, context, label, args);
-                    CommandEvents.FRIEND_COMMAND.invoker().onFriendCommand(bot, sender, message, time, context, label, args);
-                }
+            CommandMeta meta = new CommandMeta(context);
+            if (meta.getArgs() != null) {
+                CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs());
+                CommandEvents.FRIEND_COMMAND.invoker().onFriendCommand(bot, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs());
             }
         });
         // 处理群聊命令
         MessageEvents.GROUP_MESSAGE.register((bot, source, sender, message, time) -> {
             String context = message.toMessageContext();
-            if (context.startsWith("/")) {
-                // 将用户的输入以 空格 为分隔符分割
-                String[] parts = context.split(" ");
-                // 检查parts数组是否为空
-                if (parts.length > 0) {
-                    // 创建一个长度为parts数组的长度减一的数组, 用于存储命令的参数
-                    String[] args = new String[parts.length - 1];
-                    // 将parts数组中从第二个元素开始的所有元素复制到新的数组中
-                    System.arraycopy(parts, 1, args, 0, parts.length - 1);
-                    String label = parts[0].toLowerCase(Locale.ENGLISH).substring(1);
-                    CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, context, label, args);
-                    CommandEvents.GROUP_COMMAND.invoker().onGroupCommand(bot, source, sender, message, time, context, label, args);
-                }
+            CommandMeta meta = new CommandMeta(context);
+            if (meta.getArgs() != null) {
+                CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs());
+                CommandEvents.GROUP_COMMAND.invoker().onGroupCommand(bot, source, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs());
             }
             if (context.equals("签到")) {
                 Command command = this.commandSystem.getGroupCommand("sign");
@@ -132,7 +125,7 @@ public class SpCoBot {
                     if (command.hasPermission(botUser)) {
                         command.onCommand(bot, source, botUser, message, time, context, "sign", new String[]{});
                     }
-                } catch (UserFetchException e) {
+                } catch (UserFetchException | SQLException e) {
                     source.handleException(message, "SpCoBot获取用户时失败", e);
                 }
                 return;
@@ -144,28 +137,18 @@ public class SpCoBot {
                     if (command.hasPermission(botUser)) {
                         command.onCommand(bot, source, botUser, message, time, context, "getme", new String[]{});
                     }
-                } catch (UserFetchException e) {
+                } catch (UserFetchException | SQLException  e) {
                     source.handleException(message, "SpCoBot获取用户时失败", e);
                 }
-                return;
             }
         });
         // 处理群临时消息命令
         MessageEvents.GROUP_TEMP_MESSAGE.register((bot, source, sender, message, time) -> {
             String context = message.toMessageContext();
-            if (context.startsWith("/")) {
-                // 将用户的输入以 空格 为分隔符分割
-                String[] parts = context.split(" ");
-                // 检查parts数组是否为空
-                if (parts.length > 0) {
-                    // 创建一个长度为parts数组的长度减一的数组, 用于存储命令的参数
-                    String[] args = new String[parts.length - 1];
-                    // 将parts数组中从第二个元素开始的所有元素复制到新的数组中
-                    System.arraycopy(parts, 1, args, 0, parts.length - 1);
-                    String label = parts[0].toLowerCase(Locale.ENGLISH).substring(1);
-                    CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, context, label, args);
-                    CommandEvents.GROUP_TEMP_COMMAND.invoker().onGroupTempCommand(bot, source, message, time, context, label, args);
-                }
+            CommandMeta meta = new CommandMeta(context);
+            if (meta.getArgs() != null) {
+                CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs());
+                CommandEvents.GROUP_TEMP_COMMAND.invoker().onGroupTempCommand(bot, source, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs());
             }
         });
     }

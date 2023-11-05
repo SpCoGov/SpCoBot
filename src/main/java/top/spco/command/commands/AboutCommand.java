@@ -13,42 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco.command;
+package top.spco.command.commands;
 
 import top.spco.SpCoBot;
 import top.spco.base.api.Bot;
 import top.spco.base.api.Interactive;
 import top.spco.base.api.message.Message;
+import top.spco.command.BaseCommand;
 import top.spco.user.BotUser;
-import top.spco.user.UserPermission;
 
 /**
  * <p>
- * Created on 2023/10/28 0028 18:16
+ * Created on 2023/11/2 0002 12:24
  * <p>
  *
  * @author SpCo
  * @version 1.0
  * @since 1.0
  */
-public final class InfoCommand extends BaseCommand {
+public final class AboutCommand extends BaseCommand {
     @Override
-    public String[] getLabels() {
-        return new String[]{"info", "i"};
+    public String getDescriptions() {
+        return "获取机器人信息";
     }
 
     @Override
-    public String getDescriptions() {
-        return "获取机器人运行状态";
+    public String[] getLabels() {
+        return new String[]{"about"};
     }
 
     @Override
     public void onCommand(Bot bot, Interactive from, BotUser sender, Message message, int time, String command, String label, String[] args) {
-        if (sender.getPermission() == UserPermission.OWNER) {
-            from.quoteReply(message, "机器人运行状态: 正常\n" + (SpCoBot.getInstance().getCAATP().isConnected() ? "CAATP连接状态: 已连接" : "CAATP连接状态: 连接断开"));
-        } else {
-            from.quoteReply(message, "机器人正常运行中");
-        }
-
+        String sb = "你好，这里是SpCoBot。" + "\n" +
+                "Github: " + "https://github.com/SpCoGov/SpCoBot" + "\n" +
+                "Version: " + SpCoBot.VERSION + "\n" +
+                "Updated: " + SpCoBot.UPDATED_TIME + "\n";
+        from.quoteReply(message, sb);
     }
 }
