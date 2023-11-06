@@ -13,41 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco.command;
-
-import top.spco.user.BotUser;
-import top.spco.user.UserPermission;
-
-import java.sql.SQLException;
+package top.spco.service.command;
 
 /**
  * <p>
- * Created on 2023/10/28 0028 18:53
+ * Created on 2023/10/28 0028 18:27
  * <p>
  *
  * @author SpCo
  * @version 1.0
  * @since 1.0
  */
-public abstract class BaseCommand implements Command {
-
-    @Override
-    public CommandType getType() {
-        return CommandType.ALL;
-    }
-
-    @Override
-    public UserPermission needPermission() {
-        return UserPermission.NORMAL;
-    }
-
-    @Override
-    public boolean hasPermission(BotUser user) throws SQLException {
-        return user.getPermission().getLevel() >= needPermission().getLevel();
-    }
-
-    @Override
-    public void init() {
-
-    }
+public enum CommandType {
+    /**
+     * 仅可以在好友聊天中发送
+     */
+    ONLY_FRIEND,
+    /**
+     * 仅可以在私聊(如好友聊天, 群临时消息)中发送
+     */
+    ONLY_PRIVATE,
+    /**
+     * 仅可以在群中发送
+     */
+    ONLY_GROUP,
+    /**
+     * 可以在任何来源中发送
+     */
+    ALL
 }

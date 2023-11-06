@@ -29,6 +29,7 @@ public final class MiraiPlugin extends JavaPlugin {
         SpCoBot.dataFolder = getDataFolder();
         SpCoBot.logger = new MiraiLogger(getLogger());
         BOT.initOthers();
+        BOT.setMessageService(new MiraiMessageServiceImpl());
     }
 
     @Override
@@ -133,6 +134,7 @@ public final class MiraiPlugin extends JavaPlugin {
             }
         }));
         e.subscribeAlways(FriendMessageEvent.class, fm -> MessageEvents.FRIEND_MESSAGE.invoker().onFriendMessage(new MiraiBot(fm.getBot()), new MiraiFriend(fm.getSender()), new MiraiMessage(fm.getMessage()), fm.getTime()));
+        e.subscribeAlways(GroupMessagePostSendEvent.class, gmp -> MessageEvents.GROUP_MESSAGE_POST_SEND.invoker().onGroupMessagePostSend(new MiraiBot(gmp.getBot()), new MiraiGroup(gmp.getTarget()), new MiraiMessage(gmp.getMessage())));
     }
 
     @Override

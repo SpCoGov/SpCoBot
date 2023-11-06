@@ -70,4 +70,6 @@ public interface Bot extends Identifiable {
     boolean hasGroup(long id);
 
     User getUser(long id) throws UserFetchException;
+
+    Group getGroup(long id);
 }

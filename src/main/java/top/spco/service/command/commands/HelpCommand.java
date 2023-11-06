@@ -13,50 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco.command.commands;
+package top.spco.service.command.commands;
 
-import top.spco.SpCoBot;
 import top.spco.base.api.Bot;
 import top.spco.base.api.Interactive;
 import top.spco.base.api.message.Message;
-import top.spco.command.BaseCommand;
+import top.spco.service.command.BaseCommand;
+import top.spco.service.command.CommandSystem;
 import top.spco.user.BotUser;
-import top.spco.user.UserPermission;
-
-import java.sql.SQLException;
 
 /**
  * <p>
- * Created on 2023/10/28 0028 18:16
+ * Created on 2023/11/3 0003 0:16
  * <p>
  *
  * @author SpCo
  * @version 1.0
  * @since 1.0
  */
-public final class InfoCommand extends BaseCommand {
+public final class HelpCommand extends BaseCommand {
     @Override
     public String[] getLabels() {
-        return new String[]{"info", "i"};
+        return new String[]{"help", "?"};
     }
 
     @Override
     public String getDescriptions() {
-        return "获取机器人运行状态";
+        return "获取帮助信息";
     }
 
     @Override
     public void onCommand(Bot bot, Interactive from, BotUser sender, Message message, int time, String command, String label, String[] args) {
-        try {
-            if (sender.getPermission() == UserPermission.OWNER) {
-                from.quoteReply(message, "机器人运行状态: 正常\n" + (SpCoBot.getInstance().getCAATP().isConnected() ? "CAATP连接状态: 已连接" : "CAATP连接状态: 连接断开"));
-            } else {
-                from.quoteReply(message, "机器人正常运行中");
-            }
-        } catch (SQLException e) {
-            from.handleException(message, "获取用户权限失败", e);
+        StringBuilder sb = new StringBuilder();
+        for (String help : CommandSystem.getHelpList()) {
+            sb.append(help).append("\n");
         }
-
-
+        from.quoteReply(message, sb.toString());
     }
 }

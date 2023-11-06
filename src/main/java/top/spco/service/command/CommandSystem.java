@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco.command;
+package top.spco.service.command;
 
 import lombok.SneakyThrows;
-import top.spco.command.commands.*;
+import top.spco.SpCoBot;
 import top.spco.events.CommandEvents;
+import top.spco.service.chat.ChatType;
+import top.spco.service.command.commands.*;
 import top.spco.user.BotUser;
 import top.spco.user.UserFetchException;
 
@@ -30,11 +32,12 @@ import java.util.*;
  * <p>
  *
  * @author SpCo
- * @version 1.0
+ * @version 1.1
  * @since 1.0
  */
 public class CommandSystem {
     private static CommandSystem instance;
+    private static boolean registered = false;
     private static final List<Command> allCommands = new ArrayList<>();
     private static final Map<String, Command> friendCommands = new HashMap<>();
     private static final Map<String, Command> groupTempCommands = new HashMap<>();
@@ -56,6 +59,8 @@ public class CommandSystem {
         toBeRegistered.add(new DivineCommand());
         toBeRegistered.add(new HelpCommand());
         toBeRegistered.add(new BalancetopCommand());
+        toBeRegistered.add(new StatisticsCommand());
+        toBeRegistered.add(new TestCommand());
         for (var command : toBeRegistered) {
             boolean success = registerCommand(command);
             if (success) {
@@ -75,7 +80,14 @@ public class CommandSystem {
     }
 
     private void init() {
+        if (registered) {
+            return;
+        }
+        registered = true;
         CommandEvents.FRIEND_COMMAND.register((bot, interactor, message, time, command, label, args) -> {
+            if (SpCoBot.getInstance().chatManager.isInChat(interactor, ChatType.FRIEND)) {
+                return;
+            }
             if (friendCommands.containsKey(label)) {
                 try {
                     Command object = friendCommands.get(label);
@@ -97,6 +109,9 @@ public class CommandSystem {
             }
         });
         CommandEvents.GROUP_COMMAND.register((bot, from, sender, message, time, command, label, args) -> {
+            if (SpCoBot.getInstance().chatManager.isInChat(from, ChatType.GROUP)) {
+                return;
+            }
             if (groupCommands.containsKey(label)) {
                 try {
                     Command object = groupCommands.get(label);
@@ -118,6 +133,9 @@ public class CommandSystem {
             }
         });
         CommandEvents.GROUP_TEMP_COMMAND.register((bot, interactor, message, time, command, label, args) -> {
+            if (SpCoBot.getInstance().chatManager.isInChat(interactor, ChatType.GROUP_TEMP)) {
+                return;
+            }
             if (groupTempCommands.containsKey(label)) {
                 try {
                     Command object = groupTempCommands.get(label);
@@ -211,16 +229,18 @@ public class CommandSystem {
     public static List<String> getHelpList() {
         List<String> helpList = new ArrayList<>();
         for (Command command : allCommands) {
-            int index = 0;
-            String mainLabel = "MainLabel";
-            for (String label : command.getLabels()) {
-                if (index == 0) {
-                    mainLabel = label;
-                    helpList.add(mainLabel + " - " + command.getDescriptions());
-                } else {
-                    helpList.add(label + " -> " + mainLabel);
+            if (command.isVisible()) {
+                int index = 0;
+                String mainLabel = "MainLabel";
+                for (String label : command.getLabels()) {
+                    if (index == 0) {
+                        mainLabel = label;
+                        helpList.add(mainLabel + " - " + command.getDescriptions());
+                    } else {
+                        helpList.add(label + " -> " + mainLabel);
+                    }
+                    index += 1;
                 }
-                index += 1;
             }
         }
         helpList.sort(String::compareToIgnoreCase);

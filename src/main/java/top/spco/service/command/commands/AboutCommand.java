@@ -13,41 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco.command.commands;
+package top.spco.service.command.commands;
 
+import top.spco.SpCoBot;
 import top.spco.base.api.Bot;
 import top.spco.base.api.Interactive;
 import top.spco.base.api.message.Message;
-import top.spco.command.BaseCommand;
-import top.spco.command.CommandSystem;
+import top.spco.service.command.BaseCommand;
 import top.spco.user.BotUser;
 
 /**
  * <p>
- * Created on 2023/11/3 0003 0:16
+ * Created on 2023/11/2 0002 12:24
  * <p>
  *
  * @author SpCo
  * @version 1.0
  * @since 1.0
  */
-public final class HelpCommand extends BaseCommand {
+public final class AboutCommand extends BaseCommand {
     @Override
-    public String[] getLabels() {
-        return new String[]{"help", "?"};
+    public String getDescriptions() {
+        return "获取机器人信息";
     }
 
     @Override
-    public String getDescriptions() {
-        return "获取帮助信息";
+    public String[] getLabels() {
+        return new String[]{"about"};
     }
 
     @Override
     public void onCommand(Bot bot, Interactive from, BotUser sender, Message message, int time, String command, String label, String[] args) {
-        StringBuilder sb = new StringBuilder();
-        for (String help : CommandSystem.getHelpList()) {
-            sb.append(help).append("\n");
-        }
-        from.quoteReply(message, sb.toString());
+        String sb = "你好，这里是SpCoBot。" + "\n" +
+                "Github: " + "https://github.com/SpCoGov/SpCoBot" + "\n" +
+                "Version: " + SpCoBot.VERSION + "\n" +
+                "Updated: " + SpCoBot.UPDATED_TIME + "\n";
+        from.quoteReply(message, sb);
     }
 }

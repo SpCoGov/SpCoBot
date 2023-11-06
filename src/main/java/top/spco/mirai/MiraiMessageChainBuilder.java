@@ -36,6 +36,10 @@ class MiraiMessageChainBuilder implements MessageChainBuilder {
         this.builder.append(new QuoteReply(((MiraiMessage) toQuote).message()));
     }
 
+    public MiraiMessageChainBuilder() {
+        this.builder = new net.mamoe.mirai.message.data.MessageChainBuilder();
+    }
+
     @Override
     public MessageChainBuilder append(Message message) {
         this.builder.append(((MiraiMessage) message).message());

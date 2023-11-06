@@ -28,7 +28,7 @@
     - 群临时会话消息: GroupTempMessageSyncEvent
     - 陌生人消息: StrangerMessageSyncEvent
 - 主动发送消息后: MessagePostSendEvent
-    - 群消息: GroupMessagePostSendEvent
+    - [x] 群消息: GroupMessagePostSendEvent
     - 好友消息: FriendMessagePostSendEvent
     - 群临时会话消息: GroupTempMessagePostSendEvent
     - 陌生人消息：StrangerMessagePostSendEvent

@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco.command;
+package top.spco.service.command;
 
 import top.spco.base.api.Bot;
 import top.spco.base.api.Interactive;
 import top.spco.base.api.message.Message;
-import top.spco.command.commands.HelpCommand;
+import top.spco.service.command.commands.HelpCommand;
 import top.spco.events.CommandEvents;
 import top.spco.user.BotUser;
 import top.spco.user.UserPermission;
@@ -30,9 +30,9 @@ import java.sql.SQLException;
  * 并提供{@link #init 初始化}和{@link #onCommand 执行命令}的方法。<p>
  * <b>不建议命令实现此接口，而是继承 {@link BaseCommand}类</b>
  *
- * @see BaseCommand
  * @author SpCo
- * @version 1.0
+ * @version 1.1
+ * @see BaseCommand
  * @since 1.0
  */
 public interface Command {
@@ -99,4 +99,9 @@ public interface Command {
      * @see CommandEvents
      */
     void onCommand(Bot bot, Interactive from, BotUser sender, Message message, int time, String command, String label, String[] args);
+
+    /**
+     * 在帮助列表是否可见
+     */
+    boolean isVisible();
 }

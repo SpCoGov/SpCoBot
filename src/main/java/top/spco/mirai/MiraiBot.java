@@ -78,6 +78,11 @@ record MiraiBot(net.mamoe.mirai.Bot bot) implements Bot {
     }
 
     @Override
+    public Group getGroup(long id) {
+        return new MiraiGroup(this.bot.getGroup(id));
+    }
+
+    @Override
     public long getId() {
         return this.bot.getId();
     }

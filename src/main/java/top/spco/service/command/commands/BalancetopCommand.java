@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco.command.commands;
+package top.spco.service.command.commands;
 
 import top.spco.SpCoBot;
 import top.spco.base.api.Bot;
 import top.spco.base.api.Interactive;
 import top.spco.base.api.message.Message;
-import top.spco.command.BaseCommand;
+import top.spco.service.command.BaseCommand;
 import top.spco.user.BotUser;
 
 import java.sql.Connection;

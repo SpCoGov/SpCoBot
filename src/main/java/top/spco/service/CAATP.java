@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco;
+package top.spco.service;
 
+import top.spco.SpCoBot;
 import top.spco.events.CAATPEvents;
 
 import java.io.IOException;

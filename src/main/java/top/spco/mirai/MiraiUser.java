@@ -28,7 +28,6 @@ import top.spco.base.api.message.Message;
  * @since 1.0
  */
 record MiraiUser(net.mamoe.mirai.contact.User user) implements User {
-
     @Override
     public long getId() {
         return this.user.getId();

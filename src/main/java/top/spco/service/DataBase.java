@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco;
+package top.spco.service;
 
 import cn.hutool.core.util.ObjectUtil;
 import lombok.SneakyThrows;
+import top.spco.SpCoBot;
 import top.spco.base.api.Logger;
 
 import java.io.File;
@@ -33,7 +34,7 @@ import java.util.List;
  * <p>
  *
  * @author SpCo
- * @version 1.0
+ * @version 1.1
  * @since 1.0
  */
 public class DataBase {

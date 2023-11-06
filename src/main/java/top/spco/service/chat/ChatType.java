@@ -13,32 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco.command;
+package top.spco.service.chat;
 
 /**
  * <p>
- * Created on 2023/10/28 0028 18:27
+ * Created on 2023/11/5 0005 22:28
  * <p>
  *
  * @author SpCo
- * @version 1.0
- * @since 1.0
+ * @version 1.1
+ * @since 1.1
  */
-public enum CommandType {
-    /**
-     * 仅可以在好友聊天中发送
-     */
-    ONLY_FRIEND,
-    /**
-     * 仅可以在私聊(如好友聊天, 群临时消息)中发送
-     */
-    ONLY_PRIVATE,
-    /**
-     * 仅可以在群中发送
-     */
-    ONLY_GROUP,
-    /**
-     * 可以在任何来源中发送
-     */
-    ALL
+public enum ChatType {
+    FRIEND,
+    GROUP,
+    GROUP_TEMP
 }

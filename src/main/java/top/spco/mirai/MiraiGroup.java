@@ -30,7 +30,6 @@ import top.spco.base.api.message.Message;
  * @since 1.0
  */
 record MiraiGroup(net.mamoe.mirai.contact.Group group) implements Group {
-
     @Override
     public String getName() {
         return this.group.getName();

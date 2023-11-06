@@ -29,7 +29,7 @@ import top.spco.base.event.EventFactory;
  * <p>
  *
  * @author SpCo
- * @version 1.0
+ * @version 1.1
  * @since 1.0
  */
 public class MessageEvents {
@@ -76,5 +76,19 @@ public class MessageEvents {
     @FunctionalInterface
     public interface FriendMessage {
         void onFriendMessage(Bot bot, Friend sender, Message message, int time);
+    }
+
+    /**
+     * Called after actively sending a group message.
+     */
+    public static final Event<GroupMessagePostSend> GROUP_MESSAGE_POST_SEND = EventFactory.createArrayBacked(GroupMessagePostSend.class, callbacks -> (bot, group, message) -> {
+        for (GroupMessagePostSend event : callbacks) {
+            event.onGroupMessagePostSend(bot, group, message);
+        }
+    });
+
+    @FunctionalInterface
+    public interface GroupMessagePostSend {
+        void onGroupMessagePostSend(Bot bot, Group group, Message message);
     }
 }

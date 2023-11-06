@@ -17,10 +17,17 @@ package top.spco;
 
 import top.spco.base.api.Bot;
 import top.spco.base.api.Logger;
-import top.spco.command.Command;
-import top.spco.command.CommandMeta;
-import top.spco.command.CommandSystem;
+import top.spco.base.api.message.service.MessageService;
+import top.spco.service.chat.ChatManager;
+import top.spco.service.chat.ChatType;
+import top.spco.service.command.Command;
+import top.spco.service.command.CommandMeta;
+import top.spco.service.command.CommandSystem;
 import top.spco.events.*;
+import top.spco.service.CAATP;
+import top.spco.service.DataBase;
+import top.spco.service.GroupMessageRecorder;
+import top.spco.service.statistics.StatisticsManager;
 import top.spco.user.BotUser;
 import top.spco.user.UserFetchException;
 
@@ -61,9 +68,13 @@ public class SpCoBot {
     public final long BOT_ID = 2758532041L;
     public final long BOT_OWNER_ID = 2247381667L;
     public final CommandSystem commandSystem = CommandSystem.getInstance();
+    public final ChatManager chatManager = ChatManager.getInstance();
+    public final StatisticsManager statisticsManager = StatisticsManager.getInstance();
+    private MessageService messageService;
     private DataBase dataBase = null;
     private Bot bot = null;
     private CAATP caatp = null;
+    private static boolean registered = false;
     /**
      * 版本号格式采用语义版本号(X.Y.Z)
      * <ul>
@@ -74,19 +85,24 @@ public class SpCoBot {
      * <b>更新版本号(仅限核心的 Feature)时请不要忘记在 build.gradle 中同步修改版本号</b>
      */
     public static final String MAIN_VERSION = "0.1.1";
-    public static final String VERSION = "v" + MAIN_VERSION + "-alpha.2";
-    public static final String UPDATED_TIME = "2023-11-05 13:05";
+    public static final String VERSION = "v" + MAIN_VERSION + "-alpha.3";
+    public static final String UPDATED_TIME = "2023-11-07 05:50";
 
     private SpCoBot() {
-        init();
+        initEvents();
     }
 
     public void initOthers() {
         this.dataBase = new DataBase();
         this.caatp = CAATP.getInstance();
+        new GroupMessageRecorder();
     }
 
-    private void init() {
+    private void initEvents() {
+        if (registered) {
+            return;
+        }
+        registered = true;
         // 插件启用时
         PluginEvents.ENABLE_PLUGIN_TICK.register(this::onEnable);
         // 插件禁用时
@@ -105,6 +121,10 @@ public class SpCoBot {
         MessageEvents.FRIEND_MESSAGE.register((bot, sender, message, time) -> {
             String context = message.toMessageContext();
             CommandMeta meta = new CommandMeta(context);
+            if (this.chatManager.isInChat(sender, ChatType.FRIEND)) {
+                this.chatManager.onMessage(ChatType.FRIEND, bot, sender, sender, message, time);
+                return;
+            }
             if (meta.getArgs() != null) {
                 CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs());
                 CommandEvents.FRIEND_COMMAND.invoker().onFriendCommand(bot, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs());
@@ -114,6 +134,10 @@ public class SpCoBot {
         MessageEvents.GROUP_MESSAGE.register((bot, source, sender, message, time) -> {
             String context = message.toMessageContext();
             CommandMeta meta = new CommandMeta(context);
+            if (this.chatManager.isInChat(source, ChatType.GROUP)) {
+                this.chatManager.onMessage(ChatType.GROUP, bot, source, sender, message, time);
+                return;
+            }
             if (meta.getArgs() != null) {
                 CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs());
                 CommandEvents.GROUP_COMMAND.invoker().onGroupCommand(bot, source, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs());
@@ -140,12 +164,17 @@ public class SpCoBot {
                 } catch (UserFetchException | SQLException  e) {
                     source.handleException(message, "SpCoBot获取用户时失败", e);
                 }
+                return;
             }
         });
         // 处理群临时消息命令
         MessageEvents.GROUP_TEMP_MESSAGE.register((bot, source, sender, message, time) -> {
             String context = message.toMessageContext();
             CommandMeta meta = new CommandMeta(context);
+            if (this.chatManager.isInChat(source, ChatType.GROUP_TEMP)) {
+                this.chatManager.onMessage(ChatType.GROUP_TEMP, bot, source, sender, message, time);
+                return;
+            }
             if (meta.getArgs() != null) {
                 CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs());
                 CommandEvents.GROUP_TEMP_COMMAND.invoker().onGroupTempCommand(bot, source, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs());
@@ -175,6 +204,14 @@ public class SpCoBot {
 
     private void onDisable() {
         logger.info("SpCoBot已下线");
+    }
+
+    public void setMessageService(MessageService messageService) {
+        this.messageService = messageService;
+    }
+
+    public MessageService getMessageService() {
+        return messageService;
     }
 
     public static SpCoBot getInstance() {
