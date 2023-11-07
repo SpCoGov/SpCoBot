@@ -22,9 +22,8 @@ import top.spco.base.api.Interactive;
 import top.spco.base.api.NormalMember;
 
 /**
- * <p>
- * Created on 2023/11/6 0006 10:38
- * <p>
+ * {@link ChatBuilder}是一个用于构建{@link Chat}对象的构建器。<p>
+ * 该类允许您创建{@link Chat}对象，管理用户与机器人之间的交互，并添加{@link Stage 交互阶段}。
  *
  * @author SpCo
  * @version 1.1
@@ -33,6 +32,13 @@ import top.spco.base.api.NormalMember;
 public class ChatBuilder {
     private final Chat chat;
 
+    /**
+     * 创建一个{@link ChatBuilder}实例，根据给定的{@link ChatType}和目标{@link Interactive}对象。
+     *
+     * @param chatType {@link ChatType 聊天类型}，可以是{@link ChatType#GROUP}、{@link ChatType#FRIEND}或{@link ChatType#GROUP_TEMP}之一
+     * @param target   目标{@link Interactive}对象，根据{@link ChatType 聊天类型}的不同可以是{@link Group}、{@link Friend}或{@link NormalMember}
+     * @throws ChatTypeMismatchException 如果{@link ChatType 聊天类型}与目标{@link Interactive}对象不匹配时抛出异常
+     */
     public ChatBuilder(ChatType chatType, Interactive target) throws ChatTypeMismatchException {
         switch (chatType) {
             case GROUP -> {
@@ -54,11 +60,22 @@ public class ChatBuilder {
         this.chat = new Chat(chatType, target);
     }
 
+    /**
+     * 向{@link Chat}对象添加一个{@link Stage 交互阶段}。
+     *
+     * @param stage 要添加的{@link Stage 交互阶段}
+     * @return 当前ChatBuilder实例，以支持方法链式调用
+     */
     public ChatBuilder addStage(Stage stage) {
         chat.addStage(stage);
         return this;
     }
 
+    /**
+     * 构建{@link Chat}对象，冻结它以防止添加更多{@link Stage 阶段}，并将其注册到{@link ChatManager}中。
+     *
+     * @return 创建的Chat对象
+     */
     public Chat build() {
         chat.freeze();
         SpCoBot.getInstance().chatManager.register(chat);

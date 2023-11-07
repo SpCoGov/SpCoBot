@@ -24,9 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>
- * Created on 2023/11/5 0005 22:03
- * <p>
+ * {@link Chat 对话}是一种用户与机器人交互的方式。
  *
  * @author SpCo
  * @version 1.1
@@ -40,19 +38,41 @@ public class Chat {
     private final Interactive target;
     private boolean stopped;
 
+    /**
+     * 获取对话的类型。
+     *
+     * @return 对话的类型
+     */
     public ChatType getType() {
         return type;
     }
 
+    /**
+     * 获取对话的目标交互对象。
+     *
+     * @return 目标交互对象
+     */
     public Interactive getTarget() {
         return target;
     }
 
+    /**
+     * 构造一个新的对话实例。
+     *
+     * @param type   对话的类型
+     * @param target 对话的目标交互对象
+     */
     public Chat(ChatType type, Interactive target) {
         this.type = type;
         this.target = target;
     }
 
+    /**
+     * 向对话中添加一个交互阶段。
+     *
+     * @param stage 要添加的交互阶段
+     * @throws IllegalStateException 如果对话已被冻结，无法添加阶段
+     */
     public void addStage(Stage stage) {
         if (frozen) {
             throw new IllegalStateException("Cannot add stages after the pre-initialization phase!");
@@ -60,10 +80,16 @@ public class Chat {
         stages.add(stage);
     }
 
+    /**
+     * 冻结对话，防止添加更多阶段。
+     */
     public void freeze() {
         frozen = true;
     }
 
+    /**
+     * 运行当前阶段的交互。
+     */
     public void runStage() {
         if (stopped) {
             return;
@@ -71,6 +97,15 @@ public class Chat {
         target.sendMessage(getCurrentStage().startMessage.get());
     }
 
+    /**
+     * 处理收到的消息。
+     *
+     * @param bot     机器人对象
+     * @param source  消息的源交互对象
+     * @param sender  消息的发送者交互对象
+     * @param message 收到的消息
+     * @param time    时间戳
+     */
     public void handleMessage(Bot bot, Interactive source, Interactive sender, Message message, int time) {
         if (stopped) {
             return;
@@ -78,10 +113,16 @@ public class Chat {
         getCurrentStage().stageExecuter.onMessage(this, bot, source, sender, message, time);
     }
 
+    /**
+     * 启动对话，运行第一个交互阶段。
+     */
     public void start() {
         runStage();
     }
 
+    /**
+     * 停止对话，释放资源。
+     */
     public void stop() {
         this.stages = null;
         this.stopped = true;
@@ -92,15 +133,26 @@ public class Chat {
         return this.stages.get(this.currentStageIndex);
     }
 
+    /**
+     * 重新运行当前阶段的交互。
+     */
     public void replay() {
         runStage();
     }
 
+    /**
+     * 跳转到指定索引的交互阶段。
+     *
+     * @param index 要跳转到的阶段索引
+     */
     public void toStage(int index) {
         this.currentStageIndex = index;
         runStage();
     }
 
+    /**
+     * 进入下一个交互阶段，如果已经是最后一个阶段，则停止对话。
+     */
     public void next() {
         this.currentStageIndex += 1;
         if (this.currentStageIndex == this.stages.size()) {

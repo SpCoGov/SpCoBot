@@ -18,14 +18,23 @@ package top.spco.service.command;
 import top.spco.base.api.Bot;
 import top.spco.base.api.Interactive;
 import top.spco.base.api.message.Message;
-import top.spco.service.command.commands.HelpCommand;
 import top.spco.events.CommandEvents;
+import top.spco.service.chat.Chat;
+import top.spco.service.chat.Stage;
+import top.spco.service.command.commands.HelpCommand;
 import top.spco.user.BotUser;
 import top.spco.user.UserPermission;
 
 import java.sql.SQLException;
 
 /**
+ * {@link Command 命令}是一种用户与机器人交互的方式。与{@link Chat 对话}可能有以下不同：
+ * <ul>
+ * <li>{@link Chat 对话}传递参数时可以有明确的引导</li>
+ * <li>{@link Chat 对话}适合传递内容较大的参数</li>
+ * <li>{@link Chat 对话}每次传递参数都可以对参数进行校验</li>
+ * <li>{@link Chat 对话}支持传入的参数数量或类型取决于{@link Stage 阶段}的处理流程，而{@link Command 命令}支持传入不限量个参数（至多{@link Integer#MAX_VALUE 2<sup>31</sup>-1}个）</li>
+ * </ul>
  * 这个接口代表一个命令的定义，用于处理用户输入的命令。每个命令都包括{@link #getLabels 标签}、{@link #getDescriptions 描述}、{@link #getType 作用域}、{@link #needPermission 所需权限}等信息，
  * 并提供{@link #init 初始化}和{@link #onCommand 执行命令}的方法。<p>
  * <b>不建议命令实现此接口，而是继承 {@link BaseCommand}类</b>

@@ -20,7 +20,6 @@ import top.spco.base.api.Interactive;
 import top.spco.base.api.message.Message;
 import top.spco.service.chat.*;
 import top.spco.service.command.BaseCommand;
-import top.spco.service.command.CommandType;
 import top.spco.user.BotUser;
 import top.spco.user.UserPermission;
 
@@ -52,11 +51,6 @@ public final class TestCommand extends BaseCommand {
     @Override
     public boolean isVisible() {
         return false;
-    }
-
-    @Override
-    public CommandType getType() {
-        return CommandType.ONLY_FRIEND;
     }
 
     @Override
