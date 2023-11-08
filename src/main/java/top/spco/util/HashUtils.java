@@ -27,7 +27,7 @@ import java.security.NoSuchAlgorithmException;
  * @version 1.0
  * @since 1.0
  */
-public class HashUtil {
+public class HashUtils {
     /**
      * 计算输入字符串的 SHA-256 哈希值。
      *

@@ -19,12 +19,12 @@ import lombok.SneakyThrows;
 import top.spco.SpCoBot;
 import top.spco.base.api.Bot;
 import top.spco.base.api.User;
+import top.spco.util.DateUtils;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -34,7 +34,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * <p>
  *
  * @author SpCo
- * @version 1.0
+ * @version 1.2
  * @since 1.0
  */
 public class BotUser {
@@ -63,7 +63,7 @@ public class BotUser {
      * @return 成功时返回签到获得的海绵山币数量, 已签到返回-1
      */
     public int sign() throws SQLException {
-        LocalDate today = LocalDate.now(ZoneId.of("Asia/Shanghai"));
+        LocalDate today = DateUtils.today();
         String signDate = SpCoBot.getInstance().getDataBase().select("user", "sign", "id", id);
         if (Objects.equals(signDate, today.toString())) {
             return -1;

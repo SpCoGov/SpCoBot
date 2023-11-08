@@ -117,7 +117,7 @@ public class Chat {
      * 启动对话，运行第一个交互阶段。
      */
     public void start() {
-        runStage();
+        toStage(0);
     }
 
     /**

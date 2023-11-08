@@ -20,14 +20,14 @@ import top.spco.base.api.Interactive;
 import top.spco.base.api.message.Message;
 import top.spco.service.command.BaseCommand;
 import top.spco.user.BotUser;
-import top.spco.util.HashUtil;
+import top.spco.util.DateUtils;
+import top.spco.util.HashUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Random;
@@ -39,7 +39,7 @@ import java.util.Set;
  * <p>
  *
  * @author SpCo
- * @version 1.0
+ * @version 1.2
  * @since 1.0
  */
 public class DivineCommand extends BaseCommand {
@@ -55,12 +55,13 @@ public class DivineCommand extends BaseCommand {
 
     @Override
     public void onCommand(Bot bot, Interactive from, BotUser sender, Message message, int time, String command, String label, String[] args) {
+        LocalDate today = DateUtils.today();
         try {
             BigDecimal hundred = new BigDecimal("100.00");
             StringBuilder sb = new StringBuilder();
             sb.append("你好，").append(sender.getId()).append("\n");
             if (args.length == 0) {
-                BigDecimal probability = getProbability(sender.getId() + "在" + LocalDate.now(ZoneId.of("Asia/Shanghai")));
+                BigDecimal probability = getProbability(sender.getId() + "在" + today);
                 String fortune = getFortune(probability.doubleValue());
                 sb.append("汝的今日运势：").append(fortune).append("\n");
                 if (fortune.equals("大凶") || fortune.equals("凶")) {
@@ -72,18 +73,18 @@ public class DivineCommand extends BaseCommand {
                 String event = command.substring(8);
                 sb.append("所求事项：").append(event).append("\n");
                 if (isHentai(event)) {
-                    if (randomBoolean(sender.getId() + "在" + LocalDate.now(ZoneId.of("Asia/Shanghai")) + "做" + event)) {
+                    if (randomBoolean(sender.getId() + "在" + today + "做" + event)) {
                         sb.append("结果：").append("好变态哦!").append("\n");
                     } else {
                         sb.append("结果：").append("变态!").append("\n");
                     }
-                    if (randomBoolean(sender.getId() + "在" + LocalDate.now(ZoneId.of("Asia/Shanghai")) + "做2" + event)) {
+                    if (randomBoolean(sender.getId() + "在" + today + "做2" + event)) {
                         sb.append("此事有 ").append("0.00").append("% 的概率不发生");
                     } else {
                         sb.append("此事有 ").append("100.00").append("% 的概率发生");
                     }
                 } else {
-                    BigDecimal probability = getProbability(sender.getId() + "在" + LocalDate.now(ZoneId.of("Asia/Shanghai")) + "做" + event);
+                    BigDecimal probability = getProbability(sender.getId() + "在" + today + "做" + event);
                     String fortune = getFortune(probability.doubleValue());
                     sb.append("结果：").append(fortune).append("\n");
                     if (fortune.equals("大凶") || fortune.equals("凶")) {
@@ -116,7 +117,7 @@ public class DivineCommand extends BaseCommand {
     }
 
     private boolean randomBoolean(String seed) throws NoSuchAlgorithmException {
-        seed = HashUtil.sha256(seed);
+        seed = HashUtils.sha256(seed);
         return new Random(seed.hashCode()).nextBoolean();
     }
 
