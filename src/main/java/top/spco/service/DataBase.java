@@ -63,9 +63,11 @@ public class DataBase {
             conn = DriverManager.getConnection("jdbc:sqlite:" + dbFilePath);
 
             createTables();
-            addColumn("user", "premium", "INTEGER DEFAULT 0");
+            if (!columnExistsInTable("user", "premium")) {
+                addColumn("user", "premium", "INTEGER DEFAULT 0");
+            }
         } catch (Exception e) {
-            throw new RuntimeException("数据库连接或表创建失败: " + e.getMessage());
+            throw new RuntimeException("无法连接至数据库或数据库初始化失败: " + e.getMessage());
         }
     }
 
@@ -441,13 +443,6 @@ public class DataBase {
 
         String sql = "ALTER TABLE " + tableName + " ADD COLUMN " + columnName + " " + dataType;
 
-        try {
-            statement.executeUpdate(sql);
-        } catch (SQLException e) {
-            if (!e.getSQLState().startsWith("42S21")) {
-                throw e;
-            }
-        }
-
+        statement.executeUpdate(sql);
     }
 }

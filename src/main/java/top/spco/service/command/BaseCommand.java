@@ -36,8 +36,8 @@ public abstract class BaseCommand implements Command {
     }
 
     @Override
-    public boolean hasPermission(BotUser user) throws SQLException {
-        return user.getPermission().getLevel() >= needPermission().getLevel();
+    public boolean hasPermission(BotUser user) {
+        return user.getPermission() >= needPermission().getLevel();
     }
 
     @Override

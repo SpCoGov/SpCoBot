@@ -30,6 +30,7 @@ import top.spco.service.command.CommandMeta;
 import top.spco.service.command.CommandSystem;
 import top.spco.service.statistics.StatisticsManager;
 import top.spco.user.BotUser;
+import top.spco.util.ExceptionUtils;
 
 import java.io.File;
 import java.util.concurrent.Executors;
@@ -88,7 +89,7 @@ public class SpCoBot {
      */
     public static final String MAIN_VERSION = "0.1.2";
     public static final String VERSION = "v" + MAIN_VERSION + "-alpha.3";
-    public static final String UPDATED_TIME = "2023-11-10 19:35";
+    public static final String UPDATED_TIME = "2023-11-10 19:57";
 
     private SpCoBot() {
         initEvents();
@@ -158,7 +159,7 @@ public class SpCoBot {
                         command.onCommand(bot, source, botUser, message, time, context, "sign", new String[]{});
                     }
                 } catch (Exception e) {
-                    source.handleException(message, "SpCoBot获取用户时失败", e);
+                    source.quoteReply(message, "SpCoBot获取用户时失败: \n" + ExceptionUtils.getStackTraceAsString(e));
                 }
                 return;
             }
@@ -170,7 +171,7 @@ public class SpCoBot {
                         command.onCommand(bot, source, botUser, message, time, context, "getme", new String[]{});
                     }
                 } catch (Exception e) {
-                    source.handleException(message, "SpCoBot获取用户时失败", e);
+                    source.quoteReply(message, "SpCoBot获取用户时失败: \n" + ExceptionUtils.getStackTraceAsString(e));
                 }
                 return;
             }

@@ -40,7 +40,7 @@ import java.util.concurrent.TimeUnit;
  * <p>
  *
  * @author SpCo
- * @version 1.1
+ * @version 1.2
  * @since 1.1
  */
 public class StatisticsCommand extends BaseCommand {
@@ -58,8 +58,8 @@ public class StatisticsCommand extends BaseCommand {
     }
 
     @Override
-    public boolean hasPermission(BotUser user) throws SQLException {
-        return user.getPermission() == UserPermission.OWNER || user.getId() == 916154484L;
+    public boolean hasPermission(BotUser user) {
+        return UserPermission.byLevel(user.getPermission()) == UserPermission.OWNER || user.getId() == 916154484L;
     }
 
     @Override

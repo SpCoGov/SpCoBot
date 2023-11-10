@@ -20,6 +20,7 @@ import top.spco.base.api.Interactive;
 import top.spco.base.api.message.Message;
 import top.spco.service.command.BaseCommand;
 import top.spco.user.BotUser;
+import top.spco.user.UserPermission;
 
 import java.sql.SQLException;
 
@@ -45,10 +46,6 @@ public final class GetmeCommand extends BaseCommand {
 
     @Override
     public void onCommand(Bot bot, Interactive from, BotUser sender, Message message, int time, String command, String label, String[] args) {
-        try {
-            from.quoteReply(message, "QQ: " + sender.getId() + "\n海绵山币: " + sender.getSmfCoin() + "\n会员信息: " + (sender.isPremium() ? "Premium会员" : "普通会员") + "\n权限信息: " + sender.getPermission());
-        } catch (SQLException e) {
-            from.handleException(message, "获取个人信息失败", e);
-        }
+        from.quoteReply(message, "QQ: " + sender.getId() + "\n海绵山币: " + sender.getSmfCoin() + "\n会员信息: " + (sender.isPremium() ? "Premium会员" : "普通会员") + "\n权限信息: " + UserPermission.byLevel(sender.getPermission()));
     }
 }

@@ -31,7 +31,7 @@ import java.sql.SQLException;
  * <p>
  *
  * @author SpCo
- * @version 1.0
+ * @version 1.2
  * @since 1.0
  */
 public final class InfoCommand extends BaseCommand {
@@ -47,16 +47,10 @@ public final class InfoCommand extends BaseCommand {
 
     @Override
     public void onCommand(Bot bot, Interactive from, BotUser sender, Message message, int time, String command, String label, String[] args) {
-        try {
-            if (sender.getPermission() == UserPermission.OWNER) {
-                from.quoteReply(message, "机器人运行状态: 正常\n" + (SpCoBot.getInstance().getCAATP().isConnected() ? "CAATP连接状态: 已连接" : "CAATP连接状态: 连接断开"));
-            } else {
-                from.quoteReply(message, "机器人正常运行中");
-            }
-        } catch (SQLException e) {
-            from.handleException(message, "获取用户权限失败", e);
+        if (UserPermission.byLevel(sender.getPermission()) == UserPermission.OWNER) {
+            from.quoteReply(message, "机器人运行状态: 正常\n" + (SpCoBot.getInstance().getCAATP().isConnected() ? "CAATP连接状态: 已连接" : "CAATP连接状态: 连接断开"));
+        } else {
+            from.quoteReply(message, "机器人正常运行中");
         }
-
-
     }
 }

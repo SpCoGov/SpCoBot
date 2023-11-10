@@ -15,6 +15,9 @@
  */
 package top.spco.user;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import top.spco.SpCoBot;
 import top.spco.base.api.Bot;
 import top.spco.base.api.User;
@@ -36,27 +39,15 @@ import java.util.concurrent.ThreadLocalRandom;
  * @version 1.2
  * @since 1.0
  */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class BotUser {
-    private final long id;
+    private long id;
     private int permission;
     private int smfCoin;
+    private String sign;
     private int premium;
-
-    public BotUser(long id, UserPermission permission, int smfCoin, boolean premium) throws UserFetchException {
-        this.id = id;
-        this.permission = permission.getLevel();
-        this.smfCoin = smfCoin;
-        this.premium = premium ? 1 : 0;
-    }
-
-    public UserPermission getPermission() throws SQLException {
-        this.permission = SpCoBot.getInstance().getDataBase().selectInt("user", "permission", "id", this.id);
-        return UserPermission.byLevel(this.permission);
-    }
-
-    public long getId() {
-        return id;
-    }
 
     /**
      * 签到
@@ -71,22 +62,13 @@ public class BotUser {
         }
         SpCoBot.getInstance().getDataBase().update("update user set sign=? where id=?", today, id);
         int randomNumber = ThreadLocalRandom.current().nextInt(10, 101);
-        setSmfCoin(getSmfCoin() + randomNumber);
+        this.smfCoin += randomNumber;
+        SpCoBot.getInstance().getDataBase().update("update user set smf_coin=? where id=?", this.smfCoin, this.id);
         return randomNumber;
     }
 
     public boolean isPremium() {
         return premium == 1;
-    }
-
-    public void setSmfCoin(int smfCoin) throws SQLException {
-        this.smfCoin = smfCoin;
-        SpCoBot.getInstance().getDataBase().update("update user set smf_coin=? where id=?", this.smfCoin, this.id);
-    }
-
-    public int getSmfCoin() throws SQLException {
-        this.smfCoin = SpCoBot.getInstance().getDataBase().selectInt("user", "smf_coin", "id", this.id);
-        return this.smfCoin;
     }
 
     public static BotUser getOrCreate(long id) throws UserFetchException {
@@ -104,7 +86,8 @@ public class BotUser {
             botUser = SpCoBot.getInstance().getDataBase().queryForObject("select * from user where id=?", BotUser.class, id);
             return botUser;
         } catch (Exception e) {
-            throw new UserFetchException(e.getMessage(), e.getCause());
+            e.printStackTrace();
+            throw new UserFetchException(e.getMessage(), e);
         }
     }
 
