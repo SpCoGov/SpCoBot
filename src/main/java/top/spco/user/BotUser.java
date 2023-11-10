@@ -15,7 +15,6 @@
  */
 package top.spco.user;
 
-import lombok.SneakyThrows;
 import top.spco.SpCoBot;
 import top.spco.base.api.Bot;
 import top.spco.base.api.User;
@@ -39,18 +38,20 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class BotUser {
     private final long id;
-    private UserPermission permission;
+    private int permission;
     private int smfCoin;
+    private int premium;
 
-    public BotUser(long id, UserPermission permission, int smfCoin) throws UserFetchException {
+    public BotUser(long id, UserPermission permission, int smfCoin, boolean premium) throws UserFetchException {
         this.id = id;
-        this.permission = permission;
+        this.permission = permission.getLevel();
         this.smfCoin = smfCoin;
+        this.premium = premium ? 1 : 0;
     }
 
     public UserPermission getPermission() throws SQLException {
-        this.permission = UserPermission.byLevel(SpCoBot.getInstance().getDataBase().selectInt("user", "permission", "id", this.id));
-        return this.permission;
+        this.permission = SpCoBot.getInstance().getDataBase().selectInt("user", "permission", "id", this.id);
+        return UserPermission.byLevel(this.permission);
     }
 
     public long getId() {
@@ -74,6 +75,9 @@ public class BotUser {
         return randomNumber;
     }
 
+    public boolean isPremium() {
+        return premium == 1;
+    }
 
     public void setSmfCoin(int smfCoin) throws SQLException {
         this.smfCoin = smfCoin;
@@ -85,22 +89,23 @@ public class BotUser {
         return this.smfCoin;
     }
 
-    public static BotUser getOrCreate(long id) throws UserFetchException, SQLException {
-        BotUser botUser;
-        if (isUserExists(id)) {
-            int permission = SpCoBot.getInstance().getDataBase().selectInt("user", "permission", "id", id);
-            int smfCoin = SpCoBot.getInstance().getDataBase().selectInt("user", "smf_coin", "id", id);
-            botUser = new BotUser(id, UserPermission.byLevel(permission), smfCoin);
+    public static BotUser getOrCreate(long id) throws UserFetchException {
+        try {
+            BotUser botUser;
+            if (isUserExists(id)) {
+                botUser = SpCoBot.getInstance().getDataBase().queryForObject("select * from user where id=?", BotUser.class, id);
+                return botUser;
+            }
+            UserPermission userPermission = UserPermission.NORMAL;
+            if (id == SpCoBot.getInstance().BOT_ID || id == SpCoBot.getInstance().BOT_OWNER_ID) {
+                userPermission = UserPermission.OWNER;
+            }
+            SpCoBot.getInstance().getDataBase().insertData("insert into user(id,permission) values (?,?)", id, userPermission.getLevel());
+            botUser = SpCoBot.getInstance().getDataBase().queryForObject("select * from user where id=?", BotUser.class, id);
             return botUser;
+        } catch (Exception e) {
+            throw new UserFetchException(e.getMessage(), e.getCause());
         }
-        UserPermission userPermission = UserPermission.NORMAL;
-        if (id == SpCoBot.getInstance().BOT_ID || id == SpCoBot.getInstance().BOT_OWNER_ID) {
-            userPermission = UserPermission.OWNER;
-        }
-        SpCoBot.getInstance().getDataBase().insertData("insert into user(id,permission) values (?,?)", id, userPermission.getLevel());
-        int smfCoin = SpCoBot.getInstance().getDataBase().selectInt("user", "smf_coin", "id", id);
-        botUser = new BotUser(id, userPermission, smfCoin);
-        return botUser;
     }
 
     /**
@@ -109,7 +114,6 @@ public class BotUser {
      * @param id 要检查的QQ号。
      * @return 如果记录存在，则返回 true；否则返回 false。
      */
-    @SneakyThrows
     public static boolean isUserExists(long id) {
         String query = "SELECT COUNT(*) FROM user WHERE id = ?";
         try (PreparedStatement pstmt = SpCoBot.getInstance().getDataBase().getConn().prepareStatement(query)) {

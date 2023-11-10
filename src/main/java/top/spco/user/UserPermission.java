@@ -21,7 +21,7 @@ package top.spco.user;
  * <p>
  *
  * @author SpCo
- * @version 1.0
+ * @version 1.2
  * @since 1.0
  */
 public enum UserPermission implements Comparable<UserPermission> {
@@ -98,5 +98,24 @@ public enum UserPermission implements Comparable<UserPermission> {
                 return null;
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        switch (this) {
+            case OWNER -> {
+                return "机器人主人";
+            }
+            case BANNED -> {
+                return "已封禁用户";
+            }
+            case NORMAL -> {
+                return "普通用户";
+            }
+            case ADMINISTRATOR -> {
+                return "机器人管理员";
+            }
+        }
+        return "其它用户";
     }
 }

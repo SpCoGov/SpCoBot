@@ -15,16 +15,20 @@
  */
 package top.spco;
 
+import org.jetbrains.annotations.TestOnly;
+
 /**
  * <p>
  * Created on 2023/10/31 0031 20:49
  * <p>
  *
  * @author SpCo
- * @version 1.0
+ * @version 1.2
  * @since 1.0
  */
+@TestOnly
 public class Test {
+    @TestOnly
     public static void main(String[] args) {
         try {
         } catch (Exception e) {

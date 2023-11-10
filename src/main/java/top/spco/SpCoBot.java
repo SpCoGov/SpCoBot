@@ -18,21 +18,23 @@ package top.spco;
 import top.spco.base.api.Bot;
 import top.spco.base.api.Logger;
 import top.spco.base.api.message.service.MessageService;
+import top.spco.events.*;
+import top.spco.service.AutoSign;
+import top.spco.service.CAATP;
+import top.spco.service.DataBase;
+import top.spco.service.GroupMessageRecorder;
 import top.spco.service.chat.ChatManager;
 import top.spco.service.chat.ChatType;
 import top.spco.service.command.Command;
 import top.spco.service.command.CommandMeta;
 import top.spco.service.command.CommandSystem;
-import top.spco.events.*;
-import top.spco.service.CAATP;
-import top.spco.service.DataBase;
-import top.spco.service.GroupMessageRecorder;
 import top.spco.service.statistics.StatisticsManager;
 import top.spco.user.BotUser;
-import top.spco.user.UserFetchException;
 
 import java.io.File;
-import java.sql.SQLException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <pre>
@@ -58,7 +60,7 @@ import java.sql.SQLException;
  * </pre>
  *
  * @author SpCo
- * @version 1.1
+ * @version 1.2
  * @since 1.0
  */
 public class SpCoBot {
@@ -85,8 +87,8 @@ public class SpCoBot {
      * <b>更新版本号(仅限核心的 Feature)时请不要忘记在 build.gradle 中同步修改版本号</b>
      */
     public static final String MAIN_VERSION = "0.1.2";
-    public static final String VERSION = "v" + MAIN_VERSION + "-alpha";
-    public static final String UPDATED_TIME = "2023-11-07 22:11";
+    public static final String VERSION = "v" + MAIN_VERSION + "-alpha.3";
+    public static final String UPDATED_TIME = "2023-11-10 19:35";
 
     private SpCoBot() {
         initEvents();
@@ -96,6 +98,7 @@ public class SpCoBot {
         this.dataBase = new DataBase();
         this.caatp = CAATP.getInstance();
         new GroupMessageRecorder();
+        new AutoSign();
     }
 
     private void initEvents() {
@@ -103,6 +106,11 @@ public class SpCoBot {
             return;
         }
         registered = true;
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        // 每秒钟调用一次
+        scheduler.scheduleAtFixedRate(PeriodicSchedulerEvents.SECOND_TICK::invoker, 0, 1, TimeUnit.SECONDS);
+        // 每分钟调用一次
+        scheduler.scheduleAtFixedRate(PeriodicSchedulerEvents.MINUTE_TICK::invoker, 0, 1, TimeUnit.MINUTES);
         // 插件启用时
         PluginEvents.ENABLE_PLUGIN_TICK.register(this::onEnable);
         // 插件禁用时
@@ -149,7 +157,7 @@ public class SpCoBot {
                     if (command.hasPermission(botUser)) {
                         command.onCommand(bot, source, botUser, message, time, context, "sign", new String[]{});
                     }
-                } catch (UserFetchException | SQLException e) {
+                } catch (Exception e) {
                     source.handleException(message, "SpCoBot获取用户时失败", e);
                 }
                 return;
@@ -161,7 +169,7 @@ public class SpCoBot {
                     if (command.hasPermission(botUser)) {
                         command.onCommand(bot, source, botUser, message, time, context, "getme", new String[]{});
                     }
-                } catch (UserFetchException | SQLException  e) {
+                } catch (Exception e) {
                     source.handleException(message, "SpCoBot获取用户时失败", e);
                 }
                 return;

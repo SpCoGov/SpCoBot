@@ -24,10 +24,13 @@ import top.spco.base.event.EventFactory;
  * <p>
  *
  * @author SpCo
- * @version 1.0
+ * @version 1.2
  * @since 1.0
  */
 public class CAATPEvents {
+    private CAATPEvents() {
+    }
+
     /**
      * Called when a CAATP message is received.
      */

@@ -34,7 +34,7 @@ import java.util.List;
  * <p>
  *
  * @author SpCo
- * @version 1.1
+ * @version 1.2
  * @since 1.0
  */
 public class DataBase {
@@ -63,6 +63,7 @@ public class DataBase {
             conn = DriverManager.getConnection("jdbc:sqlite:" + dbFilePath);
 
             createTables();
+            addColumn("user", "premium", "INTEGER DEFAULT 0");
         } catch (Exception e) {
             throw new RuntimeException("数据库连接或表创建失败: " + e.getMessage());
         }
@@ -114,8 +115,11 @@ public class DataBase {
     public String select(String table, String columns, String whereClause, Object whereValues) throws SQLException {
         ResultSet rs = select(table, new String[]{columns}, whereClause + " = ?", new Object[]{whereValues});
         if (rs.next()) {
-            return rs.getString(columns);
+            String s = rs.getString(columns);
+            rs.close();
+            return s;
         } else {
+            rs.close();
             return null;
         }
     }
@@ -132,8 +136,11 @@ public class DataBase {
     public Integer selectInt(String table, String columns, String whereClause, Object whereValues) throws SQLException {
         ResultSet rs = select(table, new String[]{columns}, whereClause + " = ?", new Object[]{whereValues});
         if (rs.next()) {
-            return rs.getInt(columns);
+            int i = rs.getInt(columns);
+            rs.close();
+            return i;
         } else {
+            rs.close();
             return null;
         }
     }
@@ -183,7 +190,7 @@ public class DataBase {
     /**
      * 查询单个对象
      *
-     * @param sql    SQL语句
+     * @param sql    SQL语句 如："select * from product where shop_id=? and data=? and price=?"
      * @param clazz  实体类
      * @param params 参数数组
      * @param <T>    实体类类型
@@ -193,12 +200,59 @@ public class DataBase {
         if (conn == null || conn.isClosed()) {
             openConn();
         }
+
+        // 初始化结果对象
         T result = null;
+
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        setParameters(pstmt, params);
+
+        // 执行查询，获取结果集
+        ResultSet rs = pstmt.executeQuery();
+
+        // 如果结果集中有数据，进行处理
+        if (rs.next()) {
+            // 使用反射创建实体类对象
+            result = clazz.getDeclaredConstructor().newInstance();
+
+            // 获取结果集的元数据
+            ResultSetMetaData metaData = rs.getMetaData();
+            int columnCount = metaData.getColumnCount();
+
+            // 遍历结果集的每一列
+            for (int i = 1; i <= columnCount; i++) {
+                // 将数据库列名转换为驼峰命名规则
+                String columnName = underlineToCamel(metaData.getColumnName(i));
+                // 获取数据库列的值
+                Object columnValue = rs.getObject(metaData.getColumnName(i));
+                // 使用反射设置实体类的属性值
+                setProperty(result, columnName, columnValue);
+            }
+        }
+        closeResultSet(rs);
+        closeStatement(pstmt);
+        return result;
+    }
+
+    /**
+     * 查询多个对象
+     *
+     * @param sql    SQL语句 如："select * from product where shop_id=? and data=?"
+     * @param clazz  实体类
+     * @param params 参数数组
+     * @param <T>    实体类类型
+     * @return 实体类对象列表
+     */
+    public <T> List<T> queryForList(String sql, Class<T> clazz, Object... params) throws SQLException, InstantiationException, IllegalAccessException {
+        if (conn == null || conn.isClosed()) {
+            openConn();
+        }
+        List<T> resultList = new ArrayList<>();
         PreparedStatement pstmt = conn.prepareStatement(sql);
         setParameters(pstmt, params);
         ResultSet rs = pstmt.executeQuery();
-        if (rs.next()) {
-            result = clazz.getDeclaredConstructor().newInstance();
+        while (rs.next()) {
+            T result = clazz.newInstance();
             ResultSetMetaData metaData = rs.getMetaData();
             int columnCount = metaData.getColumnCount();
             for (int i = 1; i <= columnCount; i++) {
@@ -206,10 +260,11 @@ public class DataBase {
                 Object columnValue = rs.getObject(metaData.getColumnName(i));
                 setProperty(result, columnName, columnValue);
             }
+            resultList.add(result);
         }
         closeResultSet(rs);
         closeStatement(pstmt);
-        return result;
+        return resultList;
     }
 
     /**
@@ -372,5 +427,27 @@ public class DataBase {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 为数据库添加一个新的字段
+     *
+     * @param tableName  要添加的表名
+     * @param columnName 要添加的字段名
+     * @param dataType   要添加的字段的数据类型
+     */
+    public void addColumn(String tableName, String columnName, String dataType) throws SQLException {
+        Statement statement = getConn().createStatement();
+
+        String sql = "ALTER TABLE " + tableName + " ADD COLUMN " + columnName + " " + dataType;
+
+        try {
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            if (!e.getSQLState().startsWith("42S21")) {
+                throw e;
+            }
+        }
+
     }
 }

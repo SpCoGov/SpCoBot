@@ -101,7 +101,7 @@ public class CommandSystem {
                         interactor.handleException(message, "获取用户权限失败", e);
                     }
                     object.onCommand(bot, interactor, user, message, time, command, label, args);
-                } catch (UserFetchException | SQLException e) {
+                } catch (UserFetchException e) {
                     interactor.handleException(message, "SpCoBot获取用户时失败", e);
                 } catch (Exception e) {
                     interactor.handleException(message, e);
@@ -125,7 +125,7 @@ public class CommandSystem {
                         from.handleException(message, "获取用户权限失败", e);
                     }
                     object.onCommand(bot, from, user, message, time, command, label, args);
-                } catch (UserFetchException | SQLException e) {
+                } catch (UserFetchException e) {
                     from.handleException(message, "SpCoBot获取用户时失败", e);
                 } catch (Exception e) {
                     from.handleException(message, e);
@@ -149,7 +149,7 @@ public class CommandSystem {
                         interactor.handleException(message, "获取用户权限失败", e);
                     }
                     object.onCommand(bot, interactor, user, message, time, command, label, args);
-                } catch (UserFetchException | SQLException e) {
+                } catch (UserFetchException e) {
                     interactor.handleException(message, "SpCoBot获取用户时失败", e);
                 } catch (Exception e) {
                     interactor.handleException(message, e);

@@ -29,7 +29,7 @@ import java.sql.SQLException;
  * <p>
  *
  * @author SpCo
- * @version 1.0
+ * @version 1.2
  * @since 1.0
  */
 public final class GetmeCommand extends BaseCommand {
@@ -46,7 +46,7 @@ public final class GetmeCommand extends BaseCommand {
     @Override
     public void onCommand(Bot bot, Interactive from, BotUser sender, Message message, int time, String command, String label, String[] args) {
         try {
-            from.quoteReply(message, "QQ: " + sender.getId() + "\n海绵山币: " + sender.getSmfCoin());
+            from.quoteReply(message, "QQ: " + sender.getId() + "\n海绵山币: " + sender.getSmfCoin() + "\n会员信息: " + (sender.isPremium() ? "Premium会员" : "普通会员") + "\n权限信息: " + sender.getPermission());
         } catch (SQLException e) {
             from.handleException(message, "获取个人信息失败", e);
         }

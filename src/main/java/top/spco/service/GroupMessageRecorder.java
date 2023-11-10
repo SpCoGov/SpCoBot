@@ -27,11 +27,14 @@ import java.util.Random;
  * <p>
  *
  * @author SpCo
- * @version 1.1
+ * @version 1.2
  * @since 1.0
  */
 public class GroupMessageRecorder {
     private static boolean registered = false;
+    /**
+     * 记录机器人在每个群发送的最后一条消息
+     */
     private static final Map<Long, String> lastMessage = new HashMap<>();
 
     public GroupMessageRecorder() {
