@@ -15,7 +15,7 @@
  */
 package top.spco.base.api;
 
-import top.spco.base.InteractiveList;
+import top.spco.util.InteractiveList;
 import top.spco.user.UserFetchException;
 
 /**

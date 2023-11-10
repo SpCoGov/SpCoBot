@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco.base;
+package top.spco.util;
 
 import org.jetbrains.annotations.NotNull;
 import top.spco.base.api.Interactive;
@@ -30,7 +30,7 @@ import java.util.function.Predicate;
  * <p>
  *
  * @author SpCo
- * @version 1.0
+ * @version 1.2
  * @since 1.0
  */
 public class InteractiveList<C extends Interactive> implements Collection<C> {

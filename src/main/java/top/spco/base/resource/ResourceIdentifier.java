@@ -31,7 +31,7 @@ public class ResourceIdentifier implements Comparable<ResourceIdentifier> {
     private final String namespace;
     private final String path;
 
-    protected ResourceIdentifier(String namespace, String path, @Nullable ResourceIdentifier.Dummy dummy) {
+    protected ResourceIdentifier(String namespace, String path, @Nullable ResourceIdentifier.Dummy ignoredDummy) {
         this.namespace = namespace;
         this.path = path;
     }

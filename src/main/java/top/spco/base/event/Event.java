@@ -24,7 +24,7 @@ import top.spco.base.resource.ResourceIdentifier;
  * <p>
  *
  * @author SpCo
- * @version 1.0
+ * @version 1.2
  * @since 1.0
  */
 @ApiStatus.NonExtendable
@@ -61,7 +61,7 @@ public abstract class Event<T> {
      * The identifier of the default phase.
      * Have a look at {@link EventFactory#createWithPhases} for an explanation of event phases.
      */
-    public static final ResourceIdentifier DEFAULT_PHASE = new ResourceIdentifier("minecraft", "default");
+    public static final ResourceIdentifier DEFAULT_PHASE = new ResourceIdentifier("spco_bot", "default");
 
     /**
      * Register a listener to the event for the specified phase.
