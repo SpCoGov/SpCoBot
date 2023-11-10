@@ -47,7 +47,7 @@ public final class InfoCommand extends BaseCommand {
 
     @Override
     public void onCommand(Bot bot, Interactive from, BotUser sender, Message message, int time, String command, String label, String[] args) {
-        if (UserPermission.byLevel(sender.getPermission()) == UserPermission.OWNER) {
+        if (sender.toUserPermission() == UserPermission.OWNER) {
             from.quoteReply(message, "机器人运行状态: 正常\n" + (SpCoBot.getInstance().getCAATP().isConnected() ? "CAATP连接状态: 已连接" : "CAATP连接状态: 连接断开"));
         } else {
             from.quoteReply(message, "机器人正常运行中");

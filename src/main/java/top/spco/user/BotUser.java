@@ -31,9 +31,7 @@ import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * <p>
- * Created on 2023/10/28 0028 18:47
- * <p>
+ * 用户类，用于表示机器人用户。
  *
  * @author SpCo
  * @version 1.2
@@ -53,6 +51,7 @@ public class BotUser {
      * 签到
      *
      * @return 成功时返回签到获得的海绵山币数量, 已签到返回-1
+     * @throws SQLException 数据库访问异常
      */
     public int sign() throws SQLException {
         LocalDate today = DateUtils.today();
@@ -67,10 +66,31 @@ public class BotUser {
         return randomNumber;
     }
 
+    /**
+     * 判断用户是否为Premium会员。
+     *
+     * @return 如果用户是Premium会员，返回 true；否则返回 false。
+     */
     public boolean isPremium() {
         return premium == 1;
     }
 
+    /**
+     * 将用户权限转换为 {@link UserPermission}。
+     *
+     * @return 对应的用户权限
+     */
+    public UserPermission toUserPermission() {
+        return UserPermission.byLevel(this.permission);
+    }
+
+    /**
+     * 获取或创建指定用户的 {@link BotUser} 对象。
+     *
+     * @param id 用户的Id
+     * @return 用户对象
+     * @throws UserFetchException 获取用户信息失败时抛出的异常
+     */
     public static BotUser getOrCreate(long id) throws UserFetchException {
         try {
             BotUser botUser;
@@ -113,7 +133,17 @@ public class BotUser {
         return false;
     }
 
-    private static User getUser(Bot bot, long id) throws UserFetchException {
+    /**
+     * 获取或创建指定用户的 {@link User} 对象。
+     *
+     * @param bot 机器人实例
+     * @param id  用户的Id
+     * @return 用户对象
+     * @throws UserFetchException 获取用户信息失败时抛出的异常
+     * @deprecated 请使用 {@link #getOrCreate(long)} 方法替代
+     */
+    @Deprecated(since = "1.2", forRemoval = true)
+    public static User getUser(Bot bot, long id) throws UserFetchException {
         if (bot == null) {
             throw new UserFetchException("Bot instance is null while trying to fetch user.");
         } else {

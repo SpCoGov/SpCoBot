@@ -37,7 +37,7 @@ public abstract class BaseCommand implements Command {
 
     @Override
     public boolean hasPermission(BotUser user) {
-        return user.getPermission() >= needPermission().getLevel();
+        return user.toUserPermission().getLevel() >= needPermission().getLevel();
     }
 
     @Override

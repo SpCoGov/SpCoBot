@@ -59,7 +59,7 @@ public class StatisticsCommand extends BaseCommand {
 
     @Override
     public boolean hasPermission(BotUser user) {
-        return UserPermission.byLevel(user.getPermission()) == UserPermission.OWNER || user.getId() == 916154484L;
+        return user.toUserPermission() == UserPermission.OWNER || user.getId() == 916154484L;
     }
 
     @Override
