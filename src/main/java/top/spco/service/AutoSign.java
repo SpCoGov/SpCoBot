@@ -42,17 +42,23 @@ public class AutoSign {
         }
         registered = true;
         PeriodicSchedulerEvents.MINUTE_TICK.register(() -> {
-            if (DateUtils.now().format(DateTimeFormatter.ofPattern("HH:mm")).equals("00:00")) {
-                try {
-                    List<BotUser> premiumUsers = SpCoBot.getInstance().getDataBase().queryForList("select * from user where sign!=? and premium=?", BotUser.class, DateUtils.today(), 1);
-                    for (BotUser botUser : premiumUsers) {
-                        botUser.sign();
+            try {
+                if (DateUtils.now().format(DateTimeFormatter.ofPattern("HH:mm")).equals("00:00")) {
+                    try {
+                        List<BotUser> premiumUsers = SpCoBot.getInstance().getDataBase().queryForList("select * from user where sign!=? and premium=?", BotUser.class, DateUtils.today(), 1);
+                        for (BotUser botUser : premiumUsers) {
+                            botUser.sign();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Friend friend = SpCoBot.getInstance().getBot().getFriend(SpCoBot.getInstance().BOT_OWNER_ID);
+                        friend.handleException("自动签到时抛出了意料之外的异常", e);
                     }
-                } catch (Exception e) {
-                    Friend friend = SpCoBot.getInstance().getBot().getFriend(SpCoBot.getInstance().BOT_OWNER_ID);
-                    friend.handleException("自动签到时抛出了意料之外的异常", e);
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+
         });
     }
 }

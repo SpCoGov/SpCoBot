@@ -17,6 +17,7 @@ package top.spco.service.command.commands;
 
 import top.spco.SpCoBot;
 import top.spco.base.api.Bot;
+import top.spco.base.api.Friend;
 import top.spco.base.api.Group;
 import top.spco.base.api.Interactive;
 import top.spco.base.api.message.Message;
@@ -28,7 +29,6 @@ import top.spco.service.statistics.Statistics;
 import top.spco.user.BotUser;
 import top.spco.user.UserPermission;
 
-import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -242,11 +242,12 @@ public class StatisticsCommand extends BaseCommand {
                                     }
                                     group.sendMessage(sb.toString());
                                     source.sendMessage("消息已发送至目标群");
+                                    Friend friend = SpCoBot.getInstance().getBot().getFriend(SpCoBot.getInstance().BOT_OWNER_ID);
+                                    friend.sendMessage("有用户在群" + groupId + "中发起了一场报名统计，如果需要重启机器人，请注意这场报名统计的结束情况。");
                                     SpCoBot.getInstance().statisticsManager.register(group, statistics);
                                     ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
                                     Runnable delayedTask = () -> {
                                         try {
-                                            System.out.println("报名结束");
                                             StringBuilder sb2 = new StringBuilder("报名结束，以下为本次报名的统计信息：").append("\n");
                                             Map<Map.Entry<String, Integer>, Boolean> condition = new HashMap<>();
                                             for (var rank : ranks.entrySet()) {

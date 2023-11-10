@@ -109,9 +109,9 @@ public class SpCoBot {
         registered = true;
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         // 每秒钟调用一次
-        scheduler.scheduleAtFixedRate(PeriodicSchedulerEvents.SECOND_TICK::invoker, 0, 1, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(() -> PeriodicSchedulerEvents.SECOND_TICK.invoker().onSecondTick(), 0, 1, TimeUnit.SECONDS);
         // 每分钟调用一次
-        scheduler.scheduleAtFixedRate(PeriodicSchedulerEvents.MINUTE_TICK::invoker, 0, 1, TimeUnit.MINUTES);
+        scheduler.scheduleAtFixedRate(() -> PeriodicSchedulerEvents.MINUTE_TICK.invoker().onMinuteTick(), 0, 1, TimeUnit.MINUTES);
         // 插件启用时
         PluginEvents.ENABLE_PLUGIN_TICK.register(this::onEnable);
         // 插件禁用时
