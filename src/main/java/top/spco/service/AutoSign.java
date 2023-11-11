@@ -58,7 +58,6 @@ public class AutoSign {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
         });
     }
 }

@@ -145,7 +145,7 @@ public class BotUser {
     @Deprecated(since = "1.2", forRemoval = true)
     public static User getUser(Bot bot, long id) throws UserFetchException {
         if (bot == null) {
-            throw new UserFetchException("Bot instance is null while trying to fetch user.");
+            throw new UserFetchException("BotSettings instance is null while trying to fetch user.");
         } else {
             User user = bot.getUser(id);
             if (user == null) {

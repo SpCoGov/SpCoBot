@@ -27,6 +27,7 @@ public final class MiraiPlugin extends JavaPlugin {
     private MiraiPlugin() {
         super(new JvmPluginDescriptionBuilder("top.spco.spcobot", SpCoBot.MAIN_VERSION).name("SpCoBot").author("SpCo").build());
         SpCoBot.dataFolder = getDataFolder();
+        SpCoBot.configFolder = getConfigFolder();
         SpCoBot.logger = new MiraiLogger(getLogger());
         BOT.initOthers();
         BOT.setMessageService(new MiraiMessageServiceImpl());

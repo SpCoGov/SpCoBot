@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco.service;
+package top.spco.core;
 
 import top.spco.SpCoBot;
 import top.spco.events.CAATPEvents;
@@ -29,11 +29,11 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
- * Created on 2023/10/29 0029 20:35
+ * CAATP
  * <p>
  *
  * @author SpCo
- * @version 1.0
+ * @version 2.0
  * @since 1.0
  */
 public class CAATP {
@@ -43,8 +43,13 @@ public class CAATP {
     private Socket socket;
     private PrintWriter out;
     private volatile boolean isConnected = false;
+    private static boolean registered = false;
 
     private CAATP() {
+        if (registered) {
+            return;
+        }
+        registered = true;
         CAATPEvents.RECEIVE.register(message -> {
             SpCoBot.logger.info("收到CAATP发送的消息: " + message);
             if (message.equals("hello")) {

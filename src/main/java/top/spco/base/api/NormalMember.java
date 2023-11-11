@@ -37,7 +37,7 @@ public interface NormalMember extends Member {
 
     /**
      * 给予或移除群成员的管理员权限<p>
-     * 此操作需要 Bot 为{@link MemberPermission#OWNER 群主}
+     * 此操作需要 BotSettings 为{@link MemberPermission#OWNER 群主}
      *
      * @param operation true 为给予
      */

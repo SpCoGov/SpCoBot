@@ -29,7 +29,7 @@ import top.spco.user.UserFetchException;
  */
 public interface Bot extends Identifiable {
     /**
-     * 当 Bot 在线 (可正常收发消息) 时返回 {@code true}.
+     * 当 BotSettings 在线 (可正常收发消息) 时返回 {@code true}.
      */
     boolean isOnline();
 

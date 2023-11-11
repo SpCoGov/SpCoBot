@@ -15,13 +15,14 @@
  */
 package top.spco;
 
-import top.spco.base.api.Bot;
 import top.spco.base.api.Logger;
 import top.spco.base.api.message.service.MessageService;
+import top.spco.core.CAATP;
+import top.spco.core.config.BotSettings;
+import top.spco.core.config.Settings;
+import top.spco.database.DataBase;
 import top.spco.events.*;
 import top.spco.service.AutoSign;
-import top.spco.service.CAATP;
-import top.spco.service.DataBase;
 import top.spco.service.GroupMessageRecorder;
 import top.spco.service.chat.ChatManager;
 import top.spco.service.chat.ChatType;
@@ -61,22 +62,24 @@ import java.util.concurrent.TimeUnit;
  * </pre>
  *
  * @author SpCo
- * @version 1.2
+ * @version 2.0
  * @since 1.0
  */
 public class SpCoBot {
     private static SpCoBot instance;
     public static Logger logger;
     public static File dataFolder;
-    public final long BOT_ID = 2758532041L;
-    public final long BOT_OWNER_ID = 2247381667L;
+    public static File configFolder;
+    public long BOT_ID;
+    public long BOT_OWNER_ID;
     public final CommandSystem commandSystem = CommandSystem.getInstance();
     public final ChatManager chatManager = ChatManager.getInstance();
     public final StatisticsManager statisticsManager = StatisticsManager.getInstance();
+    private Settings settings;
     private MessageService messageService;
-    private DataBase dataBase = null;
-    private Bot bot = null;
-    private CAATP caatp = null;
+    private DataBase dataBase;
+    private top.spco.base.api.Bot bot;
+    private CAATP caatp;
     private static boolean registered = false;
     /**
      * 版本号格式采用语义版本号(X.Y.Z)
@@ -87,9 +90,9 @@ public class SpCoBot {
      * </ul>
      * <b>更新版本号(仅限核心的 Feature)时请不要忘记在 build.gradle 中同步修改版本号</b>
      */
-    public static final String MAIN_VERSION = "0.1.2";
-    public static final String VERSION = "v" + MAIN_VERSION + "-alpha.3";
-    public static final String UPDATED_TIME = "2023-11-10 19:57";
+    public static final String MAIN_VERSION = "0.2.0";
+    public static final String VERSION = "v" + MAIN_VERSION + "-alpha";
+    public static final String UPDATED_TIME = "2023-11-11 01:07";
 
     private SpCoBot() {
         initEvents();
@@ -100,6 +103,9 @@ public class SpCoBot {
         this.caatp = CAATP.getInstance();
         new GroupMessageRecorder();
         new AutoSign();
+        this.settings = new Settings(configFolder.getAbsolutePath() + File.separator + "config.yaml");
+        BOT_ID = settings.getLongProperty(BotSettings.BOT_BOT_ID);
+        BOT_OWNER_ID = settings.getLongProperty(BotSettings.BOT_OWNER_ID);
     }
 
     private void initEvents() {
@@ -195,11 +201,11 @@ public class SpCoBot {
         return caatp;
     }
 
-    public void setBot(Bot bot) {
+    public void setBot(top.spco.base.api.Bot bot) {
         this.bot = bot;
     }
 
-    public Bot getBot() {
+    public top.spco.base.api.Bot getBot() {
         return bot;
     }
 
@@ -221,6 +227,10 @@ public class SpCoBot {
 
     public MessageService getMessageService() {
         return messageService;
+    }
+
+    public Settings getSettings() {
+        return settings;
     }
 
     public static SpCoBot getInstance() {
