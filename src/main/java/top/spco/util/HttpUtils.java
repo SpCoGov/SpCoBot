@@ -28,8 +28,8 @@ import java.util.Map;
  * <p>
  *
  * @author SpCo
- * @version 1.0
- * @since 1.0
+ * @version 1.2
+ * @since 1.2
  */
 public class HttpUtils {
 

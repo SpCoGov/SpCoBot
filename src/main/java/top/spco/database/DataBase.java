@@ -29,9 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>
- * Created on 2023/10/28 0028 19:32
- * <p>
+ * 数据库
  *
  * @author SpCo
  * @version 1.2
@@ -55,7 +53,7 @@ public class DataBase {
                     }
                     LOGGER.info("已成功创建数据库文件");
                 } catch (IOException e) {
-                    throw new RuntimeException("创建数据库文件 (试图于位置" + dbFilePath + " ) 时发生错误: " + e.getMessage());
+                    throw new RuntimeException("创建数据库文件 (试图于" + dbFilePath + " ) 时发生错误: " + e.getMessage());
                 }
             }
 

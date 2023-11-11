@@ -22,9 +22,7 @@ import java.util.Map;
 import java.util.Random;
 
 /**
- * <p>
- * Created on 2023/11/5 0005 21:26
- * <p>
+ * 如果用户在某个群发送的消息与机器人在此群发送的最后一条消息匹配，禁言他
  *
  * @author SpCo
  * @version 1.2

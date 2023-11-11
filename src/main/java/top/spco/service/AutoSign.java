@@ -25,9 +25,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
- * <p>
- * Created on 2023/11/10 0010 18:25
- * <p>
+ * 自动签到
  *
  * @author SpCo
  * @version 1.2
