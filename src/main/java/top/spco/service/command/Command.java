@@ -15,9 +15,8 @@
  */
 package top.spco.service.command;
 
-import top.spco.base.api.Bot;
-import top.spco.base.api.Interactive;
-import top.spco.base.api.message.Message;
+import top.spco.api.*;
+import top.spco.api.message.Message;
 import top.spco.events.CommandEvents;
 import top.spco.service.chat.Chat;
 import top.spco.service.chat.Stage;
@@ -40,7 +39,7 @@ import java.sql.SQLException;
  * <b>不建议命令实现此接口，而是继承 {@link BaseCommand}类</b>
  *
  * @author SpCo
- * @version 1.1
+ * @version 2.0
  * @see BaseCommand
  * @since 1.0
  */
@@ -71,7 +70,8 @@ public interface Command {
     CommandType getType();
 
     /**
-     * 使用命令所需的最低权限等级
+     * 使用命令所需的最低权限等级<p>
+     * 注意：这里的最低权限指的是{@link BotUser 机器人用户}的{@link UserPermission 用户权限}，而不是群聊中{@link Member 群成员}的{@link MemberPermission 成员权限}。
      *
      * @see UserPermission
      */
@@ -79,7 +79,8 @@ public interface Command {
 
     /**
      * 命令发送用户是否有足够的权限触发该命令<p>
-     * 默认情况下与 {@link #needPermission()} 有关。
+     * 默认情况下与 {@link #needPermission()} 有关。<p>
+     * 注意：这里的最低权限指的是{@link BotUser 机器人用户}的{@link UserPermission 用户权限}，而不是群聊中{@link Member 群成员}的{@link MemberPermission 成员权限}
      *
      * @return 如果返回 {@code false} 则命令发送用户会被提示：{@code "[告知] 您无权使用此命令."}
      */
@@ -100,6 +101,7 @@ public interface Command {
      * @param bot     收到命令的机器人对象
      * @param from    收到命令的来源
      * @param sender  命令的发送者
+     * @param user    命令的发送用户
      * @param message 原始消息
      * @param time    命令发送的时间
      * @param command 命令的原始文本
@@ -107,7 +109,7 @@ public interface Command {
      * @param args    触发命令提交的参数
      * @see CommandEvents
      */
-    void onCommand(Bot bot, Interactive from, BotUser sender, Message message, int time, String command, String label, String[] args);
+    void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args);
 
     /**
      * 在帮助列表是否可见

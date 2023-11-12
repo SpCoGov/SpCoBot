@@ -15,8 +15,8 @@
  */
 package top.spco.mirai;
 
+import top.spco.api.*;
 import top.spco.util.InteractiveList;
-import top.spco.base.api.*;
 
 /**
  * <p>
@@ -28,7 +28,6 @@ import top.spco.base.api.*;
  * @since 1.0
  */
 record MiraiBot(net.mamoe.mirai.Bot bot) implements Bot {
-
     @Override
     public boolean isOnline() {
         return this.bot.isOnline();

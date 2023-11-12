@@ -15,11 +15,11 @@
  */
 package top.spco.events;
 
-import top.spco.base.api.Bot;
-import top.spco.base.api.Identifiable;
-import top.spco.base.api.Interactive;
-import top.spco.base.event.Event;
-import top.spco.base.event.EventFactory;
+import top.spco.api.Bot;
+import top.spco.api.Identifiable;
+import top.spco.api.Interactive;
+import top.spco.core.event.Event;
+import top.spco.core.event.EventFactory;
 
 /**
  * <p>

@@ -15,9 +15,10 @@
  */
 package top.spco.service.command.commands;
 
-import top.spco.base.api.Bot;
-import top.spco.base.api.Interactive;
-import top.spco.base.api.message.Message;
+import top.spco.api.Bot;
+import top.spco.api.Interactive;
+import top.spco.api.User;
+import top.spco.api.message.Message;
 import top.spco.service.chat.*;
 import top.spco.service.command.BaseCommand;
 import top.spco.user.BotUser;
@@ -29,7 +30,7 @@ import top.spco.user.UserPermission;
  * <p>
  *
  * @author SpCo
- * @version 1.1
+ * @version 2.0
  * @since 1.1
  */
 public final class TestCommand extends BaseCommand {
@@ -54,7 +55,7 @@ public final class TestCommand extends BaseCommand {
     }
 
     @Override
-    public void onCommand(Bot bot, Interactive from, BotUser sender, Message message, int time, String command, String label, String[] args) {
+    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args) {
         try {
             StringBuilder sb = new StringBuilder();
             Chat chat = new ChatBuilder(ChatType.FRIEND, from).addStage(new Stage(() -> "请输入你好", (chat1, bot1, source, sender1, message1, time1) -> {

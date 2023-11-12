@@ -15,9 +15,10 @@
  */
 package top.spco.service.command.commands;
 
-import top.spco.base.api.Bot;
-import top.spco.base.api.Interactive;
-import top.spco.base.api.message.Message;
+import top.spco.api.Bot;
+import top.spco.api.Interactive;
+import top.spco.api.User;
+import top.spco.api.message.Message;
 import top.spco.service.command.BaseCommand;
 import top.spco.user.BotUser;
 
@@ -29,7 +30,7 @@ import java.sql.SQLException;
  * <p>
  *
  * @author SpCo
- * @version 1.0
+ * @version 2.0
  * @since 1.0
  */
 public final class SignCommand extends BaseCommand {
@@ -44,13 +45,13 @@ public final class SignCommand extends BaseCommand {
     }
 
     @Override
-    public void onCommand(Bot bot, Interactive from, BotUser sender, Message message, int time, String command, String label, String[] args) {
+    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args) {
         try {
-            int i = sender.sign();
+            int i = user.sign();
             if (i == -1) {
                 from.quoteReply(message, "签到失败。您今天已经签到过了。");
             } else {
-                from.quoteReply(message, String.format("签到成功。您今天签到获得了%d海绵山币，您现在拥有%d海绵山币。", i, sender.getSmfCoin()));
+                from.quoteReply(message, String.format("签到成功。您今天签到获得了%d海绵山币，您现在拥有%d海绵山币。", i, user.getSmfCoin()));
             }
         } catch (SQLException e) {
             from.handleException(message, "签到失败", e);

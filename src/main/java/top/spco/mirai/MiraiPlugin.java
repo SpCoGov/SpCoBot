@@ -14,8 +14,8 @@ import net.mamoe.mirai.event.events.*;
 import net.mamoe.mirai.message.data.MessageChain;
 import org.jetbrains.annotations.NotNull;
 import top.spco.SpCoBot;
-import top.spco.base.api.Behavior;
-import top.spco.base.api.Bot;
+import top.spco.api.Behavior;
+import top.spco.api.Bot;
 import top.spco.events.*;
 
 public final class MiraiPlugin extends JavaPlugin {

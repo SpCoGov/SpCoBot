@@ -15,14 +15,12 @@
  */
 package top.spco.service.command.commands;
 
-import top.spco.base.api.Bot;
-import top.spco.base.api.Interactive;
-import top.spco.base.api.message.Message;
+import top.spco.api.Bot;
+import top.spco.api.Interactive;
+import top.spco.api.User;
+import top.spco.api.message.Message;
 import top.spco.service.command.BaseCommand;
 import top.spco.user.BotUser;
-import top.spco.user.UserPermission;
-
-import java.sql.SQLException;
 
 /**
  * <p>
@@ -30,7 +28,7 @@ import java.sql.SQLException;
  * <p>
  *
  * @author SpCo
- * @version 1.2
+ * @version 2.0
  * @since 1.0
  */
 public final class GetmeCommand extends BaseCommand {
@@ -45,7 +43,7 @@ public final class GetmeCommand extends BaseCommand {
     }
 
     @Override
-    public void onCommand(Bot bot, Interactive from, BotUser sender, Message message, int time, String command, String label, String[] args) {
-        from.quoteReply(message, "QQ: " + sender.getId() + "\n海绵山币: " + sender.getSmfCoin() + "\n会员信息: " + (sender.isPremium() ? "Premium会员" : "普通会员") + "\n权限信息: " + sender.toUserPermission());
+    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args) {
+        from.quoteReply(message, "QQ: " + user.getId() + "\n海绵山币: " + user.getSmfCoin() + "\n会员信息: " + (user.isPremium() ? "Premium会员" : "普通会员") + "\n权限信息: " + user.toUserPermission());
     }
 }

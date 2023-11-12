@@ -15,8 +15,8 @@
  */
 package top.spco.service.statistics;
 
-import top.spco.base.api.Group;
-import top.spco.base.api.NormalMember;
+import top.spco.api.Group;
+import top.spco.api.NormalMember;
 import top.spco.events.MessageEvents;
 import top.spco.service.RegistrationException;
 

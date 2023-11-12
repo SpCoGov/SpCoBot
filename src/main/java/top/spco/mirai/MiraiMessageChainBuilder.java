@@ -16,8 +16,8 @@
 package top.spco.mirai;
 
 import net.mamoe.mirai.message.data.QuoteReply;
-import top.spco.base.api.message.Message;
-import top.spco.base.api.message.MessageChainBuilder;
+import top.spco.api.message.Message;
+import top.spco.api.message.MessageChainBuilder;
 
 /**
  * <p>

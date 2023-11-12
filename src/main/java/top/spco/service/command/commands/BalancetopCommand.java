@@ -16,9 +16,10 @@
 package top.spco.service.command.commands;
 
 import top.spco.SpCoBot;
-import top.spco.base.api.Bot;
-import top.spco.base.api.Interactive;
-import top.spco.base.api.message.Message;
+import top.spco.api.Bot;
+import top.spco.api.Interactive;
+import top.spco.api.User;
+import top.spco.api.message.Message;
 import top.spco.service.command.BaseCommand;
 import top.spco.user.BotUser;
 
@@ -37,7 +38,7 @@ import java.util.Map;
  * <p>
  *
  * @author SpCo
- * @version 1.0
+ * @version 2.0
  * @since 1.0
  */
 public class BalancetopCommand extends BaseCommand {
@@ -52,7 +53,7 @@ public class BalancetopCommand extends BaseCommand {
     }
 
     @Override
-    public void onCommand(Bot bot, Interactive from, BotUser sender, Message message, int time, String command, String label, String[] args) {
+    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args) {
         try {
             List<Map.Entry<Long, Integer>> topRecords = new ArrayList<>(getRecords().entrySet());
             // 使用比较器进行值的降序排序

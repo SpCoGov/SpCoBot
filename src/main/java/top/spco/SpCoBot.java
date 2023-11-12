@@ -15,8 +15,9 @@
  */
 package top.spco;
 
-import top.spco.base.api.Logger;
-import top.spco.base.api.message.service.MessageService;
+import top.spco.api.Bot;
+import top.spco.api.Logger;
+import top.spco.api.message.service.MessageService;
 import top.spco.core.CAATP;
 import top.spco.core.config.BotSettings;
 import top.spco.core.config.Settings;
@@ -78,7 +79,7 @@ public class SpCoBot {
     private Settings settings;
     private MessageService messageService;
     private DataBase dataBase;
-    private top.spco.base.api.Bot bot;
+    private Bot bot;
     private CAATP caatp;
     private static boolean registered = false;
     /**
@@ -162,7 +163,7 @@ public class SpCoBot {
                 try {
                     BotUser botUser = BotUser.getOrCreate(sender.getId());
                     if (command.hasPermission(botUser)) {
-                        command.onCommand(bot, source, botUser, message, time, context, "sign", new String[]{});
+                        command.onCommand(bot, source, sender, botUser, message, time, context, "sign", new String[]{});
                     }
                 } catch (Exception e) {
                     source.quoteReply(message, "SpCoBot获取用户时失败: \n" + ExceptionUtils.getStackTraceAsString(e));
@@ -174,7 +175,7 @@ public class SpCoBot {
                 try {
                     BotUser botUser = BotUser.getOrCreate(sender.getId());
                     if (command.hasPermission(botUser)) {
-                        command.onCommand(bot, source, botUser, message, time, context, "getme", new String[]{});
+                        command.onCommand(bot, source, sender, botUser, message, time, context, "getme", new String[]{});
                     }
                 } catch (Exception e) {
                     source.quoteReply(message, "SpCoBot获取用户时失败: \n" + ExceptionUtils.getStackTraceAsString(e));
@@ -201,11 +202,11 @@ public class SpCoBot {
         return caatp;
     }
 
-    public void setBot(top.spco.base.api.Bot bot) {
+    public void setBot(Bot bot) {
         this.bot = bot;
     }
 
-    public top.spco.base.api.Bot getBot() {
+    public Bot getBot() {
         return bot;
     }
 

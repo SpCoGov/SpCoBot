@@ -16,8 +16,8 @@
 package top.spco.mirai;
 
 import net.mamoe.mirai.contact.Contact;
-import top.spco.base.api.Interactive;
-import top.spco.base.api.message.Message;
+import top.spco.api.Interactive;
+import top.spco.api.message.Message;
 
 /**
  * <p>
@@ -29,7 +29,6 @@ import top.spco.base.api.message.Message;
  * @since 1.0
  */
 record MiraiInteractive(Contact contact) implements Interactive {
-
     @Override
     public long getId() {
         return this.contact.getId();

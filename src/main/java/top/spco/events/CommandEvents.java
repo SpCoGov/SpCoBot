@@ -15,10 +15,10 @@
  */
 package top.spco.events;
 
-import top.spco.base.api.*;
-import top.spco.base.api.message.Message;
-import top.spco.base.event.Event;
-import top.spco.base.event.EventFactory;
+import top.spco.api.*;
+import top.spco.api.message.Message;
+import top.spco.core.event.Event;
+import top.spco.core.event.EventFactory;
 
 /**
  * <p>

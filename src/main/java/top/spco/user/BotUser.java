@@ -19,8 +19,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import top.spco.SpCoBot;
-import top.spco.base.api.Bot;
-import top.spco.base.api.User;
+import top.spco.api.Bot;
+import top.spco.api.User;
 import top.spco.util.DateUtils;
 
 import java.sql.PreparedStatement;

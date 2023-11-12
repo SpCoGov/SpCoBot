@@ -15,7 +15,7 @@
  */
 package top.spco.service.chat;
 
-import top.spco.base.api.Interactive;
+import top.spco.api.Interactive;
 import top.spco.service.RegistrationException;
 
 /**

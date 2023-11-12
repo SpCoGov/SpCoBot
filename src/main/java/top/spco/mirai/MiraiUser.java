@@ -15,8 +15,8 @@
  */
 package top.spco.mirai;
 
-import top.spco.base.api.User;
-import top.spco.base.api.message.Message;
+import top.spco.api.User;
+import top.spco.api.message.Message;
 
 /**
  * <p>

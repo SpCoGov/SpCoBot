@@ -15,9 +15,9 @@
  */
 package top.spco.mirai;
 
-import top.spco.base.api.AnonymousMember;
-import top.spco.base.api.Group;
-import top.spco.base.api.MemberPermission;
+import top.spco.api.AnonymousMember;
+import top.spco.api.Group;
+import top.spco.api.MemberPermission;
 
 /**
  * <p>
@@ -29,7 +29,6 @@ import top.spco.base.api.MemberPermission;
  * @since 1.0
  */
 record MiraiAnonymousMember(net.mamoe.mirai.contact.AnonymousMember member) implements AnonymousMember {
-
     @Override
     public Group getGroup() {
         return new MiraiGroup(this.member.getGroup());

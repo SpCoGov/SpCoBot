@@ -15,9 +15,9 @@
  */
 package top.spco.mirai;
 
-import top.spco.base.api.Friend;
-import top.spco.base.api.FriendGroup;
-import top.spco.base.api.message.Message;
+import top.spco.api.Friend;
+import top.spco.api.FriendGroup;
+import top.spco.api.message.Message;
 
 /**
  * <p>
@@ -29,7 +29,6 @@ import top.spco.base.api.message.Message;
  * @since 1.0
  */
 record MiraiFriend(net.mamoe.mirai.contact.Friend friend) implements Friend {
-
     @Override
     public long getId() {
         return this.friend.getId();

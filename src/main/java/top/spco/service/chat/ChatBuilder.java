@@ -16,10 +16,10 @@
 package top.spco.service.chat;
 
 import top.spco.SpCoBot;
-import top.spco.base.api.Friend;
-import top.spco.base.api.Group;
-import top.spco.base.api.Interactive;
-import top.spco.base.api.NormalMember;
+import top.spco.api.Friend;
+import top.spco.api.Group;
+import top.spco.api.Interactive;
+import top.spco.api.NormalMember;
 
 /**
  * {@link ChatBuilder}是一个用于构建{@link Chat}对象的构建器。<p>

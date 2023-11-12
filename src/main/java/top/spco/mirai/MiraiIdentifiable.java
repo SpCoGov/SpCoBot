@@ -16,7 +16,7 @@
 package top.spco.mirai;
 
 import net.mamoe.mirai.contact.ContactOrBot;
-import top.spco.base.api.Identifiable;
+import top.spco.api.Identifiable;
 
 /**
  * <p>
@@ -28,7 +28,6 @@ import top.spco.base.api.Identifiable;
  * @since 1.0
  */
 record MiraiIdentifiable(ContactOrBot contactOrBot) implements Identifiable {
-
     @Override
     public long getId() {
         return this.contactOrBot.getId();

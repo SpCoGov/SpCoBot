@@ -32,7 +32,7 @@ import java.util.*;
  * <p>
  *
  * @author SpCo
- * @version 1.1
+ * @version 2.0
  * @since 1.0
  */
 public class CommandSystem {
@@ -60,15 +60,14 @@ public class CommandSystem {
         toBeRegistered.add(new HelpCommand());
         toBeRegistered.add(new BalancetopCommand());
         toBeRegistered.add(new StatisticsCommand());
+        toBeRegistered.add(new BanmeCommand());
+
+
+
         toBeRegistered.add(new TestCommand());
+
         for (var command : toBeRegistered) {
-            boolean success = registerCommand(command);
-            if (success) {
-                allCommands.add(command);
-                command.init();
-            } else {
-                throw new CommandRegistrationException("The command: " + command.getLabels()[0] + " registration failed.");
-            }
+            registerCommand(command);
         }
     }
 
@@ -100,7 +99,7 @@ public class CommandSystem {
                     } catch (SQLException e) {
                         interactor.handleException(message, "获取用户权限失败", e);
                     }
-                    object.onCommand(bot, interactor, user, message, time, command, label, args);
+                    object.onCommand(bot, interactor, interactor, user, message, time, command, label, args);
                 } catch (UserFetchException e) {
                     interactor.handleException(message, "SpCoBot获取用户时失败", e);
                 } catch (Exception e) {
@@ -124,7 +123,7 @@ public class CommandSystem {
                     } catch (SQLException e) {
                         from.handleException(message, "获取用户权限失败", e);
                     }
-                    object.onCommand(bot, from, user, message, time, command, label, args);
+                    object.onCommand(bot, from, sender, user, message, time, command, label, args);
                 } catch (UserFetchException e) {
                     from.handleException(message, "SpCoBot获取用户时失败", e);
                 } catch (Exception e) {
@@ -148,7 +147,7 @@ public class CommandSystem {
                     } catch (SQLException e) {
                         interactor.handleException(message, "获取用户权限失败", e);
                     }
-                    object.onCommand(bot, interactor, user, message, time, command, label, args);
+                    object.onCommand(bot, interactor, interactor, user, message, time, command, label, args);
                 } catch (UserFetchException e) {
                     interactor.handleException(message, "SpCoBot获取用户时失败", e);
                 } catch (Exception e) {
@@ -169,9 +168,8 @@ public class CommandSystem {
      * 注册一个命令
      *
      * @param command 待注册的命令
-     * @return 注册是否成功
      */
-    public static boolean registerCommand(Command command) throws CommandRegistrationException {
+    public static void registerCommand(Command command) throws CommandRegistrationException {
         String[] labels = command.getLabels();
         for (String label : labels) {
             label = label.toLowerCase(Locale.ENGLISH);
@@ -218,12 +216,12 @@ public class CommandSystem {
                         groupTempCommands.put(label, command);
                     }
                 }
-                default -> {
-                    return false;
-                }
+                default ->
+                        throw new CommandRegistrationException("The command: " + command.getLabels()[0] + " registration failed.");
             }
         }
-        return true;
+        allCommands.add(command);
+        command.init();
     }
 
     public static List<String> getHelpList() {

@@ -15,8 +15,8 @@
  */
 package top.spco.mirai;
 
-import top.spco.base.api.FriendGroup;
-import top.spco.base.api.FriendGroups;
+import top.spco.api.FriendGroup;
+import top.spco.api.FriendGroups;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,7 +31,6 @@ import java.util.Collection;
  * @since 1.0
  */
 record MiraiFriendGroups(net.mamoe.mirai.contact.friendgroup.FriendGroups friendGroups) implements FriendGroups {
-
     @Override
     public FriendGroup getDefault() {
         return new MiraiFriendGroup(this.friendGroups.getDefault());

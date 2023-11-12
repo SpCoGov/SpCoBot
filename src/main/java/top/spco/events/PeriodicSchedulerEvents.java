@@ -15,8 +15,8 @@
  */
 package top.spco.events;
 
-import top.spco.base.event.Event;
-import top.spco.base.event.EventFactory;
+import top.spco.core.event.Event;
+import top.spco.core.event.EventFactory;
 
 /**
  * <p>

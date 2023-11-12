@@ -15,9 +15,10 @@
  */
 package top.spco.service.command.commands;
 
-import top.spco.base.api.Bot;
-import top.spco.base.api.Interactive;
-import top.spco.base.api.message.Message;
+import top.spco.api.Bot;
+import top.spco.api.Interactive;
+import top.spco.api.User;
+import top.spco.api.message.Message;
 import top.spco.service.command.BaseCommand;
 import top.spco.user.BotUser;
 import top.spco.util.DateUtils;
@@ -39,7 +40,7 @@ import java.util.Set;
  * <p>
  *
  * @author SpCo
- * @version 1.2
+ * @version 2.0
  * @since 1.0
  */
 public class DivineCommand extends BaseCommand {
@@ -54,14 +55,14 @@ public class DivineCommand extends BaseCommand {
     }
 
     @Override
-    public void onCommand(Bot bot, Interactive from, BotUser sender, Message message, int time, String command, String label, String[] args) {
+    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args) {
         LocalDate today = DateUtils.today();
         try {
             BigDecimal hundred = new BigDecimal("100.00");
             StringBuilder sb = new StringBuilder();
-            sb.append("你好，").append(sender.getId()).append("\n");
+            sb.append("你好，").append(user.getId()).append("\n");
             if (args.length == 0) {
-                BigDecimal probability = getProbability(sender.getId() + "在" + today);
+                BigDecimal probability = getProbability(user.getId() + "在" + today);
                 String fortune = getFortune(probability.doubleValue());
                 sb.append("汝的今日运势：").append(fortune).append("\n");
                 if (fortune.equals("大凶") || fortune.equals("凶")) {
@@ -73,18 +74,18 @@ public class DivineCommand extends BaseCommand {
                 String event = command.substring(8);
                 sb.append("所求事项：").append(event).append("\n");
                 if (isHentai(event)) {
-                    if (randomBoolean(sender.getId() + "在" + today + "做" + event)) {
+                    if (randomBoolean(user.getId() + "在" + today + "做" + event)) {
                         sb.append("结果：").append("好变态哦!").append("\n");
                     } else {
                         sb.append("结果：").append("变态!").append("\n");
                     }
-                    if (randomBoolean(sender.getId() + "在" + today + "做2" + event)) {
+                    if (randomBoolean(user.getId() + "在" + today + "做2" + event)) {
                         sb.append("此事有 ").append("0.00").append("% 的概率不发生");
                     } else {
                         sb.append("此事有 ").append("100.00").append("% 的概率发生");
                     }
                 } else {
-                    BigDecimal probability = getProbability(sender.getId() + "在" + today + "做" + event);
+                    BigDecimal probability = getProbability(user.getId() + "在" + today + "做" + event);
                     String fortune = getFortune(probability.doubleValue());
                     sb.append("结果：").append(fortune).append("\n");
                     if (fortune.equals("大凶") || fortune.equals("凶")) {

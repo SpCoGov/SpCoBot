@@ -16,9 +16,9 @@
 package top.spco.service.statistics;
 
 import top.spco.SpCoBot;
-import top.spco.base.api.Group;
-import top.spco.base.api.NormalMember;
-import top.spco.base.api.message.Message;
+import top.spco.api.Group;
+import top.spco.api.NormalMember;
+import top.spco.api.message.Message;
 import top.spco.util.function.PentaConsumer;
 
 import java.util.ArrayList;

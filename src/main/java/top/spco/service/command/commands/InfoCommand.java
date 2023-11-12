@@ -16,14 +16,13 @@
 package top.spco.service.command.commands;
 
 import top.spco.SpCoBot;
-import top.spco.base.api.Bot;
-import top.spco.base.api.Interactive;
-import top.spco.base.api.message.Message;
+import top.spco.api.Bot;
+import top.spco.api.Interactive;
+import top.spco.api.User;
+import top.spco.api.message.Message;
 import top.spco.service.command.BaseCommand;
 import top.spco.user.BotUser;
 import top.spco.user.UserPermission;
-
-import java.sql.SQLException;
 
 /**
  * <p>
@@ -31,7 +30,7 @@ import java.sql.SQLException;
  * <p>
  *
  * @author SpCo
- * @version 1.2
+ * @version 2.0
  * @since 1.0
  */
 public final class InfoCommand extends BaseCommand {
@@ -46,8 +45,8 @@ public final class InfoCommand extends BaseCommand {
     }
 
     @Override
-    public void onCommand(Bot bot, Interactive from, BotUser sender, Message message, int time, String command, String label, String[] args) {
-        if (sender.toUserPermission() == UserPermission.OWNER) {
+    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args) {
+        if (user.toUserPermission() == UserPermission.OWNER) {
             from.quoteReply(message, "机器人运行状态: 正常\n" + (SpCoBot.getInstance().getCAATP().isConnected() ? "CAATP连接状态: 已连接" : "CAATP连接状态: 连接断开"));
         } else {
             from.quoteReply(message, "机器人正常运行中");

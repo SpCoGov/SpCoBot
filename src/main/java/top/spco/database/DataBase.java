@@ -18,7 +18,7 @@ package top.spco.database;
 import cn.hutool.core.util.ObjectUtil;
 import lombok.SneakyThrows;
 import top.spco.SpCoBot;
-import top.spco.base.api.Logger;
+import top.spco.api.Logger;
 
 import java.io.File;
 import java.io.IOException;

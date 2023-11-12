@@ -15,10 +15,10 @@
  */
 package top.spco.mirai;
 
-import top.spco.base.api.Group;
-import top.spco.base.api.MemberPermission;
-import top.spco.base.api.NormalMember;
-import top.spco.base.api.message.Message;
+import top.spco.api.Group;
+import top.spco.api.MemberPermission;
+import top.spco.api.NormalMember;
+import top.spco.api.message.Message;
 
 /**
  * <p>

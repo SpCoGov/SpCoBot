@@ -16,9 +16,9 @@
 package top.spco.service.chat;
 
 import top.spco.SpCoBot;
-import top.spco.base.api.Bot;
-import top.spco.base.api.Interactive;
-import top.spco.base.api.message.Message;
+import top.spco.api.Bot;
+import top.spco.api.Interactive;
+import top.spco.api.message.Message;
 
 import java.util.ArrayList;
 import java.util.List;

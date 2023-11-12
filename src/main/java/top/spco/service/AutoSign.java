@@ -16,7 +16,7 @@
 package top.spco.service;
 
 import top.spco.SpCoBot;
-import top.spco.base.api.Friend;
+import top.spco.api.Friend;
 import top.spco.events.PeriodicSchedulerEvents;
 import top.spco.user.BotUser;
 import top.spco.util.DateUtils;

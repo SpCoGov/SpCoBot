@@ -16,7 +16,7 @@
 package top.spco.util;
 
 import org.jetbrains.annotations.NotNull;
-import top.spco.base.api.Interactive;
+import top.spco.api.Interactive;
 
 import java.util.Collection;
 import java.util.Iterator;
