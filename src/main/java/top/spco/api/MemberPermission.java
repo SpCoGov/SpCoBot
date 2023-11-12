@@ -18,7 +18,6 @@ package top.spco.api;
 /**
  * 群成员的权限<p>
  * 可通过 {@link #compareTo} 判断是否有更高的权限
- * <p>
  *
  * @author SpCo
  * @version 1.0

@@ -35,10 +35,6 @@ import java.util.Random;
 import java.util.Set;
 
 /**
- * <p>
- * Created on 2023/11/2 0002 18:17
- * <p>
- *
  * @author SpCo
  * @version 2.0
  * @since 1.0

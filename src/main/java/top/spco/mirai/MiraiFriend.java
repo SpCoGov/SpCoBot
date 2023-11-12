@@ -20,10 +20,6 @@ import top.spco.api.FriendGroup;
 import top.spco.api.message.Message;
 
 /**
- * <p>
- * Created on 2023/10/27 0027 0:56
- * <p>
- *
  * @author SpCo
  * @version 1.0
  * @since 1.0

@@ -20,10 +20,6 @@ import top.spco.api.message.Message;
 import top.spco.api.message.MessageChainBuilder;
 
 /**
- * <p>
- * Created on 2023/10/27 0027 19:31
- * <p>
- *
  * @author SpCo
  * @version 1.0
  * @since 1.0

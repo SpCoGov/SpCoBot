@@ -18,7 +18,7 @@ package top.spco.api;
 import top.spco.api.message.Message;
 
 /**
- * 代表匿名群成员<p>
+ * 代表匿名群成员
  *
  * @author SpCo
  * @version 1.0

@@ -19,9 +19,7 @@ import top.spco.util.InteractiveList;
 import top.spco.user.UserFetchException;
 
 /**
- * <p>
  * Created on 2023/10/26 0026 17:56
- * <p>
  *
  * @author SpCo
  * @version 1.0

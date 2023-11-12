@@ -22,10 +22,9 @@ import top.spco.api.message.Message;
 import java.util.function.Supplier;
 
 /**
- * <p>
- * Created on 2023/11/6 0006 10:48
- * <p>
+ * {@link Chat 对话}中的一个阶段
  *
+ * @see Chat
  * @author SpCo
  * @version 1.1
  * @since 1.1

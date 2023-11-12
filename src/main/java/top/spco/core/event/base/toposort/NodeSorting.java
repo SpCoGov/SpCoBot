@@ -33,9 +33,6 @@ import java.util.*;
  *     <li>Sort nodes within SCCs using the comparator.</li>
  *     <li>Sort SCCs with respect to each other by respecting constraints, and using the comparator in case of a tie.</li>
  * </ol>
- * <p>
- * Created on 2023/10/25 0025 17:16
- * <p>
  *
  * @author SpCo
  * @version 1.0

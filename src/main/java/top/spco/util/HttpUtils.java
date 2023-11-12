@@ -23,9 +23,7 @@ import java.net.URL;
 import java.util.Map;
 
 /**
- * <p>
- * Created on 2023/11/10 0010 21:29
- * <p>
+ * HTTP工具类
  *
  * @author SpCo
  * @version 1.2

@@ -25,10 +25,6 @@ import top.spco.user.BotUser;
 import top.spco.user.UserPermission;
 
 /**
- * <p>
- * Created on 2023/11/6 0006 12:32
- * <p>
- *
  * @author SpCo
  * @version 2.0
  * @since 1.1

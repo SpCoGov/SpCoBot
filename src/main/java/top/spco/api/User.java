@@ -16,7 +16,7 @@
 package top.spco.api;
 
 /**
- * 代表一位用户<p>
+ * 代表一位用户
  *
  * @author SpCo
  * @version 1.0
@@ -27,10 +27,20 @@ public interface User extends Interactive {
      * 备注信息<p>
      * 仅与 {@link User} 存在好友关系的时候才可能存在备注<p>
      * 与 {@link User} 没有好友关系时永远为空{@link String 字符串} ("")
+     *
+     * @return 备注信息
      */
     String getRemark();
 
+    /**
+     * 戳一戳
+     */
     void nudge();
 
+    /**
+     * 昵称
+     *
+     * @return 昵称
+     */
     String getNick();
 }

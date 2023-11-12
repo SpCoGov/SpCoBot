@@ -18,10 +18,14 @@ package top.spco.service.command;
 import top.spco.user.BotUser;
 import top.spco.user.UserPermission;
 
-import java.sql.SQLException;
-
 /**
- * Created on 2023/10/28 0028 18:53
+ * {@link BaseCommand} 是所有命令的抽象基类，实现了{@link Command} 接口。
+ * 提供了基本的命令信息和权限控制的默认实现。
+ *
+ * @author SpCo
+ * @version 2.0
+ * @see Command
+ * @since 1.0
  */
 public abstract class BaseCommand implements Command {
 

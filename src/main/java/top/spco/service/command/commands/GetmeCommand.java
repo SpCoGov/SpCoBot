@@ -23,10 +23,6 @@ import top.spco.service.command.BaseCommand;
 import top.spco.user.BotUser;
 
 /**
- * <p>
- * Created on 2023/10/29 0029 1:10
- * <p>
- *
  * @author SpCo
  * @version 2.0
  * @since 1.0

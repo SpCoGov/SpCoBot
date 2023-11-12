@@ -16,7 +16,7 @@
 package top.spco.api;
 
 /**
- * 代表一位普通的群成员<p>
+ * 代表一位普通的群成员
  *
  * @author SpCo
  * @version 1.0

@@ -25,9 +25,15 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.function.Predicate;
 
 /**
- * <p>
- * Created on 2023/10/27 0027 13:29
- * <p>
+ * {@code InteractiveList} 类是一个实现了 {@code Collection} 接口的交互式元素列表。<p>
+ * 这个类包装了一个底层的 {@code Collection} 实现，提供了一些额外的方法来操作交互式元素。<p>
+ * 以下是一个示例用法:
+ * <pre>
+ * InteractiveList<MyInteractiveElement> interactiveList = new InteractiveList<>();
+ * interactiveList.add(myInteractiveElement);
+ * MyInteractiveElement foundElement = interactiveList.get(123);
+ * interactiveList.remove(123);
+ * </pre>
  *
  * @author SpCo
  * @version 1.2
@@ -37,14 +43,28 @@ public class InteractiveList<C extends Interactive> implements Collection<C> {
 
     private final Collection<C> delegate;
 
+    /**
+     * 使用给定的底层实现构造一个交互式元素列表。
+     *
+     * @param delegate 底层实现的 {@code Collection}
+     */
     public InteractiveList(Collection<C> delegate) {
         this.delegate = delegate;
     }
 
+    /**
+     * 构造一个空的交互式元素列表，使用默认的底层实现 {@code ConcurrentLinkedDeque}。
+     */
     public InteractiveList() {
         this(new ConcurrentLinkedDeque<>());
     }
 
+    /**
+     * 根据给定的ID获取交互式元素。
+     *
+     * @param id 要查找的元素的ID
+     * @return 具有给定ID的交互式元素，如果不存在则返回 {@code null}
+     */
     public C get(long id) {
         for (C contact : delegate) {
             if (contact.getId() == id) {
@@ -54,11 +74,24 @@ public class InteractiveList<C extends Interactive> implements Collection<C> {
         return null;
     }
 
+    /**
+     * 根据给定的ID删除交互式元素。
+     *
+     * @param id 要删除的元素的ID
+     * @return 如果成功删除则返回 {@code true}
+     */
     public boolean remove(long id) {
         Predicate<C> predicate = contact -> contact.getId() == id;
         return delegate.removeIf(predicate);
     }
 
+    /**
+     * 根据给定的ID获取交互式元素，如果不存在则抛出 {@code NoSuchElementException}。
+     *
+     * @param id 要查找的元素的ID
+     * @return 具有给定ID的交互式元素
+     * @throws NoSuchElementException 如果找不到具有给定ID的元素
+     */
     public C getOrFail(long id) {
         C contact = get(id);
         if (contact == null) {
@@ -67,6 +100,12 @@ public class InteractiveList<C extends Interactive> implements Collection<C> {
         return contact;
     }
 
+    /**
+     * 检查列表中是否包含具有给定ID的交互式元素。
+     *
+     * @param id 要检查的元素的ID
+     * @return 如果列表中包含具有给定ID的元素则返回 {@code true}
+     */
     public boolean contains(long id) {
         return get(id) != null;
     }

@@ -19,10 +19,6 @@ import top.spco.api.User;
 import top.spco.api.message.Message;
 
 /**
- * <p>
- * Created on 2023/10/26 0026 14:51
- * <p>
- *
  * @author SpCo
  * @version 1.0
  * @since 1.0

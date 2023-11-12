@@ -16,14 +16,17 @@
 package top.spco.api.message;
 
 /**
- * <p>
- * Created on 2023/10/27 0027 18:42
- * <p>
+ * 可序列化的消息
  *
  * @author SpCo
  * @version 1.0
  * @since 1.0
  */
 public interface Codable {
+    /**
+     * 序列化
+     *
+     * @return 序列化后的结果
+     */
     String serialize();
 }

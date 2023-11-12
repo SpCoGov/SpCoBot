@@ -18,10 +18,6 @@ package top.spco.mirai;
 import top.spco.api.Logger;
 
 /**
- * <p>
- * Created on 2023/10/25 0025 19:32
- * <p>
- *
  * @author SpCo
  * @version 1.0
  * @since 1.0

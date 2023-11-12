@@ -24,9 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * <p>
  * Created on 2023/11/5 0005 22:02
- * <p>
  *
  * @author SpCo
  * @version 1.1
@@ -61,20 +59,20 @@ public class ChatManager {
         chat.handleMessage(bot, source, sender, message, time);
     }
 
-    public boolean isInChat(Identifiable id, ChatType chatType) {
+    public boolean isInChat(Identifiable where, ChatType chatType) {
         switch (chatType) {
             case GROUP -> {
-                if (this.groupChats.containsKey(id.getId()) && this.groupChats.get(id.getId()) != null) {
+                if (this.groupChats.containsKey(where.getId()) && this.groupChats.get(where.getId()) != null) {
                     return true;
                 }
             }
             case FRIEND -> {
-                if (this.friendChats.containsKey(id.getId()) && this.friendChats.get(id.getId()) != null) {
+                if (this.friendChats.containsKey(where.getId()) && this.friendChats.get(where.getId()) != null) {
                     return true;
                 }
             }
             case GROUP_TEMP -> {
-                if (this.groupTempChats.containsKey(id.getId()) && this.groupTempChats.get(id.getId()) != null) {
+                if (this.groupTempChats.containsKey(where.getId()) && this.groupTempChats.get(where.getId()) != null) {
                     return true;
                 }
             }
@@ -82,27 +80,39 @@ public class ChatManager {
         return false;
     }
 
-    public Chat getChat(Identifiable id, ChatType chatType) {
+    /**
+     * 获取对话对象
+     *
+     * @param where    发生对话的场所
+     * @param chatType 对话的类型
+     * @return 对话对象，失败时返回null
+     */
+    public Chat getChat(Identifiable where, ChatType chatType) {
         switch (chatType) {
             case GROUP -> {
-                if (this.groupChats.containsKey(id.getId()) && this.groupChats.get(id.getId()) != null) {
-                    return this.groupChats.get(id.getId());
+                if (this.groupChats.containsKey(where.getId()) && this.groupChats.get(where.getId()) != null) {
+                    return this.groupChats.get(where.getId());
                 }
             }
             case FRIEND -> {
-                if (this.friendChats.containsKey(id.getId()) && this.friendChats.get(id.getId()) != null) {
-                    return this.friendChats.get(id.getId());
+                if (this.friendChats.containsKey(where.getId()) && this.friendChats.get(where.getId()) != null) {
+                    return this.friendChats.get(where.getId());
                 }
             }
             case GROUP_TEMP -> {
-                if (this.groupTempChats.containsKey(id.getId()) && this.groupTempChats.get(id.getId()) != null) {
-                    return this.groupTempChats.get(id.getId());
+                if (this.groupTempChats.containsKey(where.getId()) && this.groupTempChats.get(where.getId()) != null) {
+                    return this.groupTempChats.get(where.getId());
                 }
             }
         }
         return null;
     }
 
+    /**
+     * 注册一个对话
+     *
+     * @param chat 对话
+     */
     public void register(Chat chat) {
         ChatType chatType = chat.getType();
         long id = chat.getTarget().getId();
@@ -113,21 +123,27 @@ public class ChatManager {
         }
     }
 
-    public void stopChat(Identifiable id, ChatType chatType) {
+    /**
+     * 结束对话
+     *
+     * @param where    发生对话的场所
+     * @param chatType 对话的类型
+     */
+    public void stopChat(Identifiable where, ChatType chatType) {
         switch (chatType) {
             case GROUP -> {
-                if (this.groupChats.containsKey(id.getId()) && this.groupChats.get(id.getId()) != null) {
-                    this.groupChats.put(id.getId(), null);
+                if (this.groupChats.containsKey(where.getId()) && this.groupChats.get(where.getId()) != null) {
+                    this.groupChats.put(where.getId(), null);
                 }
             }
             case FRIEND -> {
-                if (this.friendChats.containsKey(id.getId()) && this.friendChats.get(id.getId()) != null) {
-                    this.friendChats.put(id.getId(), null);
+                if (this.friendChats.containsKey(where.getId()) && this.friendChats.get(where.getId()) != null) {
+                    this.friendChats.put(where.getId(), null);
                 }
             }
             case GROUP_TEMP -> {
-                if (this.groupTempChats.containsKey(id.getId()) && this.groupTempChats.get(id.getId()) != null) {
-                    this.groupTempChats.put(id.getId(), null);
+                if (this.groupTempChats.containsKey(where.getId()) && this.groupTempChats.get(where.getId()) != null) {
+                    this.groupTempChats.put(where.getId(), null);
                 }
             }
         }

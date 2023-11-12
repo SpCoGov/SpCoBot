@@ -25,7 +25,7 @@ import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 
 /**
- * 用于处理日期和时间的实用工具类。
+ * 用于处理日期和时间的工具类。
  *
  * @author SpCo
  * @version 1.2

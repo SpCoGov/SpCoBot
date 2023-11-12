@@ -16,9 +16,7 @@
 package top.spco.api.message;
 
 /**
- * <p>
- * Created on 2023/10/26 0026 14:44
- * <p>
+ * 消息
  *
  * @author SpCo
  * @version 1.0
@@ -27,6 +25,8 @@ package top.spco.api.message;
 public interface Message extends Codable{
     /**
      * 转为接近官方格式的字符串, 即 "内容". 如 At(member) + "test" 将转为 "@QQ test"
+     *
+     * @return 转化后的文本
      */
     String toMessageContext();
 }

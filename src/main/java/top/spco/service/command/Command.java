@@ -59,12 +59,15 @@ public interface Command {
 
     /**
      * 命令的描述
+     *
+     * @return 命令的描述
      */
     String getDescriptions();
 
     /**
      * 命令的作用域
      *
+     * @return 命令的作用域
      * @see CommandType
      */
     CommandType getType();
@@ -73,6 +76,7 @@ public interface Command {
      * 使用命令所需的最低权限等级<p>
      * 注意：这里的最低权限指的是{@link BotUser 机器人用户}的{@link UserPermission 用户权限}，而不是群聊中{@link Member 群成员}的{@link MemberPermission 成员权限}。
      *
+     * @return 使用命令所需的最低权限等级
      * @see UserPermission
      */
     UserPermission needPermission();
@@ -81,7 +85,7 @@ public interface Command {
      * 命令发送用户是否有足够的权限触发该命令<p>
      * 默认情况下与 {@link #needPermission()} 有关。<p>
      * 注意：这里的最低权限指的是{@link BotUser 机器人用户}的{@link UserPermission 用户权限}，而不是群聊中{@link Member 群成员}的{@link MemberPermission 成员权限}
-     *
+     * @param user 命令发送用户
      * @return 如果返回 {@code false} 则命令发送用户会被提示：{@code "[告知] 您无权使用此命令."}
      */
     boolean hasPermission(BotUser user) throws SQLException;
@@ -90,7 +94,7 @@ public interface Command {
      * 初始化命令<p>
      * 会在命令被成功注册时被调用。
      *
-     * @see CommandSystem#registerCommands
+     * @see CommandSystem#registerCommand(Command)
      */
     void init();
 
@@ -113,6 +117,8 @@ public interface Command {
 
     /**
      * 在帮助列表是否可见
+     *
+     * @return 在帮助列表是否可见
      */
     boolean isVisible();
 }

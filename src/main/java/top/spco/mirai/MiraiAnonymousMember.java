@@ -20,10 +20,6 @@ import top.spco.api.Group;
 import top.spco.api.MemberPermission;
 
 /**
- * <p>
- * Created on 2023/10/26 0026 16:01
- * <p>
- *
  * @author SpCo
  * @version 1.0
  * @since 1.0

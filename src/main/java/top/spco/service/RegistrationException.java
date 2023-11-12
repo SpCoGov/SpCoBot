@@ -16,15 +16,13 @@
 package top.spco.service;
 
 /**
- * <p>
- * Created on 2023/11/6 0006 21:23
- * <p>
+ * 用于处理对象注册时出现的问题
  *
  * @author SpCo
  * @version 1.1
  * @since 1.1
  */
-public class RegistrationException extends Exception{
+public class RegistrationException extends Exception {
     /**
      * 带有详细消息的构造函数。
      *

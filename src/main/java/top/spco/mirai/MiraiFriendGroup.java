@@ -22,10 +22,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * <p>
- * Created on 2023/10/27 0027 1:16
- * <p>
- *
  * @author SpCo
  * @version 1.0
  * @since 1.0

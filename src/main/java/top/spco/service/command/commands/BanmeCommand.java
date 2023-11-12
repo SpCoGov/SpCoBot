@@ -24,10 +24,6 @@ import top.spco.user.BotUser;
 import java.security.SecureRandom;
 
 /**
- * <p>
- * Created on 2023/11/12 0012 19:04
- * <p>
- *
  * @author SpCo
  * @version 2.0
  * @since 1.0

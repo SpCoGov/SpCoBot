@@ -21,10 +21,6 @@ import top.spco.api.message.Message;
 import top.spco.api.message.service.MessageService;
 
 /**
- * <p>
- * Created on 2023/11/6 0006 22:26
- * <p>
- *
  * @author SpCo
  * @version 1.0
  * @since 1.0

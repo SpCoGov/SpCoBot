@@ -18,9 +18,7 @@ package top.spco.api;
 import java.util.Collection;
 
 /**
- * <p>
  * Created on 2023/10/27 0027 15:37
- * <p>
  *
  * @author SpCo
  * @version 1.0

@@ -18,9 +18,7 @@ package top.spco.api;
 import top.spco.api.message.Message;
 
 /**
- * <p>
  * Created on 2023/10/26 0026 17:24
- * <p>
  *
  * @author SpCo
  * @version 1.0
@@ -41,7 +39,19 @@ public interface Interactive extends Identifiable {
 
     void handleException(String message);
 
+    /**
+     * 回复并引用源消息。
+     *
+     * @param sourceMessage 源消息，用于引用
+     * @param message       要发送的回复消息
+     */
     void quoteReply(Message sourceMessage, Message message);
 
+    /**
+     * 回复并引用源消息。
+     *
+     * @param sourceMessage 源消息，用于引用
+     * @param message       要发送的回复消息
+     */
     void quoteReply(Message sourceMessage, String message);
 }

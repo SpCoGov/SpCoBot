@@ -22,9 +22,6 @@ import java.util.function.Function;
 
 /**
  * Helper for creating {@link Event} classes.
- * <p>
- * Created on 2023/10/25 0025 16:42
- * <p>
  *
  * @author SpCo
  * @version 1.0

@@ -28,9 +28,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
- * <p>
  * CAATP
- * <p>
  *
  * @author SpCo
  * @version 2.0

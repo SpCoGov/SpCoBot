@@ -19,9 +19,7 @@ import org.jetbrains.annotations.ApiStatus;
 import top.spco.core.resource.ResourceIdentifier;
 
 /**
- * <p>
- * Created on 2023/10/25 0025 16:43
- * <p>
+ * Event
  *
  * @author SpCo
  * @version 1.2

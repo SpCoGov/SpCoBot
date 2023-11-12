@@ -8,6 +8,11 @@ plugins {
 group = 'top.spco'
 version = '0.2.0'
 
+javadoc {
+    failOnError = false
+    options.encoding = 'UTF-8'
+}
+
 repositories {
     maven { url 'https://maven.aliyun.com/repository/public' }
     mavenCentral()

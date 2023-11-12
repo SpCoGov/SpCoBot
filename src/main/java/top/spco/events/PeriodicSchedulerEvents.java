@@ -19,9 +19,7 @@ import top.spco.core.event.Event;
 import top.spco.core.event.EventFactory;
 
 /**
- * <p>
  * Created on 2023/11/10 0010 17:29
- * <p>
  *
  * @author SpCo
  * @version 1.2

@@ -19,9 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * <p>
  * Created on 2023/10/25 0025 16:46
- * <p>
  *
  * @author SpCo
  * @version 1.0

@@ -16,16 +16,23 @@
 package top.spco.service.chat;
 
 /**
- * <p>
- * Created on 2023/11/5 0005 22:28
- * <p>
+ * 对话的类型
  *
  * @author SpCo
  * @version 1.1
  * @since 1.1
  */
 public enum ChatType {
+    /**
+     * 对话在好友聊天中发生
+     */
     FRIEND,
+    /**
+     * 对话在群组聊天中发生
+     */
     GROUP,
+    /**
+     * 对话在群临时聊天中发生
+     */
     GROUP_TEMP
 }

@@ -27,9 +27,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 /**
- * <p>
  * Created on 2023/10/28 0028 18:11
- * <p>
  *
  * @author SpCo
  * @version 2.0
@@ -49,7 +47,7 @@ public class CommandSystem {
     }
 
     @SneakyThrows
-    public void registerCommands() {
+    private void registerCommands() {
         List<Command> toBeRegistered = new ArrayList<>();
         toBeRegistered.add(new InfoCommand());
         toBeRegistered.add(new SignCommand());
@@ -63,7 +61,6 @@ public class CommandSystem {
         toBeRegistered.add(new BanmeCommand());
 
 
-
         toBeRegistered.add(new TestCommand());
 
         for (var command : toBeRegistered) {
@@ -71,6 +68,9 @@ public class CommandSystem {
         }
     }
 
+    /**
+     * 获取所有已注册的群组命令
+     */
     public Command getGroupCommand(String label) {
         if (groupCommands.containsKey(label)) {
             return groupCommands.get(label);
@@ -157,6 +157,9 @@ public class CommandSystem {
         });
     }
 
+    /**
+     * 获取{@link CommandSystem}单例
+     */
     public static CommandSystem getInstance() {
         if (instance == null) {
             instance = new CommandSystem();
@@ -224,6 +227,10 @@ public class CommandSystem {
         command.init();
     }
 
+    /**
+     * 获取命令帮助列表
+     * @see HelpCommand
+     */
     public static List<String> getHelpList() {
         List<String> helpList = new ArrayList<>();
         for (Command command : allCommands) {

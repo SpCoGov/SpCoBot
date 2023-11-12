@@ -16,18 +16,25 @@
 package top.spco.api;
 
 /**
- * <p>
- * Created on 2023/10/27 0027 11:26
- * <p>
+ * 收到某些请求后的行为。如请求加群、请求添加好友等。
  *
  * @author SpCo
  * @version 1.0
  * @since 1.0
  */
 public interface Behavior {
+    /**
+     * 同意
+     */
     void accept();
 
+    /**
+     * 忽略
+     */
     void ignore();
 
+    /**
+     * 拒绝
+     */
     void reject(boolean block, String message);
 }

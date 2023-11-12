@@ -25,9 +25,7 @@ import java.util.Set;
 import java.util.function.Function;
 
 /**
- * <p>
  * Created on 2023/10/25 0025 16:46
- * <p>
  *
  * @author SpCo
  * @version 1.2

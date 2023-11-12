@@ -17,7 +17,7 @@ package top.spco.api;
 
 /**
  * 代表一名群成员<p>
- * 群成员分为{@link NormalMember 普通成员}和{@link AnonymousMember 匿名成员}<p>
+ * 群成员分为{@link NormalMember 普通成员}和{@link AnonymousMember 匿名成员}
  *
  * @author SpCo
  * @version 1.0
@@ -28,23 +28,31 @@ package top.spco.api;
 public interface Member extends User {
     /**
      * 所在的群
+     *
+     * @return 所在的群
      */
     Group getGroup();
 
     /**
-     * 群名片. 可能为空
+     * 群名片
+     *
+     * @return 群名片. 可能为空
      */
     String getNameCard();
 
     /**
      * 群特殊头衔<p>
      * 为 {@link AnonymousMember 匿名成员} 时一定是 {@code "匿名"}
+     *
+     * @return 群特殊头衔
      */
     String getSpecialTitle();
 
     /**
      * 成员的权限<p>
      * {@link Member} 可能是 {@link NormalMember 普通成员} 或 {@link AnonymousMember 匿名成员}, 要修改群成员权限, 请检查类型为 {@link NormalMember 普通成员} 然后使用 {@link NormalMember#modifyPermission}
+     *
+     * @return 成员的权限
      */
     MemberPermission getPermission();
 
@@ -56,6 +64,4 @@ public interface Member extends User {
      * @param time 持续时间. 精确到秒. 最短 0 秒, 最长 30 天
      */
     void mute(int time);
-
-
 }

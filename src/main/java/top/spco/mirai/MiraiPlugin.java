@@ -23,7 +23,6 @@ public final class MiraiPlugin extends JavaPlugin {
     @Deprecated
     public static final MiraiPlugin INSTANCE = new MiraiPlugin();
 
-
     private MiraiPlugin() {
         super(new JvmPluginDescriptionBuilder("top.spco.spcobot", SpCoBot.MAIN_VERSION).name("SpCoBot").author("SpCo").build());
         SpCoBot.dataFolder = getDataFolder();

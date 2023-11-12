@@ -25,10 +25,6 @@ import top.spco.user.BotUser;
 import java.sql.SQLException;
 
 /**
- * <p>
- * Created on 2023/10/29 0029 0:51
- * <p>
- *
  * @author SpCo
  * @version 2.0
  * @since 1.0

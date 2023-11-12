@@ -24,10 +24,6 @@ import top.spco.service.command.CommandSystem;
 import top.spco.user.BotUser;
 
 /**
- * <p>
- * Created on 2023/11/3 0003 0:16
- * <p>
- *
  * @author SpCo
  * @version 2.0
  * @since 1.0

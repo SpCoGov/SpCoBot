@@ -16,9 +16,7 @@
 package top.spco.service.command;
 
 /**
- * <p>
  * 用于处理机器人注册命令时出现的问题
- * <p>
  *
  * @author SpCo
  * @version 1.0

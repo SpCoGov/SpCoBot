@@ -16,9 +16,7 @@
 package top.spco.user;
 
 /**
- * <p>
  * 用于处理QQ机器人获取用户对象失败的情况
- * <p>
  *
  * @author SpCo
  * @version 1.0

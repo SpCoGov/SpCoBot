@@ -23,9 +23,6 @@ import java.util.Arrays;
 
 /**
  * Data of an {@link ArrayBackedEvent} phase.
- * <p>
- * Created on 2023/10/25 0025 17:14
- * <p>
  *
  * @author SpCo
  * @version 1.0

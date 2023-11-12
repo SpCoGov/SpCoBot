@@ -16,9 +16,7 @@
 package top.spco.user;
 
 /**
- * <p>
- * Created on 2023/10/28 0028 18:32
- * <p>
+ * 机器人用户的权限
  *
  * @author SpCo
  * @version 1.2

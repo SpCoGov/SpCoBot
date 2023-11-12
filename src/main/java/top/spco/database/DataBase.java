@@ -111,6 +111,7 @@ public class DataBase {
      * @param whereClause 查询条件语句，占位符用"?"
      * @param whereValues 查询条件中占位符的值
      * @return 指定字段的值. 如果结果集中没有数据, 则返回null
+     * @throws SQLException 如果在执行数据库查询时发生错误
      */
     public String select(String table, String columns, String whereClause, Object whereValues) throws SQLException {
         ResultSet rs = select(table, new String[]{columns}, whereClause + " = ?", new Object[]{whereValues});

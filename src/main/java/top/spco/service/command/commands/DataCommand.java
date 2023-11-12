@@ -27,15 +27,11 @@ import top.spco.user.UserPermission;
 import java.sql.SQLException;
 
 /**
- * <p>
- * Created on 2023/10/29 0029 14:41
- * <p>
- *
  * @author SpCo
  * @version 2.0
  * @since 1.0
  */
-public class DataCommand extends BaseCommand {
+public final class DataCommand extends BaseCommand {
     @Override
     public String[] getLabels() {
         return new String[]{"data"};

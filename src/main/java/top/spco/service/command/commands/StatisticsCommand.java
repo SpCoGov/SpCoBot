@@ -32,10 +32,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
- * <p>
- * Created on 2023/11/5 0005 21:11
- * <p>
- *
  * @author SpCo
  * @version 2.0
  * @since 1.1

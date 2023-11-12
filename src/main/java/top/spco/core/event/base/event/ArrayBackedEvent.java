@@ -24,9 +24,7 @@ import java.util.*;
 import java.util.function.Function;
 
 /**
- * <p>
  * Created on 2023/10/25 0025 17:14
- * <p>
  *
  * @author SpCo
  * @version 1.0

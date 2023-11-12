@@ -47,7 +47,6 @@ package top.spco.core.config;
  * }
  * }
  * </pre>
- * </p>
  *
  * @author SpCo
  * @version 2.0

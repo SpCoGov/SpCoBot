@@ -19,9 +19,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * <p>
- * Created on 2023/11/3 0003 15:46
- * <p>
+ * 哈希值工具类
  *
  * @author SpCo
  * @version 1.0

@@ -18,9 +18,7 @@ package top.spco.service.command;
 import java.util.Locale;
 
 /**
- * <p>
- * Created on 2023/11/3 0003 20:41
- * <p>
+ * 命令的数据
  *
  * @author SpCo
  * @version 1.1
@@ -31,18 +29,32 @@ public class CommandMeta {
     private String label = null;
     private String[] args = null;
 
+    /**
+     * 获取命令的原始文本
+     */
     public String getCommand() {
         return command;
     }
 
+    /**
+     * 获取命令标签
+     */
     public String getLabel() {
         return label;
     }
 
+    /**
+     * 获取命令参数
+     */
     public String[] getArgs() {
         return args;
     }
 
+    /**
+     * 创建命令元数据
+     *
+     * @param context 命令的原始文本
+     */
     public CommandMeta(String context) {
         if (context.startsWith("/")) {
             // 将用户的输入以 空格 为分隔符分割
