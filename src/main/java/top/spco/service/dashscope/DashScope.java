@@ -97,7 +97,7 @@ public class DashScope {
             generation = new Generation();
             lastMessage.getLeft().quoteReply(lastMessage.getRight(), "Chat(" + generation.toString().replaceAll("com.alibaba.dashscope.aigc.generation.Generation@", "") + ") created!");
             msgManager = new MessageManager(maxMessages);
-            com.alibaba.dashscope.common.Message systemMsg = com.alibaba.dashscope.common.Message.builder().role(Role.SYSTEM.getValue()).content("你是趙かれい语音助手接入终端程序，所有问题请用汉语回答。").build();
+            com.alibaba.dashscope.common.Message systemMsg = com.alibaba.dashscope.common.Message.builder().role(Role.SYSTEM.getValue()).content("所有问题请用汉语回答。").build();
             msgManager.add(systemMsg);
         }
         com.alibaba.dashscope.common.Message userMsg = com.alibaba.dashscope.common.Message.builder().role(Role.USER.getValue()).content(content).build();
