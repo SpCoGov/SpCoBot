@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @author SpCo
- * @version 2.0
+ * @version 2.1
  * @since 1.1
  */
 public class StatisticsCommand extends BaseCommand {
@@ -238,13 +238,15 @@ public class StatisticsCommand extends BaseCommand {
                                     Friend friend = SpCoBot.getInstance().getBot().getFriend(SpCoBot.getInstance().BOT_OWNER_ID);
                                     friend.sendMessage("有用户在群" + groupId + "中发起了一场报名统计，如果需要重启机器人，请注意这场报名统计的结束情况。");
                                     SpCoBot.getInstance().statisticsManager.register(group, statistics);
+                                    statistics = null;
+                                    Statistics statisticsFromManager = SpCoBot.getInstance().statisticsManager.getStatistics(bot.getGroup(groupId));
                                     ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
                                     Runnable delayedTask = () -> {
                                         try {
                                             StringBuilder sb2 = new StringBuilder("报名结束，以下为本次报名的统计信息：").append("\n");
                                             Map<Map.Entry<String, Integer>, Boolean> condition = new HashMap<>();
                                             for (var rank : ranks.entrySet()) {
-                                                var records = statistics.getRecords(statistics.getIndex(rank.getKey()));
+                                                var records = statisticsFromManager.getRecords(statisticsFromManager.getIndex(rank.getKey()));
                                                 int i = 0;
                                                 if (records != null) {
                                                     i = records.size();
@@ -259,9 +261,9 @@ public class StatisticsCommand extends BaseCommand {
                                             source.sendMessage(sb2.toString());
                                             // 开始从所有已报名的人中随机选择
                                             for (var rank : condition.entrySet()) {
-                                                int itemId = statistics.getIndex(rank.getKey().getKey());
+                                                int itemId = statisticsFromManager.getIndex(rank.getKey().getKey());
                                                 int need = rank.getKey().getValue();
-                                                var records = statistics.getRecords(itemId);
+                                                var records = statisticsFromManager.getRecords(itemId);
                                                 if (records == null) {
                                                     continue;
                                                 }
@@ -273,7 +275,7 @@ public class StatisticsCommand extends BaseCommand {
                                                     group.quoteReply(record.getValue(), SpCoBot.getInstance().getMessageService().append(SpCoBot.getInstance().getMessageService().at(record.getKey()), " 恭喜你参与本次上镜赛，请在 5 分钟内联系新晴"));
                                                 }
                                             }
-                                            statistics.stop();
+                                            statisticsFromManager.stop();
                                         } catch (Exception e) {
                                             group.handleException("处理报名结果时抛出了意料之外的异常", e);
                                         }

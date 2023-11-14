@@ -1,12 +1,11 @@
 # SpCoBot
 
-## 0.2.0
+## 0.2.1
 
 ### feat
 
-- 添加配置系统
-- 扩展Command接口
+- Dashscope命令
 
-### remove
+### fix
 
-- At和AtAll的Mirai实现
+- 当同时有多个投票统计存在时，其中一个处理投票结果会失效

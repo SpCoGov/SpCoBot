@@ -15,20 +15,22 @@
  */
 package top.spco.core.config;
 
+import top.spco.SpCoBot;
+
 /**
- * Created on 2023/11/11 0011 11:46
+ * Created on 2023/11/15 0015 0:12
  *
  * @author SpCo
  * @version 2.1
- * @since 2.0
+ * @since 2.1
  */
-public enum BotSettings implements SettingsGroup {
-    BOT_ID("bot_id", 0L),
-    OWNER_ID("owner_id", 0L);
+public enum SettingsVersion implements SettingsGroup {
+    CONFIG_VERSION("config_version", SpCoBot.MAIN_VERSION);
+
     private final String key;
     private final Object defaultValue;
 
-    BotSettings(String key, Object defaultValue) {
+    SettingsVersion(String key, Object defaultValue) {
         this.key = key;
         this.defaultValue = defaultValue;
     }
@@ -45,6 +47,6 @@ public enum BotSettings implements SettingsGroup {
 
     @Override
     public String groupName() {
-        return "Bot";
+        return "Version";
     }
 }

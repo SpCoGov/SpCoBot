@@ -30,7 +30,7 @@ import java.util.*;
  * Created on 2023/10/28 0028 18:11
  *
  * @author SpCo
- * @version 2.0
+ * @version 2.1
  * @since 1.0
  */
 public class CommandSystem {
@@ -42,6 +42,10 @@ public class CommandSystem {
     private static final Map<String, Command> groupCommands = new HashMap<>();
 
     private CommandSystem() {
+        if (registered) {
+            return;
+        }
+        registered = true;
         init();
         registerCommands();
     }
@@ -59,6 +63,7 @@ public class CommandSystem {
         toBeRegistered.add(new BalancetopCommand());
         toBeRegistered.add(new StatisticsCommand());
         toBeRegistered.add(new BanmeCommand());
+        toBeRegistered.add(new DashscopeCommand());
 
 
         toBeRegistered.add(new TestCommand());
@@ -79,10 +84,6 @@ public class CommandSystem {
     }
 
     private void init() {
-        if (registered) {
-            return;
-        }
-        registered = true;
         CommandEvents.FRIEND_COMMAND.register((bot, interactor, message, time, command, label, args) -> {
             if (SpCoBot.getInstance().chatManager.isInChat(interactor, ChatType.FRIEND)) {
                 return;

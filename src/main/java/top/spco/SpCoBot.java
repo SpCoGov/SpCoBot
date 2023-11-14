@@ -21,6 +21,7 @@ import top.spco.api.message.service.MessageService;
 import top.spco.core.CAATP;
 import top.spco.core.config.BotSettings;
 import top.spco.core.config.Settings;
+import top.spco.core.config.SettingsVersion;
 import top.spco.database.DataBase;
 import top.spco.events.*;
 import top.spco.service.AutoSign;
@@ -30,6 +31,7 @@ import top.spco.service.chat.ChatType;
 import top.spco.service.command.Command;
 import top.spco.service.command.CommandMeta;
 import top.spco.service.command.CommandSystem;
+import top.spco.service.dashscope.DashScopeManager;
 import top.spco.service.statistics.StatisticsManager;
 import top.spco.user.BotUser;
 import top.spco.util.ExceptionUtils;
@@ -63,7 +65,7 @@ import java.util.concurrent.TimeUnit;
  * </pre>
  *
  * @author SpCo
- * @version 2.0
+ * @version 2.1
  * @since 1.0
  */
 public class SpCoBot {
@@ -73,9 +75,10 @@ public class SpCoBot {
     public static File configFolder;
     public long BOT_ID;
     public long BOT_OWNER_ID;
-    public final CommandSystem commandSystem = CommandSystem.getInstance();
+    private CommandSystem commandSystem;
     public final ChatManager chatManager = ChatManager.getInstance();
     public final StatisticsManager statisticsManager = StatisticsManager.getInstance();
+    public final DashScopeManager dashScopeManager = DashScopeManager.getInstance();
     private Settings settings;
     private MessageService messageService;
     private DataBase dataBase;
@@ -91,9 +94,9 @@ public class SpCoBot {
      * </ul>
      * <b>更新版本号(仅限核心的 Feature)时请不要忘记在 build.gradle 中同步修改版本号</b>
      */
-    public static final String MAIN_VERSION = "0.2.0";
-    public static final String VERSION = "v" + MAIN_VERSION + "-alpha.2";
-    public static final String UPDATED_TIME = "2023-11-12 20:45";
+    public static final String MAIN_VERSION = "0.2.1";
+    public static final String VERSION = "v" + MAIN_VERSION + "-alpha";
+    public static final String UPDATED_TIME = "2023-11-14 23:45";
 
     private SpCoBot() {
         initEvents();
@@ -105,8 +108,13 @@ public class SpCoBot {
         new GroupMessageRecorder();
         new AutoSign();
         this.settings = new Settings(configFolder.getAbsolutePath() + File.separator + "config.yaml");
-        BOT_ID = settings.getLongProperty(BotSettings.BOT_BOT_ID);
-        BOT_OWNER_ID = settings.getLongProperty(BotSettings.BOT_OWNER_ID);
+        if (!MAIN_VERSION.equals(settings.getProperty(SettingsVersion.CONFIG_VERSION))) {
+            logger.error("配置版本过时，请备份配置后删除配置重新启动机器人以生成新配置。");
+            System.exit(-2);
+        }
+        BOT_ID = settings.getLongProperty(BotSettings.BOT_ID);
+        BOT_OWNER_ID = settings.getLongProperty(BotSettings.OWNER_ID);
+        this.commandSystem = CommandSystem.getInstance();
     }
 
     private void initEvents() {
