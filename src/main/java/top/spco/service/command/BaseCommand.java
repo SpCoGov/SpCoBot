@@ -28,7 +28,6 @@ import top.spco.user.UserPermission;
  * @since 1.0
  */
 public abstract class BaseCommand implements Command {
-
     @Override
     public CommandType getType() {
         return CommandType.ALL;

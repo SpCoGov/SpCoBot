@@ -24,12 +24,13 @@ import top.spco.api.User;
 import top.spco.api.message.Message;
 import top.spco.core.config.DashScopeSettings;
 import top.spco.service.command.BaseCommand;
+import top.spco.service.command.CommandMeta;
 import top.spco.service.dashscope.DashScope;
 import top.spco.user.BotUser;
 
 /**
  * @author SpCo
- * @version 2.1
+ * @version 3.0
  * @since 2.1
  */
 public class DashscopeCommand extends BaseCommand {
@@ -49,7 +50,7 @@ public class DashscopeCommand extends BaseCommand {
     }
 
     @Override
-    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args) {
+    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta) {
         if (!user.isPremium()) {
             from.quoteReply(message, "仅Premium会员可使用此命令。");
             return;

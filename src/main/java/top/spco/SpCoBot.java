@@ -65,7 +65,7 @@ import java.util.concurrent.TimeUnit;
  * </pre>
  *
  * @author SpCo
- * @version 2.1
+ * @version 3.0
  * @since 1.0
  */
 public class SpCoBot {
@@ -94,9 +94,9 @@ public class SpCoBot {
      * </ul>
      * <b>更新版本号(仅限核心的 Feature)时请不要忘记在 build.gradle 中同步修改版本号</b>
      */
-    public static final String MAIN_VERSION = "0.2.1";
-    public static final String VERSION = "v" + MAIN_VERSION + "-alpha.2";
-    public static final String UPDATED_TIME = "2023-11-14 23:45";
+    public static final String MAIN_VERSION = "0.3.0";
+    public static final String VERSION = "v" + MAIN_VERSION + "-alpha";
+    public static final String UPDATED_TIME = "2023-11-15 19:24";
 
     private SpCoBot() {
         initEvents();
@@ -150,8 +150,8 @@ public class SpCoBot {
                 return;
             }
             if (meta.getArgs() != null) {
-                CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs());
-                CommandEvents.FRIEND_COMMAND.invoker().onFriendCommand(bot, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs());
+                CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs(), meta);
+                CommandEvents.FRIEND_COMMAND.invoker().onFriendCommand(bot, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs(), meta);
             }
         });
         // 处理群聊命令
@@ -163,15 +163,15 @@ public class SpCoBot {
                 return;
             }
             if (meta.getArgs() != null) {
-                CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs());
-                CommandEvents.GROUP_COMMAND.invoker().onGroupCommand(bot, source, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs());
+                CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs(), meta);
+                CommandEvents.GROUP_COMMAND.invoker().onGroupCommand(bot, source, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs(), meta);
             }
             if (context.equals("签到")) {
                 Command command = this.commandSystem.getGroupCommand("sign");
                 try {
                     BotUser botUser = BotUser.getOrCreate(sender.getId());
                     if (command.hasPermission(botUser)) {
-                        command.onCommand(bot, source, sender, botUser, message, time, context, "sign", new String[]{});
+                        command.onCommand(bot, source, sender, botUser, message, time, context, "sign", new String[]{}, new CommandMeta(context));
                     }
                 } catch (Exception e) {
                     source.quoteReply(message, "SpCoBot获取用户时失败: \n" + ExceptionUtils.getStackTraceAsString(e));
@@ -183,7 +183,7 @@ public class SpCoBot {
                 try {
                     BotUser botUser = BotUser.getOrCreate(sender.getId());
                     if (command.hasPermission(botUser)) {
-                        command.onCommand(bot, source, sender, botUser, message, time, context, "getme", new String[]{});
+                        command.onCommand(bot, source, sender, botUser, message, time, context, "getme", new String[]{}, new CommandMeta(context));
                     }
                 } catch (Exception e) {
                     source.quoteReply(message, "SpCoBot获取用户时失败: \n" + ExceptionUtils.getStackTraceAsString(e));
@@ -200,8 +200,8 @@ public class SpCoBot {
                 return;
             }
             if (meta.getArgs() != null) {
-                CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs());
-                CommandEvents.GROUP_TEMP_COMMAND.invoker().onGroupTempCommand(bot, source, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs());
+                CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs(), meta);
+                CommandEvents.GROUP_TEMP_COMMAND.invoker().onGroupTempCommand(bot, source, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs(), meta);
             }
         });
     }

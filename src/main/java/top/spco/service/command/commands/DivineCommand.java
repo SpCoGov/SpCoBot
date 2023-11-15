@@ -20,6 +20,7 @@ import top.spco.api.Interactive;
 import top.spco.api.User;
 import top.spco.api.message.Message;
 import top.spco.service.command.BaseCommand;
+import top.spco.service.command.CommandMeta;
 import top.spco.user.BotUser;
 import top.spco.util.DateUtils;
 import top.spco.util.HashUtils;
@@ -36,7 +37,7 @@ import java.util.Set;
 
 /**
  * @author SpCo
- * @version 2.0
+ * @version 3.0
  * @since 1.0
  */
 public class DivineCommand extends BaseCommand {
@@ -51,7 +52,7 @@ public class DivineCommand extends BaseCommand {
     }
 
     @Override
-    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args) {
+    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta) {
         LocalDate today = DateUtils.today();
         try {
             BigDecimal hundred = new BigDecimal("100.00");

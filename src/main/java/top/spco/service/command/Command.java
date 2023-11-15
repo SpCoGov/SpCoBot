@@ -39,7 +39,7 @@ import java.sql.SQLException;
  * <b>不建议命令实现此接口，而是继承 {@link BaseCommand}类</b>
  *
  * @author SpCo
- * @version 2.0
+ * @version 3.0
  * @see BaseCommand
  * @since 1.0
  */
@@ -85,6 +85,7 @@ public interface Command {
      * 命令发送用户是否有足够的权限触发该命令<p>
      * 默认情况下与 {@link #needPermission()} 有关。<p>
      * 注意：这里的最低权限指的是{@link BotUser 机器人用户}的{@link UserPermission 用户权限}，而不是群聊中{@link Member 群成员}的{@link MemberPermission 成员权限}
+     *
      * @param user 命令发送用户
      * @return 如果返回 {@code false} 则命令发送用户会被提示：{@code "[告知] 您无权使用此命令."}
      */
@@ -111,9 +112,10 @@ public interface Command {
      * @param command 命令的原始文本
      * @param label   触发命令的标签
      * @param args    触发命令提交的参数
+     * @param meta    命令的元数据
      * @see CommandEvents
      */
-    void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args);
+    void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta);
 
     /**
      * 在帮助列表是否可见

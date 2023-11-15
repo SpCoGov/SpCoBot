@@ -21,7 +21,7 @@ import java.util.Locale;
  * 命令的数据
  *
  * @author SpCo
- * @version 1.1
+ * @version 3.0
  * @since 1.1
  */
 public class CommandMeta {
@@ -75,6 +75,52 @@ public class CommandMeta {
                 }
                 this.args = args;
             }
+        }
+    }
+
+    /**
+     * 获取命令的字符串类型参数
+     *
+     * @param index 参数的索引
+     * @return 对应参数的值
+     * @throws CommandSyntaxException 索引超出了参数数组的范围
+     */
+    public String argument(int index) throws CommandSyntaxException {
+        if (args.length < index + 1) {
+            throw CommandSyntaxException.DISPATCHER_UNKNOWN_COMMAND;
+        }
+        return args[index];
+    }
+
+    /**
+     * 获取命令的整数类型参数
+     *
+     * @param index 参数的索引
+     * @return 对应参数的值
+     * @throws CommandSyntaxException 索引超出了参数数组的范围或该参数不是预期类型
+     */
+    public int integerArgument(int index) throws CommandSyntaxException {
+        String arg = argument(index);
+        try {
+            return Integer.parseInt(arg);
+        } catch (NumberFormatException e) {
+            throw CommandSyntaxException.error("Expected integer", label, args, index);
+        }
+    }
+
+    /**
+     * 获取命令的长整数类型参数
+     *
+     * @param index 参数的索引
+     * @return 对应参数的值
+     * @throws CommandSyntaxException 索引超出了参数数组的范围或该参数不是预期类型
+     */
+    public long longArgument(int index) throws CommandSyntaxException {
+        String arg = argument(index);
+        try {
+            return Long.parseLong(arg);
+        } catch (NumberFormatException e) {
+            throw CommandSyntaxException.error("Expected Long", label, args, index);
         }
     }
 }

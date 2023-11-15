@@ -30,7 +30,7 @@ import java.util.*;
  * Created on 2023/10/28 0028 18:11
  *
  * @author SpCo
- * @version 2.1
+ * @version 3.0
  * @since 1.0
  */
 public class CommandSystem {
@@ -84,7 +84,7 @@ public class CommandSystem {
     }
 
     private void init() {
-        CommandEvents.FRIEND_COMMAND.register((bot, interactor, message, time, command, label, args) -> {
+        CommandEvents.FRIEND_COMMAND.register((bot, interactor, message, time, command, label, args, meta) -> {
             if (SpCoBot.getInstance().chatManager.isInChat(interactor, ChatType.FRIEND)) {
                 return;
             }
@@ -100,7 +100,7 @@ public class CommandSystem {
                     } catch (SQLException e) {
                         interactor.handleException(message, "获取用户权限失败", e);
                     }
-                    object.onCommand(bot, interactor, interactor, user, message, time, command, label, args);
+                    object.onCommand(bot, interactor, interactor, user, message, time, command, label, args, meta);
                 } catch (UserFetchException e) {
                     interactor.handleException(message, "SpCoBot获取用户时失败", e);
                 } catch (Exception e) {
@@ -108,7 +108,7 @@ public class CommandSystem {
                 }
             }
         });
-        CommandEvents.GROUP_COMMAND.register((bot, from, sender, message, time, command, label, args) -> {
+        CommandEvents.GROUP_COMMAND.register((bot, from, sender, message, time, command, label, args, meta) -> {
             if (SpCoBot.getInstance().chatManager.isInChat(from, ChatType.GROUP)) {
                 return;
             }
@@ -124,7 +124,7 @@ public class CommandSystem {
                     } catch (SQLException e) {
                         from.handleException(message, "获取用户权限失败", e);
                     }
-                    object.onCommand(bot, from, sender, user, message, time, command, label, args);
+                    object.onCommand(bot, from, sender, user, message, time, command, label, args, meta);
                 } catch (UserFetchException e) {
                     from.handleException(message, "SpCoBot获取用户时失败", e);
                 } catch (Exception e) {
@@ -132,7 +132,7 @@ public class CommandSystem {
                 }
             }
         });
-        CommandEvents.GROUP_TEMP_COMMAND.register((bot, interactor, message, time, command, label, args) -> {
+        CommandEvents.GROUP_TEMP_COMMAND.register((bot, interactor, message, time, command, label, args, meta) -> {
             if (SpCoBot.getInstance().chatManager.isInChat(interactor, ChatType.GROUP_TEMP)) {
                 return;
             }
@@ -148,7 +148,7 @@ public class CommandSystem {
                     } catch (SQLException e) {
                         interactor.handleException(message, "获取用户权限失败", e);
                     }
-                    object.onCommand(bot, interactor, interactor, user, message, time, command, label, args);
+                    object.onCommand(bot, interactor, interactor, user, message, time, command, label, args, meta);
                 } catch (UserFetchException e) {
                     interactor.handleException(message, "SpCoBot获取用户时失败", e);
                 } catch (Exception e) {

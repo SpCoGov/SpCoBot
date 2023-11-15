@@ -18,6 +18,7 @@ package top.spco.service.command.commands;
 import top.spco.api.*;
 import top.spco.api.message.Message;
 import top.spco.service.command.BaseCommand;
+import top.spco.service.command.CommandMeta;
 import top.spco.service.command.CommandType;
 import top.spco.user.BotUser;
 
@@ -25,7 +26,7 @@ import java.security.SecureRandom;
 
 /**
  * @author SpCo
- * @version 2.0
+ * @version 3.0
  * @since 1.0
  */
 public class BanmeCommand extends BaseCommand {
@@ -45,7 +46,7 @@ public class BanmeCommand extends BaseCommand {
     }
 
     @Override
-    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args) {
+    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta) {
         if (from instanceof Group group) {
             if (!group.botPermission().isOperator()) {
                 from.quoteReply(message, "权限不足");

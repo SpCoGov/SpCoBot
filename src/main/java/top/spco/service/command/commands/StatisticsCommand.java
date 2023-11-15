@@ -21,6 +21,7 @@ import top.spco.api.message.Message;
 import top.spco.service.RegistrationException;
 import top.spco.service.chat.*;
 import top.spco.service.command.BaseCommand;
+import top.spco.service.command.CommandMeta;
 import top.spco.service.command.CommandType;
 import top.spco.service.statistics.Statistics;
 import top.spco.user.BotUser;
@@ -33,7 +34,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @author SpCo
- * @version 2.1
+ * @version 3.0
  * @since 1.1
  */
 public class StatisticsCommand extends BaseCommand {
@@ -71,7 +72,7 @@ public class StatisticsCommand extends BaseCommand {
     }
 
     @Override
-    public void onCommand(Bot bot1, Interactive from1, User sender1, BotUser user1, Message message1, int time1, String command, String label, String[] args) {
+    public void onCommand(Bot bot1, Interactive from1, User sender1, BotUser user1, Message message1, int time1, String command, String label, String[] args, CommandMeta meta) {
         // 在每次调用命令时，重置
         sb.setLength(0);
         ranks.clear();

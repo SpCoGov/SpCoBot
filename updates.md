@@ -1,12 +1,7 @@
 # SpCoBot
 
-## 0.2.1
+## 0.3.0
 
 ### feat
 
-- Dashscope命令
-
-### fix
-
-- 当同时有多个投票统计存在时，其中一个处理投票结果会失效
-- 删除不属于SpCoBot的DashScope的规则
+- 修改Command系统

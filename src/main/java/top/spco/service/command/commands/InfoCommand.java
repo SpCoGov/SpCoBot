@@ -21,12 +21,13 @@ import top.spco.api.Interactive;
 import top.spco.api.User;
 import top.spco.api.message.Message;
 import top.spco.service.command.BaseCommand;
+import top.spco.service.command.CommandMeta;
 import top.spco.user.BotUser;
 import top.spco.user.UserPermission;
 
 /**
  * @author SpCo
- * @version 2.0
+ * @version 3.0
  * @since 1.0
  */
 public final class InfoCommand extends BaseCommand {
@@ -41,7 +42,7 @@ public final class InfoCommand extends BaseCommand {
     }
 
     @Override
-    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args) {
+    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta) {
         if (user.toUserPermission() == UserPermission.OWNER) {
             from.quoteReply(message, "机器人运行状态: 正常\n" + (SpCoBot.getInstance().getCAATP().isConnected() ? "CAATP连接状态: 已连接" : "CAATP连接状态: 连接断开"));
         } else {
