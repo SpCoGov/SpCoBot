@@ -22,23 +22,27 @@ import top.spco.service.command.CommandMeta;
 import top.spco.service.command.CommandSyntaxException;
 import top.spco.service.command.CommandType;
 import top.spco.user.BotUser;
-
-import java.security.SecureRandom;
+import top.spco.user.UserPermission;
 
 /**
  * @author SpCo
  * @version 3.0
- * @since 1.0
+ * @since 3.0
  */
-public class BanmeCommand extends BaseCommand {
+public class UnmuteCommand extends BaseCommand {
     @Override
     public String[] getLabels() {
-        return new String[]{"banme"};
+        return new String[]{"unmute"};
     }
 
     @Override
     public String getDescriptions() {
-        return "禁言我";
+        return "解除禁言一位群员";
+    }
+
+    @Override
+    public UserPermission needPermission() {
+        return UserPermission.ADMINISTRATOR;
     }
 
     @Override
@@ -49,21 +53,19 @@ public class BanmeCommand extends BaseCommand {
     @Override
     public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta) {
         try {
-            meta.max(0);
+            meta.max(1);
             if (from instanceof Group group) {
                 if (!group.botPermission().isOperator()) {
                     from.quoteReply(message, "机器人权限不足");
                     return;
                 }
-                if (sender instanceof Member member) {
-                    if (member.getPermission().getLevel() >= group.botAsMember().getPermission().getLevel()) {
-                        from.quoteReply(message, "大佬，惹不起");
-                        return;
-                    }
-                    int d = new SecureRandom().nextInt(1, 61);
-                    member.mute(d);
-                    from.quoteReply(message, "恭喜，您已被禁言" + d + "秒");
+                NormalMember target = group.getMember(meta.userIdArgument(0));
+                if (target.getPermission().getLevel() >= group.botPermission().getLevel()) {
+                    from.quoteReply(message, "大佬，惹不起");
+                    return;
                 }
+                target.unmute();
+                from.quoteReply(message, "已将 " + target.getNameCard() + "(" + target.getId() + ")" + " 解除禁言");
             }
         } catch (CommandSyntaxException e) {
             from.handleException(message, e.getMessage());

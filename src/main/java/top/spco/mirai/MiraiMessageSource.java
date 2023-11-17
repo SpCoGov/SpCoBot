@@ -13,36 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco.api;
+package top.spco.mirai;
+
+
+import top.spco.api.message.MessageSource;
 
 /**
- * 代表一个群
+ * Created on 2023/11/17 0017 22:08
  *
  * @author SpCo
  * @version 3.0
- * @since 1.0
+ * @since 3.0
  */
-public interface Group extends Interactive {
-    /**
-     * 群名称
-     */
-    String getName();
+record MiraiMessageSource(net.mamoe.mirai.message.data.MessageSource messageSource) implements MessageSource {
 
-    /**
-     * 群主
-     */
-    NormalMember getOwner();
+    @Override
+    public long getFromId() {
+        return messageSource.getFromId();
+    }
 
-    /**
-     * 让机器人退出这个群
-     *
-     * @return 退出成功时 {@code true}; 已经退出时 {@code false}
-     */
-    boolean quit();
-
-    MemberPermission botPermission();
-
-    NormalMember botAsMember();
-
-    NormalMember getMember(long id);
+    @Override
+    public long getTargetId() {
+        return messageSource.getTargetId();
+    }
 }

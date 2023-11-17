@@ -31,6 +31,7 @@ public class CommandSyntaxException extends Exception {
 
     public static final CommandSyntaxException DISPATCHER_UNKNOWN_COMMAND = new CommandSyntaxException(CommandReturn.UNKNOWN_COMMAND);
     public static final CommandSyntaxException DISPATCHER_UNKNOWN_ARGUMENT = new CommandSyntaxException(CommandReturn.UNKNOWN_ARGUMENT);
+    public static final CommandSyntaxException DISPATCHER_EXPECTED_SEPARATOR = new CommandSyntaxException(CommandReturn.EXPECTED_SEPARATOR);
 
     public static CommandSyntaxException error(String message, String label, String[] args, int unknownArgIndex) {
         if (args.length >= unknownArgIndex + 1) {

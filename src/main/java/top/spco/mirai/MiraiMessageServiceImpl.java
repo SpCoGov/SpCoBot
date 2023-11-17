@@ -17,15 +17,19 @@ package top.spco.mirai;
 
 import net.mamoe.mirai.message.data.At;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
+import net.mamoe.mirai.message.data.QuoteReply;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import top.spco.api.message.Message;
+import top.spco.api.message.MessageSource;
 import top.spco.api.message.service.MessageService;
 
 /**
  * @author SpCo
- * @version 1.0
+ * @version 3.0
  * @since 1.0
  */
-public class MiraiMessageServiceImpl implements MessageService {
+class MiraiMessageServiceImpl implements MessageService {
     @Override
     public Message at(long id) {
         return new MiraiMessage(new MessageChainBuilder().append(new At(id)).build());
@@ -44,5 +48,21 @@ public class MiraiMessageServiceImpl implements MessageService {
     @Override
     public Message append(Message original, String other) {
         return new MiraiMessageChainBuilder().append(original).append(other).build();
+    }
+
+    @Override
+    public String getAtRegex() {
+        return "\\[mirai:at:\\d+\\]";
+    }
+
+    @Override
+    public ImmutablePair<MessageSource, Message> getQuote(Message message) {
+        MiraiMessage miraiMessage = ((MiraiMessage) message);
+        for (var singleMessage : miraiMessage.message()) {
+            if (singleMessage instanceof QuoteReply quoteReply) {
+                return new ImmutablePair<>(new MiraiMessageSource(quoteReply.getSource()),new MiraiMessage(quoteReply.getSource().getOriginalMessage()));
+            }
+        }
+        return null;
     }
 }

@@ -15,7 +15,11 @@
  */
 package top.spco.service.command;
 
+import top.spco.SpCoBot;
+
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 命令的数据
@@ -25,7 +29,7 @@ import java.util.Locale;
  * @since 1.1
  */
 public class CommandMeta {
-    private String command = null;
+    private final String command;
     private String label = null;
     private String[] args = null;
 
@@ -56,9 +60,11 @@ public class CommandMeta {
      * @param context 命令的原始文本
      */
     public CommandMeta(String context) {
-        if (context.startsWith("/")) {
+        this.command = context;
+        String cleanedString = convertMultipleSpaces(context);
+        if (cleanedString.startsWith("/")) {
             // 将用户的输入以 空格 为分隔符分割
-            String[] parts = context.split(" ");
+            String[] parts = cleanedString.split(" ");
             // 检查parts数组是否为空
             if (parts.length > 0) {
                 // 创建一个长度为parts数组的长度减一的数组, 用于存储命令的参数
@@ -66,9 +72,7 @@ public class CommandMeta {
                 // 将parts数组中从第二个元素开始的所有元素复制到新的数组中
                 System.arraycopy(parts, 1, args, 0, parts.length - 1);
                 // 标签转换为小写
-                String label = parts[0].toLowerCase(Locale.ENGLISH).substring(1);
-                this.command = context;
-                this.label = label;
+                this.label = parts[0].toLowerCase(Locale.ENGLISH).substring(1);
                 // 删除args中每个元素的空格
                 for (int i = 0; i < args.length; i++) {
                     args[i] = args[i].replaceAll(" ", "");
@@ -76,6 +80,11 @@ public class CommandMeta {
                 this.args = args;
             }
         }
+    }
+
+    private static String convertMultipleSpaces(String input) {
+        // 使用正则表达式替换连续空格为单个空格，并去掉末尾空格
+        return input.replaceAll("\\s++$", "").replaceAll("\\s+", " ");
     }
 
     /**
@@ -87,7 +96,7 @@ public class CommandMeta {
      */
     public String argument(int index) throws CommandSyntaxException {
         if (args.length < index + 1) {
-            throw CommandSyntaxException.DISPATCHER_UNKNOWN_COMMAND;
+            throw CommandSyntaxException.DISPATCHER_UNKNOWN_ARGUMENT;
         }
         return args[index];
     }
@@ -121,6 +130,47 @@ public class CommandMeta {
             return Long.parseLong(arg);
         } catch (NumberFormatException e) {
             throw CommandSyntaxException.error("Expected Long", label, args, index);
+        }
+    }
+
+    /**
+     * 检测提交的参数是否过多
+     *
+     * @throws CommandSyntaxException 提交的参数过多
+     */
+    public void max(int amount) throws CommandSyntaxException {
+        if (args.length > amount) {
+            throw CommandSyntaxException.DISPATCHER_EXPECTED_SEPARATOR;
+        }
+    }
+
+    /**
+     * 获取命令的用户id类型参数
+     *
+     * @param index 参数的索引
+     * @return 对应参数的值
+     * @throws CommandSyntaxException 索引超出了参数数组的范围或该参数不是预期类型
+     */
+    public long userIdArgument(int index) throws CommandSyntaxException {
+        String arg = argument(index);
+        Matcher atMatcher = Pattern.compile("@(\\w+)").matcher(arg);
+        if (SpCoBot.getInstance().getMessageService().isAtFormat(arg)) {
+            Pattern pattern = Pattern.compile(SpCoBot.getInstance().getMessageService().getAtRegex());
+            Matcher matcher = pattern.matcher(arg);
+            return Long.parseLong(matcher.group(1));
+        } else if (atMatcher.find()) {
+            try {
+                String id = atMatcher.group(1);
+                return Long.parseLong(id);
+            } catch (NumberFormatException e) {
+                throw CommandSyntaxException.error("Expected UserId or at a user", label, args, index);
+            }
+        } else {
+            try {
+                return longArgument(index);
+            } catch (CommandSyntaxException e) {
+                throw CommandSyntaxException.error("Expected UserId or at a user", label, args, index);
+            }
         }
     }
 }

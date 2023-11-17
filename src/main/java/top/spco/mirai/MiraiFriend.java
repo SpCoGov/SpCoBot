@@ -21,7 +21,7 @@ import top.spco.api.message.Message;
 
 /**
  * @author SpCo
- * @version 1.0
+ * @version 3.0
  * @since 1.0
  */
 record MiraiFriend(net.mamoe.mirai.contact.Friend friend) implements Friend {
@@ -38,6 +38,11 @@ record MiraiFriend(net.mamoe.mirai.contact.Friend friend) implements Friend {
     @Override
     public void sendMessage(Message message) {
         this.friend.sendMessage(((MiraiMessage) message).message());
+    }
+
+    @Override
+    public void handleException(Message sourceMessage, String message) {
+        this.sendMessage(new MiraiMessageChainBuilder(sourceMessage).append("[错误发生] " + message).build());
     }
 
     @Override

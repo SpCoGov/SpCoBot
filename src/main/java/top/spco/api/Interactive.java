@@ -18,16 +18,18 @@ package top.spco.api;
 import top.spco.api.message.Message;
 
 /**
- * Created on 2023/10/26 0026 17:24
+ * 可进行发送消息等交互行为
  *
  * @author SpCo
- * @version 1.0
+ * @version 3.0
  * @since 1.0
  */
 public interface Interactive extends Identifiable {
     void sendMessage(String message);
 
     void sendMessage(Message message);
+
+    void handleException(Message sourceMessage, String message);
 
     void handleException(Message sourceMessage, String message, Throwable throwable);
 

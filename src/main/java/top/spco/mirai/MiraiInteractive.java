@@ -21,7 +21,7 @@ import top.spco.api.message.Message;
 
 /**
  * @author SpCo
- * @version 1.0
+ * @version 3.0
  * @since 1.0
  */
 record MiraiInteractive(Contact contact) implements Interactive {
@@ -43,6 +43,11 @@ record MiraiInteractive(Contact contact) implements Interactive {
     @Override
     public void handleException(Message sourceMessage, String message, Throwable throwable) {
         this.sendMessage(new MiraiMessageChainBuilder(sourceMessage).append("[错误发生] " + message + ": " + throwable.getMessage()).build());
+    }
+
+    @Override
+    public void handleException(Message sourceMessage, String message) {
+        this.sendMessage(new MiraiMessageChainBuilder(sourceMessage).append("[错误发生] " + message).build());
     }
 
     @Override

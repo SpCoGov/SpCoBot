@@ -15,13 +15,18 @@
  */
 package top.spco.api.message.service;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import top.spco.api.message.Message;
+import top.spco.api.message.MessageSource;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 消息服务
  *
  * @author SpCo
- * @version 1.1
+ * @version 3.0
  * @since 1.1
  */
 public interface MessageService {
@@ -57,4 +62,23 @@ public interface MessageService {
      * @return 操作后的Message对象
      */
     Message append(Message original, String other);
+
+    String getAtRegex();
+
+    default boolean isAtFormat(String input) {
+        String regex = getAtRegex();
+        // 编译正则表达式
+        Pattern pattern = Pattern.compile(regex);
+        // 创建匹配器
+        Matcher matcher = pattern.matcher(input);
+        return matcher.find();
+    }
+
+    /**
+     * 获取消息所引用的消息
+     *
+     * @param message 源消息
+     * @return 如果有引用时返回被引用的消息，如果没有时返回null
+     */
+    ImmutablePair<MessageSource, Message> getQuote(Message message);
 }

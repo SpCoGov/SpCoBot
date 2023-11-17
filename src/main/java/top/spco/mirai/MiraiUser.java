@@ -20,7 +20,7 @@ import top.spco.api.message.Message;
 
 /**
  * @author SpCo
- * @version 1.0
+ * @version 3.0
  * @since 1.0
  */
 record MiraiUser(net.mamoe.mirai.contact.User user) implements User {
@@ -57,6 +57,11 @@ record MiraiUser(net.mamoe.mirai.contact.User user) implements User {
     @Override
     public void handleException(Message sourceMessage, Throwable throwable) {
         this.sendMessage(new MiraiMessageChainBuilder(sourceMessage).append("[错误发生] SpCoBot运行时抛出了意料之外的异常: " + throwable.getMessage()).build());
+    }
+
+    @Override
+    public void handleException(Message sourceMessage, String message) {
+        this.sendMessage(new MiraiMessageChainBuilder(sourceMessage).append("[错误发生] " + message).build());
     }
 
     @Override

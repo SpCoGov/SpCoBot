@@ -64,6 +64,9 @@ public class CommandSystem {
         toBeRegistered.add(new StatisticsCommand());
         toBeRegistered.add(new BanmeCommand());
         toBeRegistered.add(new DashscopeCommand());
+        toBeRegistered.add(new MuteCommand());
+        toBeRegistered.add(new UnmuteCommand());
+        toBeRegistered.add(new GetotherCommand());
 
 
         toBeRegistered.add(new TestCommand());
@@ -104,6 +107,7 @@ public class CommandSystem {
                 } catch (UserFetchException e) {
                     interactor.handleException(message, "SpCoBot获取用户时失败", e);
                 } catch (Exception e) {
+                    e.printStackTrace();
                     interactor.handleException(message, e);
                 }
             }
@@ -128,6 +132,7 @@ public class CommandSystem {
                 } catch (UserFetchException e) {
                     from.handleException(message, "SpCoBot获取用户时失败", e);
                 } catch (Exception e) {
+                    e.printStackTrace();
                     from.handleException(message, e);
                 }
             }
@@ -152,6 +157,7 @@ public class CommandSystem {
                 } catch (UserFetchException e) {
                     interactor.handleException(message, "SpCoBot获取用户时失败", e);
                 } catch (Exception e) {
+                    e.printStackTrace();
                     interactor.handleException(message, e);
                 }
             }

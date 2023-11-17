@@ -23,8 +23,8 @@ package top.spco.service.command;
  * @since 3.0
  */
 public class CommandReturn {
-    public static final String UNKNOWN_COMMAND = "Unknown command or insufficient permissions";
-    public static final String UNKNOWN_ARGUMENT = "Incorrect argument for command";
-    public static final String FAILED = "An unexpected error occurred trying to execute that command";
-    public static final String EXPECTED_SEPARATOR = "Expected whitespace to end one argument, but found trailing data";
+    public static final String UNKNOWN_COMMAND = "未知命令";
+    public static final String UNKNOWN_ARGUMENT = "命令参数不正确";
+    public static final String FAILED = "尝试执行该命令时发生意外错误";
+    public static final String EXPECTED_SEPARATOR = "预期以空格结束一个参数，但发现了尾随数据";
 }

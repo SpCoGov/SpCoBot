@@ -22,7 +22,7 @@ import top.spco.api.message.Message;
 
 /**
  * @author SpCo
- * @version 1.0
+ * @version 3.0
  * @since 1.0
  */
 record MiraiNormalMember(net.mamoe.mirai.contact.NormalMember member) implements NormalMember {
@@ -103,6 +103,11 @@ record MiraiNormalMember(net.mamoe.mirai.contact.NormalMember member) implements
     @Override
     public void handleException(Message sourceMessage, String message, Throwable throwable) {
         this.sendMessage(new MiraiMessageChainBuilder(sourceMessage).append("[错误发生] " + message + ": " + throwable.getMessage()).build());
+    }
+
+    @Override
+    public void handleException(Message sourceMessage, String message) {
+        this.sendMessage(new MiraiMessageChainBuilder(sourceMessage).append("[错误发生] " + message).build());
     }
 
     @Override

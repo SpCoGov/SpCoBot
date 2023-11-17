@@ -13,36 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco.api;
+package top.spco.api.message;
 
 /**
- * 代表一个群
+ * 消息的来源信息
  *
  * @author SpCo
  * @version 3.0
- * @since 1.0
+ * @since 3.0
  */
-public interface Group extends Interactive {
-    /**
-     * 群名称
-     */
-    String getName();
+public interface MessageSource {
+    long getFromId();
 
-    /**
-     * 群主
-     */
-    NormalMember getOwner();
-
-    /**
-     * 让机器人退出这个群
-     *
-     * @return 退出成功时 {@code true}; 已经退出时 {@code false}
-     */
-    boolean quit();
-
-    MemberPermission botPermission();
-
-    NormalMember botAsMember();
-
-    NormalMember getMember(long id);
+    long getTargetId();
 }

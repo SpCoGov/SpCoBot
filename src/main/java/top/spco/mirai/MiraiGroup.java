@@ -22,7 +22,7 @@ import top.spco.api.message.Message;
 
 /**
  * @author SpCo
- * @version 1.0
+ * @version 3.0
  * @since 1.0
  */
 record MiraiGroup(net.mamoe.mirai.contact.Group group) implements Group {
@@ -72,6 +72,11 @@ record MiraiGroup(net.mamoe.mirai.contact.Group group) implements Group {
     }
 
     @Override
+    public void handleException(Message sourceMessage, String message) {
+        this.sendMessage(new MiraiMessageChainBuilder(sourceMessage).append("[错误发生] " + message).build());
+    }
+
+    @Override
     public void handleException(String message, Throwable throwable) {
         this.handleException("[错误发生] " + message + ": " + throwable.getMessage());
     }
@@ -89,6 +94,11 @@ record MiraiGroup(net.mamoe.mirai.contact.Group group) implements Group {
     @Override
     public NormalMember botAsMember() {
         return new MiraiNormalMember(this.group.getBotAsMember());
+    }
+
+    @Override
+    public NormalMember getMember(long id) {
+        return new MiraiNormalMember(group.get(id));
     }
 
     @Override
