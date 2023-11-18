@@ -23,7 +23,13 @@ package top.spco.api.message;
  * @since 3.0
  */
 public interface MessageSource {
+    /**
+     * 发送人用户 ID
+     */
     long getFromId();
 
+    /**
+     * 消息发送目标用户或群号码
+     */
     long getTargetId();
 }

@@ -40,7 +40,6 @@ import java.util.function.Predicate;
  * @since 1.0
  */
 public class InteractiveList<C extends Interactive> implements Collection<C> {
-
     private final Collection<C> delegate;
 
     /**

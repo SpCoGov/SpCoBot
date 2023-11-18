@@ -1,9 +1,7 @@
 # SpCoBot
 
-## 0.3.0
+## 0.3.1
 
 ### feat
 
-- 修改Command系统
-- 添加Mute、Unmute、Getother、Banme命令
-- 添加MessageSource类
+- 命令支持引用时选择目标

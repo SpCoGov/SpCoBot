@@ -16,7 +16,7 @@
 package top.spco.api;
 
 /**
- * Created on 2023/10/26 0026 17:18
+ * 表示具有标识号的对象的接口
  *
  * @author SpCo
  * @version 1.0

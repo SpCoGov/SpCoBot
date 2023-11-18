@@ -18,7 +18,7 @@ package top.spco.api;
 import top.spco.api.message.Message;
 
 /**
- * 可进行发送消息等交互行为
+ * 表示具有消息发送和异常处理功能
  *
  * @author SpCo
  * @version 3.0

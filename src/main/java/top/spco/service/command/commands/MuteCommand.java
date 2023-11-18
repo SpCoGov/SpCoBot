@@ -15,6 +15,7 @@
  */
 package top.spco.service.command.commands;
 
+import top.spco.SpCoBot;
 import top.spco.api.*;
 import top.spco.api.message.Message;
 import top.spco.service.command.BaseCommand;
@@ -25,10 +26,8 @@ import top.spco.user.BotUser;
 import top.spco.user.UserPermission;
 
 /**
- * Created on 2023/11/15 0015 20:54
- *
  * @author SpCo
- * @version 3.0
+ * @version 3.1
  * @since 3.0
  */
 public class MuteCommand extends BaseCommand {
@@ -61,19 +60,26 @@ public class MuteCommand extends BaseCommand {
                     from.quoteReply(message, "机器人权限不足");
                     return;
                 }
-
-                NormalMember target = group.getMember(meta.userIdArgument(0));
+                long id;
+                if (args.length == 1) {
+                    var quote = SpCoBot.getInstance().getMessageService().getQuote(message);
+                    id = quote.getLeft().getFromId();
+                } else {
+                    id = meta.userIdArgument(0);
+                }
+                NormalMember target = group.getMember(id);
                 if (target.getPermission().getLevel() >= group.botPermission().getLevel()) {
                     from.quoteReply(message, "大佬，惹不起");
                     return;
                 }
-
                 int duration = meta.integerArgument(1);
                 target.mute(duration);
                 from.quoteReply(message, "已将 " + target.getNameCard() + "(" + target.getId() + ")" + " 禁言" + duration + "秒");
             }
         } catch (CommandSyntaxException e) {
             from.handleException(message, e.getMessage());
+        } catch (NullPointerException e) {
+            from.quoteReply(message, "该用户不存在");
         }
 
     }

@@ -18,11 +18,11 @@ package top.spco.mirai;
 import net.mamoe.mirai.message.data.At;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.QuoteReply;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
+
 import top.spco.api.message.Message;
 import top.spco.api.message.MessageSource;
 import top.spco.api.message.service.MessageService;
+import top.spco.util.tuple.ImmutablePair;
 
 /**
  * @author SpCo
@@ -57,11 +57,16 @@ class MiraiMessageServiceImpl implements MessageService {
 
     @Override
     public ImmutablePair<MessageSource, Message> getQuote(Message message) {
-        MiraiMessage miraiMessage = ((MiraiMessage) message);
-        for (var singleMessage : miraiMessage.message()) {
-            if (singleMessage instanceof QuoteReply quoteReply) {
-                return new ImmutablePair<>(new MiraiMessageSource(quoteReply.getSource()),new MiraiMessage(quoteReply.getSource().getOriginalMessage()));
+        try {
+            MiraiMessage miraiMessage = ((MiraiMessage) message);
+            for (var singleMessage : miraiMessage.message()) {
+                if (singleMessage instanceof QuoteReply quoteReply) {
+                    return new ImmutablePair<>(new MiraiMessageSource(quoteReply.getSource()), new MiraiMessage(quoteReply.getSource().getOriginalMessage()));
+                }
             }
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }

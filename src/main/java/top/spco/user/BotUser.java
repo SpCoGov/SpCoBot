@@ -155,4 +155,9 @@ public class BotUser {
             }
         }
     }
+
+    @Override
+    public String toString() {
+        return  "QQ: " + this.id + "\n海绵山币: " + smfCoin + "\n会员信息: " + (isPremium() ? "Premium会员" : "普通会员") + "\n权限信息: " + toUserPermission();
+    }
 }
