@@ -19,12 +19,13 @@ import top.spco.api.Group;
 import top.spco.api.NormalMember;
 import top.spco.events.MessageEvents;
 import top.spco.service.RegistrationException;
+import top.spco.service.dashscope.DashScope;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created on 2023/11/6 0006 20:15
+ * 用于管理{@link Statistics}的单例类
  *
  * @author SpCo
  * @version 1.1

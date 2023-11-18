@@ -35,7 +35,7 @@ import java.util.Map;
  * 每个键值对的键为枚举常量的名称，值为该枚举常量的默认值。
  *
  * @author SpCo
- * @version 2.1
+ * @version 3.2
  * @since 2.1
  */
 public class Settings {
@@ -90,6 +90,7 @@ public class Settings {
         setDefaultProperty(SettingsVersion.class);
         setDefaultProperty(BotSettings.class);
         setDefaultProperty(DashScopeSettings.class);
+        setDefaultProperty(ValorantGroupSettings.class);
         return defaultSettings;
     }
 

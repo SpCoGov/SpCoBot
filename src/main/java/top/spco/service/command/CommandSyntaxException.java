@@ -16,7 +16,7 @@
 package top.spco.service.command;
 
 /**
- * Created on 2023/11/15 0015 19:33
+ * 用于处理用户使用命令时的语法错误
  *
  * @author SpCo
  * @version 3.0

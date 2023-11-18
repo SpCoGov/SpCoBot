@@ -16,15 +16,14 @@
 package top.spco.core.config;
 
 /**
- * Created on 2023/11/11 0011 11:46
- *
  * @author SpCo
- * @version 2.1
+ * @version 3.2
  * @since 2.0
  */
 public enum BotSettings implements SettingsGroup {
     BOT_ID("bot_id", 0L),
-    OWNER_ID("owner_id", 0L);
+    OWNER_ID("owner_id", 0L),
+    TEST_GROUP("test_group", 0L);
     private final String key;
     private final Object defaultValue;
 

@@ -24,6 +24,7 @@ import top.spco.core.config.Settings;
 import top.spco.core.config.SettingsVersion;
 import top.spco.database.DataBase;
 import top.spco.events.*;
+import top.spco.service.AutoAgreeValorant;
 import top.spco.service.AutoSign;
 import top.spco.service.GroupMessageRecorder;
 import top.spco.service.chat.ChatManager;
@@ -65,7 +66,7 @@ import java.util.concurrent.TimeUnit;
  * </pre>
  *
  * @author SpCo
- * @version 3.1
+ * @version 3.2
  * @since 1.0
  */
 public class SpCoBot {
@@ -75,6 +76,7 @@ public class SpCoBot {
     public static File configFolder;
     public long BOT_ID;
     public long BOT_OWNER_ID;
+    public long TEST_GROUP_ID;
     private CommandSystem commandSystem;
     public final ChatManager chatManager = ChatManager.getInstance();
     public final StatisticsManager statisticsManager = StatisticsManager.getInstance();
@@ -94,9 +96,9 @@ public class SpCoBot {
      * </ul>
      * <b>更新版本号(仅限核心的 Feature)时请不要忘记在 build.gradle 中同步修改版本号</b>
      */
-    public static final String MAIN_VERSION = "0.3.1";
+    public static final String MAIN_VERSION = "0.3.2";
     public static final String VERSION = "v" + MAIN_VERSION + "-final";
-    public static final String UPDATED_TIME = "2023-11-18 22:20";
+    public static final String UPDATED_TIME = "2023-11-18 23:09";
 
     private SpCoBot() {
         initEvents();
@@ -107,6 +109,7 @@ public class SpCoBot {
         this.caatp = CAATP.getInstance();
         new GroupMessageRecorder();
         new AutoSign();
+        new AutoAgreeValorant();
         this.settings = new Settings(configFolder.getAbsolutePath() + File.separator + "config.yaml");
         if (!MAIN_VERSION.equals(settings.getProperty(SettingsVersion.CONFIG_VERSION))) {
             logger.error("配置版本过时，请备份配置后删除配置重新启动机器人以生成新配置。");
@@ -114,6 +117,7 @@ public class SpCoBot {
         }
         BOT_ID = settings.getLongProperty(BotSettings.BOT_ID);
         BOT_OWNER_ID = settings.getLongProperty(BotSettings.OWNER_ID);
+        TEST_GROUP_ID = settings.getLongProperty(BotSettings.TEST_GROUP);
         this.commandSystem = CommandSystem.getInstance();
     }
 

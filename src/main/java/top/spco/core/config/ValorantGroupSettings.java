@@ -15,36 +15,35 @@
  */
 package top.spco.core.config;
 
-import top.spco.SpCoBot;
-
 /**
  * @author SpCo
- * @version 2.1
- * @since 2.1
+ * @version 3.2
+ * @since 3.2
  */
-public enum SettingsVersion implements SettingsGroup {
-    CONFIG_VERSION("config_version", SpCoBot.MAIN_VERSION);
+public enum ValorantGroupSettings implements SettingsGroup {
+    VALORANT_GROUP("valorant_group", 0L);
 
     private final String key;
     private final Object defaultValue;
 
-    SettingsVersion(String key, Object defaultValue) {
+    ValorantGroupSettings(String key, Object defaultValue) {
         this.key = key;
         this.defaultValue = defaultValue;
     }
 
+
     @Override
-    public String toString() {
-        return key;
+    public String groupName() {
+        return "ValorantGroup";
     }
 
     @Override
     public Object defaultValue() {
-        return defaultValue;
+        return this.defaultValue;
     }
 
     @Override
-    public String groupName() {
-        return "Version";
+    public String toString() {
+        return this.key;
     }
 }

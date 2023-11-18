@@ -16,7 +16,7 @@
 package top.spco.service.command;
 
 /**
- * Created on 2023/10/28 0028 18:27
+ * 命令的作用域
  *
  * @author SpCo
  * @version 1.0

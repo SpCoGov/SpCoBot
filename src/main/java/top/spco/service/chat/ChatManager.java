@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created on 2023/11/5 0005 22:02
+ * 用于管理{@link Chat}的单例类
  *
  * @author SpCo
  * @version 1.1

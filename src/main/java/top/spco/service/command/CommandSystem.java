@@ -27,7 +27,8 @@ import java.sql.SQLException;
 import java.util.*;
 
 /**
- * Created on 2023/10/28 0028 18:11
+ * 一个用于处理机器人应用中命令的系统<p>
+ * 它负责注册、执行和管理各种命令的权限
  *
  * @author SpCo
  * @version 3.0
@@ -67,7 +68,7 @@ public class CommandSystem {
         toBeRegistered.add(new MuteCommand());
         toBeRegistered.add(new UnmuteCommand());
         toBeRegistered.add(new GetotherCommand());
-
+        toBeRegistered.add(new NoteCommand());
 
         toBeRegistered.add(new TestCommand());
 
@@ -236,6 +237,7 @@ public class CommandSystem {
 
     /**
      * 获取命令帮助列表
+     *
      * @see HelpCommand
      */
     public static List<String> getHelpList() {

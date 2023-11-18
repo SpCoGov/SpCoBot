@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created on 2023/11/15 0015 0:18
+ * 用于管理{@link DashScope}的单例类
  *
  * @author SpCo
  * @version 2.1

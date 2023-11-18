@@ -25,7 +25,7 @@ import java.util.Random;
  * 如果用户在某个群发送的消息与机器人在此群发送的最后一条消息匹配，禁言他
  *
  * @author SpCo
- * @version 1.2
+ * @version 3.2
  * @since 1.0
  */
 public class GroupMessageRecorder {
@@ -36,19 +36,20 @@ public class GroupMessageRecorder {
     private static final Map<Long, String> lastMessage = new HashMap<>();
 
     public GroupMessageRecorder() {
-        if (!registered) {
-            registered = true;
-            MessageEvents.GROUP_MESSAGE.register((bot, source, sender, message, time) -> {
-                if (source.botPermission().isOperator() && !sender.getPermission().isOperator()) {
-                    if (isRepeating(source.getId(), message.toMessageContext())) {
-                        int i = new Random().nextInt(60, 100);
-                        sender.mute(i);
-                        source.quoteReply(message, String.format("学我说话很好玩\uD83D\uDC34? 劳资反手就是禁言 %d 秒.", i));
-                    }
-                }
-            });
-            MessageEvents.GROUP_MESSAGE_POST_SEND.register((bot, group, message) -> record(group.getId(), message.toMessageContext()));
+        if (registered) {
+            return;
         }
+        registered = true;
+        MessageEvents.GROUP_MESSAGE.register((bot, source, sender, message, time) -> {
+            if (source.botPermission().isOperator() && !sender.getPermission().isOperator()) {
+                if (isRepeating(source.getId(), message.toMessageContext())) {
+                    int i = new Random().nextInt(60, 100);
+                    sender.mute(i);
+                    source.quoteReply(message, String.format("学我说话很好玩\uD83D\uDC34? 劳资反手就是禁言 %d 秒.", i));
+                }
+            }
+        });
+        MessageEvents.GROUP_MESSAGE_POST_SEND.register((bot, group, message) -> record(group.getId(), message.toMessageContext()));
     }
 
     public void record(long id, String content) {

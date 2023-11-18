@@ -16,7 +16,7 @@
 package top.spco.service.command;
 
 /**
- * Created on 2023/11/15 0015 19:35
+ * 命令的返回值
  *
  * @author SpCo
  * @version 3.0

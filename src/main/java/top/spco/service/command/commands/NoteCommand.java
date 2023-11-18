@@ -1,0 +1,66 @@
+/*
+ * Copyright 2023 SpCo
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package top.spco.service.command.commands;
+
+import top.spco.SpCoBot;
+import top.spco.api.Bot;
+import top.spco.api.Interactive;
+import top.spco.api.User;
+import top.spco.api.message.Message;
+import top.spco.service.FileManipulation;
+import top.spco.service.command.BaseCommand;
+import top.spco.service.command.CommandMeta;
+import top.spco.user.BotUser;
+import top.spco.user.UserPermission;
+
+import java.io.File;
+
+/**
+ * @author SpCo
+ * @version 3.2
+ * @since 3.2
+ */
+public class NoteCommand extends BaseCommand {
+    @Override
+    public String[] getLabels() {
+        return new String[]{"note", "t"};
+    }
+
+    @Override
+    public String getDescriptions() {
+        return "记录一条文本";
+    }
+
+    @Override
+    public UserPermission needPermission() {
+        return UserPermission.OWNER;
+    }
+
+    @Override
+    public boolean isVisible() {
+        return false;
+    }
+
+    @Override
+    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta) {
+        String context = SpCoBot.getInstance().getMessageService().getQuote(message).getRight().toMessageContext();
+        if (!context.endsWith("，不打")) {
+            context += "，不打";
+        }
+        new FileManipulation(SpCoBot.configFolder + File.separator + "valorant.spco").writeToFile(context + "\n");
+        from.quoteReply(message, "已记录「" + context + "」");
+    }
+}

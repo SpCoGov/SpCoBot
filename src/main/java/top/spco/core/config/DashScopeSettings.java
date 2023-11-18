@@ -16,8 +16,6 @@
 package top.spco.core.config;
 
 /**
- * Created on 2023/11/15 0015 0:09
- *
  * @author SpCo
  * @version 2.1
  * @since 2.1
