@@ -15,6 +15,7 @@
  */
 package top.spco.service.command.commands;
 
+import top.spco.SpCoBot;
 import top.spco.api.*;
 import top.spco.api.message.Message;
 import top.spco.service.command.BaseCommand;
@@ -59,7 +60,14 @@ public class UnmuteCommand extends BaseCommand {
                     from.quoteReply(message, "机器人权限不足");
                     return;
                 }
-                NormalMember target = group.getMember(meta.userIdArgument(0));
+                long id;
+                if (args.length == 1) {
+                    var quote = SpCoBot.getInstance().getMessageService().getQuote(message);
+                    id = quote.getLeft().getFromId();
+                } else {
+                    id = meta.userIdArgument(0);
+                }
+                NormalMember target = group.getMember(id);
                 if (target.getPermission().getLevel() >= group.botPermission().getLevel()) {
                     from.quoteReply(message, "大佬，惹不起");
                     return;

@@ -55,11 +55,11 @@ public class GetotherCommand extends BaseCommand {
             if (args.length == 0) {
                 var quote = SpCoBot.getInstance().getMessageService().getQuote(message);
                 BotUser user = BotUser.getOrCreate(quote.getLeft().getFromId());
-                from.quoteReply(message, "QQ: " + user.getId() + "\n海绵山币: " + user.getSmfCoin() + "\n会员信息: " + (user.isPremium() ? "Premium会员" : "普通会员") + "\n权限信息: " + user.toUserPermission());
+                from.quoteReply(message, user.toString());
             } else {
                 long id = meta.userIdArgument(0);
                 BotUser user = BotUser.getOrCreate(id);
-                from.quoteReply(message, "QQ: " + user.getId() + "\n海绵山币: " + user.getSmfCoin() + "\n会员信息: " + (user.isPremium() ? "Premium会员" : "普通会员") + "\n权限信息: " + user.toUserPermission());
+                from.quoteReply(message, user.toString());
             }
         } catch (CommandSyntaxException e) {
             from.handleException(message, e.getMessage());

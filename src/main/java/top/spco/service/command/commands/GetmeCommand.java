@@ -41,6 +41,6 @@ public final class GetmeCommand extends BaseCommand {
 
     @Override
     public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta) {
-        from.quoteReply(message, "QQ: " + user.getId() + "\n海绵山币: " + user.getSmfCoin() + "\n会员信息: " + (user.isPremium() ? "Premium会员" : "普通会员") + "\n权限信息: " + user.toUserPermission());
+        from.quoteReply(message, user.toString());
     }
 }

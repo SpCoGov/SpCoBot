@@ -20,6 +20,7 @@ import top.spco.api.Friend;
 import top.spco.api.Group;
 import top.spco.api.Interactive;
 import top.spco.api.NormalMember;
+import top.spco.util.builder.Builder;
 
 /**
  * {@link ChatBuilder}是一个用于构建{@link Chat}对象的构建器。<p>
@@ -27,9 +28,9 @@ import top.spco.api.NormalMember;
  *
  * @author SpCo
  * @version 1.1
- * @since 1.1
+ * @since 3.1
  */
-public class ChatBuilder {
+public class ChatBuilder implements Builder<Chat> {
     private final Chat chat;
 
     /**
