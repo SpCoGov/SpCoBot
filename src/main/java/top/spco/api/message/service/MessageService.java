@@ -15,9 +15,9 @@
  */
 package top.spco.api.message.service;
 
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import top.spco.api.message.Message;
 import top.spco.api.message.MessageSource;
+import top.spco.util.tuple.ImmutablePair;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

@@ -25,10 +25,8 @@ import top.spco.user.BotUser;
 import top.spco.user.UserPermission;
 
 /**
- * Created on 2023/11/15 0015 20:54
- *
  * @author SpCo
- * @version 3.0
+ * @version 3.1
  * @since 3.0
  */
 public class MuteCommand extends BaseCommand {
@@ -74,6 +72,8 @@ public class MuteCommand extends BaseCommand {
             }
         } catch (CommandSyntaxException e) {
             from.handleException(message, e.getMessage());
+        } catch (NullPointerException e) {
+            from.quoteReply(message, "该用户不存在");
         }
 
     }

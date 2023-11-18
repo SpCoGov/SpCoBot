@@ -15,7 +15,7 @@
  */
 package top.spco.core.resource;
 
-import org.apache.commons.lang3.StringEscapeUtils;
+import top.spco.util.StringEscapeUtils;
 
 /**
  * Created on 2023/10/25 0025 16:52

@@ -26,7 +26,7 @@ import top.spco.user.UserPermission;
 
 /**
  * @author SpCo
- * @version 3.0
+ * @version 3.1
  * @since 3.0
  */
 public class UnmuteCommand extends BaseCommand {
@@ -69,6 +69,8 @@ public class UnmuteCommand extends BaseCommand {
             }
         } catch (CommandSyntaxException e) {
             from.handleException(message, e.getMessage());
+        } catch (NullPointerException e) {
+            from.quoteReply(message, "该用户不存在");
         }
     }
 }

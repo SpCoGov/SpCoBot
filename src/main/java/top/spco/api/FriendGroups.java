@@ -18,7 +18,7 @@ package top.spco.api;
 import java.util.Collection;
 
 /**
- * Created on 2023/10/27 0027 15:37
+ * 用户的所有好友分组
  *
  * @author SpCo
  * @version 1.0

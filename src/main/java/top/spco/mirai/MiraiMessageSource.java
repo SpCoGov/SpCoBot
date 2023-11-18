@@ -19,14 +19,11 @@ package top.spco.mirai;
 import top.spco.api.message.MessageSource;
 
 /**
- * Created on 2023/11/17 0017 22:08
- *
  * @author SpCo
  * @version 3.0
  * @since 3.0
  */
 record MiraiMessageSource(net.mamoe.mirai.message.data.MessageSource messageSource) implements MessageSource {
-
     @Override
     public long getFromId() {
         return messageSource.getFromId();

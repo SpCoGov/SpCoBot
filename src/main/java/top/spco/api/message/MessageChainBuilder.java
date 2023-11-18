@@ -16,8 +16,6 @@
 package top.spco.api.message;
 
 /**
- * Created on 2023/10/27 0027 19:24
- *
  * @author SpCo
  * @version 1.0
  * @since 1.0

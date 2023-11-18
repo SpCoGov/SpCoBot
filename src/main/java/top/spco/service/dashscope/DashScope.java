@@ -23,12 +23,12 @@ import com.alibaba.dashscope.common.Role;
 import com.alibaba.dashscope.exception.ApiException;
 import com.alibaba.dashscope.exception.InputRequiredException;
 import com.alibaba.dashscope.exception.NoApiKeyException;
-import org.apache.commons.lang3.tuple.MutablePair;
 import org.jetbrains.annotations.NotNull;
 import top.spco.SpCoBot;
 import top.spco.api.Interactive;
 import top.spco.api.message.Message;
 import top.spco.user.BotUser;
+import top.spco.util.tuple.MutablePair;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;

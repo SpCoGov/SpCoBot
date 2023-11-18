@@ -16,7 +16,7 @@
 package top.spco.api;
 
 /**
- * Created on 2023/10/25 0025 19:23
+ * 定义了记录日志的方法，提供了不同级别的日志记录能力
  *
  * @author SpCo
  * @version 1.0

@@ -19,7 +19,7 @@ import top.spco.util.InteractiveList;
 import top.spco.user.UserFetchException;
 
 /**
- * Created on 2023/10/26 0026 17:56
+ * 机器人
  *
  * @author SpCo
  * @version 1.0
