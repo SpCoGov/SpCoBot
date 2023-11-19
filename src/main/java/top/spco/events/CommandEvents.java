@@ -22,7 +22,7 @@ import top.spco.core.event.EventFactory;
 import top.spco.service.command.CommandMeta;
 
 /**
- * Created on 2023/10/27 0027 17:57
+ * 命令相关事件
  *
  * @author SpCo
  * @version 3.0

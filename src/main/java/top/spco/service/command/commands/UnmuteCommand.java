@@ -18,19 +18,19 @@ package top.spco.service.command.commands;
 import top.spco.SpCoBot;
 import top.spco.api.*;
 import top.spco.api.message.Message;
-import top.spco.service.command.BaseCommand;
+import top.spco.service.command.AbstractCommand;
 import top.spco.service.command.CommandMeta;
 import top.spco.service.command.CommandSyntaxException;
-import top.spco.service.command.CommandType;
+import top.spco.service.command.CommandScope;
 import top.spco.user.BotUser;
 import top.spco.user.UserPermission;
 
 /**
  * @author SpCo
- * @version 3.1
+ * @version 3.3
  * @since 3.0
  */
-public class UnmuteCommand extends BaseCommand {
+public class UnmuteCommand extends AbstractCommand {
     @Override
     public String[] getLabels() {
         return new String[]{"unmute"};
@@ -47,8 +47,8 @@ public class UnmuteCommand extends BaseCommand {
     }
 
     @Override
-    public CommandType getType() {
-        return CommandType.ONLY_GROUP;
+    public CommandScope getScope() {
+        return CommandScope.ONLY_GROUP;
     }
 
     @Override

@@ -19,18 +19,18 @@ import top.spco.user.BotUser;
 import top.spco.user.UserPermission;
 
 /**
- * {@link BaseCommand} 是所有命令的抽象基类，实现了{@link Command} 接口。
+ * {@link AbstractCommand} 是所有命令的抽象基类，实现了{@link Command} 接口。
  * 提供了基本的命令信息和权限控制的默认实现。
  *
  * @author SpCo
- * @version 2.0
+ * @version 3.3
  * @see Command
  * @since 1.0
  */
-public abstract class BaseCommand implements Command {
+public abstract class AbstractCommand implements Command {
     @Override
-    public CommandType getType() {
-        return CommandType.ALL;
+    public CommandScope getScope() {
+        return CommandScope.ALL;
     }
 
     @Override

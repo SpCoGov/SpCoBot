@@ -18,7 +18,7 @@ package top.spco.core.resource;
 import top.spco.util.StringEscapeUtils;
 
 /**
- * Created on 2023/10/25 0025 16:52
+ * 用于表示资源标识符操作中的异常情况的异常类
  *
  * @author SpCo
  * @version 1.0

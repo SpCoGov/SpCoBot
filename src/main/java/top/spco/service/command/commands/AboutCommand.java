@@ -20,7 +20,7 @@ import top.spco.api.Bot;
 import top.spco.api.Interactive;
 import top.spco.api.User;
 import top.spco.api.message.Message;
-import top.spco.service.command.BaseCommand;
+import top.spco.service.command.AbstractCommand;
 import top.spco.service.command.CommandMeta;
 import top.spco.user.BotUser;
 
@@ -29,7 +29,7 @@ import top.spco.user.BotUser;
  * @version 3.0
  * @since 1.0
  */
-public final class AboutCommand extends BaseCommand {
+public final class AboutCommand extends AbstractCommand {
     @Override
     public String getDescriptions() {
         return "获取机器人信息";

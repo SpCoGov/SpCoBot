@@ -20,9 +20,9 @@ import top.spco.api.*;
 import top.spco.api.message.Message;
 import top.spco.service.RegistrationException;
 import top.spco.service.chat.*;
-import top.spco.service.command.BaseCommand;
+import top.spco.service.command.AbstractCommand;
 import top.spco.service.command.CommandMeta;
-import top.spco.service.command.CommandType;
+import top.spco.service.command.CommandScope;
 import top.spco.service.statistics.Statistics;
 import top.spco.user.BotUser;
 import top.spco.user.UserPermission;
@@ -34,10 +34,10 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @author SpCo
- * @version 3.0
+ * @version 3.3
  * @since 1.1
  */
-public class StatisticsCommand extends BaseCommand {
+public class StatisticsCommand extends AbstractCommand {
     private final StringBuilder sb = new StringBuilder();
     private final Map<String, Integer> ranks = new HashMap<>();
     private String rankName;
@@ -67,8 +67,8 @@ public class StatisticsCommand extends BaseCommand {
     }
 
     @Override
-    public CommandType getType() {
-        return CommandType.ONLY_FRIEND;
+    public CommandScope getScope() {
+        return CommandScope.ONLY_FRIEND;
     }
 
     @Override

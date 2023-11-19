@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Created on 2023/10/25 0025 16:46
+ * 表示一个资源的标识符，包含命名空间和路径
  *
  * @author SpCo
  * @version 1.0

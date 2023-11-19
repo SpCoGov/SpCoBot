@@ -20,7 +20,7 @@ import top.spco.api.Bot;
 import top.spco.api.Interactive;
 import top.spco.api.User;
 import top.spco.api.message.Message;
-import top.spco.service.command.BaseCommand;
+import top.spco.service.command.AbstractCommand;
 import top.spco.service.command.CommandMeta;
 import top.spco.user.BotUser;
 import top.spco.user.UserPermission;
@@ -30,7 +30,7 @@ import top.spco.user.UserPermission;
  * @version 3.0
  * @since 1.0
  */
-public final class InfoCommand extends BaseCommand {
+public final class InfoCommand extends AbstractCommand {
     @Override
     public String[] getLabels() {
         return new String[]{"info", "i"};

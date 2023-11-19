@@ -31,7 +31,7 @@ import java.util.*;
  * 它负责注册、执行和管理各种命令的权限
  *
  * @author SpCo
- * @version 3.0
+ * @version 3.3
  * @since 1.0
  */
 public class CommandSystem {
@@ -187,7 +187,7 @@ public class CommandSystem {
             if (label.equals("") || label == null) {
                 throw new CommandRegistrationException("The command label is not valid.");
             }
-            switch (command.getType()) {
+            switch (command.getScope()) {
                 case ALL -> {
                     if (groupCommands.containsKey(label)) {
                         throw new CommandRegistrationException("The command: " + label + " is registered in the group command.");
@@ -245,7 +245,7 @@ public class CommandSystem {
         for (Command command : allCommands) {
             if (command.isVisible()) {
                 int index = 0;
-                String mainLabel = "MainLabel";
+                String mainLabel = "";
                 for (String label : command.getLabels()) {
                     if (index == 0) {
                         mainLabel = label;

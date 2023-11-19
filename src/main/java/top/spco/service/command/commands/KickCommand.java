@@ -15,52 +15,32 @@
  */
 package top.spco.service.command.commands;
 
-import top.spco.SpCoBot;
 import top.spco.api.Bot;
 import top.spco.api.Interactive;
 import top.spco.api.User;
 import top.spco.api.message.Message;
-import top.spco.service.FileManipulation;
 import top.spco.service.command.AbstractCommand;
 import top.spco.service.command.CommandMeta;
 import top.spco.user.BotUser;
-import top.spco.user.UserPermission;
-
-import java.io.File;
 
 /**
  * @author SpCo
  * @version 3.3
- * @since 3.2
+ * @since 3.3
  */
-public class NoteCommand extends AbstractCommand {
+public class KickCommand extends AbstractCommand {
     @Override
     public String[] getLabels() {
-        return new String[]{"note", "n"};
+        return new String[]{"kick"};
     }
 
     @Override
     public String getDescriptions() {
-        return "记录一条文本";
-    }
-
-    @Override
-    public UserPermission needPermission() {
-        return UserPermission.OWNER;
-    }
-
-    @Override
-    public boolean isVisible() {
-        return false;
+        return "踢出一名群成员";
     }
 
     @Override
     public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta) {
-        String context = SpCoBot.getInstance().getMessageService().getQuote(message).getRight().toMessageContext();
-        if (!context.endsWith("，不打")) {
-            context += "，不打";
-        }
-        new FileManipulation(SpCoBot.configFolder + File.separator + "valorant.spco").writeToFile(context + "\n");
-        from.quoteReply(message, "已记录「" + context + "」");
+
     }
 }

@@ -17,20 +17,20 @@ package top.spco.service.command.commands;
 
 import top.spco.api.*;
 import top.spco.api.message.Message;
-import top.spco.service.command.BaseCommand;
+import top.spco.service.command.AbstractCommand;
 import top.spco.service.command.CommandMeta;
 import top.spco.service.command.CommandSyntaxException;
-import top.spco.service.command.CommandType;
+import top.spco.service.command.CommandScope;
 import top.spco.user.BotUser;
 
 import java.security.SecureRandom;
 
 /**
  * @author SpCo
- * @version 3.0
+ * @version 3.3
  * @since 1.0
  */
-public class BanmeCommand extends BaseCommand {
+public class BanmeCommand extends AbstractCommand {
     @Override
     public String[] getLabels() {
         return new String[]{"banme"};
@@ -42,8 +42,8 @@ public class BanmeCommand extends BaseCommand {
     }
 
     @Override
-    public CommandType getType() {
-        return CommandType.ONLY_GROUP;
+    public CommandScope getScope() {
+        return CommandScope.ONLY_GROUP;
     }
 
     @Override

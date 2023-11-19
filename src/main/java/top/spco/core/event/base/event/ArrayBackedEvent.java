@@ -24,7 +24,7 @@ import java.util.*;
 import java.util.function.Function;
 
 /**
- * Created on 2023/10/25 0025 17:14
+ * 用于管理事件及其阶段的类，可以注册和处理事件监听器
  *
  * @author SpCo
  * @version 1.0

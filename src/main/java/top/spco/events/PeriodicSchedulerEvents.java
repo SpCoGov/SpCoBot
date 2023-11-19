@@ -19,7 +19,7 @@ import top.spco.core.event.Event;
 import top.spco.core.event.EventFactory;
 
 /**
- * Created on 2023/11/10 0010 17:29
+ * 定时事件
  *
  * @author SpCo
  * @version 1.2

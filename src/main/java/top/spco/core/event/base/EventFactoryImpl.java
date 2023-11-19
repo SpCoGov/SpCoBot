@@ -25,7 +25,7 @@ import java.util.Set;
 import java.util.function.Function;
 
 /**
- * Created on 2023/10/25 0025 16:46
+ * 事件工厂的实现类，用于创建和管理各种类型的事件
  *
  * @author SpCo
  * @version 1.2

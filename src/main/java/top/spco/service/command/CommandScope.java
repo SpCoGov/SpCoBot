@@ -19,10 +19,10 @@ package top.spco.service.command;
  * 命令的作用域
  *
  * @author SpCo
- * @version 1.0
+ * @version 3.3
  * @since 1.0
  */
-public enum CommandType {
+public enum CommandScope {
     /**
      * 仅可以在好友聊天中发送
      */

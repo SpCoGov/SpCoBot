@@ -19,7 +19,7 @@ import top.spco.core.event.Event;
 import top.spco.core.event.EventFactory;
 
 /**
- * Created on 2023/10/29 0029 20:43
+ * CAATP相关事件
  *
  * @author SpCo
  * @version 1.2

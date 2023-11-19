@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created on 2023/10/25 0025 17:15
+ * 可排序节点的抽象类，用于在图中表示节点，并维护节点之间的顺序关系
  *
  * @author SpCo
  * @version 1.0

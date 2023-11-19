@@ -23,7 +23,7 @@ import top.spco.api.Interactive;
 import top.spco.api.User;
 import top.spco.api.message.Message;
 import top.spco.core.config.DashScopeSettings;
-import top.spco.service.command.BaseCommand;
+import top.spco.service.command.AbstractCommand;
 import top.spco.service.command.CommandMeta;
 import top.spco.service.dashscope.DashScope;
 import top.spco.user.BotUser;
@@ -33,7 +33,7 @@ import top.spco.user.BotUser;
  * @version 3.0
  * @since 2.1
  */
-public class DashscopeCommand extends BaseCommand {
+public class DashscopeCommand extends AbstractCommand {
     @Override
     public String[] getLabels() {
         return new String[]{"dashscope"};

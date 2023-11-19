@@ -21,7 +21,7 @@ import top.spco.core.event.Event;
 import top.spco.core.event.EventFactory;
 
 /**
- * Created on 2023/10/27 0027 1:02
+ * 好友相关事件
  *
  * @author SpCo
  * @version 1.0
