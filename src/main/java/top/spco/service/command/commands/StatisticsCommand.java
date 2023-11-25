@@ -31,6 +31,7 @@ import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author SpCo
@@ -38,14 +39,6 @@ import java.util.concurrent.TimeUnit;
  * @since 1.1
  */
 public class StatisticsCommand extends AbstractCommand {
-    private final StringBuilder sb = new StringBuilder();
-    private final Map<String, Integer> ranks = new HashMap<>();
-    private String rankName;
-    private Long groupId;
-    private boolean needAtAll;
-    private Statistics statistics;
-    private int duration;
-
     @Override
     public String[] getLabels() {
         return new String[]{"statistics"};
@@ -74,13 +67,13 @@ public class StatisticsCommand extends AbstractCommand {
     @Override
     public void onCommand(Bot bot1, Interactive from1, User sender1, BotUser user1, Message message1, int time1, String command, String label, String[] args, CommandMeta meta) {
         // 在每次调用命令时，重置
-        sb.setLength(0);
-        ranks.clear();
-        rankName = "";
-        groupId = 0L;
-        needAtAll = false;
-        statistics = null;
-        duration = 0;
+        StringBuilder sb = new StringBuilder();
+        Map<String, Integer> ranks = new HashMap<>();
+        final String[] rankName = {""};
+        final long[] groupId = {0L};
+        final boolean[] needAtAll = {false};
+        final AtomicReference<Statistics>[] statistics = new AtomicReference[]{null};
+        final int[] duration = {0};
         try {
             sb.append("新晴上镜赛准备开始！").append("\n");
             sb.append("游戏：");
@@ -107,14 +100,14 @@ public class StatisticsCommand extends AbstractCommand {
                             }
                             return;
                         }
-                        rankName = "";
+                        rankName[0] = "";
                         if (ranks.containsKey(message.toMessageContext())) {
                             source.quoteReply(message, "该段位已被记录");
                             chat.replay();
                             return;
                         }
-                        rankName = message.toMessageContext();
-                        source.quoteReply(message, "已记录段位：" + rankName);
+                        rankName[0] = message.toMessageContext();
+                        source.quoteReply(message, "已记录段位：" + rankName[0]);
                         chat.next();
                     })).
                     addStage(new Stage(() -> "请输入该段位所需要的人数", (chat, bot, source, sender, message, time) -> {
@@ -129,8 +122,8 @@ public class StatisticsCommand extends AbstractCommand {
                                 chat.replay();
                                 return;
                             }
-                            ranks.put(rankName, i);
-                            source.quoteReply(message, "已记录段位需求：" + rankName + "段位需要" + i + "人");
+                            ranks.put(rankName[0], i);
+                            source.quoteReply(message, "已记录段位需求：" + rankName[0] + "段位需要" + i + "人");
                             chat.toStage(1);
                             return;
                         } catch (Exception e) {
@@ -150,7 +143,7 @@ public class StatisticsCommand extends AbstractCommand {
                                 chat.replay();
                                 return;
                             }
-                            duration = i;
+                            duration[0] = i;
                             chat.next();
                         } catch (Exception e) {
                             source.quoteReply(message, "请输入有效的数字");
@@ -175,7 +168,7 @@ public class StatisticsCommand extends AbstractCommand {
                                 chat.replay();
                                 return;
                             }
-                            groupId = id;
+                            groupId[0] = id;
                             chat.next();
                             return;
                         } catch (Exception e) {
@@ -189,32 +182,32 @@ public class StatisticsCommand extends AbstractCommand {
                             return;
                         }
                         if (message.toMessageContext().equals("需要")) {
-                            needAtAll = true;
+                            needAtAll[0] = true;
                         } else if (message.toMessageContext().equals("不需要")) {
-                            needAtAll = false;
+                            needAtAll[0] = false;
                         } else {
                             chat.replay();
                             return;
                         }
                         source.sendMessage("请坐和放宽，正在创建报名统计");
-                        statistics = new Statistics(bot.getGroup(groupId), (aBoolean, normalMember, message2, integer, group) -> {
+                        statistics[0].set(new Statistics(bot.getGroup(groupId[0]), (aBoolean, normalMember, message2, integer, group) -> {
                             if (aBoolean) {
                                 group.quoteReply(message2, "已记录您的报名");
                             }
-                        });
+                        }));
                         sb.append("段位需求：").append("\n");
                         for (var rank : ranks.entrySet()) {
-                            sb.append("报名段位 ").append(rank.getKey()).append("(").append("需要").append(rank.getValue()).append("人) 发送").append(statistics.addItem(rank.getKey())).append("\n");
+                            sb.append("报名段位 ").append(rank.getKey()).append("(").append("需要").append(rank.getValue()).append("人) 发送").append(statistics[0].get().addItem(rank.getKey())).append("\n");
                         }
                         sb.append("\n");
-                        sb.append("报名时间持续 ").append(duration).append(" 分钟！").append("\n");
-                        sb.append("于 ").append(duration).append(" 分钟后@报名成功的选手，请以上选手私聊新晴~").append("\n");
+                        sb.append("报名时间持续 ").append(duration[0]).append(" 分钟！").append("\n");
+                        sb.append("于 ").append(duration[0]).append(" 分钟后@报名成功的选手，请以上选手私聊新晴~").append("\n");
                         sb.append("请勿重复刷屏，我们只会记录一次");
                         chat.next();
                     })).
-                    addStage(new Stage(() -> "以下为最终消息预览，请确认是否要发送至群" + groupId + "。（如需确认，请发送“确认”。否则发送“退出”以退出对话）\n\n" +
+                    addStage(new Stage(() -> "以下为最终消息预览，请确认是否要发送至群" + groupId[0] + "。（如需确认，请发送“确认”。否则发送“退出”以退出对话）\n\n" +
                             "=================================\n" + sb + "\n=================================\n" +
-                            "\n\n" + "注：@全体成员会分条发送（如需要）\n是否需要@全体成员：" + needAtAll,
+                            "\n\n" + "注：@全体成员会分条发送（如需要）\n是否需要@全体成员：" + needAtAll[0],
                             (chat, bot, source, sender, message, time) -> {
                                 if (message.toMessageContext().equals("退出")) {
                                     chat.stop();
@@ -226,21 +219,21 @@ public class StatisticsCommand extends AbstractCommand {
                                 }
                                 try {
                                     chat.stop();
-                                    Group group = bot.getGroup(groupId);
+                                    Group group = bot.getGroup(groupId[0]);
                                     if (group == null) {
-                                        source.quoteReply(message, "发送失败，无法获取群号为" + groupId + "的群对象");
+                                        source.quoteReply(message, "发送失败，无法获取群号为" + groupId[0] + "的群对象");
                                         return;
                                     }
-                                    if (needAtAll) {
+                                    if (needAtAll[0]) {
                                         group.sendMessage(SpCoBot.getInstance().getMessageService().atAll());
                                     }
                                     group.sendMessage(sb.toString());
                                     source.sendMessage("消息已发送至目标群");
                                     Friend friend = SpCoBot.getInstance().getBot().getFriend(SpCoBot.getInstance().BOT_OWNER_ID);
-                                    friend.sendMessage("有用户在群" + groupId + "中发起了一场报名统计，如果需要重启机器人，请注意这场报名统计的结束情况。");
-                                    SpCoBot.getInstance().statisticsManager.register(group, statistics);
-                                    statistics = null;
-                                    Statistics statisticsFromManager = SpCoBot.getInstance().statisticsManager.getStatistics(bot.getGroup(groupId));
+                                    friend.sendMessage("有用户在群" + groupId[0] + "中发起了一场报名统计，如果需要重启机器人，请注意这场报名统计的结束情况。");
+                                    SpCoBot.getInstance().statisticsManager.register(group, statistics[0].get());
+                                    statistics[0] = null;
+                                    Statistics statisticsFromManager = SpCoBot.getInstance().statisticsManager.getStatistics(bot.getGroup(groupId[0]));
                                     ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
                                     Runnable delayedTask = () -> {
                                         try {
@@ -282,7 +275,7 @@ public class StatisticsCommand extends AbstractCommand {
                                         }
                                     };
                                     // 使用scheduler.schedule来执行延迟任务
-                                    scheduler.schedule(delayedTask, duration, TimeUnit.MINUTES);
+                                    scheduler.schedule(delayedTask, duration[0], TimeUnit.MINUTES);
                                     scheduler.shutdown();
                                 } catch (RegistrationException e) {
                                     source.handleException("注册报名统计时出现异常", e);
