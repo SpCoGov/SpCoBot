@@ -31,11 +31,10 @@ import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author SpCo
- * @version 3.3
+ * @version 3.4
  * @since 1.1
  */
 public class StatisticsCommand extends AbstractCommand {
@@ -72,7 +71,8 @@ public class StatisticsCommand extends AbstractCommand {
         final String[] rankName = {""};
         final long[] groupId = {0L};
         final boolean[] needAtAll = {false};
-        final AtomicReference<Statistics>[] statistics = new AtomicReference[]{null};
+        final String[] matchTime = {""};
+        final Statistics[] statistics = {null};
         final int[] duration = {0};
         try {
             sb.append("新晴上镜赛准备开始！").append("\n");
@@ -150,6 +150,14 @@ public class StatisticsCommand extends AbstractCommand {
                             chat.replay();
                         }
                     })).
+                    addStage(new Stage(() -> "请输入比赛预计开始时间", (chat, bot, source, sender, message, time) -> {
+                        if (message.toMessageContext().equals("退出")) {
+                            chat.stop();
+                            return;
+                        }
+                        matchTime[0] = message.toMessageContext();
+                        chat.next();
+                    })).
                     addStage(new Stage(() -> "请选择报名统计要发送到的群聊", (chat, bot, source, sender, message, time) -> {
                         if (message.toMessageContext().equals("退出")) {
                             chat.stop();
@@ -190,20 +198,27 @@ public class StatisticsCommand extends AbstractCommand {
                             return;
                         }
                         source.sendMessage("请坐和放宽，正在创建报名统计");
-                        statistics[0].set(new Statistics(bot.getGroup(groupId[0]), (aBoolean, normalMember, message2, integer, group) -> {
-                            if (aBoolean) {
-                                group.quoteReply(message2, "已记录您的报名");
+                        try {
+                            statistics[0] = new Statistics(bot.getGroup(groupId[0]), (aBoolean, normalMember, message2, integer, group) -> {
+                                if (aBoolean) {
+                                    group.quoteReply(message2, "已记录您的报名");
+                                }
+                            });
+                            sb.append("比赛预计开始时间：").append(matchTime[0]).append("\n");
+                            sb.append("段位需求：").append("\n");
+                            for (var rank : ranks.entrySet()) {
+                                sb.append("报名段位 ").append(rank.getKey()).append("(").append("需要").append(rank.getValue()).append("人) 发送").append(statistics[0].addItem(rank.getKey())).append("\n");
                             }
-                        }));
-                        sb.append("段位需求：").append("\n");
-                        for (var rank : ranks.entrySet()) {
-                            sb.append("报名段位 ").append(rank.getKey()).append("(").append("需要").append(rank.getValue()).append("人) 发送").append(statistics[0].get().addItem(rank.getKey())).append("\n");
+                            sb.append("\n");
+                            sb.append("报名时间持续 ").append(duration[0]).append(" 分钟！").append("\n");
+                            sb.append("于 ").append(duration[0]).append(" 分钟后@报名成功的选手，请以上选手私聊新晴~").append("\n");
+                            sb.append("请勿重复刷屏，我们只会记录一次");
+                            chat.next();
+                        } catch (Exception e) {
+                            source.handleException(message, "创建报名统计失败，对话已退出", e);
+                            chat.stop();
                         }
-                        sb.append("\n");
-                        sb.append("报名时间持续 ").append(duration[0]).append(" 分钟！").append("\n");
-                        sb.append("于 ").append(duration[0]).append(" 分钟后@报名成功的选手，请以上选手私聊新晴~").append("\n");
-                        sb.append("请勿重复刷屏，我们只会记录一次");
-                        chat.next();
+
                     })).
                     addStage(new Stage(() -> "以下为最终消息预览，请确认是否要发送至群" + groupId[0] + "。（如需确认，请发送“确认”。否则发送“退出”以退出对话）\n\n" +
                             "=================================\n" + sb + "\n=================================\n" +
@@ -231,7 +246,7 @@ public class StatisticsCommand extends AbstractCommand {
                                     source.sendMessage("消息已发送至目标群");
                                     Friend friend = SpCoBot.getInstance().getBot().getFriend(SpCoBot.getInstance().BOT_OWNER_ID);
                                     friend.sendMessage("有用户在群" + groupId[0] + "中发起了一场报名统计，如果需要重启机器人，请注意这场报名统计的结束情况。");
-                                    SpCoBot.getInstance().statisticsManager.register(group, statistics[0].get());
+                                    SpCoBot.getInstance().statisticsManager.register(group, statistics[0]);
                                     statistics[0] = null;
                                     Statistics statisticsFromManager = SpCoBot.getInstance().statisticsManager.getStatistics(bot.getGroup(groupId[0]));
                                     ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);

@@ -96,9 +96,9 @@ public class SpCoBot {
      * </ul>
      * <b>更新版本号(仅限核心的 Feature)时请不要忘记在 build.gradle 中同步修改版本号</b>
      */
-    public static final String MAIN_VERSION = "0.3.3";
-    public static final String VERSION = "v" + MAIN_VERSION + "-final";
-    public static final String UPDATED_TIME = "2023-11-25 12:16";
+    public static final String MAIN_VERSION = "0.3.4";
+    public static final String VERSION = "v" + MAIN_VERSION + "-alpha.3";
+    public static final String UPDATED_TIME = "2023-11-25 17:56";
 
     private SpCoBot() {
         initEvents();

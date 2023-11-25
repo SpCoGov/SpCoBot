@@ -26,7 +26,7 @@ import java.util.Random;
  * 自动“同意”打瓦
  *
  * @author SpCo
- * @version 3.3
+ * @version 3.4
  * @since 3.2
  */
 public class AutoAgreeValorant {
@@ -40,7 +40,8 @@ public class AutoAgreeValorant {
         MessageEvents.GROUP_MESSAGE.register((bot, source, sender, message, time) -> {
             if (source.getId() == SpCoBot.getInstance().getSettings().getLongProperty(ValorantGroupSettings.VALORANT_GROUP) || source.getId() == SpCoBot.getInstance().TEST_GROUP_ID) {
                 if (message.toMessageContext().equals("瓦") || message.toMessageContext().endsWith("瓦吗") || message.toMessageContext().endsWith("打不打瓦")
-                        || message.toMessageContext().endsWith(" 瓦")) {
+                        || message.toMessageContext().endsWith(" 瓦") || message.toMessageContext().equals("有无瓦") || message.toMessageContext().equals("有没有瓦")
+                        || message.toMessageContext().endsWith("瓦不瓦")) {
                     FileManipulation file = new FileManipulation(SpCoBot.configFolder + File.separator + "valorant.spco");
                     String str = getRandomLine(file.readFromFile());
                     if (str == null) {
