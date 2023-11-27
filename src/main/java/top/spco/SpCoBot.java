@@ -74,9 +74,9 @@ public class SpCoBot {
     public static Logger logger;
     public static File dataFolder;
     public static File configFolder;
-    public long BOT_ID;
-    public long BOT_OWNER_ID;
-    public long TEST_GROUP_ID;
+    public long botId;
+    public long botOwnerId;
+    public long testGroupId;
     private CommandSystem commandSystem;
     public final ChatManager chatManager = ChatManager.getInstance();
     public final StatisticsManager statisticsManager = StatisticsManager.getInstance();
@@ -115,9 +115,9 @@ public class SpCoBot {
             logger.error("配置版本过时，请备份配置后删除配置重新启动机器人以生成新配置。");
             System.exit(-2);
         }
-        BOT_ID = settings.getLongProperty(BotSettings.BOT_ID);
-        BOT_OWNER_ID = settings.getLongProperty(BotSettings.OWNER_ID);
-        TEST_GROUP_ID = settings.getLongProperty(BotSettings.TEST_GROUP);
+        botId = settings.getLongProperty(BotSettings.BOT_ID);
+        botOwnerId = settings.getLongProperty(BotSettings.OWNER_ID);
+        testGroupId = settings.getLongProperty(BotSettings.TEST_GROUP);
         this.commandSystem = CommandSystem.getInstance();
     }
 
@@ -137,7 +137,7 @@ public class SpCoBot {
         PluginEvents.DISABLE_PLUGIN_TICK.register(this::onDisable);
         // 机器人被拍一拍时的提示
         BotEvents.NUDGED_TICK.register((from, target, subject, action, suffix) -> {
-            if (target.getId() == this.BOT_ID) {
+            if (target.getId() == this.botId) {
                 subject.sendMessage("机器人正常运行中");
             }
         });

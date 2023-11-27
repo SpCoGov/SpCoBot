@@ -244,7 +244,7 @@ public class StatisticsCommand extends AbstractCommand {
                                     }
                                     group.sendMessage(sb.toString());
                                     source.sendMessage("消息已发送至目标群");
-                                    Friend friend = SpCoBot.getInstance().getBot().getFriend(SpCoBot.getInstance().BOT_OWNER_ID);
+                                    Friend friend = SpCoBot.getInstance().getBot().getFriend(SpCoBot.getInstance().testGroupId);
                                     friend.sendMessage("有用户在群" + groupId[0] + "中发起了一场报名统计，如果需要重启机器人，请注意这场报名统计的结束情况。");
                                     SpCoBot.getInstance().statisticsManager.register(group, statistics[0]);
                                     statistics[0] = null;

@@ -99,7 +99,7 @@ public class BotUser {
                 return botUser;
             }
             UserPermission userPermission = UserPermission.NORMAL;
-            if (id == SpCoBot.getInstance().BOT_ID || id == SpCoBot.getInstance().BOT_OWNER_ID) {
+            if (id == SpCoBot.getInstance().botId || id == SpCoBot.getInstance().botOwnerId) {
                 userPermission = UserPermission.OWNER;
             }
             SpCoBot.getInstance().getDataBase().insertData("insert into user(id,permission) values (?,?)", id, userPermission.getLevel());
