@@ -22,8 +22,8 @@ import java.nio.charset.StandardCharsets;
  * 文件操作
  *
  * @author SpCo
- * @version 3.2
- * @since 3.2
+ * @version 0.3.2
+ * @since 0.3.2
  */
 public class FileManipulation {
     private final String filePath;

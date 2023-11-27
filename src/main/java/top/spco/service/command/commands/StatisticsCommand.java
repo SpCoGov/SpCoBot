@@ -34,8 +34,8 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @author SpCo
- * @version 3.4
- * @since 1.1
+ * @version 0.3.4
+ * @since 0.1.1
  */
 public class StatisticsCommand extends AbstractCommand {
     @Override

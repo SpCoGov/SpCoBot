@@ -22,8 +22,8 @@ import top.spco.core.event.EventFactory;
  * 定时事件
  *
  * @author SpCo
- * @version 1.2
- * @since 1.2
+ * @version 0.1.2
+ * @since 0.1.2
  */
 public class PeriodicSchedulerEvents {
     private PeriodicSchedulerEvents() {

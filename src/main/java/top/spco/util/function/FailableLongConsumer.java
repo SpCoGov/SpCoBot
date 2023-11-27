@@ -22,7 +22,7 @@ import java.util.function.LongConsumer;
  * A functional interface like {@link LongConsumer} that declares a {@link Throwable}.
  *
  * @param <E> The kind of thrown exception or error.
- * @since 3.1
+ * @since 0.3.1
  */
 @FunctionalInterface
 public interface FailableLongConsumer<E extends Throwable> {

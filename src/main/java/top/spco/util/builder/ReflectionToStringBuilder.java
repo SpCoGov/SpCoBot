@@ -94,7 +94,7 @@ import java.util.Objects;
  * further traversed. To get "deep" formatting, use an instance of {@link RecursiveToStringStyle}.
  * </p>
  *
- * @since 3.1
+ * @since 0.3.1
  */
 public class ReflectionToStringBuilder extends ToStringBuilder {
     /**
@@ -246,7 +246,7 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      * @throws IllegalArgumentException if the Object is {@code null}
      * @see ToStringExclude
      * @see ToStringSummary
-     * @since 3.1
+     * @since 0.3.1
      */
     public static String toString(final Object object, final ToStringStyle style, final boolean outputTransients, final boolean outputStatics) {
         return toString(object, style, outputTransients, outputStatics, null);
@@ -291,7 +291,7 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      * @throws IllegalArgumentException if the Object is {@code null}
      * @see ToStringExclude
      * @see ToStringSummary
-     * @since 3.1
+     * @since 0.3.1
      */
     public static <T> String toString(
             final T object, final ToStringStyle style, final boolean outputTransients,
@@ -338,7 +338,7 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      * @throws IllegalArgumentException if the Object is {@code null}
      * @see ToStringExclude
      * @see ToStringSummary
-     * @since 3.1
+     * @since 0.3.1
      */
     public static <T> String toString(
             final T object, final ToStringStyle style, final boolean outputTransients,
@@ -376,7 +376,7 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      * @param object            The object to "toString".
      * @param includeFieldNames {@code null} or empty means all fields are included. All fields are included by default. This method will override the default behavior.
      * @return The toString value.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static String toStringInclude(final Object object, final Collection<String> includeFieldNames) {
         return toStringInclude(object, toNoNullStringArray(includeFieldNames));
@@ -389,7 +389,7 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      * @param includeFieldNames The field names to include. {@code null} or empty means all fields are included. All fields are included by default. This method will override the default
      *                          behavior.
      * @return The toString value.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static String toStringInclude(final Object object, final String... includeFieldNames) {
         return new ReflectionToStringBuilder(object).setIncludeFieldNames(includeFieldNames).toString();
@@ -413,14 +413,14 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
     /**
      * Which field names to exclude from output. Intended for fields like {@code "password"}.
      *
-     * @since 3.1
+     * @since 0.3.1
      */
     protected String[] excludeFieldNames;
 
     /**
      * Field names that will be included in the output. All fields are included by default.
      *
-     * @since 3.1
+     * @since 0.3.1
      */
     protected String[] includeFieldNames;
 
@@ -488,7 +488,7 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      * @param reflectUpToClass the superclass to reflect up to (inclusive), may be {@code null}
      * @param outputTransients whether to include transient fields
      * @param outputStatics    whether to include static fields
-     * @since 3.1
+     * @since 0.3.1
      */
     public <T> ReflectionToStringBuilder(
             final T object, final ToStringStyle style, final StringBuffer buffer,
@@ -510,7 +510,7 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      * @param outputTransients  whether to include transient fields
      * @param outputStatics     whether to include static fields
      * @param excludeNullValues whether to exclude fields who value is null
-     * @since 3.1
+     * @since 0.3.1
      */
     public <T> ReflectionToStringBuilder(
             final T object, final ToStringStyle style, final StringBuffer buffer,
@@ -605,7 +605,7 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      * Gets the includeFieldNames
      *
      * @return the includeFieldNames.
-     * @since 3.1
+     * @since 0.3.1
      */
     public String[] getIncludeFieldNames() {
         return this.includeFieldNames.clone();
@@ -637,7 +637,7 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      * Gets whether or not to append static fields.
      *
      * @return Whether or not to append static fields.
-     * @since 3.1
+     * @since 0.3.1
      */
     public boolean isAppendStatics() {
         return this.appendStatics;
@@ -656,7 +656,7 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      * Gets whether or not to append fields whose values are null.
      *
      * @return Whether or not to append fields whose values are null.
-     * @since 3.1
+     * @since 0.3.1
      */
     public boolean isExcludeNullValues() {
         return this.excludeNullValues;
@@ -677,7 +677,7 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      * Sets whether or not to append static fields.
      *
      * @param appendStatics Whether or not to append static fields.
-     * @since 3.1
+     * @since 0.3.1
      */
     public void setAppendStatics(final boolean appendStatics) {
         this.appendStatics = appendStatics;
@@ -712,7 +712,7 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      * Sets whether or not to append fields whose values are null.
      *
      * @param excludeNullValues Whether or not to append fields whose values are null.
-     * @since 3.1
+     * @since 0.3.1
      */
     public void setExcludeNullValues(final boolean excludeNullValues) {
         this.excludeNullValues = excludeNullValues;
@@ -723,7 +723,7 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      *
      * @param includeFieldNamesParam The includeFieldNames that must be on toString or {@code null}.
      * @return {@code this}
-     * @since 3.1
+     * @since 0.3.1
      */
     public ReflectionToStringBuilder setIncludeFieldNames(final String... includeFieldNamesParam) {
         if (includeFieldNamesParam == null) {

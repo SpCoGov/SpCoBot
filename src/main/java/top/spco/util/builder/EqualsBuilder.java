@@ -79,13 +79,13 @@ import java.util.*;
  * <p>The {@link EqualsExclude} annotation can be used to exclude fields from being
  * used by the {@code reflectionEquals} methods.</p>
  *
- * @since 3.1
+ * @since 0.3.1
  */
 public class EqualsBuilder implements Builder<Boolean> {
     /**
      * A registry of objects used by reflection methods to detect cyclical object references and avoid infinite loops.
      *
-     * @since 3.1
+     * @since 0.3.1
      */
     private static final ThreadLocal<Set<Pair<IDKey, IDKey>>> REGISTRY = new ThreadLocal<>();
 
@@ -111,7 +111,7 @@ public class EqualsBuilder implements Builder<Boolean> {
      * methods in the current thread.
      *
      * @return Set the registry of objects being traversed
-     * @since 3.1
+     * @since 0.3.1
      */
     static Set<Pair<IDKey, IDKey>> getRegistry() {
         return REGISTRY.get();
@@ -139,7 +139,7 @@ public class EqualsBuilder implements Builder<Boolean> {
      * @param lhs {@code this} object to lookup in registry
      * @param rhs the other object to lookup on registry
      * @return boolean {@code true} if the registry contains the given object.
-     * @since 3.1
+     * @since 0.3.1
      */
     static boolean isRegistered(final Object lhs, final Object rhs) {
         final Set<Pair<IDKey, IDKey>> registry = getRegistry();
@@ -175,7 +175,7 @@ public class EqualsBuilder implements Builder<Boolean> {
      *
      * @param lhs {@code this} object to unregister
      * @param rhs the other object to unregister
-     * @since 3.1
+     * @since 0.3.1
      */
     private static void unregister(final Object lhs, final Object rhs) {
         final Set<Pair<IDKey, IDKey>> registry = getRegistry();
@@ -217,7 +217,7 @@ public class EqualsBuilder implements Builder<Boolean> {
      *
      * @param testTransients whether to test transient fields
      * @return this
-     * @since 3.1
+     * @since 0.3.1
      */
     public EqualsBuilder setTestTransients(final boolean testTransients) {
         this.testTransients = testTransients;
@@ -232,7 +232,7 @@ public class EqualsBuilder implements Builder<Boolean> {
      * @param testRecursive whether to do a recursive test
      * @return this
      * @see #setBypassReflectionClasses(List)
-     * @since 3.1
+     * @since 0.3.1
      */
     public EqualsBuilder setTestRecursive(final boolean testRecursive) {
         this.testRecursive = testRecursive;
@@ -251,7 +251,7 @@ public class EqualsBuilder implements Builder<Boolean> {
      * @param bypassReflectionClasses classes to bypass reflection test
      * @return this
      * @see #setTestRecursive(boolean)
-     * @since 3.1
+     * @since 0.3.1
      */
     public EqualsBuilder setBypassReflectionClasses(final List<Class<?>> bypassReflectionClasses) {
         this.bypassReflectionClasses = bypassReflectionClasses;
@@ -263,7 +263,7 @@ public class EqualsBuilder implements Builder<Boolean> {
      *
      * @param reflectUpToClass the super class to reflect up to
      * @return this
-     * @since 3.1
+     * @since 0.3.1
      */
     public EqualsBuilder setReflectUpToClass(final Class<?> reflectUpToClass) {
         this.reflectUpToClass = reflectUpToClass;
@@ -275,7 +275,7 @@ public class EqualsBuilder implements Builder<Boolean> {
      *
      * @param excludeFields the fields to exclude
      * @return this
-     * @since 3.1
+     * @since 0.3.1
      */
     public EqualsBuilder setExcludeFields(final String... excludeFields) {
         this.excludeFields = excludeFields;
@@ -385,7 +385,7 @@ public class EqualsBuilder implements Builder<Boolean> {
      * @param excludeFields    array of field names to exclude from testing
      * @return {@code true} if the two Objects have tested equals.
      * @see EqualsExclude
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean reflectionEquals(final Object lhs, final Object rhs, final boolean testTransients, final Class<?> reflectUpToClass,
                                            final String... excludeFields) {
@@ -425,7 +425,7 @@ public class EqualsBuilder implements Builder<Boolean> {
      * @param excludeFields    array of field names to exclude from testing
      * @return {@code true} if the two Objects have tested equals.
      * @see EqualsExclude
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean reflectionEquals(final Object lhs, final Object rhs, final boolean testTransients, final Class<?> reflectUpToClass,
                                            final boolean testRecursive, final String... excludeFields) {
@@ -574,7 +574,7 @@ public class EqualsBuilder implements Builder<Boolean> {
      *
      * @param superEquals the result of calling {@code super.equals()}
      * @return this
-     * @since 3.1
+     * @since 0.3.1
      */
     public EqualsBuilder appendSuper(final boolean superEquals) {
         if (!isEquals) {
@@ -1082,7 +1082,7 @@ public class EqualsBuilder implements Builder<Boolean> {
      *
      * @return {@code true} if all of the fields that have been checked
      * are equal, {@code false} otherwise.
-     * @since 3.1
+     * @since 0.3.1
      */
     @Override
     public Boolean build() {
@@ -1093,7 +1093,7 @@ public class EqualsBuilder implements Builder<Boolean> {
      * Sets the {@code isEquals} value.
      *
      * @param isEquals The value to set.
-     * @since 3.1
+     * @since 0.3.1
      */
     protected void setEquals(final boolean isEquals) {
         this.isEquals = isEquals;
@@ -1102,7 +1102,7 @@ public class EqualsBuilder implements Builder<Boolean> {
     /**
      * Reset the EqualsBuilder so you can use the same object again
      *
-     * @since 3.1
+     * @since 0.3.1
      */
     public void reset() {
         this.isEquals = true;

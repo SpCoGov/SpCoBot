@@ -35,8 +35,8 @@ import java.util.Map;
  * 每个键值对的键为枚举常量的名称，值为该枚举常量的默认值。
  *
  * @author SpCo
- * @version 3.2
- * @since 2.1
+ * @version 0.3.2
+ * @since 0.2.1
  */
 public class Settings {
     private Map<String, Object> settings;

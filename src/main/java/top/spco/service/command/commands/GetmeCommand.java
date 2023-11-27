@@ -25,8 +25,8 @@ import top.spco.user.BotUser;
 
 /**
  * @author SpCo
- * @version 3.0
- * @since 1.0
+ * @version 0.3.0
+ * @since 0.1.0
  */
 public final class GetmeCommand extends AbstractCommand {
     @Override

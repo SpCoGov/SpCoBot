@@ -27,8 +27,8 @@ import java.util.Map;
  * 用于管理{@link DashScope}的单例类
  *
  * @author SpCo
- * @version 2.1
- * @since 2.1
+ * @version 0.2.1
+ * @since 0.2.1
  */
 public class DashScopeManager {
     private static DashScopeManager instance;

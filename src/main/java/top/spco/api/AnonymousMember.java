@@ -21,10 +21,10 @@ import top.spco.api.message.Message;
  * 代表匿名群成员
  *
  * @author SpCo
- * @version 3.0
+ * @version 0.3.0
  * @see Member
  * @see NormalMember
- * @since 1.0
+ * @since 0.1.0
  */
 public interface AnonymousMember extends Member {
     /**

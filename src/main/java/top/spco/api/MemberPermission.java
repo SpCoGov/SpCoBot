@@ -20,8 +20,8 @@ package top.spco.api;
  * 可通过 {@link #compareTo} 判断是否有更高的权限
  *
  * @author SpCo
- * @version 1.0
- * @since 1.0
+ * @version 0.1.0
+ * @since 0.1.0
  */
 public enum MemberPermission implements Comparable<MemberPermission> {
     /**

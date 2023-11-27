@@ -20,8 +20,8 @@ import top.spco.api.message.MessageSource;
 
 /**
  * @author SpCo
- * @version 3.0
- * @since 3.0
+ * @version 0.3.0
+ * @since 0.3.0
  */
 record MiraiMessageSource(net.mamoe.mirai.message.data.MessageSource messageSource) implements MessageSource {
     @Override

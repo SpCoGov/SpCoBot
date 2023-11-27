@@ -21,7 +21,7 @@ import java.util.function.DoubleSupplier;
  * A functional interface like {@link DoubleSupplier} that declares a {@link Throwable}.
  *
  * @param <E> The kind of thrown exception or error.
- * @since 3.1
+ * @since 0.3.1
  */
 @FunctionalInterface
 public interface FailableDoubleSupplier<E extends Throwable> {

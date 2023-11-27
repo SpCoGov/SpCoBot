@@ -27,8 +27,8 @@ import top.spco.core.event.EventFactory;
  * 消息相关事件
  *
  * @author SpCo
- * @version 1.1
- * @since 1.0
+ * @version 0.1.1
+ * @since 0.1.0
  */
 public class MessageEvents {
     private MessageEvents() {

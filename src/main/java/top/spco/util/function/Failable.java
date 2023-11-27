@@ -57,7 +57,7 @@ import java.util.stream.Stream;
  * version.
  * </p>
  *
- * @since 3.1
+ * @since 0.3.1
  */
 public class Failable {
     /**

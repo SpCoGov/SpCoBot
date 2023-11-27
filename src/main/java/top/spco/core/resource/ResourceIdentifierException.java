@@ -21,8 +21,8 @@ import top.spco.util.StringEscapeUtils;
  * 用于表示资源标识符操作中的异常情况的异常类
  *
  * @author SpCo
- * @version 1.0
- * @since 1.0
+ * @version 0.1.0
+ * @since 0.1.0
  */
 public class ResourceIdentifierException extends RuntimeException {
     public ResourceIdentifierException(String message) {

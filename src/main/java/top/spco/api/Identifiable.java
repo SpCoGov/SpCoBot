@@ -19,8 +19,8 @@ package top.spco.api;
  * 表示具有标识号的对象的接口
  *
  * @author SpCo
- * @version 1.0
- * @since 1.0
+ * @version 0.1.0
+ * @since 0.1.0
  */
 public interface Identifiable {
     long getId();

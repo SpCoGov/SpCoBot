@@ -22,8 +22,8 @@ import java.util.List;
  * 可排序节点的抽象类，用于在图中表示节点，并维护节点之间的顺序关系
  *
  * @author SpCo
- * @version 1.0
- * @since 1.0
+ * @version 0.1.0
+ * @since 0.1.0
  */
 public abstract class SortableNode<N extends SortableNode<N>> {
     final List<N> subsequentNodes = new ArrayList<>();

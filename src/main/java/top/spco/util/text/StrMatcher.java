@@ -29,7 +29,7 @@ import java.util.Arrays;
  * If these do not suffice, you can subclass and implement your own matcher.
  * </p>
  *
- * @since 3.1
+ * @since 0.3.1
  * @deprecated As of 3.6, use Apache Commons Text
  * <a href="https://commons.apache.org/proper/commons-text/javadocs/api-release/org/apache/commons/text/matcher/StringMatcherFactory.html">
  * StringMatcherFactory</a> instead
@@ -269,7 +269,7 @@ public abstract class StrMatcher {
      * @param buffer the text content to match against, do not change
      * @param pos    the starting position for the match, valid for buffer
      * @return the number of matching characters, zero for no match
-     * @since 3.1
+     * @since 0.3.1
      */
     public int isMatch(final char[] buffer, final int pos) {
         return isMatch(buffer, pos, 0, buffer.length);

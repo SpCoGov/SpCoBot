@@ -19,8 +19,8 @@ package top.spco.service.command;
  * 命令的返回值
  *
  * @author SpCo
- * @version 3.0
- * @since 3.0
+ * @version 0.3.0
+ * @since 0.3.0
  */
 public class CommandReturn {
     public static final String UNKNOWN_COMMAND = "未知命令";

@@ -37,7 +37,7 @@ import java.util.Objects;
  *
  * @param <L> the left element type
  * @param <R> the right element type
- * @since 3.1
+ * @since 0.3.1
  */
 public abstract class Pair<L, R> implements Map.Entry<L, R>, Comparable<Pair<L, R>>, Serializable {
     /**
@@ -51,7 +51,7 @@ public abstract class Pair<L, R> implements Map.Entry<L, R>, Comparable<Pair<L, 
      * Consider using {@link #emptyArray()} to avoid generics warnings.
      * </p>
      *
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final Pair<?, ?>[] EMPTY_ARRAY = {};
 
@@ -61,7 +61,7 @@ public abstract class Pair<L, R> implements Map.Entry<L, R>, Comparable<Pair<L, 
      * @param <L> the left element type
      * @param <R> the right element type
      * @return the empty array singleton that can be assigned without compiler warning.
-     * @since 3.1
+     * @since 0.3.1
      */
     @SuppressWarnings("unchecked")
     public static <L, R> Pair<L, R>[] emptyArray() {
@@ -94,7 +94,7 @@ public abstract class Pair<L, R> implements Map.Entry<L, R>, Comparable<Pair<L, 
      * @param <R>  the right element type
      * @param pair the map entry.
      * @return a pair formed from the map entry
-     * @since 3.1
+     * @since 0.3.1
      */
     public static <L, R> Pair<L, R> of(final Map.Entry<L, R> pair) {
         return ImmutablePair.of(pair);
@@ -112,7 +112,7 @@ public abstract class Pair<L, R> implements Map.Entry<L, R>, Comparable<Pair<L, 
      * @param right the right element, may not  be null
      * @return a pair formed from the two parameters, not null
      * @throws NullPointerException if any input is null
-     * @since 3.1
+     * @since 0.3.1
      */
     public static <L, R> Pair<L, R> ofNonNull(final L left, final R right) {
         return ImmutablePair.ofNonNull(left, right);
@@ -124,7 +124,7 @@ public abstract class Pair<L, R> implements Map.Entry<L, R>, Comparable<Pair<L, 
      * @param <E>      The kind of thrown exception or error.
      * @param consumer the consumer to call.
      * @throws E Thrown when the consumer fails.
-     * @since 3.1
+     * @since 0.3.1
      */
     public <E extends Throwable> void accept(final FailableBiConsumer<L, R, E> consumer) throws E {
         consumer.accept(getKey(), getValue());
@@ -138,7 +138,7 @@ public abstract class Pair<L, R> implements Map.Entry<L, R>, Comparable<Pair<L, 
      * @param function the consumer to call.
      * @return the function's return value.
      * @throws E Thrown when the consumer fails.
-     * @since 3.1
+     * @since 0.3.1
      */
     public <V, E extends Throwable> V apply(final FailableBiFunction<L, R, V, E> function) throws E {
         return function.apply(getKey(), getValue());

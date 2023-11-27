@@ -27,8 +27,8 @@ import top.spco.user.UserPermission;
 
 /**
  * @author SpCo
- * @version 3.0
- * @since 1.1
+ * @version 0.3.0
+ * @since 0.1.1
  */
 public final class TestCommand extends AbstractCommand {
     @Override

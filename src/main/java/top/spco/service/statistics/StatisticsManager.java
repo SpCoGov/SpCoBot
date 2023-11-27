@@ -28,8 +28,8 @@ import java.util.Map;
  * 用于管理{@link Statistics}的单例类
  *
  * @author SpCo
- * @version 1.1
- * @since 1.1
+ * @version 0.1.1
+ * @since 0.1.1
  */
 public class StatisticsManager {
     private static StatisticsManager instance;

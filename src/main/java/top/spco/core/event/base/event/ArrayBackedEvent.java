@@ -27,8 +27,8 @@ import java.util.function.Function;
  * 用于管理事件及其阶段的类，可以注册和处理事件监听器
  *
  * @author SpCo
- * @version 1.0
- * @since 1.0
+ * @version 0.1.0
+ * @since 0.1.0
  */
 public class ArrayBackedEvent<T> extends Event<T> {
     private final Function<T[], T> invokerFactory;

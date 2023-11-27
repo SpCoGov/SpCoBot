@@ -27,8 +27,8 @@ import java.util.List;
  * {@link Chat 对话}是一种用户与机器人交互的方式。
  *
  * @author SpCo
- * @version 1.1
- * @since 1.1
+ * @version 0.1.1
+ * @since 0.1.1
  */
 public class Chat {
     private final ChatType type;

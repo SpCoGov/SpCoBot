@@ -23,7 +23,7 @@ import java.lang.annotation.Target;
 /**
  * Exclude a field from being used by the various {@code reflectionHashcode} methods defined on {@link HashCodeBuilder}.
  *
- * @since 3.1
+ * @since 0.3.1
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

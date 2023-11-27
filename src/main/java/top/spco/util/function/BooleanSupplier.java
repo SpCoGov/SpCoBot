@@ -28,7 +28,7 @@ import java.util.function.Supplier;
  * whose functional method is {@link #getAsBoolean()}.
  *
  * @see Supplier
- * @since 3.1
+ * @since 0.3.1
  */
 @FunctionalInterface
 public interface BooleanSupplier {

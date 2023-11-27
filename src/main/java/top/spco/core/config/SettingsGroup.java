@@ -49,8 +49,8 @@ package top.spco.core.config;
  * </pre>
  *
  * @author SpCo
- * @version 2.0
- * @since 2.0
+ * @version 0.2.0
+ * @since 0.2.0
  */
 public interface SettingsGroup {
     /**

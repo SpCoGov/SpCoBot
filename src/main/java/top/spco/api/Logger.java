@@ -19,8 +19,8 @@ package top.spco.api;
  * 定义了记录日志的方法，提供了不同级别的日志记录能力
  *
  * @author SpCo
- * @version 1.0
- * @since 1.0
+ * @version 0.1.0
+ * @since 0.1.0
  */
 public interface Logger {
     void debug(String message);

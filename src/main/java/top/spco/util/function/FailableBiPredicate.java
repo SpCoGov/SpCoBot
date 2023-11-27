@@ -24,7 +24,7 @@ import java.util.function.BiPredicate;
  * @param <T> Predicate type 1.
  * @param <U> Predicate type 2.
  * @param <E> The kind of thrown exception or error.
- * @since 3.1
+ * @since 0.3.1
  */
 @FunctionalInterface
 public interface FailableBiPredicate<T, U, E extends Throwable> {

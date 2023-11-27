@@ -15,18 +15,20 @@
  */
 package top.spco.service.command.commands;
 
-import top.spco.api.Bot;
-import top.spco.api.Interactive;
-import top.spco.api.User;
+import top.spco.SpCoBot;
+import top.spco.api.*;
 import top.spco.api.message.Message;
 import top.spco.service.command.AbstractCommand;
 import top.spco.service.command.CommandMeta;
+import top.spco.service.command.CommandScope;
+import top.spco.service.command.CommandSyntaxException;
 import top.spco.user.BotUser;
+import top.spco.user.UserPermission;
 
 /**
  * @author SpCo
- * @version 3.3
- * @since 3.3
+ * @version 0.3.4
+ * @since 0.3.3
  */
 public class KickCommand extends AbstractCommand {
     @Override
@@ -40,7 +42,43 @@ public class KickCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta) {
+    public UserPermission needPermission() {
+        return UserPermission.ADMINISTRATOR;
+    }
 
+    @Override
+    public CommandScope getScope() {
+        return CommandScope.ONLY_GROUP;
+    }
+
+    @Override
+    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta) {
+        try {
+            meta.max(1);
+            if (from instanceof Group group) {
+                if (!group.botPermission().isOperator()) {
+                    from.quoteReply(message, "机器人权限不足");
+                    return;
+                }
+                long id;
+                if (args.length == 1) {
+                    var quote = SpCoBot.getInstance().getMessageService().getQuote(message);
+                    id = quote.getLeft().getFromId();
+                } else {
+                    id = meta.userIdArgument(0);
+                }
+                NormalMember target = group.getMember(id);
+                if (target.getPermission().getLevel() >= group.botPermission().getLevel()) {
+                    from.quoteReply(message, "大佬，惹不起");
+                    return;
+                }
+                target.kick("您被管理员移出了本群", false);
+                from.quoteReply(message, "已将 " + target.getNameCard() + "(" + target.getId() + ")" + " 移出本群");
+            }
+        } catch (CommandSyntaxException e) {
+            from.handleException(message, e.getMessage());
+        } catch (NullPointerException e) {
+            from.quoteReply(message, "该用户不存在");
+        }
     }
 }

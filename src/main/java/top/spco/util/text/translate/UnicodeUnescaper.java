@@ -23,7 +23,7 @@ import java.io.Writer;
  * Unicode. It supports multiple 'u' characters and will work with or
  * without the +.
  *
- * @since 3.1
+ * @since 0.3.1
  */
 public class UnicodeUnescaper extends CharSequenceTranslator {
     /**

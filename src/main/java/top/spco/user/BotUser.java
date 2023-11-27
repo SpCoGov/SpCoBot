@@ -34,8 +34,8 @@ import java.util.concurrent.ThreadLocalRandom;
  * 用户类，用于表示机器人用户。
  *
  * @author SpCo
- * @version 1.2
- * @since 1.0
+ * @version 0.1.2
+ * @since 0.1.0
  */
 @Data
 @AllArgsConstructor

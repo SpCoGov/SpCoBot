@@ -26,8 +26,8 @@ import java.util.regex.Pattern;
  * 消息服务
  *
  * @author SpCo
- * @version 3.0
- * @since 1.1
+ * @version 0.3.0
+ * @since 0.1.1
  */
 public interface MessageService {
     /**

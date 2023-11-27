@@ -19,7 +19,7 @@ package top.spco.util.function;
  * A functional interface like {@link Runnable} that declares a kind of {@link Throwable}.
  *
  * @param <E> The kind of {@link Throwable}.
- * @since 3.1
+ * @since 0.3.1
  */
 @FunctionalInterface
 public interface FailableRunnable<E extends Throwable> {

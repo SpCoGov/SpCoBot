@@ -23,9 +23,9 @@ import top.spco.user.UserPermission;
  * 提供了基本的命令信息和权限控制的默认实现。
  *
  * @author SpCo
- * @version 3.3
+ * @version 0.3.3
  * @see Command
- * @since 1.0
+ * @since 0.1.0
  */
 public abstract class AbstractCommand implements Command {
     @Override

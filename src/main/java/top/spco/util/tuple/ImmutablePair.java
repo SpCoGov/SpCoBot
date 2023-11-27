@@ -30,7 +30,7 @@ import java.util.Objects;
  *
  * @param <L> the left element type
  * @param <R> the right element type
- * @since 3.1
+ * @since 0.3.1
  */
 public class ImmutablePair<L, R> extends Pair<L, R> {
     /**
@@ -39,7 +39,7 @@ public class ImmutablePair<L, R> extends Pair<L, R> {
      * Consider using {@link #emptyArray()} to avoid generics warnings.
      * </p>
      *
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final ImmutablePair<?, ?>[] EMPTY_ARRAY = {};
 
@@ -61,7 +61,7 @@ public class ImmutablePair<L, R> extends Pair<L, R> {
      * @param <L> the left element type
      * @param <R> the right element type
      * @return the empty array singleton that can be assigned without compiler warning.
-     * @since 3.1
+     * @since 0.3.1
      */
     @SuppressWarnings("unchecked")
     public static <L, R> ImmutablePair<L, R>[] emptyArray() {
@@ -78,7 +78,7 @@ public class ImmutablePair<L, R> extends Pair<L, R> {
      * @param <R>  the right element type
      * @param left the left element, may be null
      * @return a pair formed from the two parameters, not null
-     * @since 3.1
+     * @since 0.3.1
      */
     public static <L, R> Pair<L, R> left(final L left) {
         return ImmutablePair.of(left, null);
@@ -90,7 +90,7 @@ public class ImmutablePair<L, R> extends Pair<L, R> {
      * @param <L> the left element of this pair. Value is {@code null}.
      * @param <R> the right element of this pair. Value is {@code null}.
      * @return an immutable pair of nulls.
-     * @since 3.1
+     * @since 0.3.1
      */
     @SuppressWarnings("unchecked")
     public static <L, R> ImmutablePair<L, R> nullPair() {
@@ -123,7 +123,7 @@ public class ImmutablePair<L, R> extends Pair<L, R> {
      * @param <R>  the right element type
      * @param pair the existing map entry.
      * @return a pair formed from the map entry
-     * @since 3.1
+     * @since 0.3.1
      */
     public static <L, R> ImmutablePair<L, R> of(final Map.Entry<L, R> pair) {
         return pair != null ? new ImmutablePair<>(pair.getKey(), pair.getValue()) : nullPair();
@@ -141,7 +141,7 @@ public class ImmutablePair<L, R> extends Pair<L, R> {
      * @param right the right element, may not  be null
      * @return a pair formed from the two parameters, not null
      * @throws NullPointerException if any input is null
-     * @since 3.1
+     * @since 0.3.1
      */
     public static <L, R> ImmutablePair<L, R> ofNonNull(final L left, final R right) {
         return of(Objects.requireNonNull(left, "left"), Objects.requireNonNull(right, "right"));
@@ -157,7 +157,7 @@ public class ImmutablePair<L, R> extends Pair<L, R> {
      * @param <R>   the right element type
      * @param right the right element, may be null
      * @return a pair formed from the two parameters, not null
-     * @since 3.1
+     * @since 0.3.1
      */
     public static <L, R> Pair<L, R> right(final R right) {
         return ImmutablePair.of(null, right);

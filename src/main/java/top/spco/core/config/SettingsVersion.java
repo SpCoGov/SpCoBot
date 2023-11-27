@@ -19,8 +19,8 @@ import top.spco.SpCoBot;
 
 /**
  * @author SpCo
- * @version 2.1
- * @since 2.1
+ * @version 0.2.1
+ * @since 0.2.1
  */
 public enum SettingsVersion implements SettingsGroup {
     CONFIG_VERSION("config_version", SpCoBot.MAIN_VERSION);

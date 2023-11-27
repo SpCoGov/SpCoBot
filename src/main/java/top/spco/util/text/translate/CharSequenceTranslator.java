@@ -27,7 +27,7 @@ import java.util.Objects;
  * Its core use is to escape and unescape text. Because escaping and unescaping
  * is completely contextual, the API does not present two separate signatures.
  *
- * @since 3.1
+ * @since 0.3.1
  */
 @Deprecated
 public abstract class CharSequenceTranslator {

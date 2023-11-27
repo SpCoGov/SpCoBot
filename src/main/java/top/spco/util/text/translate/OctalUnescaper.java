@@ -26,7 +26,7 @@ import java.io.Writer;
  * Note that this currently only supports the viable range of octal for Java; namely
  * 1 to 377. This is because parsing Java is the main use case.
  *
- * @since 3.1
+ * @since 0.3.1
  */
 @Deprecated
 public class OctalUnescaper extends CharSequenceTranslator {

@@ -21,7 +21,7 @@ import java.util.function.IntSupplier;
  * A functional interface like {@link IntSupplier} that declares a {@link Throwable}.
  *
  * @param <E> The kind of thrown exception or error.
- * @since 3.1
+ * @since 0.3.1
  */
 @FunctionalInterface
 public interface FailableIntSupplier<E extends Throwable> {

@@ -24,8 +24,8 @@ import java.util.function.Function;
  * Helper for creating {@link Event} classes.
  *
  * @author SpCo
- * @version 1.0
- * @since 1.0
+ * @version 0.1.0
+ * @since 0.1.0
  */
 public final class EventFactory {
     private EventFactory() {

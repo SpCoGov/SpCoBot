@@ -31,8 +31,8 @@ import java.util.*;
  * 它负责注册、执行和管理各种命令的权限
  *
  * @author SpCo
- * @version 3.3
- * @since 1.0
+ * @version 0.3.4
+ * @since 0.1.0
  */
 public class CommandSystem {
     private static CommandSystem instance;
@@ -69,6 +69,7 @@ public class CommandSystem {
         toBeRegistered.add(new UnmuteCommand());
         toBeRegistered.add(new GetotherCommand());
         toBeRegistered.add(new NoteCommand());
+        toBeRegistered.add(new KickCommand());
 
         toBeRegistered.add(new TestCommand());
 

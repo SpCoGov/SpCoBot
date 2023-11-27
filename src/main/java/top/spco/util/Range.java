@@ -28,7 +28,7 @@ import java.util.Objects;
  * <p>#ThreadSafe# if the objects and comparator are thread-safe.</p>
  *
  * @param <T> The type of range values.
- * @since 3.1
+ * @since 0.3.1
  */
 public class Range<T> implements Serializable {
     @SuppressWarnings({"rawtypes", "unchecked"})
@@ -394,7 +394,7 @@ public class Range<T> implements Serializable {
      * @param other overlapping Range
      * @return range representing the intersection of {@code this} and {@code other} ({@code this} if equal)
      * @throws IllegalArgumentException if {@code other} does not overlap {@code this}
-     * @since 3.1
+     * @since 0.3.1
      */
     public Range<T> intersectionWith(final Range<T> other) {
         if (!this.isOverlappedBy(other)) {

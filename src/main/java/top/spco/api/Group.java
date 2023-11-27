@@ -19,8 +19,8 @@ package top.spco.api;
  * 代表一个群
  *
  * @author SpCo
- * @version 3.0
- * @since 1.0
+ * @version 0.3.0
+ * @since 0.1.0
  */
 public interface Group extends Interactive {
     /**

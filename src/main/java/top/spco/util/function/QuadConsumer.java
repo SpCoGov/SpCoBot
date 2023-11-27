@@ -27,8 +27,8 @@ package top.spco.util.function;
  * @param <W> 第四个输入参数的类型
  *
  * @author SpCo
- * @version 1.1
- * @since 1.1
+ * @version 0.1.1
+ * @since 0.1.1
  */
 @FunctionalInterface
 public interface QuadConsumer<T, U, V, W> {

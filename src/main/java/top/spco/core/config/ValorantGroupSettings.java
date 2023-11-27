@@ -17,8 +17,8 @@ package top.spco.core.config;
 
 /**
  * @author SpCo
- * @version 3.2
- * @since 3.2
+ * @version 0.3.2
+ * @since 0.3.2
  */
 public enum ValorantGroupSettings implements SettingsGroup {
     VALORANT_GROUP("valorant_group", 0L);

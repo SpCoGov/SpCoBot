@@ -27,8 +27,8 @@ import top.spco.user.UserPermission;
 
 /**
  * @author SpCo
- * @version 3.3
- * @since 3.0
+ * @version 0.3.3
+ * @since 0.3.0
  */
 public class MuteCommand extends AbstractCommand {
     @Override

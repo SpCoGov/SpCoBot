@@ -21,7 +21,7 @@ import java.util.function.DoubleBinaryOperator;
  * A functional interface like {@link DoubleBinaryOperator} that declares a {@link Throwable}.
  *
  * @param <E> The kind of thrown exception or error.
- * @since 3.1
+ * @since 0.3.1
  */
 @FunctionalInterface
 public interface FailableDoubleBinaryOperator<E extends Throwable> {

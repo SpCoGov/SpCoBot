@@ -17,8 +17,8 @@ package top.spco.core.config;
 
 /**
  * @author SpCo
- * @version 2.1
- * @since 2.1
+ * @version 0.2.1
+ * @since 0.2.1
  */
 public enum DashScopeSettings implements SettingsGroup {
     API_KET("api_key", "");

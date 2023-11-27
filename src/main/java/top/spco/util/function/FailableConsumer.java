@@ -28,7 +28,7 @@ import java.util.function.Function;
  *
  * @param <T> the type of the input to the operation
  * @param <E> Thrown exception type.
- * @since 3.1
+ * @since 0.3.1
  */
 @FunctionalInterface
 public interface FailableConsumer<T, E extends Throwable> {

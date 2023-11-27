@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
  * Helpers to process Strings using regular expressions.
  *
  * @see java.util.regex.Pattern
- * @since 3.1
+ * @since 0.3.1
  */
 public class RegExUtils {
     /**
@@ -30,7 +30,7 @@ public class RegExUtils {
      *
      * @param regex The expression to be compiled
      * @return the given regular expression compiled into a pattern with the {@link Pattern#DOTALL} flag.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static Pattern dotAll(final String regex) {
         return Pattern.compile(regex, Pattern.DOTALL);
@@ -43,7 +43,7 @@ public class RegExUtils {
      * @param regex The expression to be compiled.
      * @param text  The character sequence to be matched.
      * @return A new matcher for this pattern.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static Matcher dotAllMatcher(final String regex, final String text) {
         return dotAll(regex).matcher(text);

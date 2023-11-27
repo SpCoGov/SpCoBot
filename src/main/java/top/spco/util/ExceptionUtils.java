@@ -22,8 +22,8 @@ import java.io.StringWriter;
  * 异常工具类。
  *
  * @author SpCo
- * @version 1.2
- * @since 1.2
+ * @version 0.1.2
+ * @since 0.1.2
  */
 public class ExceptionUtils {
     /**

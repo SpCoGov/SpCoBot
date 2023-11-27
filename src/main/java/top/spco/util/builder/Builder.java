@@ -69,7 +69,7 @@ package top.spco.util.builder;
  * </code></pre>
  *
  * @param <T> the type of object that the builder will construct or compute.
- * @since 3.1
+ * @since 0.3.1
  */
 @FunctionalInterface
 public interface Builder<T> {

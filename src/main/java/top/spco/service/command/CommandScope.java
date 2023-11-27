@@ -19,8 +19,8 @@ package top.spco.service.command;
  * 命令的作用域
  *
  * @author SpCo
- * @version 3.3
- * @since 1.0
+ * @version 0.3.3
+ * @since 0.1.0
  */
 public enum CommandScope {
     /**

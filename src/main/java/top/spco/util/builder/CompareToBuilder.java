@@ -91,7 +91,7 @@ import java.util.Objects;
  * @see Object#hashCode()
  * @see EqualsBuilder
  * @see HashCodeBuilder
- * @since 3.1
+ * @since 0.3.1
  */
 public class CompareToBuilder implements Builder<Integer> {
     /**
@@ -220,7 +220,7 @@ public class CompareToBuilder implements Builder<Integer> {
      *                              (but not both) is {@code null}
      * @throws ClassCastException   if {@code rhs} is not assignment-compatible
      *                              with {@code lhs}
-     * @since 3.1 (2.0 as {@code reflectionCompare(Object, Object, boolean, Class)})
+     * @since 0.3.1 (2.0 as {@code reflectionCompare(Object, Object, boolean, Class)})
      */
     public static int reflectionCompare(
             final Object lhs,
@@ -275,7 +275,7 @@ public class CompareToBuilder implements Builder<Integer> {
      *                              (but not both) is {@code null}
      * @throws ClassCastException   if {@code rhs} is not assignment-compatible
      *                              with {@code lhs}
-     * @since 3.1
+     * @since 0.3.1
      */
     public static int reflectionCompare(final Object lhs, final Object rhs, final Collection<String> excludeFields) {
         return reflectionCompare(lhs, rhs, ReflectionToStringBuilder.toNoNullStringArray(excludeFields));
@@ -308,7 +308,7 @@ public class CompareToBuilder implements Builder<Integer> {
      *                              (but not both) is {@code null}
      * @throws ClassCastException   if {@code rhs} is not assignment-compatible
      *                              with {@code lhs}
-     * @since 3.1
+     * @since 0.3.1
      */
     public static int reflectionCompare(final Object lhs, final Object rhs, final String... excludeFields) {
         return reflectionCompare(lhs, rhs, false, null, excludeFields);
@@ -785,7 +785,7 @@ public class CompareToBuilder implements Builder<Integer> {
      * @return this
      * @throws ClassCastException if {@code rhs} is not assignment-compatible
      *                            with {@code lhs}
-     * @since 3.1
+     * @since 0.3.1
      */
     public CompareToBuilder append(final Object lhs, final Object rhs, final Comparator<?> comparator) {
         if (comparison != 0) {
@@ -863,7 +863,7 @@ public class CompareToBuilder implements Builder<Integer> {
      * @return this
      * @throws ClassCastException if {@code rhs} is not assignment-compatible
      *                            with {@code lhs}
-     * @since 3.1
+     * @since 0.3.1
      */
     public CompareToBuilder append(final Object[] lhs, final Object[] rhs, final Comparator<?> comparator) {
         if (comparison != 0) {
@@ -979,7 +979,7 @@ public class CompareToBuilder implements Builder<Integer> {
      *
      * @param superCompareTo result of calling {@code super.compareTo(Object)}
      * @return this
-     * @since 3.1
+     * @since 0.3.1
      */
     public CompareToBuilder appendSuper(final int superCompareTo) {
         if (comparison != 0) {
@@ -997,7 +997,7 @@ public class CompareToBuilder implements Builder<Integer> {
      *
      * @return final comparison result as an Integer
      * @see #toComparison()
-     * @since 3.1
+     * @since 0.3.1
      */
     @Override
     public Integer build() {

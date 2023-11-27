@@ -19,10 +19,10 @@ package top.spco.api;
  * 代表一位普通的群成员
  *
  * @author SpCo
- * @version 1.0
+ * @version 0.1.0
  * @see Member
  * @see AnonymousMember
- * @since 1.0
+ * @since 0.1.0
  */
 public interface NormalMember extends Member {
     /**

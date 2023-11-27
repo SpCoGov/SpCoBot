@@ -23,7 +23,7 @@ import java.lang.annotation.Target;
 /**
  * Excludes a field from being used by the {@link ReflectionToStringBuilder}.
  *
- * @since 3.1
+ * @since 0.3.1
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

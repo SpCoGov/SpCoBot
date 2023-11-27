@@ -25,7 +25,7 @@ import java.util.Objects;
  *
  * @param <L> the left element type
  * @param <R> the right element type
- * @since 3.1
+ * @since 0.3.1
  */
 public class MutablePair<L, R> extends Pair<L, R> {
     /**
@@ -34,7 +34,7 @@ public class MutablePair<L, R> extends Pair<L, R> {
      * Consider using {@link #emptyArray()} to avoid generics warnings.
      * </p>
      *
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final MutablePair<?, ?>[] EMPTY_ARRAY = {};
 
@@ -49,7 +49,7 @@ public class MutablePair<L, R> extends Pair<L, R> {
      * @param <L> the left element type
      * @param <R> the right element type
      * @return the empty array singleton that can be assigned without compiler warning.
-     * @since 3.1
+     * @since 0.3.1
      */
     @SuppressWarnings("unchecked")
     public static <L, R> MutablePair<L, R>[] emptyArray() {
@@ -108,7 +108,7 @@ public class MutablePair<L, R> extends Pair<L, R> {
      * @param right the right element, may not be null
      * @return a pair formed from the two parameters, not null
      * @throws NullPointerException if any input is null
-     * @since 3.1
+     * @since 0.3.1
      */
     public static <L, R> MutablePair<L, R> ofNonNull(final L left, final R right) {
         return of(Objects.requireNonNull(left, "left"), Objects.requireNonNull(right, "right"));

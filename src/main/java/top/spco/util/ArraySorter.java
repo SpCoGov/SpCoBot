@@ -21,7 +21,7 @@ import java.util.Comparator;
 /**
  * Sorts and returns arrays in the fluent style.
  *
- * @since 3.1
+ * @since 0.3.1
  */
 public class ArraySorter {
     /**

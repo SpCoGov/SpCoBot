@@ -81,7 +81,7 @@ import java.util.*;
  *  </tr>
  * </table>
  *
- * @since 3.1
+ * @since 0.3.1
  * @deprecated As of 3.6, use Apache Commons Text
  * <a href="https://commons.apache.org/proper/commons-text/javadocs/api-release/org/apache/commons/text/StringTokenizer.html">
  * StringTokenizer</a> instead

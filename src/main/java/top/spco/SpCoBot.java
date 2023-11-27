@@ -66,8 +66,8 @@ import java.util.concurrent.TimeUnit;
  * </pre>
  *
  * @author SpCo
- * @version 3.3
- * @since 1.0
+ * @version 0.3.4
+ * @since 0.1.0
  */
 public class SpCoBot {
     private static SpCoBot instance;

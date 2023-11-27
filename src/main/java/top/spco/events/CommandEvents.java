@@ -25,8 +25,8 @@ import top.spco.service.command.CommandMeta;
  * 命令相关事件
  *
  * @author SpCo
- * @version 3.0
- * @since 3.0
+ * @version 0.3.0
+ * @since 0.3.0
  */
 public class CommandEvents {
     /**

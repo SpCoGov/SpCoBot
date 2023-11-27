@@ -18,7 +18,7 @@ package top.spco.util.text.translate;
 /**
  * Translates code points to their Unicode escaped value suitable for Java source.
  *
- * @since 3.1
+ * @since 0.3.1
  */
 @Deprecated
 public class JavaUnicodeEscaper extends UnicodeEscaper {

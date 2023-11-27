@@ -25,8 +25,8 @@ import java.util.regex.Pattern;
  * 命令的数据
  *
  * @author SpCo
- * @version 3.0
- * @since 1.1
+ * @version 0.3.0
+ * @since 0.1.1
  */
 public class CommandMeta {
     private final String command;

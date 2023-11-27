@@ -22,8 +22,8 @@ import top.spco.service.RegistrationException;
  * 当创建{@link Chat}对象时提交的聊天类型和聊天目标不匹配时会抛出此异常
  *
  * @author SpCo
- * @version 1.1
- * @since 1.1
+ * @version 0.1.1
+ * @since 0.1.1
  */
 public class ChatTypeMismatchException extends RegistrationException {
     /**

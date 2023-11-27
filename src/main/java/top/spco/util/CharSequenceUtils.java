@@ -20,7 +20,7 @@ package top.spco.util;
  * {@code null} safe.
  *
  * @see CharSequence
- * @since 3.1
+ * @since 0.3.1
  */
 public class CharSequenceUtils {
     private static final int NOT_FOUND = -1;
@@ -105,7 +105,7 @@ public class CharSequenceUtils {
      * @param searchChar  the char to be searched for
      * @param start  the start index, negative starts at the string start
      * @return the index where the search char was found, -1 if not found
-     * @since 3.1 updated to behave more like {@link String}
+     * @since 0.3.1 updated to behave more like {@link String}
      */
     static int indexOf(final CharSequence cs, final int searchChar, int start) {
         if (cs instanceof String) {
@@ -238,7 +238,7 @@ public class CharSequenceUtils {
      * @param searchChar  the char to be searched for
      * @param start  the start index, negative returns -1, beyond length starts at end
      * @return the index where the search char was found, -1 if not found
-     * @since 3.1 updated to behave more like {@link String}
+     * @since 0.3.1 updated to behave more like {@link String}
      */
     static int lastIndexOf(final CharSequence cs, final int searchChar, int start) {
         if (cs instanceof String) {
@@ -358,7 +358,7 @@ public class CharSequenceUtils {
      *
      * @param source the {@link CharSequence} to be processed.
      * @return the resulting char array, never null.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static char[] toCharArray(final CharSequence source) {
         final int len = StringUtils.length(source);

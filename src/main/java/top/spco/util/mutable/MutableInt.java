@@ -24,7 +24,7 @@ import top.spco.util.math.NumberUtils;
  * </p>
  *
  * @see Integer
- * @since 3.1
+ * @since 0.3.1
  */
 public class MutableInt extends Number implements Comparable<MutableInt>, Mutable<Number> {
     /**
@@ -69,7 +69,7 @@ public class MutableInt extends Number implements Comparable<MutableInt>, Mutabl
      *
      * @param value the string to parse, not null
      * @throws NumberFormatException if the string cannot be parsed into an int
-     * @since 3.1
+     * @since 0.3.1
      */
     public MutableInt(final String value) {
         this.value = Integer.parseInt(value);
@@ -108,7 +108,7 @@ public class MutableInt extends Number implements Comparable<MutableInt>, Mutabl
     /**
      * Increments the value.
      *
-     * @since 3.1
+     * @since 0.3.1
      */
     public void increment() {
         value++;
@@ -119,7 +119,7 @@ public class MutableInt extends Number implements Comparable<MutableInt>, Mutabl
      * immediately prior to the increment operation. This method is not thread safe.
      *
      * @return the value associated with the instance before it was incremented
-     * @since 3.1
+     * @since 0.3.1
      */
     public int getAndIncrement() {
         final int last = value;
@@ -132,7 +132,7 @@ public class MutableInt extends Number implements Comparable<MutableInt>, Mutabl
      * immediately after the increment operation. This method is not thread safe.
      *
      * @return the value associated with the instance after it is incremented
-     * @since 3.1
+     * @since 0.3.1
      */
     public int incrementAndGet() {
         value++;
@@ -142,7 +142,7 @@ public class MutableInt extends Number implements Comparable<MutableInt>, Mutabl
     /**
      * Decrements the value.
      *
-     * @since 3.1
+     * @since 0.3.1
      */
     public void decrement() {
         value--;
@@ -153,7 +153,7 @@ public class MutableInt extends Number implements Comparable<MutableInt>, Mutabl
      * immediately prior to the decrement operation. This method is not thread safe.
      *
      * @return the value associated with the instance before it was decremented
-     * @since 3.1
+     * @since 0.3.1
      */
     public int getAndDecrement() {
         final int last = value;
@@ -166,7 +166,7 @@ public class MutableInt extends Number implements Comparable<MutableInt>, Mutabl
      * immediately after the decrement operation. This method is not thread safe.
      *
      * @return the value associated with the instance after it is decremented
-     * @since 3.1
+     * @since 0.3.1
      */
     public int decrementAndGet() {
         value--;
@@ -177,7 +177,7 @@ public class MutableInt extends Number implements Comparable<MutableInt>, Mutabl
      * Adds a value to the value of this instance.
      *
      * @param operand the value to add, not null
-     * @since 3.1
+     * @since 0.3.1
      */
     public void add(final int operand) {
         this.value += operand;
@@ -188,7 +188,7 @@ public class MutableInt extends Number implements Comparable<MutableInt>, Mutabl
      *
      * @param operand the value to add, not null
      * @throws NullPointerException if the object is null
-     * @since 3.1
+     * @since 0.3.1
      */
     public void add(final Number operand) {
         this.value += operand.intValue();
@@ -198,7 +198,7 @@ public class MutableInt extends Number implements Comparable<MutableInt>, Mutabl
      * Subtracts a value from the value of this instance.
      *
      * @param operand the value to subtract, not null
-     * @since 3.1
+     * @since 0.3.1
      */
     public void subtract(final int operand) {
         this.value -= operand;
@@ -209,7 +209,7 @@ public class MutableInt extends Number implements Comparable<MutableInt>, Mutabl
      *
      * @param operand the value to subtract, not null
      * @throws NullPointerException if the object is null
-     * @since 3.1
+     * @since 0.3.1
      */
     public void subtract(final Number operand) {
         this.value -= operand.intValue();
@@ -221,7 +221,7 @@ public class MutableInt extends Number implements Comparable<MutableInt>, Mutabl
      *
      * @param operand the quantity to add, not null
      * @return the value associated with this instance after adding the operand
-     * @since 3.1
+     * @since 0.3.1
      */
     public int addAndGet(final int operand) {
         this.value += operand;
@@ -235,7 +235,7 @@ public class MutableInt extends Number implements Comparable<MutableInt>, Mutabl
      * @param operand the quantity to add, not null
      * @return the value associated with this instance after adding the operand
      * @throws NullPointerException if {@code operand} is null
-     * @since 3.1
+     * @since 0.3.1
      */
     public int addAndGet(final Number operand) {
         this.value += operand.intValue();
@@ -248,7 +248,7 @@ public class MutableInt extends Number implements Comparable<MutableInt>, Mutabl
      *
      * @param operand the quantity to add, not null
      * @return the value associated with this instance immediately before the operand was added
-     * @since 3.1
+     * @since 0.3.1
      */
     public int getAndAdd(final int operand) {
         final int last = value;
@@ -263,7 +263,7 @@ public class MutableInt extends Number implements Comparable<MutableInt>, Mutabl
      * @param operand the quantity to add, not null
      * @return the value associated with this instance immediately before the operand was added
      * @throws NullPointerException if {@code operand} is null
-     * @since 3.1
+     * @since 0.3.1
      */
     public int getAndAdd(final Number operand) {
         final int last = value;

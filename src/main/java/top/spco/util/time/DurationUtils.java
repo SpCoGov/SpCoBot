@@ -32,7 +32,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Utilities for {@link Duration}.
  *
- * @since 3.1
+ * @since 0.3.1
  */
 public class DurationUtils {
 
@@ -88,7 +88,7 @@ public class DurationUtils {
      *
      * @param duration The duration to query.
      * @return nanoseconds between 0 and 999,999.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static int getNanosOfMilli(final Duration duration) {
         return zeroIfNull(duration).getNano() % 1_000_000;
@@ -111,7 +111,7 @@ public class DurationUtils {
      * @param consumer What to execute.
      * @return The Duration of execution.
      * @throws E thrown by the lambda.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static <E extends Throwable> Duration of(final FailableConsumer<Instant, E> consumer) throws E {
         return since(now(consumer::accept));
@@ -124,7 +124,7 @@ public class DurationUtils {
      * @param runnable What to execute.
      * @return The Duration of execution.
      * @throws E thrown by the lambda.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static <E extends Throwable> Duration of(final FailableRunnable<E> runnable) throws E {
         return of(start -> runnable.run());
@@ -141,7 +141,7 @@ public class DurationUtils {
      *
      * @param startInclusive the start instant, inclusive, not null.
      * @return a {@link Duration}, not null.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static Duration since(final Temporal startInclusive) {
         return Duration.between(startInclusive, Instant.now());

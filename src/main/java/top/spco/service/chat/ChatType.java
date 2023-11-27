@@ -19,8 +19,8 @@ package top.spco.service.chat;
  * 对话的类型
  *
  * @author SpCo
- * @version 1.1
- * @since 1.1
+ * @version 0.1.1
+ * @since 0.1.1
  */
 public enum ChatType {
     /**

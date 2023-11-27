@@ -20,7 +20,7 @@ package top.spco.util.function;
  *
  * @param <R> Return type.
  * @param <E> The kind of thrown exception or error.
- * @since 3.1
+ * @since 0.3.1
  */
 @FunctionalInterface
 public interface FailableCallable<R, E extends Throwable> {

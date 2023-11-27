@@ -19,7 +19,7 @@ package top.spco.util.exception;
  * Exception thrown when a clone cannot be created. In contrast to
  * {@link CloneNotSupportedException} this is a {@link RuntimeException}.
  *
- * @since 3.1
+ * @since 0.3.1
  */
 public class CloneFailedException extends RuntimeException {
 

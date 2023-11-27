@@ -31,7 +31,7 @@ import java.util.function.Consumer;
  *
  * <p>#ThreadSafe#</p>
  *
- * @since 3.1
+ * @since 0.3.1
  */
 public class BooleanUtils {
     private static final List<Boolean> BOOLEAN_LIST = Collections.unmodifiableList(Arrays.asList(Boolean.FALSE, Boolean.TRUE));
@@ -39,42 +39,42 @@ public class BooleanUtils {
     /**
      * The false String {@code "false"}.
      *
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final String FALSE = "false";
 
     /**
      * The no String {@code "no"}.
      *
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final String NO = "no";
 
     /**
      * The off String {@code "off"}.
      *
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final String OFF = "off";
 
     /**
      * The on String {@code "on"}.
      *
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final String ON = "on";
 
     /**
      * The true String {@code "true"}.
      *
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final String TRUE = "true";
 
     /**
      * The yes String {@code "yes"}.
      *
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final String YES = "yes";
 
@@ -94,7 +94,7 @@ public class BooleanUtils {
      * if any of the parameters is {@code false} and {@code true} otherwise.
      * @throws NullPointerException     if {@code array} is {@code null}
      * @throws IllegalArgumentException if {@code array} is empty.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean and(final boolean... array) {
         ObjectUtils.requireNonEmpty(array, "array");
@@ -126,7 +126,7 @@ public class BooleanUtils {
      * if any of the parameters is {@code false} and {@code true} otherwise.
      * @throws NullPointerException     if {@code array} is {@code null}
      * @throws IllegalArgumentException if {@code array} is empty.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static Boolean and(final Boolean... array) {
         ObjectUtils.requireNonEmpty(array, "array");
@@ -137,7 +137,7 @@ public class BooleanUtils {
      * Returns a new array of possible values (like an enum would).
      *
      * @return a new array of possible values (like an enum would).
-     * @since 3.1
+     * @since 0.3.1
      */
     public static Boolean[] booleanValues() {
         return new Boolean[]{Boolean.FALSE, Boolean.TRUE};
@@ -151,7 +151,7 @@ public class BooleanUtils {
      * @return the value {@code 0} if {@code x == y};
      * a value less than {@code 0} if {@code !x && y}; and
      * a value greater than {@code 0} if {@code x && !y}
-     * @since 3.1
+     * @since 0.3.1
      */
     public static int compare(final boolean x, final boolean y) {
         if (x == y) {
@@ -164,7 +164,7 @@ public class BooleanUtils {
      * Performs the given action for each Boolean {@link BooleanUtils#values()}.
      *
      * @param action The action to be performed for each element
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void forEach(final Consumer<Boolean> action) {
         values().forEach(action);
@@ -182,7 +182,7 @@ public class BooleanUtils {
      *
      * @param bool the boolean to check, null returns {@code false}
      * @return {@code true} only if the input is non-{@code null} and {@code false}
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean isFalse(final Boolean bool) {
         return Boolean.FALSE.equals(bool);
@@ -200,7 +200,7 @@ public class BooleanUtils {
      *
      * @param bool the boolean to check, null returns {@code true}
      * @return {@code true} if the input is {@code null} or {@code true}
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean isNotFalse(final Boolean bool) {
         return !isFalse(bool);
@@ -218,7 +218,7 @@ public class BooleanUtils {
      *
      * @param bool the boolean to check, null returns {@code true}
      * @return {@code true} if the input is null or false
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean isNotTrue(final Boolean bool) {
         return !isTrue(bool);
@@ -236,7 +236,7 @@ public class BooleanUtils {
      *
      * @param bool the boolean to check, {@code null} returns {@code false}
      * @return {@code true} only if the input is non-null and true
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean isTrue(final Boolean bool) {
         return Boolean.TRUE.equals(bool);
@@ -331,7 +331,7 @@ public class BooleanUtils {
      * @return {@code true} if any of the arguments is {@code true}, and it returns {@code false} otherwise.
      * @throws NullPointerException     if {@code array} is {@code null}
      * @throws IllegalArgumentException if {@code array} is empty.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean or(final boolean... array) {
         ObjectUtils.requireNonEmpty(array, "array");
@@ -364,7 +364,7 @@ public class BooleanUtils {
      * @return {@code true} if any of the arguments is {@code true}, and it returns {@code false} otherwise.
      * @throws NullPointerException     if {@code array} is {@code null}
      * @throws IllegalArgumentException if {@code array} is empty.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static Boolean or(final Boolean... array) {
         ObjectUtils.requireNonEmpty(array, "array");
@@ -375,7 +375,7 @@ public class BooleanUtils {
      * Returns a new array of possible values (like an enum would).
      *
      * @return a new array of possible values (like an enum would).
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean[] primitiveValues() {
         return new boolean[]{false, true};
@@ -1146,7 +1146,7 @@ public class BooleanUtils {
      * Returns an unmodifiable list of Booleans {@code [false, true]}.
      *
      * @return an unmodifiable list of Booleans {@code [false, true]}.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static List<Boolean> values() {
         return BOOLEAN_LIST;

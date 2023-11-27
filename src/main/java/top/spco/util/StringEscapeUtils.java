@@ -26,7 +26,7 @@ import java.io.Writer;
  *
  * <p>#ThreadSafe#</p>
  *
- * @since 3.1
+ * @since 0.3.1
  */
 public class StringEscapeUtils {
 
@@ -39,7 +39,7 @@ public class StringEscapeUtils {
      * object allows the Java escaping functionality to be used
      * as the foundation for a custom translator.
      *
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final CharSequenceTranslator ESCAPE_JAVA =
             new LookupTranslator(
@@ -59,7 +59,7 @@ public class StringEscapeUtils {
      * object allows the EcmaScript escaping functionality to be used
      * as the foundation for a custom translator.
      *
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final CharSequenceTranslator ESCAPE_ECMASCRIPT =
             new AggregateTranslator(
@@ -81,7 +81,7 @@ public class StringEscapeUtils {
      * object allows the Json escaping functionality to be used
      * as the foundation for a custom translator.
      *
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final CharSequenceTranslator ESCAPE_JSON =
             new AggregateTranslator(
@@ -102,7 +102,7 @@ public class StringEscapeUtils {
      * object allows the XML escaping functionality to be used
      * as the foundation for a custom translator.
      *
-     * @since 3.1
+     * @since 0.3.1
      * @deprecated use {@link #ESCAPE_XML10} or {@link #ESCAPE_XML11} instead.
      */
     @Deprecated
@@ -119,7 +119,7 @@ public class StringEscapeUtils {
      * object allows the XML escaping functionality to be used
      * as the foundation for a custom translator.
      *
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final CharSequenceTranslator ESCAPE_XML10 =
             new AggregateTranslator(
@@ -171,7 +171,7 @@ public class StringEscapeUtils {
      * object allows the XML escaping functionality to be used
      * as the foundation for a custom translator.
      *
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final CharSequenceTranslator ESCAPE_XML11 =
             new AggregateTranslator(
@@ -199,7 +199,7 @@ public class StringEscapeUtils {
      * object allows the HTML escaping functionality to be used
      * as the foundation for a custom translator.
      *
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final CharSequenceTranslator ESCAPE_HTML3 =
             new AggregateTranslator(
@@ -214,7 +214,7 @@ public class StringEscapeUtils {
      * object allows the HTML escaping functionality to be used
      * as the foundation for a custom translator.
      *
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final CharSequenceTranslator ESCAPE_HTML4 =
             new AggregateTranslator(
@@ -230,7 +230,7 @@ public class StringEscapeUtils {
      * object allows the CSV escaping functionality to be used
      * as the foundation for a custom translator.
      *
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final CharSequenceTranslator ESCAPE_CSV = new StringEscapeUtils.CsvEscaper();
 
@@ -271,7 +271,7 @@ public class StringEscapeUtils {
      * object allows the Java unescaping functionality to be used
      * as the foundation for a custom translator.
      *
-     * @since 3.1
+     * @since 0.3.1
      */
     // TODO: throw "illegal character: \92" as an Exception if a \ on the end of the Java (as per the compiler)?
     public static final CharSequenceTranslator UNESCAPE_JAVA =
@@ -295,7 +295,7 @@ public class StringEscapeUtils {
      * object allows the EcmaScript unescaping functionality to be used
      * as the foundation for a custom translator.
      *
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final CharSequenceTranslator UNESCAPE_ECMASCRIPT = UNESCAPE_JAVA;
 
@@ -306,7 +306,7 @@ public class StringEscapeUtils {
      * object allows the Json unescaping functionality to be used
      * as the foundation for a custom translator.
      *
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final CharSequenceTranslator UNESCAPE_JSON = UNESCAPE_JAVA;
 
@@ -317,7 +317,7 @@ public class StringEscapeUtils {
      * object allows the HTML unescaping functionality to be used
      * as the foundation for a custom translator.
      *
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final CharSequenceTranslator UNESCAPE_HTML3 =
             new AggregateTranslator(
@@ -333,7 +333,7 @@ public class StringEscapeUtils {
      * object allows the HTML unescaping functionality to be used
      * as the foundation for a custom translator.
      *
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final CharSequenceTranslator UNESCAPE_HTML4 =
             new AggregateTranslator(
@@ -350,7 +350,7 @@ public class StringEscapeUtils {
      * object allows the XML unescaping functionality to be used
      * as the foundation for a custom translator.
      *
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final CharSequenceTranslator UNESCAPE_XML =
             new AggregateTranslator(
@@ -366,7 +366,7 @@ public class StringEscapeUtils {
      * object allows the CSV unescaping functionality to be used
      * as the foundation for a custom translator.
      *
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final CharSequenceTranslator UNESCAPE_CSV = new StringEscapeUtils.CsvUnescaper();
 
@@ -462,7 +462,7 @@ public class StringEscapeUtils {
      *
      * @param input String to escape values in, may be null
      * @return String with escaped values, {@code null} if null string input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final String escapeEcmaScript(final String input) {
         return ESCAPE_ECMASCRIPT.translate(input);
@@ -489,7 +489,7 @@ public class StringEscapeUtils {
      *
      * @param input String to escape values in, may be null
      * @return String with escaped values, {@code null} if null string input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final String escapeJson(final String input) {
         return ESCAPE_JSON.translate(input);
@@ -518,7 +518,7 @@ public class StringEscapeUtils {
      * @param input the {@link String} to unescape, may be null
      * @return A new unescaped {@link String}, {@code null} if null string input
      * @see #unescapeJava(String)
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final String unescapeEcmaScript(final String input) {
         return UNESCAPE_ECMASCRIPT.translate(input);
@@ -534,7 +534,7 @@ public class StringEscapeUtils {
      * @param input the {@link String} to unescape, may be null
      * @return A new unescaped {@link String}, {@code null} if null string input
      * @see #unescapeJava(String)
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final String unescapeJson(final String input) {
         return UNESCAPE_JSON.translate(input);
@@ -563,7 +563,7 @@ public class StringEscapeUtils {
      * @see <a href="https://www.w3.org/TR/REC-html40/sgml/entities.html">HTML 4.0 Character entity references</a>
      * @see <a href="https://www.w3.org/TR/html401/charset.html#h-5.3">HTML 4.01 Character References</a>
      * @see <a href="https://www.w3.org/TR/html401/charset.html#code-position">HTML 4.01 Code positions</a>
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final String escapeHtml4(final String input) {
         return ESCAPE_HTML4.translate(input);
@@ -575,7 +575,7 @@ public class StringEscapeUtils {
      *
      * @param input the {@link String} to escape, may be null
      * @return a new escaped {@link String}, {@code null} if null string input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final String escapeHtml3(final String input) {
         return ESCAPE_HTML3.translate(input);
@@ -595,7 +595,7 @@ public class StringEscapeUtils {
      *
      * @param input the {@link String} to unescape, may be null
      * @return a new unescaped {@link String}, {@code null} if null string input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final String unescapeHtml4(final String input) {
         return UNESCAPE_HTML4.translate(input);
@@ -608,7 +608,7 @@ public class StringEscapeUtils {
      *
      * @param input the {@link String} to unescape, may be null
      * @return a new unescaped {@link String}, {@code null} if null string input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final String unescapeHtml3(final String input) {
         return UNESCAPE_HTML3.translate(input);
@@ -665,7 +665,7 @@ public class StringEscapeUtils {
      * @param input the {@link String} to escape, may be null
      * @return a new escaped {@link String}, {@code null} if null string input
      * @see #unescapeXml(String)
-     * @since 3.1
+     * @since 0.3.1
      */
     public static String escapeXml10(final String input) {
         return ESCAPE_XML10.translate(input);
@@ -695,7 +695,7 @@ public class StringEscapeUtils {
      * @param input the {@link String} to escape, may be null
      * @return a new escaped {@link String}, {@code null} if null string input
      * @see #unescapeXml(String)
-     * @since 3.1
+     * @since 0.3.1
      */
     public static String escapeXml11(final String input) {
         return ESCAPE_XML11.translate(input);
@@ -741,7 +741,7 @@ public class StringEscapeUtils {
      * @param input the input CSV column String, may be null
      * @return the input String, enclosed in double quotes if the value contains a comma,
      * newline or double quote, {@code null} if null string input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final String escapeCsv(final String input) {
         return ESCAPE_CSV.translate(input);
@@ -766,7 +766,7 @@ public class StringEscapeUtils {
      * @param input the input CSV column String, may be null
      * @return the input String, with enclosing double quotes removed and embedded double
      * quotes unescaped, {@code null} if null string input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final String unescapeCsv(final String input) {
         return UNESCAPE_CSV.translate(input);

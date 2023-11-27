@@ -27,8 +27,8 @@ import java.security.SecureRandom;
 
 /**
  * @author SpCo
- * @version 3.3
- * @since 1.0
+ * @version 0.3.3
+ * @since 0.1.0
  */
 public class BanmeCommand extends AbstractCommand {
     @Override

@@ -84,7 +84,7 @@ import java.util.Objects;
  * <p>The exact format of the {@code toString} is determined by
  * the {@link ToStringStyle} passed into the constructor.</p>
  *
- * @since 3.1
+ * @since 0.3.1
  */
 public class ToStringBuilder implements Builder<String> {
     /**
@@ -183,7 +183,7 @@ public class ToStringBuilder implements Builder<String> {
      * @param reflectUpToClass  the superclass to reflect up to (inclusive), may be {@code null}
      * @return the String result
      * @see ReflectionToStringBuilder#toString(Object,ToStringStyle,boolean,boolean,Class)
-     * @since 3.1
+     * @since 0.3.1
      */
     public static <T> String reflectionToString(
             final T object,
@@ -906,7 +906,7 @@ public class ToStringBuilder implements Builder<String> {
      * @param srcObject  the {@link Object} whose class name and id to output
      * @return this
      * @throws NullPointerException if {@code srcObject} is {@code null}
-     * @since 3.1
+     * @since 0.3.1
      */
     public ToStringBuilder appendAsObjectToString(final Object srcObject) {
         ObjectUtils.identityToString(this.getStringBuffer(), srcObject);
@@ -923,7 +923,7 @@ public class ToStringBuilder implements Builder<String> {
      *
      * @param superToString  the result of {@code super.toString()}
      * @return this
-     * @since 3.1
+     * @since 0.3.1
      */
     public ToStringBuilder appendSuper(final String superToString) {
         if (superToString != null) {
@@ -957,7 +957,7 @@ public class ToStringBuilder implements Builder<String> {
      *
      * @param toString  the result of {@code toString()} on another object
      * @return this
-     * @since 3.1
+     * @since 0.3.1
      */
     public ToStringBuilder appendToString(final String toString) {
         if (toString != null) {
@@ -970,7 +970,7 @@ public class ToStringBuilder implements Builder<String> {
      * Returns the {@link Object} being output.
      *
      * @return The object being output.
-     * @since 3.1
+     * @since 0.3.1
      */
     public Object getObject() {
         return object;
@@ -989,7 +989,7 @@ public class ToStringBuilder implements Builder<String> {
      * Gets the {@link ToStringStyle} being used.
      *
      * @return the {@link ToStringStyle} being used
-     * @since 3.1
+     * @since 0.3.1
      */
     public ToStringStyle getStyle() {
         return style;
@@ -1023,7 +1023,7 @@ public class ToStringBuilder implements Builder<String> {
      *
      * @see #toString()
      *
-     * @since 3.1
+     * @since 0.3.1
      */
     @Override
     public String build() {

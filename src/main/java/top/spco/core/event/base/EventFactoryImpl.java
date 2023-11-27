@@ -28,8 +28,8 @@ import java.util.function.Function;
  * 事件工厂的实现类，用于创建和管理各种类型的事件
  *
  * @author SpCo
- * @version 1.2
- * @since 1.0
+ * @version 0.1.2
+ * @since 0.1.0
  */
 public final class EventFactoryImpl {
     private static final Set<ArrayBackedEvent<?>> ARRAY_BACKED_EVENTS

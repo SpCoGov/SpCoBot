@@ -30,8 +30,8 @@ import java.io.File;
 
 /**
  * @author SpCo
- * @version 3.3
- * @since 3.2
+ * @version 0.3.3
+ * @since 0.3.2
  */
 public class NoteCommand extends AbstractCommand {
     @Override

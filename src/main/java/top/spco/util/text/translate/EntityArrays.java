@@ -20,7 +20,7 @@ package top.spco.util.text.translate;
  * the LookupTranslator.
  * All arrays are of length [*][2].
  *
- * @since 3.1
+ * @since 0.3.1
  */
 @Deprecated
 public class EntityArrays {

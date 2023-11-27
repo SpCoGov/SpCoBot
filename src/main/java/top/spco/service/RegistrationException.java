@@ -19,8 +19,8 @@ package top.spco.service;
  * 用于处理对象注册时出现的问题
  *
  * @author SpCo
- * @version 1.1
- * @since 1.1
+ * @version 0.1.1
+ * @since 0.1.1
  */
 public class RegistrationException extends Exception {
     /**

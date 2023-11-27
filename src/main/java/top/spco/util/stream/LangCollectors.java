@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
  * This class is called {@code LangCollectors} instead of {@code Collectors} to avoid clashes with {@link Collectors}.
  * </p>
  *
- * @since 3.1
+ * @since 0.3.1
  */
 public final class LangCollectors {
     /**

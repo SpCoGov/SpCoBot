@@ -24,7 +24,7 @@ import java.util.Objects;
  *
  * <p>See: <a href="https://en.wikipedia.org/wiki/IEEE_754r">https://en.wikipedia.org/wiki/IEEE_754r</a></p>
  *
- * @since 3.1
+ * @since 0.3.1
  */
 public class IEEE754rUtils {
     /**
@@ -34,7 +34,7 @@ public class IEEE754rUtils {
      * @return the minimum value in the array
      * @throws NullPointerException     if {@code array} is {@code null}
      * @throws IllegalArgumentException if {@code array} is empty
-     * @since 3.1 Changed signature from min(double[]) to min(double...)
+     * @since 0.3.1 Changed signature from min(double[]) to min(double...)
      */
     public static double min(final double... array) {
         Objects.requireNonNull(array, "array");
@@ -56,7 +56,7 @@ public class IEEE754rUtils {
      * @return the minimum value in the array
      * @throws NullPointerException     if {@code array} is {@code null}
      * @throws IllegalArgumentException if {@code array} is empty
-     * @since 3.1 Changed signature from min(float[]) to min(float...)
+     * @since 0.3.1 Changed signature from min(float[]) to min(float...)
      */
     public static float min(final float... array) {
         Objects.requireNonNull(array, "array");
@@ -144,7 +144,7 @@ public class IEEE754rUtils {
      * @return the minimum value in the array
      * @throws NullPointerException     if {@code array} is {@code null}
      * @throws IllegalArgumentException if {@code array} is empty
-     * @since 3.1 Changed signature from max(double[]) to max(double...)
+     * @since 0.3.1 Changed signature from max(double[]) to max(double...)
      */
     public static double max(final double... array) {
         Objects.requireNonNull(array, "array");
@@ -166,7 +166,7 @@ public class IEEE754rUtils {
      * @return the minimum value in the array
      * @throws NullPointerException     if {@code array} is {@code null}
      * @throws IllegalArgumentException if {@code array} is empty
-     * @since 3.1 Changed signature from max(float[]) to max(float...)
+     * @since 0.3.1 Changed signature from max(float[]) to max(float...)
      */
     public static float max(final float... array) {
         Objects.requireNonNull(array, "array");

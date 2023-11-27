@@ -37,8 +37,8 @@ import java.util.Set;
 
 /**
  * @author SpCo
- * @version 3.0
- * @since 1.0
+ * @version 0.3.0
+ * @since 0.1.0
  */
 public class DivineCommand extends AbstractCommand {
     @Override

@@ -29,7 +29,7 @@ import java.lang.annotation.Target;
  * appendSummary method.
  * </p>
  *
- * @since 3.1
+ * @since 0.3.1
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

@@ -25,7 +25,7 @@ import java.util.Objects;
  * Each method documents its behavior in more detail.</p>
  *
  * <p>#ThreadSafe#</p>
- * @since 3.1
+ * @since 0.3.1
  */
 public class CharUtils {
     private static final String[] CHAR_STRING_ARRAY = new String[128];
@@ -37,7 +37,7 @@ public class CharUtils {
      *
      * @see <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-3.html#jls-3.10.6">JLF: Escape Sequences
      *      for Character and String Literals</a>
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final char LF = '\n';
 
@@ -46,14 +46,14 @@ public class CharUtils {
      *
      * @see <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-3.html#jls-3.10.6">JLF: Escape Sequences
      *      for Character and String Literals</a>
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final char CR = '\r';
 
     /**
      * {@code \u0000} null control character ('\0'), abbreviated NUL.
      *
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final char NUL = '\0';
 
@@ -511,7 +511,7 @@ public class CharUtils {
      * @return the value {@code 0} if {@code x == y};
      *         a value less than {@code 0} if {@code x < y}; and
      *         a value greater than {@code 0} if {@code x > y}
-     * @since 3.1
+     * @since 0.3.1
      */
     public static int compare(final char x, final char y) {
         return x - y;

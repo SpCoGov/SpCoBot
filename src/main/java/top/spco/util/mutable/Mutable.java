@@ -27,7 +27,7 @@ package top.spco.util.mutable;
  * </p>
  *
  * @param <T> the type to set and get
- * @since 3.1
+ * @since 0.3.1
  */
 public interface Mutable<T> {
     /**

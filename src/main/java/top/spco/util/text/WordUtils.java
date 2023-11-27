@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
  * An exception will not be thrown for a {@code null} input.
  * Each method documents its behavior in more detail.</p>
  *
- * @since 3.1
+ * @since 0.3.1
  * @deprecated As of 3.6, use Apache Commons Text
  * <a href="https://commons.apache.org/proper/commons-text/javadocs/api-release/org/apache/commons/text/WordUtils.html">
  * WordUtils</a> instead
@@ -397,7 +397,7 @@ public class WordUtils {
      * @return capitalized String, {@code null} if null String input
      * @see #uncapitalize(String)
      * @see #capitalizeFully(String)
-     * @since 3.1
+     * @since 0.3.1
      */
     public static String capitalize(final String str, final char... delimiters) {
         final int delimLen = delimiters == null ? -1 : delimiters.length;
@@ -465,7 +465,7 @@ public class WordUtils {
      * @param str        the String to capitalize, may be null
      * @param delimiters set of characters to determine capitalization, null means whitespace
      * @return capitalized String, {@code null} if null String input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static String capitalizeFully(final String str, final char... delimiters) {
         final int delimLen = delimiters == null ? -1 : delimiters.length;
@@ -519,7 +519,7 @@ public class WordUtils {
      * @param delimiters set of characters to determine uncapitalization, null means whitespace
      * @return uncapitalized String, {@code null} if null String input
      * @see #capitalize(String)
-     * @since 3.1
+     * @since 0.3.1
      */
     public static String uncapitalize(final String str, final char... delimiters) {
         final int delimLen = delimiters == null ? -1 : delimiters.length;
@@ -608,7 +608,7 @@ public class WordUtils {
      * @param str the String to get initials from, may be null
      * @return String of initial letters, {@code null} if null String input
      * @see #initials(String, char[])
-     * @since 3.1
+     * @since 0.3.1
      */
     public static String initials(final String str) {
         return initials(str, null);
@@ -638,7 +638,7 @@ public class WordUtils {
      * @param delimiters set of characters to determine words, null means whitespace
      * @return String of initial characters, {@code null} if null String input
      * @see #initials(String)
-     * @since 3.1
+     * @since 0.3.1
      */
     public static String initials(final String str, final char... delimiters) {
         if (StringUtils.isEmpty(str)) {
@@ -685,7 +685,7 @@ public class WordUtils {
      * @param word  The CharSequence to check, may be null
      * @param words The array of String words to search for, may be null
      * @return {@code true} if all search words are found, {@code false} otherwise
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean containsAllWords(final CharSequence word, final CharSequence... words) {
         if (StringUtils.isEmpty(word) || ArrayUtils.isEmpty(words)) {

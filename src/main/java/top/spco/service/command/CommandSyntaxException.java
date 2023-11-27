@@ -19,8 +19,8 @@ package top.spco.service.command;
  * 用于处理用户使用命令时的语法错误
  *
  * @author SpCo
- * @version 3.0
- * @since 3.0
+ * @version 0.3.0
+ * @since 0.3.0
  */
 public class CommandSyntaxException extends Exception {
     public static final int CONTEXT_AMOUNT = 10;

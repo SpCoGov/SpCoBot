@@ -22,8 +22,8 @@ import top.spco.core.resource.ResourceIdentifier;
  * Event
  *
  * @author SpCo
- * @version 1.2
- * @since 1.0
+ * @version 0.1.2
+ * @since 0.1.0
  */
 @ApiStatus.NonExtendable
 public abstract class Event<T> {

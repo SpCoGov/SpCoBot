@@ -61,7 +61,7 @@ import java.util.WeakHashMap;
  * }
  * </pre>
  *
- * @since 3.1
+ * @since 0.3.1
  */
 @SuppressWarnings("deprecation") // StringEscapeUtils
 public abstract class ToStringStyle implements Serializable {
@@ -114,7 +114,7 @@ public abstract class ToStringStyle implements Serializable {
      * Person[name=John Doe,age=33,smoker=false]
      * </pre>
      *
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final ToStringStyle SHORT_PREFIX_STYLE = new ToStringStyle.ShortPrefixToStringStyle();
 
@@ -136,7 +136,7 @@ public abstract class ToStringStyle implements Serializable {
      * [name=John Doe,age=33,smoker=false]
      * </pre>
      *
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final ToStringStyle NO_CLASS_NAME_STYLE = new ToStringStyle.NoClassNameToStringStyle();
 
@@ -155,7 +155,7 @@ public abstract class ToStringStyle implements Serializable {
      * when calling {@code toString()} on them.
      *
      * @see <a href="https://www.json.org/">json.org</a>
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final ToStringStyle JSON_STYLE = new ToStringStyle.JsonToStringStyle();
 
@@ -349,7 +349,7 @@ public abstract class ToStringStyle implements Serializable {
      *
      * @param buffer        the {@link StringBuffer} to populate
      * @param superToString the {@code super.toString()}
-     * @since 3.1
+     * @since 0.3.1
      */
     public void appendSuper(final StringBuffer buffer, final String superToString) {
         appendToString(buffer, superToString);
@@ -363,7 +363,7 @@ public abstract class ToStringStyle implements Serializable {
      *
      * @param buffer   the {@link StringBuffer} to populate
      * @param toString the additional {@code toString}
-     * @since 3.1
+     * @since 0.3.1
      */
     public void appendToString(final StringBuffer buffer, final String toString) {
         if (toString != null) {
@@ -415,7 +415,7 @@ public abstract class ToStringStyle implements Serializable {
      * Remove the last field separator from the buffer.
      *
      * @param buffer the {@link StringBuffer} to populate
-     * @since 3.1
+     * @since 0.3.1
      */
     protected void removeLastFieldSeparator(final StringBuffer buffer) {
         if (StringUtils.endsWith(buffer, fieldSeparator)) {
@@ -572,7 +572,7 @@ public abstract class ToStringStyle implements Serializable {
      * @param fieldName the field name, typically not used as already appended
      * @param value     the value to add to the {@code toString},
      *                  not {@code null}
-     * @since 3.1
+     * @since 0.3.1
      */
     protected void appendCyclicObject(final StringBuffer buffer, final String fieldName, final Object value) {
         ObjectUtils.identityToString(buffer, value);
@@ -889,7 +889,7 @@ public abstract class ToStringStyle implements Serializable {
      * @param fieldName the field name, typically not used as already appended
      * @param i         the array item index to add
      * @param item      the array item to add
-     * @since 3.1
+     * @since 0.3.1
      */
     protected void appendDetail(final StringBuffer buffer, final String fieldName, final int i, final Object item) {
         if (i > 0) {
@@ -909,7 +909,7 @@ public abstract class ToStringStyle implements Serializable {
      * @param fieldName the field name, typically not used as already appended
      * @param array     the array to add to the {@code toString},
      *                  not {@code null}
-     * @since 3.1
+     * @since 0.3.1
      */
     protected void reflectionAppendArrayDetail(final StringBuffer buffer, final String fieldName, final Object array) {
         buffer.append(arrayStart);
@@ -1579,7 +1579,7 @@ public abstract class ToStringStyle implements Serializable {
      * Gets whether to output short or long class names.
      *
      * @return the current useShortClassName flag
-     * @since 3.1
+     * @since 0.3.1
      */
     protected boolean isUseShortClassName() {
         return useShortClassName;
@@ -1589,7 +1589,7 @@ public abstract class ToStringStyle implements Serializable {
      * Sets whether to output short or long class names.
      *
      * @param useShortClassName the new useShortClassName flag
-     * @since 3.1
+     * @since 0.3.1
      */
     protected void setUseShortClassName(final boolean useShortClassName) {
         this.useShortClassName = useShortClassName;
@@ -1842,7 +1842,7 @@ public abstract class ToStringStyle implements Serializable {
      * of each buffer.
      *
      * @return the fieldSeparatorAtStart flag
-     * @since 3.1
+     * @since 0.3.1
      */
     protected boolean isFieldSeparatorAtStart() {
         return fieldSeparatorAtStart;
@@ -1853,7 +1853,7 @@ public abstract class ToStringStyle implements Serializable {
      * of each buffer.
      *
      * @param fieldSeparatorAtStart the fieldSeparatorAtStart flag
-     * @since 3.1
+     * @since 0.3.1
      */
     protected void setFieldSeparatorAtStart(final boolean fieldSeparatorAtStart) {
         this.fieldSeparatorAtStart = fieldSeparatorAtStart;
@@ -1864,7 +1864,7 @@ public abstract class ToStringStyle implements Serializable {
      * of each buffer.
      *
      * @return fieldSeparatorAtEnd flag
-     * @since 3.1
+     * @since 0.3.1
      */
     protected boolean isFieldSeparatorAtEnd() {
         return fieldSeparatorAtEnd;
@@ -1875,7 +1875,7 @@ public abstract class ToStringStyle implements Serializable {
      * of each buffer.
      *
      * @param fieldSeparatorAtEnd the fieldSeparatorAtEnd flag
-     * @since 3.1
+     * @since 0.3.1
      */
     protected void setFieldSeparatorAtEnd(final boolean fieldSeparatorAtEnd) {
         this.fieldSeparatorAtEnd = fieldSeparatorAtEnd;
@@ -2231,7 +2231,7 @@ public abstract class ToStringStyle implements Serializable {
      * </p>
      *
      * @see <a href="https://www.json.org/">json.org</a>
-     * @since 3.1
+     * @since 0.3.1
      */
     private static final class JsonToStringStyle extends ToStringStyle {
 

@@ -20,10 +20,10 @@ package top.spco.api;
  * 群成员分为{@link NormalMember 普通成员}和{@link AnonymousMember 匿名成员}
  *
  * @author SpCo
- * @version 1.0
+ * @version 0.1.0
  * @see NormalMember
  * @see AnonymousMember
- * @since 1.0
+ * @since 0.1.0
  */
 public interface Member extends User {
     /**

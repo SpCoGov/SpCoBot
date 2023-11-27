@@ -25,8 +25,8 @@ import java.util.Random;
  * 如果用户在某个群发送的消息与机器人在此群发送的最后一条消息匹配，禁言他
  *
  * @author SpCo
- * @version 3.2
- * @since 1.0
+ * @version 0.3.2
+ * @since 0.1.0
  */
 public class GroupMessageRecorder {
     private static boolean registered = false;

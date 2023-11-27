@@ -19,8 +19,8 @@ package top.spco.service.command;
  * 用于处理机器人注册命令时出现的问题
  *
  * @author SpCo
- * @version 1.0
- * @since 1.0
+ * @version 0.1.0
+ * @since 0.1.0
  */
 public class CommandRegistrationException extends Exception {
     /**

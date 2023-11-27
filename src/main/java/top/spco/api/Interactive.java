@@ -21,8 +21,8 @@ import top.spco.api.message.Message;
  * 表示具有消息发送和异常处理功能
  *
  * @author SpCo
- * @version 3.0
- * @since 1.0
+ * @version 0.3.0
+ * @since 0.1.0
  */
 public interface Interactive extends Identifiable {
     void sendMessage(String message);

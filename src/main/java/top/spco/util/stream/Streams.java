@@ -61,7 +61,7 @@ import java.util.stream.StreamSupport;
  *
  * @see Stream
  * @see Failable
- * @since 3.1
+ * @since 0.3.1
  */
 public class Streams {
     /**
@@ -512,7 +512,7 @@ public class Streams {
      * @param <T>    The streams element type.
      * @param stream The stream, which is being converted.
      * @return The {@link Streams.FailableStream}, which has been created by converting the stream.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static <T> Streams.FailableStream<T> failableStream(final Collection<T> stream) {
         return failableStream(of(stream));
@@ -556,7 +556,7 @@ public class Streams {
      * @param <T>    The streams element type.
      * @param stream The stream, which is being converted.
      * @return The {@link Streams.FailableStream}, which has been created by converting the stream.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static <T> Streams.FailableStream<T> failableStream(final Stream<T> stream) {
         return new Streams.FailableStream<>(stream);
@@ -575,7 +575,7 @@ public class Streams {
      * @param clazz      the type of elements in the collection we want to stream.
      * @param collection the collection to stream or null.
      * @return A non-null stream that only provides instances we want.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static <E> Stream<E> instancesOf(final Class<? super E> clazz, final Collection<? super E> collection) {
         return instancesOf(clazz, of(collection));
@@ -592,7 +592,7 @@ public class Streams {
      * @param <E>        the type of elements in the collection.
      * @param collection the collection to stream or null.
      * @return A non-null stream that filters out null elements.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static <E> Stream<E> nonNull(final Collection<E> collection) {
         return of(collection).filter(Objects::nonNull);
@@ -604,7 +604,7 @@ public class Streams {
      * @param <E>   the type of elements in the collection.
      * @param array the array to stream or null.
      * @return A non-null stream that filters out null elements.
-     * @since 3.1
+     * @since 0.3.1
      */
     @SafeVarargs
     public static <E> Stream<E> nonNull(final E... array) {
@@ -617,7 +617,7 @@ public class Streams {
      * @param <E>    the type of elements in the collection.
      * @param stream the stream to stream or null.
      * @return A non-null stream that filters out null elements.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static <E> Stream<E> nonNull(final Stream<E> stream) {
         return of(stream).filter(Objects::nonNull);
@@ -629,7 +629,7 @@ public class Streams {
      * @param <E>        the type of elements in the collection.
      * @param collection the collection to stream or null.
      * @return {@link Collection#stream()} or {@link Stream#empty()} if the collection is null.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static <E> Stream<E> of(final Collection<E> collection) {
         return collection == null ? Stream.empty() : collection.stream();
@@ -641,7 +641,7 @@ public class Streams {
      * @param <E>         The enumeration element type.
      * @param enumeration The enumeration to stream.
      * @return a new stream.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static <E> Stream<E> of(final Enumeration<E> enumeration) {
         return StreamSupport.stream(new Streams.EnumerationSpliterator<>(Long.MAX_VALUE, Spliterator.ORDERED, enumeration), false);
@@ -653,7 +653,7 @@ public class Streams {
      * @param <E>      the type of elements in the Iterable.
      * @param iterable the Iterable to stream or null.
      * @return a new Stream or {@link Stream#empty()} if the Iterable is null.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static <E> Stream<E> of(final Iterable<E> iterable) {
         return iterable == null ? Stream.empty() : StreamSupport.stream(iterable.spliterator(), false);
@@ -665,7 +665,7 @@ public class Streams {
      * @param <E>      the type of elements in the Iterator.
      * @param iterator the Iterator to stream or null.
      * @return a new Stream or {@link Stream#empty()} if the Iterator is null.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static <E> Stream<E> of(final Iterator<E> iterator) {
         return iterator == null ? Stream.empty() : StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED), false);
@@ -677,7 +677,7 @@ public class Streams {
      * @param <E>    the type of elements in the collection.
      * @param stream the stream to stream or null.
      * @return the stream or {@link Stream#empty()} if the stream is null.
-     * @since 3.1
+     * @since 0.3.1
      */
     private static <E> Stream<E> of(final Stream<E> stream) {
         return stream == null ? Stream.empty() : stream;
@@ -689,7 +689,7 @@ public class Streams {
      * @param <T>    the type of stream elements.
      * @param values the elements of the new stream, may be {@code null}.
      * @return the new stream on {@code values} or {@link Stream#empty()}.
-     * @since 3.1
+     * @since 0.3.1
      */
     @SafeVarargs // Creating a stream from an array is safe
     public static <T> Stream<T> of(final T... values) {

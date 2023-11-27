@@ -39,9 +39,9 @@ import java.sql.SQLException;
  * <b>不建议命令实现此接口，而是继承 {@link AbstractCommand}类</b>
  *
  * @author SpCo
- * @version 3.3
+ * @version 0.3.3
  * @see AbstractCommand
- * @since 1.0
+ * @since 0.1.0
  */
 public interface Command {
     /**

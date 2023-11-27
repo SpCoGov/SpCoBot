@@ -32,8 +32,8 @@ import java.util.List;
  * 数据库
  *
  * @author SpCo
- * @version 1.2
- * @since 1.0
+ * @version 0.1.2
+ * @since 0.1.0
  */
 public class DataBase {
     private static final Logger LOGGER = SpCoBot.logger;

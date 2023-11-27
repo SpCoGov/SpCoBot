@@ -26,8 +26,8 @@ import java.util.function.Supplier;
  *
  * @see Chat
  * @author SpCo
- * @version 1.1
- * @since 1.1
+ * @version 0.1.1
+ * @since 0.1.1
  */
 public class Stage {
     public final Supplier<String> startMessage;

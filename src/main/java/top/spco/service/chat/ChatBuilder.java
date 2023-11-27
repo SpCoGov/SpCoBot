@@ -27,8 +27,8 @@ import top.spco.util.builder.Builder;
  * 该类允许您创建{@link Chat}对象，管理用户与机器人之间的交互，并添加{@link Stage 交互阶段}。
  *
  * @author SpCo
- * @version 1.1
- * @since 3.1
+ * @version 0.1.1
+ * @since 0.3.1
  */
 public class ChatBuilder implements Builder<Chat> {
     private final Chat chat;

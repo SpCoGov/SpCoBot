@@ -28,8 +28,8 @@ import java.time.temporal.ChronoUnit;
  * 用于处理日期和时间的工具类。
  *
  * @author SpCo
- * @version 1.2
- * @since 1.2
+ * @version 0.1.2
+ * @since 0.1.2
  */
 public class DateUtils {
     public static final String DATE_TIME_MINUTE_FORMAT = "yyyy-MM-dd'T'HH:mm";

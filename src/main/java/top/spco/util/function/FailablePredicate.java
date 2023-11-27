@@ -23,7 +23,7 @@ import java.util.function.Predicate;
  *
  * @param <T> Predicate type.
  * @param <E> The kind of thrown exception or error.
- * @since 3.1
+ * @since 0.3.1
  */
 @FunctionalInterface
 public interface FailablePredicate<T, E extends Throwable> {

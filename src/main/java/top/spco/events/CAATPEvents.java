@@ -22,8 +22,8 @@ import top.spco.core.event.EventFactory;
  * CAATP相关事件
  *
  * @author SpCo
- * @version 1.2
- * @since 1.0
+ * @version 0.1.2
+ * @since 0.1.0
  */
 public class CAATPEvents {
     private CAATPEvents() {

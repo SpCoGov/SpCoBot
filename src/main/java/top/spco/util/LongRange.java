@@ -22,7 +22,7 @@ package top.spco.util;
  * This class is not designed to interoperate with other NumberRanges
  * </p>
  *
- * @since 3.1
+ * @since 0.3.1
  */
 public final class LongRange extends NumberRange<Long> {
     private static final long serialVersionUID = 1L;

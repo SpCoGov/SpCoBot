@@ -25,8 +25,8 @@ import java.util.Arrays;
  * Data of an {@link ArrayBackedEvent} phase.
  *
  * @author SpCo
- * @version 1.0
- * @since 1.0
+ * @version 0.1.0
+ * @since 0.1.0
  */
 class EventPhaseData<T> extends SortableNode<EventPhaseData<T>> {
     final ResourceIdentifier id;

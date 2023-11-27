@@ -26,8 +26,8 @@ import java.util.Random;
  * 自动“同意”打瓦
  *
  * @author SpCo
- * @version 3.4
- * @since 3.2
+ * @version 0.3.4
+ * @since 0.3.2
  */
 public class AutoAgreeValorant {
     private static boolean registered = false;

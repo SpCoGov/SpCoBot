@@ -30,8 +30,8 @@ import java.util.Map;
  * 统计
  *
  * @author SpCo
- * @version 1.1
- * @since 1.1
+ * @version 0.1.1
+ * @since 0.1.1
  */
 public class Statistics {
     private Map<Integer, String> mapping = new HashMap<>();

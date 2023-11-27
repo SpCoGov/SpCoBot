@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
  * An exception will not be thrown for a {@code null} input.
  * Each method documents its behavior in more detail.</p>
  *
- * @since 3.1
+ * @since 0.3.1
  */
 public class LocaleUtils {
     private static final char UNDERSCORE = '_';
@@ -257,7 +257,7 @@ public class LocaleUtils {
      *
      * @param locale a locale or {@code null}.
      * @return the given locale if non-{@code null}, otherwise {@link Locale#getDefault()}.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static Locale toLocale(final Locale locale) {
         return locale != null ? locale : Locale.getDefault();

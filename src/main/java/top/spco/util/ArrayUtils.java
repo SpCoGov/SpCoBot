@@ -45,7 +45,7 @@ import java.util.function.Supplier;
  * #ThreadSafe#
  * </p>
  *
- * @since 3.1
+ * @since 0.3.1
  */
 public class ArrayUtils {
     /**
@@ -96,7 +96,7 @@ public class ArrayUtils {
     /**
      * An empty immutable {@link Field} array.
      *
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final Field[] EMPTY_FIELD_ARRAY = {};
 
@@ -133,7 +133,7 @@ public class ArrayUtils {
     /**
      * An empty immutable {@link Method} array.
      *
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final Method[] EMPTY_METHOD_ARRAY = {};
 
@@ -160,14 +160,14 @@ public class ArrayUtils {
     /**
      * An empty immutable {@link Throwable} array.
      *
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final Throwable[] EMPTY_THROWABLE_ARRAY = {};
 
     /**
      * An empty immutable {@link Type} array.
      *
-     * @since 3.1
+     * @since 0.3.1
      */
     public static final Type[] EMPTY_TYPE_ARRAY = {};
 
@@ -198,7 +198,7 @@ public class ArrayUtils {
      * @param array   the array to copy and add the element to, may be {@code null}
      * @param element the object to add at the last index of the new array
      * @return A new array containing the existing elements plus the new element
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean[] add(final boolean[] array, final boolean element) {
         final boolean[] newArray = (boolean[]) copyArrayGrow1(array, Boolean.TYPE);
@@ -261,7 +261,7 @@ public class ArrayUtils {
      * @param array   the array to copy and add the element to, may be {@code null}
      * @param element the object to add at the last index of the new array
      * @return A new array containing the existing elements plus the new element
-     * @since 3.1
+     * @since 0.3.1
      */
     public static byte[] add(final byte[] array, final byte element) {
         final byte[] newArray = (byte[]) copyArrayGrow1(array, Byte.TYPE);
@@ -325,7 +325,7 @@ public class ArrayUtils {
      * @param array   the array to copy and add the element to, may be {@code null}
      * @param element the object to add at the last index of the new array
      * @return A new array containing the existing elements plus the new element
-     * @since 3.1
+     * @since 0.3.1
      */
     public static char[] add(final char[] array, final char element) {
         final char[] newArray = (char[]) copyArrayGrow1(array, Character.TYPE);
@@ -391,7 +391,7 @@ public class ArrayUtils {
      * @param array   the array to copy and add the element to, may be {@code null}
      * @param element the object to add at the last index of the new array
      * @return A new array containing the existing elements plus the new element
-     * @since 3.1
+     * @since 0.3.1
      */
     public static double[] add(final double[] array, final double element) {
         final double[] newArray = (double[]) copyArrayGrow1(array, Double.TYPE);
@@ -455,7 +455,7 @@ public class ArrayUtils {
      * @param array   the array to copy and add the element to, may be {@code null}
      * @param element the object to add at the last index of the new array
      * @return A new array containing the existing elements plus the new element
-     * @since 3.1
+     * @since 0.3.1
      */
     public static float[] add(final float[] array, final float element) {
         final float[] newArray = (float[]) copyArrayGrow1(array, Float.TYPE);
@@ -519,7 +519,7 @@ public class ArrayUtils {
      * @param array   the array to copy and add the element to, may be {@code null}
      * @param element the object to add at the last index of the new array
      * @return A new array containing the existing elements plus the new element
-     * @since 3.1
+     * @since 0.3.1
      */
     public static int[] add(final int[] array, final int element) {
         final int[] newArray = (int[]) copyArrayGrow1(array, Integer.TYPE);
@@ -619,7 +619,7 @@ public class ArrayUtils {
      * @param array   the array to copy and add the element to, may be {@code null}
      * @param element the object to add at the last index of the new array
      * @return A new array containing the existing elements plus the new element
-     * @since 3.1
+     * @since 0.3.1
      */
     public static long[] add(final long[] array, final long element) {
         final long[] newArray = (long[]) copyArrayGrow1(array, Long.TYPE);
@@ -716,7 +716,7 @@ public class ArrayUtils {
      * @param array   the array to copy and add the element to, may be {@code null}
      * @param element the object to add at the last index of the new array
      * @return A new array containing the existing elements plus the new element
-     * @since 3.1
+     * @since 0.3.1
      */
     public static short[] add(final short[] array, final short element) {
         final short[] newArray = (short[]) copyArrayGrow1(array, Short.TYPE);
@@ -799,7 +799,7 @@ public class ArrayUtils {
      * in which case it will have the same type as the element.
      * If both are null, an IllegalArgumentException is thrown
      * @throws IllegalArgumentException if both arguments are null
-     * @since 3.1
+     * @since 0.3.1
      */
     public static <T> T[] add(final T[] array, final T element) {
         final Class<?> type;
@@ -832,7 +832,7 @@ public class ArrayUtils {
      * @param array1 the first array whose elements are added to the new array.
      * @param array2 the second array whose elements are added to the new array.
      * @return The new boolean[] array.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean[] addAll(final boolean[] array1, final boolean... array2) {
         if (array1 == null) {
@@ -863,7 +863,7 @@ public class ArrayUtils {
      * @param array1 the first array whose elements are added to the new array.
      * @param array2 the second array whose elements are added to the new array.
      * @return The new byte[] array.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static byte[] addAll(final byte[] array1, final byte... array2) {
         if (array1 == null) {
@@ -894,7 +894,7 @@ public class ArrayUtils {
      * @param array1 the first array whose elements are added to the new array.
      * @param array2 the second array whose elements are added to the new array.
      * @return The new char[] array.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static char[] addAll(final char[] array1, final char... array2) {
         if (array1 == null) {
@@ -925,7 +925,7 @@ public class ArrayUtils {
      * @param array1 the first array whose elements are added to the new array.
      * @param array2 the second array whose elements are added to the new array.
      * @return The new double[] array.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static double[] addAll(final double[] array1, final double... array2) {
         if (array1 == null) {
@@ -956,7 +956,7 @@ public class ArrayUtils {
      * @param array1 the first array whose elements are added to the new array.
      * @param array2 the second array whose elements are added to the new array.
      * @return The new float[] array.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static float[] addAll(final float[] array1, final float... array2) {
         if (array1 == null) {
@@ -987,7 +987,7 @@ public class ArrayUtils {
      * @param array1 the first array whose elements are added to the new array.
      * @param array2 the second array whose elements are added to the new array.
      * @return The new int[] array.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static int[] addAll(final int[] array1, final int... array2) {
         if (array1 == null) {
@@ -1018,7 +1018,7 @@ public class ArrayUtils {
      * @param array1 the first array whose elements are added to the new array.
      * @param array2 the second array whose elements are added to the new array.
      * @return The new long[] array.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static long[] addAll(final long[] array1, final long... array2) {
         if (array1 == null) {
@@ -1049,7 +1049,7 @@ public class ArrayUtils {
      * @param array1 the first array whose elements are added to the new array.
      * @param array2 the second array whose elements are added to the new array.
      * @return The new short[] array.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static short[] addAll(final short[] array1, final short... array2) {
         if (array1 == null) {
@@ -1087,7 +1087,7 @@ public class ArrayUtils {
      * The type of the new array is the type of the first array,
      * unless the first array is null, in which case the type is the same as the second array.
      * @throws IllegalArgumentException if the array types are incompatible
-     * @since 3.1
+     * @since 0.3.1
      */
     public static <T> T[] addAll(final T[] array1, @SuppressWarnings("unchecked") final T... array2) {
         if (array1 == null) {
@@ -1138,7 +1138,7 @@ public class ArrayUtils {
      * @param element the object to add.
      * @return A new array containing the existing elements plus the new element The returned array type will be that of
      * the input array (unless null), in which case it will have the same type as the element.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean[] addFirst(final boolean[] array, final boolean element) {
         return array == null ? add(array, element) : insert(0, array, element);
@@ -1164,7 +1164,7 @@ public class ArrayUtils {
      * @param element the object to add.
      * @return A new array containing the existing elements plus the new element The returned array type will be that of
      * the input array (unless null), in which case it will have the same type as the element.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static byte[] addFirst(final byte[] array, final byte element) {
         return array == null ? add(array, element) : insert(0, array, element);
@@ -1190,7 +1190,7 @@ public class ArrayUtils {
      * @param element the object to add.
      * @return A new array containing the existing elements plus the new element The returned array type will be that of
      * the input array (unless null), in which case it will have the same type as the element.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static char[] addFirst(final char[] array, final char element) {
         return array == null ? add(array, element) : insert(0, array, element);
@@ -1216,7 +1216,7 @@ public class ArrayUtils {
      * @param element the object to add.
      * @return A new array containing the existing elements plus the new element The returned array type will be that of
      * the input array (unless null), in which case it will have the same type as the element.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static double[] addFirst(final double[] array, final double element) {
         return array == null ? add(array, element) : insert(0, array, element);
@@ -1242,7 +1242,7 @@ public class ArrayUtils {
      * @param element the object to add.
      * @return A new array containing the existing elements plus the new element The returned array type will be that of
      * the input array (unless null), in which case it will have the same type as the element.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static float[] addFirst(final float[] array, final float element) {
         return array == null ? add(array, element) : insert(0, array, element);
@@ -1268,7 +1268,7 @@ public class ArrayUtils {
      * @param element the object to add.
      * @return A new array containing the existing elements plus the new element The returned array type will be that of
      * the input array (unless null), in which case it will have the same type as the element.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static int[] addFirst(final int[] array, final int element) {
         return array == null ? add(array, element) : insert(0, array, element);
@@ -1294,7 +1294,7 @@ public class ArrayUtils {
      * @param element the object to add.
      * @return A new array containing the existing elements plus the new element The returned array type will be that of
      * the input array (unless null), in which case it will have the same type as the element.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static long[] addFirst(final long[] array, final long element) {
         return array == null ? add(array, element) : insert(0, array, element);
@@ -1320,7 +1320,7 @@ public class ArrayUtils {
      * @param element the object to add.
      * @return A new array containing the existing elements plus the new element The returned array type will be that of
      * the input array (unless null), in which case it will have the same type as the element.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static short[] addFirst(final short[] array, final short element) {
         return array == null ? add(array, element) : insert(0, array, element);
@@ -1351,7 +1351,7 @@ public class ArrayUtils {
      * the input array (unless null), in which case it will have the same type as the element. If both are null,
      * an IllegalArgumentException is thrown
      * @throws IllegalArgumentException if both arguments are null
-     * @since 3.1
+     * @since 0.3.1
      */
     public static <T> T[] addFirst(final T[] array, final T element) {
         return array == null ? add(array, element) : insert(0, array, element);
@@ -1525,7 +1525,7 @@ public class ArrayUtils {
      * @param array       the array to search through
      * @param valueToFind the value to find
      * @return {@code true} if the array contains the object
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean contains(final char[] array, final char valueToFind) {
         return indexOf(array, valueToFind) != INDEX_NOT_FOUND;
@@ -1642,7 +1642,7 @@ public class ArrayUtils {
      * @param array         the array to search through
      * @param objectsToFind any of the objects to find
      * @return {@code true} if the array contains any of the objects
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean containsAny(final Object[] array, final Object... objectsToFind) {
         return Streams.of(objectsToFind).anyMatch(e -> contains(array, e));
@@ -1674,7 +1674,7 @@ public class ArrayUtils {
      * @param array The array to index.
      * @param index The index
      * @return the nTh element of an array or null if the index is out of bounds or the array is null.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static <T> T get(final T[] array, final int index) {
         return get(array, index, null);
@@ -1688,7 +1688,7 @@ public class ArrayUtils {
      * @param index        The index
      * @param defaultValue The return value of the given index is out of bounds.
      * @return the nTh element of an array or a default value if the index is out of bounds.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static <T> T get(final T[] array, final int index, final T defaultValue) {
         return isArrayIndexValid(array, index) ? array[index] : defaultValue;
@@ -1700,7 +1700,7 @@ public class ArrayUtils {
      * @param <T>   The array type.
      * @param array The array.
      * @return The component type.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static <T> Class<T> getComponentType(final T[] array) {
         return ClassUtils.getComponentType(ObjectUtils.getClass(array));
@@ -1724,7 +1724,7 @@ public class ArrayUtils {
      * @param array the array to retrieve the length from, may be null
      * @return The length of the array, or {@code 0} if the array is {@code null}
      * @throws IllegalArgumentException if the object argument is not an array.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static int getLength(final Object array) {
         return array != null ? Array.getLength(array) : 0;
@@ -1753,7 +1753,7 @@ public class ArrayUtils {
      * @param valueToFind the value to find
      * @return a BitSet of all the indices of the value within the array,
      * an empty BitSet if not found or {@code null} array input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static BitSet indexesOf(final boolean[] array, final boolean valueToFind) {
         return indexesOf(array, valueToFind, 0);
@@ -1775,7 +1775,7 @@ public class ArrayUtils {
      * @return a BitSet of all the indices of the value within the array,
      * an empty BitSet if not found or {@code null}
      * array input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static BitSet indexesOf(final boolean[] array, final boolean valueToFind, int startIndex) {
         final BitSet bitSet = new BitSet();
@@ -1807,7 +1807,7 @@ public class ArrayUtils {
      * @param valueToFind the value to find
      * @return a BitSet of all the indices of the value within the array,
      * an empty BitSet if not found or {@code null} array input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static BitSet indexesOf(final byte[] array, final byte valueToFind) {
         return indexesOf(array, valueToFind, 0);
@@ -1826,7 +1826,7 @@ public class ArrayUtils {
      * @param startIndex  the index to start searching at
      * @return a BitSet of all the indices of the value within the array,
      * an empty BitSet if not found or {@code null} array input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static BitSet indexesOf(final byte[] array, final byte valueToFind, int startIndex) {
         final BitSet bitSet = new BitSet();
@@ -1858,7 +1858,7 @@ public class ArrayUtils {
      * @param valueToFind the value to find
      * @return a BitSet of all the indices of the value within the array,
      * an empty BitSet if not found or {@code null} array input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static BitSet indexesOf(final char[] array, final char valueToFind) {
         return indexesOf(array, valueToFind, 0);
@@ -1877,7 +1877,7 @@ public class ArrayUtils {
      * @param startIndex  the index to start searching at
      * @return a BitSet of all the indices of the value within the array,
      * an empty BitSet if not found or {@code null} array input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static BitSet indexesOf(final char[] array, final char valueToFind, int startIndex) {
         final BitSet bitSet = new BitSet();
@@ -1909,7 +1909,7 @@ public class ArrayUtils {
      * @param valueToFind the value to find
      * @return a BitSet of all the indices of the value within the array,
      * an empty BitSet if not found or {@code null} array input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static BitSet indexesOf(final double[] array, final double valueToFind) {
         return indexesOf(array, valueToFind, 0);
@@ -1930,7 +1930,7 @@ public class ArrayUtils {
      * @param tolerance   tolerance of the search
      * @return a BitSet of all the indices of the value within the array,
      * an empty BitSet if not found or {@code null} array input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static BitSet indexesOf(final double[] array, final double valueToFind, final double tolerance) {
         return indexesOf(array, valueToFind, 0, tolerance);
@@ -1949,7 +1949,7 @@ public class ArrayUtils {
      * @param startIndex  the index to start searching at
      * @return a BitSet of the indices of the value within the array,
      * an empty BitSet if not found or {@code null} array input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static BitSet indexesOf(final double[] array, final double valueToFind, int startIndex) {
         final BitSet bitSet = new BitSet();
@@ -1991,7 +1991,7 @@ public class ArrayUtils {
      * @param tolerance   tolerance of the search
      * @return a BitSet of the indices of the value within the array,
      * an empty BitSet if not found or {@code null} array input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static BitSet indexesOf(final double[] array, final double valueToFind, int startIndex, final double tolerance) {
         final BitSet bitSet = new BitSet();
@@ -2023,7 +2023,7 @@ public class ArrayUtils {
      * @param valueToFind the value to find
      * @return a BitSet of all the indices of the value within the array,
      * an empty BitSet if not found or {@code null} array input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static BitSet indexesOf(final float[] array, final float valueToFind) {
         return indexesOf(array, valueToFind, 0);
@@ -2042,7 +2042,7 @@ public class ArrayUtils {
      * @param startIndex  the index to start searching at
      * @return a BitSet of all the indices of the value within the array,
      * an empty BitSet if not found or {@code null} array input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static BitSet indexesOf(final float[] array, final float valueToFind, int startIndex) {
         final BitSet bitSet = new BitSet();
@@ -2074,7 +2074,7 @@ public class ArrayUtils {
      * @param valueToFind the value to find
      * @return a BitSet of all the indices of the value within the array,
      * an empty BitSet if not found or {@code null} array input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static BitSet indexesOf(final int[] array, final int valueToFind) {
         return indexesOf(array, valueToFind, 0);
@@ -2093,7 +2093,7 @@ public class ArrayUtils {
      * @param startIndex  the index to start searching at
      * @return a BitSet of all the indices of the value within the array,
      * an empty BitSet if not found or {@code null} array input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static BitSet indexesOf(final int[] array, final int valueToFind, int startIndex) {
         final BitSet bitSet = new BitSet();
@@ -2125,7 +2125,7 @@ public class ArrayUtils {
      * @param valueToFind the value to find
      * @return a BitSet of all the indices of the value within the array,
      * an empty BitSet if not found or {@code null} array input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static BitSet indexesOf(final long[] array, final long valueToFind) {
         return indexesOf(array, valueToFind, 0);
@@ -2144,7 +2144,7 @@ public class ArrayUtils {
      * @param startIndex  the index to start searching at
      * @return a BitSet of all the indices of the value within the array,
      * an empty BitSet if not found or {@code null} array input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static BitSet indexesOf(final long[] array, final long valueToFind, int startIndex) {
         final BitSet bitSet = new BitSet();
@@ -2176,7 +2176,7 @@ public class ArrayUtils {
      * @param objectToFind the object to find, may be {@code null}
      * @return a BitSet of all the indices of the object within the array,
      * an empty BitSet if not found or {@code null} array input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static BitSet indexesOf(final Object[] array, final Object objectToFind) {
         return indexesOf(array, objectToFind, 0);
@@ -2195,7 +2195,7 @@ public class ArrayUtils {
      * @param startIndex   the index to start searching at
      * @return a BitSet of all the indices of the object within the array starting at the index,
      * an empty BitSet if not found or {@code null} array input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static BitSet indexesOf(final Object[] array, final Object objectToFind, int startIndex) {
         final BitSet bitSet = new BitSet();
@@ -2227,7 +2227,7 @@ public class ArrayUtils {
      * @param valueToFind the value to find
      * @return a BitSet of all the indices of the value within the array,
      * an empty BitSet if not found or {@code null} array input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static BitSet indexesOf(final short[] array, final short valueToFind) {
         return indexesOf(array, valueToFind, 0);
@@ -2246,7 +2246,7 @@ public class ArrayUtils {
      * @param startIndex  the index to start searching at
      * @return a BitSet of all the indices of the value within the array,
      * an empty BitSet if not found or {@code null} array input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static BitSet indexesOf(final short[] array, final short valueToFind, int startIndex) {
         final BitSet bitSet = new BitSet();
@@ -2372,7 +2372,7 @@ public class ArrayUtils {
      * @param valueToFind the value to find
      * @return the index of the value within the array,
      * {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static int indexOf(final char[] array, final char valueToFind) {
         return indexOf(array, valueToFind, 0);
@@ -2393,7 +2393,7 @@ public class ArrayUtils {
      * @param startIndex  the index to start searching at
      * @return the index of the value within the array,
      * {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static int indexOf(final char[] array, final char valueToFind, int startIndex) {
         if (array == null) {
@@ -2769,7 +2769,7 @@ public class ArrayUtils {
      * @return The new array or {@code null} if the given array is {@code null}.
      * @throws IndexOutOfBoundsException if {@code array} is provided
      *                                   and either {@code index < 0} or {@code index > array.length}
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean[] insert(final int index, final boolean[] array, final boolean... values) {
         if (array == null) {
@@ -2811,7 +2811,7 @@ public class ArrayUtils {
      * @return The new array or {@code null} if the given array is {@code null}.
      * @throws IndexOutOfBoundsException if {@code array} is provided
      *                                   and either {@code index < 0} or {@code index > array.length}
-     * @since 3.1
+     * @since 0.3.1
      */
     public static byte[] insert(final int index, final byte[] array, final byte... values) {
         if (array == null) {
@@ -2853,7 +2853,7 @@ public class ArrayUtils {
      * @return The new array or {@code null} if the given array is {@code null}.
      * @throws IndexOutOfBoundsException if {@code array} is provided
      *                                   and either {@code index < 0} or {@code index > array.length}
-     * @since 3.1
+     * @since 0.3.1
      */
     public static char[] insert(final int index, final char[] array, final char... values) {
         if (array == null) {
@@ -2895,7 +2895,7 @@ public class ArrayUtils {
      * @return The new array or {@code null} if the given array is {@code null}.
      * @throws IndexOutOfBoundsException if {@code array} is provided
      *                                   and either {@code index < 0} or {@code index > array.length}
-     * @since 3.1
+     * @since 0.3.1
      */
     public static double[] insert(final int index, final double[] array, final double... values) {
         if (array == null) {
@@ -2937,7 +2937,7 @@ public class ArrayUtils {
      * @return The new array or {@code null} if the given array is {@code null}.
      * @throws IndexOutOfBoundsException if {@code array} is provided
      *                                   and either {@code index < 0} or {@code index > array.length}
-     * @since 3.1
+     * @since 0.3.1
      */
     public static float[] insert(final int index, final float[] array, final float... values) {
         if (array == null) {
@@ -2979,7 +2979,7 @@ public class ArrayUtils {
      * @return The new array or {@code null} if the given array is {@code null}.
      * @throws IndexOutOfBoundsException if {@code array} is provided
      *                                   and either {@code index < 0} or {@code index > array.length}
-     * @since 3.1
+     * @since 0.3.1
      */
     public static int[] insert(final int index, final int[] array, final int... values) {
         if (array == null) {
@@ -3021,7 +3021,7 @@ public class ArrayUtils {
      * @return The new array or {@code null} if the given array is {@code null}.
      * @throws IndexOutOfBoundsException if {@code array} is provided
      *                                   and either {@code index < 0} or {@code index > array.length}
-     * @since 3.1
+     * @since 0.3.1
      */
     public static long[] insert(final int index, final long[] array, final long... values) {
         if (array == null) {
@@ -3063,7 +3063,7 @@ public class ArrayUtils {
      * @return The new array or {@code null} if the given array is {@code null}.
      * @throws IndexOutOfBoundsException if {@code array} is provided
      *                                   and either {@code index < 0} or {@code index > array.length}
-     * @since 3.1
+     * @since 0.3.1
      */
     public static short[] insert(final int index, final short[] array, final short... values) {
         if (array == null) {
@@ -3106,7 +3106,7 @@ public class ArrayUtils {
      * @return The new array or {@code null} if the given array is {@code null}.
      * @throws IndexOutOfBoundsException if {@code array} is provided
      *                                   and either {@code index < 0} or {@code index > array.length}
-     * @since 3.1
+     * @since 0.3.1
      */
     @SafeVarargs
     public static <T> T[] insert(final int index, final T[] array, final T... values) {
@@ -3165,7 +3165,7 @@ public class ArrayUtils {
      * @param array the array to inspect, may be null
      * @param index the index of the array to be inspected
      * @return Whether the given index is safely-accessible in the given array
-     * @since 3.1
+     * @since 0.3.1
      */
     public static <T> boolean isArrayIndexValid(final T[] array, final int index) {
         return index >= 0 && getLength(array) > index;
@@ -3176,7 +3176,7 @@ public class ArrayUtils {
      *
      * @param array the array to test
      * @return {@code true} if the array is empty or {@code null}
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean isEmpty(final boolean[] array) {
         return isArrayEmpty(array);
@@ -3187,7 +3187,7 @@ public class ArrayUtils {
      *
      * @param array the array to test
      * @return {@code true} if the array is empty or {@code null}
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean isEmpty(final byte[] array) {
         return isArrayEmpty(array);
@@ -3198,7 +3198,7 @@ public class ArrayUtils {
      *
      * @param array the array to test
      * @return {@code true} if the array is empty or {@code null}
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean isEmpty(final char[] array) {
         return isArrayEmpty(array);
@@ -3209,7 +3209,7 @@ public class ArrayUtils {
      *
      * @param array the array to test
      * @return {@code true} if the array is empty or {@code null}
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean isEmpty(final double[] array) {
         return isArrayEmpty(array);
@@ -3220,7 +3220,7 @@ public class ArrayUtils {
      *
      * @param array the array to test
      * @return {@code true} if the array is empty or {@code null}
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean isEmpty(final float[] array) {
         return isArrayEmpty(array);
@@ -3231,7 +3231,7 @@ public class ArrayUtils {
      *
      * @param array the array to test
      * @return {@code true} if the array is empty or {@code null}
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean isEmpty(final int[] array) {
         return isArrayEmpty(array);
@@ -3242,7 +3242,7 @@ public class ArrayUtils {
      *
      * @param array the array to test
      * @return {@code true} if the array is empty or {@code null}
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean isEmpty(final long[] array) {
         return isArrayEmpty(array);
@@ -3253,7 +3253,7 @@ public class ArrayUtils {
      *
      * @param array the array to test
      * @return {@code true} if the array is empty or {@code null}
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean isEmpty(final Object[] array) {
         return isArrayEmpty(array);
@@ -3264,7 +3264,7 @@ public class ArrayUtils {
      *
      * @param array the array to test
      * @return {@code true} if the array is empty or {@code null}
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean isEmpty(final short[] array) {
         return isArrayEmpty(array);
@@ -3293,7 +3293,7 @@ public class ArrayUtils {
      *
      * @param array the array to test
      * @return {@code true} if the array is not empty and not {@code null}
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean isNotEmpty(final boolean[] array) {
         return !isEmpty(array);
@@ -3304,7 +3304,7 @@ public class ArrayUtils {
      *
      * @param array the array to test
      * @return {@code true} if the array is not empty and not {@code null}
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean isNotEmpty(final byte[] array) {
         return !isEmpty(array);
@@ -3315,7 +3315,7 @@ public class ArrayUtils {
      *
      * @param array the array to test
      * @return {@code true} if the array is not empty and not {@code null}
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean isNotEmpty(final char[] array) {
         return !isEmpty(array);
@@ -3326,7 +3326,7 @@ public class ArrayUtils {
      *
      * @param array the array to test
      * @return {@code true} if the array is not empty and not {@code null}
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean isNotEmpty(final double[] array) {
         return !isEmpty(array);
@@ -3337,7 +3337,7 @@ public class ArrayUtils {
      *
      * @param array the array to test
      * @return {@code true} if the array is not empty and not {@code null}
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean isNotEmpty(final float[] array) {
         return !isEmpty(array);
@@ -3348,7 +3348,7 @@ public class ArrayUtils {
      *
      * @param array the array to test
      * @return {@code true} if the array is not empty and not {@code null}
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean isNotEmpty(final int[] array) {
         return !isEmpty(array);
@@ -3359,7 +3359,7 @@ public class ArrayUtils {
      *
      * @param array the array to test
      * @return {@code true} if the array is not empty and not {@code null}
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean isNotEmpty(final long[] array) {
         return !isEmpty(array);
@@ -3370,7 +3370,7 @@ public class ArrayUtils {
      *
      * @param array the array to test
      * @return {@code true} if the array is not empty and not {@code null}
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean isNotEmpty(final short[] array) {
         return !isEmpty(array);
@@ -3382,7 +3382,7 @@ public class ArrayUtils {
      * @param <T>   the component type of the array
      * @param array the array to test
      * @return {@code true} if the array is not empty and not {@code null}
-     * @since 3.1
+     * @since 0.3.1
      */
     public static <T> boolean isNotEmpty(final T[] array) {
         return !isEmpty(array);
@@ -3490,7 +3490,7 @@ public class ArrayUtils {
      * @param array2 the second array, may be {@code null}
      * @return {@code true} if length of arrays matches, treating
      * {@code null} as an empty array
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean isSameLength(final Object array1, final Object array2) {
         return getLength(array1) == getLength(array2);
@@ -3548,7 +3548,7 @@ public class ArrayUtils {
      *
      * @param array the array to check
      * @return whether the array is sorted according to natural ordering
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean isSorted(final boolean[] array) {
         if (getLength(array) < 2) {
@@ -3573,7 +3573,7 @@ public class ArrayUtils {
      *
      * @param array the array to check
      * @return whether the array is sorted according to natural ordering
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean isSorted(final byte[] array) {
         if (getLength(array) < 2) {
@@ -3598,7 +3598,7 @@ public class ArrayUtils {
      *
      * @param array the array to check
      * @return whether the array is sorted according to natural ordering
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean isSorted(final char[] array) {
         if (getLength(array) < 2) {
@@ -3623,7 +3623,7 @@ public class ArrayUtils {
      *
      * @param array the array to check
      * @return whether the array is sorted according to natural ordering
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean isSorted(final double[] array) {
         if (getLength(array) < 2) {
@@ -3648,7 +3648,7 @@ public class ArrayUtils {
      *
      * @param array the array to check
      * @return whether the array is sorted according to natural ordering
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean isSorted(final float[] array) {
         if (getLength(array) < 2) {
@@ -3673,7 +3673,7 @@ public class ArrayUtils {
      *
      * @param array the array to check
      * @return whether the array is sorted according to natural ordering
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean isSorted(final int[] array) {
         if (getLength(array) < 2) {
@@ -3698,7 +3698,7 @@ public class ArrayUtils {
      *
      * @param array the array to check
      * @return whether the array is sorted according to natural ordering
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean isSorted(final long[] array) {
         if (getLength(array) < 2) {
@@ -3723,7 +3723,7 @@ public class ArrayUtils {
      *
      * @param array the array to check
      * @return whether the array is sorted according to natural ordering
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean isSorted(final short[] array) {
         if (getLength(array) < 2) {
@@ -3750,7 +3750,7 @@ public class ArrayUtils {
      * @param array the array to check
      * @param <T>   the datatype of the array to check, it must implement {@link Comparable}
      * @return whether the array is sorted
-     * @since 3.1
+     * @since 0.3.1
      */
     public static <T extends Comparable<? super T>> boolean isSorted(final T[] array) {
         return isSorted(array, Comparable::compareTo);
@@ -3764,7 +3764,7 @@ public class ArrayUtils {
      * @param <T>        the datatype of the array
      * @return whether the array is sorted
      * @throws NullPointerException if {@code comparator} is {@code null}
-     * @since 3.1
+     * @since 0.3.1
      */
     public static <T> boolean isSorted(final T[] array, final Comparator<T> comparator) {
         Objects.requireNonNull(comparator, "comparator");
@@ -3887,7 +3887,7 @@ public class ArrayUtils {
      * @param valueToFind the object to find
      * @return the last index of the value within the array,
      * {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static int lastIndexOf(final char[] array, final char valueToFind) {
         return lastIndexOf(array, valueToFind, Integer.MAX_VALUE);
@@ -3908,7 +3908,7 @@ public class ArrayUtils {
      * @param startIndex  the start index to traverse backwards from
      * @return the last index of the value within the array,
      * {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static int lastIndexOf(final char[] array, final char valueToFind, int startIndex) {
         if (array == null || startIndex < 0) {
@@ -4272,7 +4272,7 @@ public class ArrayUtils {
      * @param length        the array length
      * @return The new array.
      * @throws NullPointerException if the specified {@code componentType} parameter is null.
-     * @since 3.1
+     * @since 0.3.1
      */
     @SuppressWarnings("unchecked") // OK, because array and values are of type T
     public static <T> T[] newInstance(final Class<T> componentType, final int length) {
@@ -4292,7 +4292,7 @@ public class ArrayUtils {
      *
      * @param array the array to check for {@code null} or empty
      * @return the same array, {@code public static} empty array if {@code null} or empty input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean[] nullToEmpty(final boolean[] array) {
         return isEmpty(array) ? EMPTY_BOOLEAN_ARRAY : array;
@@ -4311,7 +4311,7 @@ public class ArrayUtils {
      *
      * @param array the array to check for {@code null} or empty
      * @return the same array, {@code public static} empty array if {@code null} or empty input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static Boolean[] nullToEmpty(final Boolean[] array) {
         return isEmpty(array) ? EMPTY_BOOLEAN_OBJECT_ARRAY : array;
@@ -4330,7 +4330,7 @@ public class ArrayUtils {
      *
      * @param array the array to check for {@code null} or empty
      * @return the same array, {@code public static} empty array if {@code null} or empty input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static byte[] nullToEmpty(final byte[] array) {
         return isEmpty(array) ? EMPTY_BYTE_ARRAY : array;
@@ -4349,7 +4349,7 @@ public class ArrayUtils {
      *
      * @param array the array to check for {@code null} or empty
      * @return the same array, {@code public static} empty array if {@code null} or empty input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static Byte[] nullToEmpty(final Byte[] array) {
         return isEmpty(array) ? EMPTY_BYTE_OBJECT_ARRAY : array;
@@ -4368,7 +4368,7 @@ public class ArrayUtils {
      *
      * @param array the array to check for {@code null} or empty
      * @return the same array, {@code public static} empty array if {@code null} or empty input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static char[] nullToEmpty(final char[] array) {
         return isEmpty(array) ? EMPTY_CHAR_ARRAY : array;
@@ -4387,7 +4387,7 @@ public class ArrayUtils {
      *
      * @param array the array to check for {@code null} or empty
      * @return the same array, {@code public static} empty array if {@code null} or empty input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static Character[] nullToEmpty(final Character[] array) {
         return isEmpty(array) ? EMPTY_CHARACTER_OBJECT_ARRAY : array;
@@ -4406,7 +4406,7 @@ public class ArrayUtils {
      *
      * @param array the array to check for {@code null} or empty
      * @return the same array, {@code public static} empty array if {@code null} or empty input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static Class<?>[] nullToEmpty(final Class<?>[] array) {
         return isEmpty(array) ? EMPTY_CLASS_ARRAY : array;
@@ -4425,7 +4425,7 @@ public class ArrayUtils {
      *
      * @param array the array to check for {@code null} or empty
      * @return the same array, {@code public static} empty array if {@code null} or empty input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static double[] nullToEmpty(final double[] array) {
         return isEmpty(array) ? EMPTY_DOUBLE_ARRAY : array;
@@ -4444,7 +4444,7 @@ public class ArrayUtils {
      *
      * @param array the array to check for {@code null} or empty
      * @return the same array, {@code public static} empty array if {@code null} or empty input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static Double[] nullToEmpty(final Double[] array) {
         return isEmpty(array) ? EMPTY_DOUBLE_OBJECT_ARRAY : array;
@@ -4463,7 +4463,7 @@ public class ArrayUtils {
      *
      * @param array the array to check for {@code null} or empty
      * @return the same array, {@code public static} empty array if {@code null} or empty input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static float[] nullToEmpty(final float[] array) {
         return isEmpty(array) ? EMPTY_FLOAT_ARRAY : array;
@@ -4482,7 +4482,7 @@ public class ArrayUtils {
      *
      * @param array the array to check for {@code null} or empty
      * @return the same array, {@code public static} empty array if {@code null} or empty input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static Float[] nullToEmpty(final Float[] array) {
         return isEmpty(array) ? EMPTY_FLOAT_OBJECT_ARRAY : array;
@@ -4501,7 +4501,7 @@ public class ArrayUtils {
      *
      * @param array the array to check for {@code null} or empty
      * @return the same array, {@code public static} empty array if {@code null} or empty input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static int[] nullToEmpty(final int[] array) {
         return isEmpty(array) ? EMPTY_INT_ARRAY : array;
@@ -4520,7 +4520,7 @@ public class ArrayUtils {
      *
      * @param array the array to check for {@code null} or empty
      * @return the same array, {@code public static} empty array if {@code null} or empty input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static Integer[] nullToEmpty(final Integer[] array) {
         return isEmpty(array) ? EMPTY_INTEGER_OBJECT_ARRAY : array;
@@ -4539,7 +4539,7 @@ public class ArrayUtils {
      *
      * @param array the array to check for {@code null} or empty
      * @return the same array, {@code public static} empty array if {@code null} or empty input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static long[] nullToEmpty(final long[] array) {
         return isEmpty(array) ? EMPTY_LONG_ARRAY : array;
@@ -4558,7 +4558,7 @@ public class ArrayUtils {
      *
      * @param array the array to check for {@code null} or empty
      * @return the same array, {@code public static} empty array if {@code null} or empty input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static Long[] nullToEmpty(final Long[] array) {
         return isEmpty(array) ? EMPTY_LONG_OBJECT_ARRAY : array;
@@ -4577,7 +4577,7 @@ public class ArrayUtils {
      *
      * @param array the array to check for {@code null} or empty
      * @return the same array, {@code public static} empty array if {@code null} or empty input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static Object[] nullToEmpty(final Object[] array) {
         return isEmpty(array) ? EMPTY_OBJECT_ARRAY : array;
@@ -4596,7 +4596,7 @@ public class ArrayUtils {
      *
      * @param array the array to check for {@code null} or empty
      * @return the same array, {@code public static} empty array if {@code null} or empty input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static short[] nullToEmpty(final short[] array) {
         return isEmpty(array) ? EMPTY_SHORT_ARRAY : array;
@@ -4615,7 +4615,7 @@ public class ArrayUtils {
      *
      * @param array the array to check for {@code null} or empty
      * @return the same array, {@code public static} empty array if {@code null} or empty input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static Short[] nullToEmpty(final Short[] array) {
         return isEmpty(array) ? EMPTY_SHORT_OBJECT_ARRAY : array;
@@ -4634,7 +4634,7 @@ public class ArrayUtils {
      *
      * @param array the array to check for {@code null} or empty
      * @return the same array, {@code public static} empty array if {@code null} or empty input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static String[] nullToEmpty(final String[] array) {
         return isEmpty(array) ? EMPTY_STRING_ARRAY : array;
@@ -4652,7 +4652,7 @@ public class ArrayUtils {
      * @param <T>   the class type
      * @return the same array, {@code public static} empty array if {@code null}
      * @throws IllegalArgumentException if the type argument is null
-     * @since 3.1
+     * @since 0.3.1
      */
     public static <T> T[] nullToEmpty(final T[] array, final Class<T[]> type) {
         if (type == null) {
@@ -4696,7 +4696,7 @@ public class ArrayUtils {
      * at the specified position.
      * @throws IndexOutOfBoundsException if the index is out of range
      *                                   (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean[] remove(final boolean[] array, final int index) {
         return (boolean[]) remove((Object) array, index);
@@ -4729,7 +4729,7 @@ public class ArrayUtils {
      * at the specified position.
      * @throws IndexOutOfBoundsException if the index is out of range
      *                                   (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static byte[] remove(final byte[] array, final int index) {
         return (byte[]) remove((Object) array, index);
@@ -4762,7 +4762,7 @@ public class ArrayUtils {
      * at the specified position.
      * @throws IndexOutOfBoundsException if the index is out of range
      *                                   (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static char[] remove(final char[] array, final int index) {
         return (char[]) remove((Object) array, index);
@@ -4795,7 +4795,7 @@ public class ArrayUtils {
      * at the specified position.
      * @throws IndexOutOfBoundsException if the index is out of range
      *                                   (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static double[] remove(final double[] array, final int index) {
         return (double[]) remove((Object) array, index);
@@ -4828,7 +4828,7 @@ public class ArrayUtils {
      * at the specified position.
      * @throws IndexOutOfBoundsException if the index is out of range
      *                                   (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static float[] remove(final float[] array, final int index) {
         return (float[]) remove((Object) array, index);
@@ -4861,7 +4861,7 @@ public class ArrayUtils {
      * at the specified position.
      * @throws IndexOutOfBoundsException if the index is out of range
      *                                   (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static int[] remove(final int[] array, final int index) {
         return (int[]) remove((Object) array, index);
@@ -4894,7 +4894,7 @@ public class ArrayUtils {
      * at the specified position.
      * @throws IndexOutOfBoundsException if the index is out of range
      *                                   (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static long[] remove(final long[] array, final int index) {
         return (long[]) remove((Object) array, index);
@@ -4921,7 +4921,7 @@ public class ArrayUtils {
      * at the specified position.
      * @throws IndexOutOfBoundsException if the index is out of range
      *                                   (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
-     * @since 3.1
+     * @since 0.3.1
      */
     private static Object remove(final Object array, final int index) {
         final int length = getLength(array);
@@ -4965,7 +4965,7 @@ public class ArrayUtils {
      * at the specified position.
      * @throws IndexOutOfBoundsException if the index is out of range
      *                                   (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static short[] remove(final short[] array, final int index) {
         return (short[]) remove((Object) array, index);
@@ -4999,7 +4999,7 @@ public class ArrayUtils {
      * at the specified position.
      * @throws IndexOutOfBoundsException if the index is out of range
      *                                   (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
-     * @since 3.1
+     * @since 0.3.1
      */
     @SuppressWarnings("unchecked") // remove() always creates an array of the same type as its input
     public static <T> T[] remove(final T[] array, final int index) {
@@ -5030,7 +5030,7 @@ public class ArrayUtils {
      * at the specified positions.
      * @throws IndexOutOfBoundsException if any index is out of range
      *                                   (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean[] removeAll(final boolean[] array, final int... indices) {
         return (boolean[]) removeAll((Object) array, indices);
@@ -5064,7 +5064,7 @@ public class ArrayUtils {
      * at the specified positions.
      * @throws IndexOutOfBoundsException if any index is out of range
      *                                   (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static byte[] removeAll(final byte[] array, final int... indices) {
         return (byte[]) removeAll((Object) array, indices);
@@ -5098,7 +5098,7 @@ public class ArrayUtils {
      * at the specified positions.
      * @throws IndexOutOfBoundsException if any index is out of range
      *                                   (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static char[] removeAll(final char[] array, final int... indices) {
         return (char[]) removeAll((Object) array, indices);
@@ -5132,7 +5132,7 @@ public class ArrayUtils {
      * at the specified positions.
      * @throws IndexOutOfBoundsException if any index is out of range
      *                                   (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static double[] removeAll(final double[] array, final int... indices) {
         return (double[]) removeAll((Object) array, indices);
@@ -5166,7 +5166,7 @@ public class ArrayUtils {
      * at the specified positions.
      * @throws IndexOutOfBoundsException if any index is out of range
      *                                   (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static float[] removeAll(final float[] array, final int... indices) {
         return (float[]) removeAll((Object) array, indices);
@@ -5200,7 +5200,7 @@ public class ArrayUtils {
      * at the specified positions.
      * @throws IndexOutOfBoundsException if any index is out of range
      *                                   (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static int[] removeAll(final int[] array, final int... indices) {
         return (int[]) removeAll((Object) array, indices);
@@ -5234,7 +5234,7 @@ public class ArrayUtils {
      * at the specified positions.
      * @throws IndexOutOfBoundsException if any index is out of range
      *                                   (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static long[] removeAll(final long[] array, final int... indices) {
         return (long[]) removeAll((Object) array, indices);
@@ -5246,7 +5246,7 @@ public class ArrayUtils {
      * @param array   source
      * @param indices to remove
      * @return new array of same type minus elements specified by the set bits in {@code indices}
-     * @since 3.1
+     * @since 0.3.1
      */
     // package protected for access by unit tests
     static Object removeAll(final Object array, final BitSet indices) {
@@ -5288,7 +5288,7 @@ public class ArrayUtils {
      * @param array   source
      * @param indices to remove
      * @return new array of same type minus elements specified by unique values of {@code indices}
-     * @since 3.1
+     * @since 0.3.1
      */
     // package protected for access by unit tests
     static Object removeAll(final Object array, final int... indices) {
@@ -5363,7 +5363,7 @@ public class ArrayUtils {
      * at the specified positions.
      * @throws IndexOutOfBoundsException if any index is out of range
      *                                   (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static short[] removeAll(final short[] array, final int... indices) {
         return (short[]) removeAll((Object) array, indices);
@@ -5394,7 +5394,7 @@ public class ArrayUtils {
      * at the specified positions.
      * @throws IndexOutOfBoundsException if any index is out of range
      *                                   (index &lt; 0 || index &gt;= array.length), or if the array is {@code null}.
-     * @since 3.1
+     * @since 0.3.1
      */
     @SuppressWarnings("unchecked") // removeAll() always creates an array of the same type as its input
     public static <T> T[] removeAll(final T[] array, final int... indices) {
@@ -5412,7 +5412,7 @@ public class ArrayUtils {
      * @param element the element to remove
      * @param array   the input array
      * @return A new array containing the existing elements except the occurrences of the specified element.
-     * @since 3.1
+     * @since 0.3.1
      * @deprecated Use {@link #removeAllOccurrences(boolean[], boolean)}
      */
     @Deprecated
@@ -5431,7 +5431,7 @@ public class ArrayUtils {
      * @param element the element to remove
      * @param array   the input array
      * @return A new array containing the existing elements except the occurrences of the specified element.
-     * @since 3.1
+     * @since 0.3.1
      * @deprecated Use {@link #removeAllOccurrences(byte[], byte)}
      */
     @Deprecated
@@ -5450,7 +5450,7 @@ public class ArrayUtils {
      * @param element the element to remove
      * @param array   the input array
      * @return A new array containing the existing elements except the occurrences of the specified element.
-     * @since 3.1
+     * @since 0.3.1
      * @deprecated Use {@link #removeAllOccurrences(char[], char)}
      */
     @Deprecated
@@ -5469,7 +5469,7 @@ public class ArrayUtils {
      * @param element the element to remove
      * @param array   the input array
      * @return A new array containing the existing elements except the occurrences of the specified element.
-     * @since 3.1
+     * @since 0.3.1
      * @deprecated Use {@link #removeAllOccurrences(double[], double)}
      */
     @Deprecated
@@ -5488,7 +5488,7 @@ public class ArrayUtils {
      * @param element the element to remove
      * @param array   the input array
      * @return A new array containing the existing elements except the occurrences of the specified element.
-     * @since 3.1
+     * @since 0.3.1
      * @deprecated Use {@link #removeAllOccurrences(float[], float)}
      */
     @Deprecated
@@ -5507,7 +5507,7 @@ public class ArrayUtils {
      * @param element the element to remove
      * @param array   the input array
      * @return A new array containing the existing elements except the occurrences of the specified element.
-     * @since 3.1
+     * @since 0.3.1
      * @deprecated Use {@link #removeAllOccurrences(int[], int)}
      */
     @Deprecated
@@ -5526,7 +5526,7 @@ public class ArrayUtils {
      * @param element the element to remove
      * @param array   the input array
      * @return A new array containing the existing elements except the occurrences of the specified element.
-     * @since 3.1
+     * @since 0.3.1
      * @deprecated Use {@link #removeAllOccurrences(long[], long)}
      */
     @Deprecated
@@ -5545,7 +5545,7 @@ public class ArrayUtils {
      * @param element the element to remove
      * @param array   the input array
      * @return A new array containing the existing elements except the occurrences of the specified element.
-     * @since 3.1
+     * @since 0.3.1
      * @deprecated Use {@link #removeAllOccurrences(short[], short)}
      */
     @Deprecated
@@ -5565,7 +5565,7 @@ public class ArrayUtils {
      * @param element the element to remove
      * @param array   the input array
      * @return A new array containing the existing elements except the occurrences of the specified element.
-     * @since 3.1
+     * @since 0.3.1
      * @deprecated Use {@link #removeAllOccurrences(Object[], Object)}
      */
     @Deprecated
@@ -5584,7 +5584,7 @@ public class ArrayUtils {
      * @param element the element to remove
      * @param array   the input array
      * @return A new array containing the existing elements except the occurrences of the specified element.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean[] removeAllOccurrences(final boolean[] array, final boolean element) {
         return (boolean[]) removeAll((Object) array, indexesOf(array, element));
@@ -5601,7 +5601,7 @@ public class ArrayUtils {
      * @param element the element to remove
      * @param array   the input array
      * @return A new array containing the existing elements except the occurrences of the specified element.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static byte[] removeAllOccurrences(final byte[] array, final byte element) {
         return (byte[]) removeAll((Object) array, indexesOf(array, element));
@@ -5618,7 +5618,7 @@ public class ArrayUtils {
      * @param element the element to remove
      * @param array   the input array
      * @return A new array containing the existing elements except the occurrences of the specified element.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static char[] removeAllOccurrences(final char[] array, final char element) {
         return (char[]) removeAll((Object) array, indexesOf(array, element));
@@ -5635,7 +5635,7 @@ public class ArrayUtils {
      * @param element the element to remove
      * @param array   the input array
      * @return A new array containing the existing elements except the occurrences of the specified element.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static double[] removeAllOccurrences(final double[] array, final double element) {
         return (double[]) removeAll((Object) array, indexesOf(array, element));
@@ -5652,7 +5652,7 @@ public class ArrayUtils {
      * @param element the element to remove
      * @param array   the input array
      * @return A new array containing the existing elements except the occurrences of the specified element.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static float[] removeAllOccurrences(final float[] array, final float element) {
         return (float[]) removeAll((Object) array, indexesOf(array, element));
@@ -5669,7 +5669,7 @@ public class ArrayUtils {
      * @param element the element to remove
      * @param array   the input array
      * @return A new array containing the existing elements except the occurrences of the specified element.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static int[] removeAllOccurrences(final int[] array, final int element) {
         return (int[]) removeAll((Object) array, indexesOf(array, element));
@@ -5686,7 +5686,7 @@ public class ArrayUtils {
      * @param element the element to remove
      * @param array   the input array
      * @return A new array containing the existing elements except the occurrences of the specified element.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static long[] removeAllOccurrences(final long[] array, final long element) {
         return (long[]) removeAll((Object) array, indexesOf(array, element));
@@ -5703,7 +5703,7 @@ public class ArrayUtils {
      * @param element the element to remove
      * @param array   the input array
      * @return A new array containing the existing elements except the occurrences of the specified element.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static short[] removeAllOccurrences(final short[] array, final short element) {
         return (short[]) removeAll((Object) array, indexesOf(array, element));
@@ -5721,7 +5721,7 @@ public class ArrayUtils {
      * @param element the element to remove
      * @param array   the input array
      * @return A new array containing the existing elements except the occurrences of the specified element.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static <T> T[] removeAllOccurrences(final T[] array, final T element) {
         return (T[]) removeAll((Object) array, indexesOf(array, element));
@@ -5750,7 +5750,7 @@ public class ArrayUtils {
      * @param element the element to be removed
      * @return A new array containing the existing elements except the first
      * occurrence of the specified element.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean[] removeElement(final boolean[] array, final boolean element) {
         final int index = indexOf(array, element);
@@ -5780,7 +5780,7 @@ public class ArrayUtils {
      * @param element the element to be removed
      * @return A new array containing the existing elements except the first
      * occurrence of the specified element.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static byte[] removeElement(final byte[] array, final byte element) {
         final int index = indexOf(array, element);
@@ -5810,7 +5810,7 @@ public class ArrayUtils {
      * @param element the element to be removed
      * @return A new array containing the existing elements except the first
      * occurrence of the specified element.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static char[] removeElement(final char[] array, final char element) {
         final int index = indexOf(array, element);
@@ -5840,7 +5840,7 @@ public class ArrayUtils {
      * @param element the element to be removed
      * @return A new array containing the existing elements except the first
      * occurrence of the specified element.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static double[] removeElement(final double[] array, final double element) {
         final int index = indexOf(array, element);
@@ -5870,7 +5870,7 @@ public class ArrayUtils {
      * @param element the element to be removed
      * @return A new array containing the existing elements except the first
      * occurrence of the specified element.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static float[] removeElement(final float[] array, final float element) {
         final int index = indexOf(array, element);
@@ -5900,7 +5900,7 @@ public class ArrayUtils {
      * @param element the element to be removed
      * @return A new array containing the existing elements except the first
      * occurrence of the specified element.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static int[] removeElement(final int[] array, final int element) {
         final int index = indexOf(array, element);
@@ -5930,7 +5930,7 @@ public class ArrayUtils {
      * @param element the element to be removed
      * @return A new array containing the existing elements except the first
      * occurrence of the specified element.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static long[] removeElement(final long[] array, final long element) {
         final int index = indexOf(array, element);
@@ -5960,7 +5960,7 @@ public class ArrayUtils {
      * @param element the element to be removed
      * @return A new array containing the existing elements except the first
      * occurrence of the specified element.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static short[] removeElement(final short[] array, final short element) {
         final int index = indexOf(array, element);
@@ -5991,7 +5991,7 @@ public class ArrayUtils {
      * @param element the element to be removed
      * @return A new array containing the existing elements except the first
      * occurrence of the specified element.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static <T> T[] removeElement(final T[] array, final Object element) {
         final int index = indexOf(array, element);
@@ -6023,7 +6023,7 @@ public class ArrayUtils {
      * @param values the elements to be removed
      * @return A new array containing the existing elements except the
      * earliest-encountered occurrences of the specified elements.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean[] removeElements(final boolean[] array, final boolean... values) {
         if (isEmpty(array) || isEmpty(values)) {
@@ -6078,7 +6078,7 @@ public class ArrayUtils {
      * @param values the elements to be removed
      * @return A new array containing the existing elements except the
      * earliest-encountered occurrences of the specified elements.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static byte[] removeElements(final byte[] array, final byte... values) {
         if (isEmpty(array) || isEmpty(values)) {
@@ -6133,7 +6133,7 @@ public class ArrayUtils {
      * @param values the elements to be removed
      * @return A new array containing the existing elements except the
      * earliest-encountered occurrences of the specified elements.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static char[] removeElements(final char[] array, final char... values) {
         if (isEmpty(array) || isEmpty(values)) {
@@ -6188,7 +6188,7 @@ public class ArrayUtils {
      * @param values the elements to be removed
      * @return A new array containing the existing elements except the
      * earliest-encountered occurrences of the specified elements.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static double[] removeElements(final double[] array, final double... values) {
         if (isEmpty(array) || isEmpty(values)) {
@@ -6243,7 +6243,7 @@ public class ArrayUtils {
      * @param values the elements to be removed
      * @return A new array containing the existing elements except the
      * earliest-encountered occurrences of the specified elements.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static float[] removeElements(final float[] array, final float... values) {
         if (isEmpty(array) || isEmpty(values)) {
@@ -6298,7 +6298,7 @@ public class ArrayUtils {
      * @param values the elements to be removed
      * @return A new array containing the existing elements except the
      * earliest-encountered occurrences of the specified elements.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static int[] removeElements(final int[] array, final int... values) {
         if (isEmpty(array) || isEmpty(values)) {
@@ -6353,7 +6353,7 @@ public class ArrayUtils {
      * @param values the elements to be removed
      * @return A new array containing the existing elements except the
      * earliest-encountered occurrences of the specified elements.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static long[] removeElements(final long[] array, final long... values) {
         if (isEmpty(array) || isEmpty(values)) {
@@ -6408,7 +6408,7 @@ public class ArrayUtils {
      * @param values the elements to be removed
      * @return A new array containing the existing elements except the
      * earliest-encountered occurrences of the specified elements.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static short[] removeElements(final short[] array, final short... values) {
         if (isEmpty(array) || isEmpty(values)) {
@@ -6464,7 +6464,7 @@ public class ArrayUtils {
      * @param values the elements to be removed
      * @return A new array containing the existing elements except the
      * earliest-encountered occurrences of the specified elements.
-     * @since 3.1
+     * @since 0.3.1
      */
     @SafeVarargs
     public static <T> T[] removeElements(final T[] array, final T... values) {
@@ -6522,7 +6522,7 @@ public class ArrayUtils {
      *                            change.
      * @param endIndexExclusive   elements up to endIndex-1 are reversed in the array. Undervalue (&lt; start index) results in no
      *                            change. Overvalue (&gt;array.length) is demoted to array length.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void reverse(final boolean[] array, final int startIndexInclusive, final int endIndexExclusive) {
         if (array == null) {
@@ -6565,7 +6565,7 @@ public class ArrayUtils {
      *                            change.
      * @param endIndexExclusive   elements up to endIndex-1 are reversed in the array. Undervalue (&lt; start index) results in no
      *                            change. Overvalue (&gt;array.length) is demoted to array length.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void reverse(final byte[] array, final int startIndexInclusive, final int endIndexExclusive) {
         if (array == null) {
@@ -6608,7 +6608,7 @@ public class ArrayUtils {
      *                            change.
      * @param endIndexExclusive   elements up to endIndex-1 are reversed in the array. Undervalue (&lt; start index) results in no
      *                            change. Overvalue (&gt;array.length) is demoted to array length.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void reverse(final char[] array, final int startIndexInclusive, final int endIndexExclusive) {
         if (array == null) {
@@ -6651,7 +6651,7 @@ public class ArrayUtils {
      *                            change.
      * @param endIndexExclusive   elements up to endIndex-1 are reversed in the array. Undervalue (&lt; start index) results in no
      *                            change. Overvalue (&gt;array.length) is demoted to array length.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void reverse(final double[] array, final int startIndexInclusive, final int endIndexExclusive) {
         if (array == null) {
@@ -6694,7 +6694,7 @@ public class ArrayUtils {
      *                            change.
      * @param endIndexExclusive   elements up to endIndex-1 are reversed in the array. Undervalue (&lt; start index) results in no
      *                            change. Overvalue (&gt;array.length) is demoted to array length.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void reverse(final float[] array, final int startIndexInclusive, final int endIndexExclusive) {
         if (array == null) {
@@ -6737,7 +6737,7 @@ public class ArrayUtils {
      *                            change.
      * @param endIndexExclusive   elements up to endIndex-1 are reversed in the array. Undervalue (&lt; start index) results in no
      *                            change. Overvalue (&gt;array.length) is demoted to array length.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void reverse(final int[] array, final int startIndexInclusive, final int endIndexExclusive) {
         if (array == null) {
@@ -6780,7 +6780,7 @@ public class ArrayUtils {
      *                            change.
      * @param endIndexExclusive   elements up to endIndex-1 are reversed in the array. Undervalue (&lt; start index) results in no
      *                            change. Overvalue (&gt;array.length) is demoted to array length.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void reverse(final long[] array, final int startIndexInclusive, final int endIndexExclusive) {
         if (array == null) {
@@ -6826,7 +6826,7 @@ public class ArrayUtils {
      *                            change.
      * @param endIndexExclusive   elements up to endIndex-1 are reversed in the array. Under value (&lt; start index) results in no
      *                            change. Over value (&gt;array.length) is demoted to array length.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void reverse(final Object[] array, final int startIndexInclusive, final int endIndexExclusive) {
         if (array == null) {
@@ -6869,7 +6869,7 @@ public class ArrayUtils {
      *                            change.
      * @param endIndexExclusive   elements up to endIndex-1 are reversed in the array. Undervalue (&lt; start index) results in no
      *                            change. Overvalue (&gt;array.length) is demoted to array length.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void reverse(final short[] array, final int startIndexInclusive, final int endIndexExclusive) {
         if (array == null) {
@@ -6898,7 +6898,7 @@ public class ArrayUtils {
      * @param array     array to be initialized.
      * @param generator a function accepting an index and producing the desired value for that position.
      * @return the input array
-     * @since 3.1
+     * @since 0.3.1
      */
     public static <T> T[] setAll(final T[] array, final IntFunction<? extends T> generator) {
         if (array != null && generator != null) {
@@ -6918,7 +6918,7 @@ public class ArrayUtils {
      * @param array     array to be initialized.
      * @param generator a function accepting an index and producing the desired value for that position.
      * @return the input array
-     * @since 3.1
+     * @since 0.3.1
      */
     public static <T> T[] setAll(final T[] array, final Supplier<? extends T> generator) {
         if (array != null && generator != null) {
@@ -6938,7 +6938,7 @@ public class ArrayUtils {
      * @param array  the array to shift, may be {@code null}
      * @param offset The number of positions to rotate the elements.  If the offset is larger than the number of elements to
      *               rotate, than the effective offset is modulo the number of elements to rotate.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void shift(final boolean[] array, final int offset) {
         if (array != null) {
@@ -6959,7 +6959,7 @@ public class ArrayUtils {
      *                            change. Overvalue (&gt;array.length) is demoted to array length.
      * @param offset              The number of positions to rotate the elements.  If the offset is larger than the number of elements to
      *                            rotate, than the effective offset is modulo the number of elements to rotate.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void shift(final boolean[] array, int startIndexInclusive, int endIndexExclusive, int offset) {
         if (array == null || startIndexInclusive >= array.length - 1 || endIndexExclusive <= 0) {
@@ -7008,7 +7008,7 @@ public class ArrayUtils {
      * @param array  the array to shift, may be {@code null}
      * @param offset The number of positions to rotate the elements.  If the offset is larger than the number of elements to
      *               rotate, than the effective offset is modulo the number of elements to rotate.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void shift(final byte[] array, final int offset) {
         if (array != null) {
@@ -7029,7 +7029,7 @@ public class ArrayUtils {
      *                            change. Overvalue (&gt;array.length) is demoted to array length.
      * @param offset              The number of positions to rotate the elements.  If the offset is larger than the number of elements to
      *                            rotate, than the effective offset is modulo the number of elements to rotate.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void shift(final byte[] array, int startIndexInclusive, int endIndexExclusive, int offset) {
         if (array == null || startIndexInclusive >= array.length - 1 || endIndexExclusive <= 0) {
@@ -7078,7 +7078,7 @@ public class ArrayUtils {
      * @param array  the array to shift, may be {@code null}
      * @param offset The number of positions to rotate the elements.  If the offset is larger than the number of elements to
      *               rotate, than the effective offset is modulo the number of elements to rotate.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void shift(final char[] array, final int offset) {
         if (array != null) {
@@ -7099,7 +7099,7 @@ public class ArrayUtils {
      *                            change. Overvalue (&gt;array.length) is demoted to array length.
      * @param offset              The number of positions to rotate the elements.  If the offset is larger than the number of elements to
      *                            rotate, than the effective offset is modulo the number of elements to rotate.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void shift(final char[] array, int startIndexInclusive, int endIndexExclusive, int offset) {
         if (array == null || startIndexInclusive >= array.length - 1 || endIndexExclusive <= 0) {
@@ -7148,7 +7148,7 @@ public class ArrayUtils {
      * @param array  the array to shift, may be {@code null}
      * @param offset The number of positions to rotate the elements.  If the offset is larger than the number of elements to
      *               rotate, than the effective offset is modulo the number of elements to rotate.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void shift(final double[] array, final int offset) {
         if (array != null) {
@@ -7169,7 +7169,7 @@ public class ArrayUtils {
      *                            change. Overvalue (&gt;array.length) is demoted to array length.
      * @param offset              The number of positions to rotate the elements.  If the offset is larger than the number of elements to
      *                            rotate, than the effective offset is modulo the number of elements to rotate.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void shift(final double[] array, int startIndexInclusive, int endIndexExclusive, int offset) {
         if (array == null || startIndexInclusive >= array.length - 1 || endIndexExclusive <= 0) {
@@ -7218,7 +7218,7 @@ public class ArrayUtils {
      * @param array  the array to shift, may be {@code null}
      * @param offset The number of positions to rotate the elements.  If the offset is larger than the number of elements to
      *               rotate, than the effective offset is modulo the number of elements to rotate.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void shift(final float[] array, final int offset) {
         if (array != null) {
@@ -7239,7 +7239,7 @@ public class ArrayUtils {
      *                            change. Overvalue (&gt;array.length) is demoted to array length.
      * @param offset              The number of positions to rotate the elements.  If the offset is larger than the number of elements to
      *                            rotate, than the effective offset is modulo the number of elements to rotate.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void shift(final float[] array, int startIndexInclusive, int endIndexExclusive, int offset) {
         if (array == null || startIndexInclusive >= array.length - 1 || endIndexExclusive <= 0) {
@@ -7288,7 +7288,7 @@ public class ArrayUtils {
      * @param array  the array to shift, may be {@code null}
      * @param offset The number of positions to rotate the elements.  If the offset is larger than the number of elements to
      *               rotate, than the effective offset is modulo the number of elements to rotate.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void shift(final int[] array, final int offset) {
         if (array != null) {
@@ -7309,7 +7309,7 @@ public class ArrayUtils {
      *                            change. Overvalue (&gt;array.length) is demoted to array length.
      * @param offset              The number of positions to rotate the elements.  If the offset is larger than the number of elements to
      *                            rotate, than the effective offset is modulo the number of elements to rotate.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void shift(final int[] array, int startIndexInclusive, int endIndexExclusive, int offset) {
         if (array == null || startIndexInclusive >= array.length - 1 || endIndexExclusive <= 0) {
@@ -7358,7 +7358,7 @@ public class ArrayUtils {
      * @param array  the array to shift, may be {@code null}
      * @param offset The number of positions to rotate the elements.  If the offset is larger than the number of elements to
      *               rotate, than the effective offset is modulo the number of elements to rotate.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void shift(final long[] array, final int offset) {
         if (array != null) {
@@ -7379,7 +7379,7 @@ public class ArrayUtils {
      *                            change. Overvalue (&gt;array.length) is demoted to array length.
      * @param offset              The number of positions to rotate the elements.  If the offset is larger than the number of elements to
      *                            rotate, than the effective offset is modulo the number of elements to rotate.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void shift(final long[] array, int startIndexInclusive, int endIndexExclusive, int offset) {
         if (array == null || startIndexInclusive >= array.length - 1 || endIndexExclusive <= 0) {
@@ -7428,7 +7428,7 @@ public class ArrayUtils {
      * @param array  the array to shift, may be {@code null}
      * @param offset The number of positions to rotate the elements.  If the offset is larger than the number of elements to
      *               rotate, than the effective offset is modulo the number of elements to rotate.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void shift(final Object[] array, final int offset) {
         if (array != null) {
@@ -7449,7 +7449,7 @@ public class ArrayUtils {
      *                            change. Overvalue (&gt;array.length) is demoted to array length.
      * @param offset              The number of positions to rotate the elements.  If the offset is larger than the number of elements to
      *                            rotate, than the effective offset is modulo the number of elements to rotate.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void shift(final Object[] array, int startIndexInclusive, int endIndexExclusive, int offset) {
         if (array == null || startIndexInclusive >= array.length - 1 || endIndexExclusive <= 0) {
@@ -7498,7 +7498,7 @@ public class ArrayUtils {
      * @param array  the array to shift, may be {@code null}
      * @param offset The number of positions to rotate the elements.  If the offset is larger than the number of elements to
      *               rotate, than the effective offset is modulo the number of elements to rotate.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void shift(final short[] array, final int offset) {
         if (array != null) {
@@ -7519,7 +7519,7 @@ public class ArrayUtils {
      *                            change. Overvalue (&gt;array.length) is demoted to array length.
      * @param offset              The number of positions to rotate the elements.  If the offset is larger than the number of elements to
      *                            rotate, than the effective offset is modulo the number of elements to rotate.
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void shift(final short[] array, int startIndexInclusive, int endIndexExclusive, int offset) {
         if (array == null || startIndexInclusive >= array.length - 1 || endIndexExclusive <= 0) {
@@ -7564,7 +7564,7 @@ public class ArrayUtils {
      *
      * @param array the array to shuffle
      * @see <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Fisher-Yates shuffle algorithm</a>
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void shuffle(final boolean[] array) {
         shuffle(array, random());
@@ -7576,7 +7576,7 @@ public class ArrayUtils {
      * @param array  the array to shuffle
      * @param random the source of randomness used to permute the elements
      * @see <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Fisher-Yates shuffle algorithm</a>
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void shuffle(final boolean[] array, final Random random) {
         for (int i = array.length; i > 1; i--) {
@@ -7589,7 +7589,7 @@ public class ArrayUtils {
      *
      * @param array the array to shuffle
      * @see <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Fisher-Yates shuffle algorithm</a>
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void shuffle(final byte[] array) {
         shuffle(array, random());
@@ -7601,7 +7601,7 @@ public class ArrayUtils {
      * @param array  the array to shuffle
      * @param random the source of randomness used to permute the elements
      * @see <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Fisher-Yates shuffle algorithm</a>
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void shuffle(final byte[] array, final Random random) {
         for (int i = array.length; i > 1; i--) {
@@ -7614,7 +7614,7 @@ public class ArrayUtils {
      *
      * @param array the array to shuffle
      * @see <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Fisher-Yates shuffle algorithm</a>
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void shuffle(final char[] array) {
         shuffle(array, random());
@@ -7626,7 +7626,7 @@ public class ArrayUtils {
      * @param array  the array to shuffle
      * @param random the source of randomness used to permute the elements
      * @see <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Fisher-Yates shuffle algorithm</a>
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void shuffle(final char[] array, final Random random) {
         for (int i = array.length; i > 1; i--) {
@@ -7639,7 +7639,7 @@ public class ArrayUtils {
      *
      * @param array the array to shuffle
      * @see <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Fisher-Yates shuffle algorithm</a>
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void shuffle(final double[] array) {
         shuffle(array, random());
@@ -7651,7 +7651,7 @@ public class ArrayUtils {
      * @param array  the array to shuffle
      * @param random the source of randomness used to permute the elements
      * @see <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Fisher-Yates shuffle algorithm</a>
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void shuffle(final double[] array, final Random random) {
         for (int i = array.length; i > 1; i--) {
@@ -7664,7 +7664,7 @@ public class ArrayUtils {
      *
      * @param array the array to shuffle
      * @see <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Fisher-Yates shuffle algorithm</a>
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void shuffle(final float[] array) {
         shuffle(array, random());
@@ -7676,7 +7676,7 @@ public class ArrayUtils {
      * @param array  the array to shuffle
      * @param random the source of randomness used to permute the elements
      * @see <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Fisher-Yates shuffle algorithm</a>
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void shuffle(final float[] array, final Random random) {
         for (int i = array.length; i > 1; i--) {
@@ -7689,7 +7689,7 @@ public class ArrayUtils {
      *
      * @param array the array to shuffle
      * @see <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Fisher-Yates shuffle algorithm</a>
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void shuffle(final int[] array) {
         shuffle(array, random());
@@ -7701,7 +7701,7 @@ public class ArrayUtils {
      * @param array  the array to shuffle
      * @param random the source of randomness used to permute the elements
      * @see <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Fisher-Yates shuffle algorithm</a>
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void shuffle(final int[] array, final Random random) {
         for (int i = array.length; i > 1; i--) {
@@ -7714,7 +7714,7 @@ public class ArrayUtils {
      *
      * @param array the array to shuffle
      * @see <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Fisher-Yates shuffle algorithm</a>
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void shuffle(final long[] array) {
         shuffle(array, random());
@@ -7726,7 +7726,7 @@ public class ArrayUtils {
      * @param array  the array to shuffle
      * @param random the source of randomness used to permute the elements
      * @see <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Fisher-Yates shuffle algorithm</a>
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void shuffle(final long[] array, final Random random) {
         for (int i = array.length; i > 1; i--) {
@@ -7739,7 +7739,7 @@ public class ArrayUtils {
      *
      * @param array the array to shuffle
      * @see <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Fisher-Yates shuffle algorithm</a>
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void shuffle(final Object[] array) {
         shuffle(array, random());
@@ -7751,7 +7751,7 @@ public class ArrayUtils {
      * @param array  the array to shuffle
      * @param random the source of randomness used to permute the elements
      * @see <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Fisher-Yates shuffle algorithm</a>
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void shuffle(final Object[] array, final Random random) {
         for (int i = array.length; i > 1; i--) {
@@ -7764,7 +7764,7 @@ public class ArrayUtils {
      *
      * @param array the array to shuffle
      * @see <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Fisher-Yates shuffle algorithm</a>
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void shuffle(final short[] array) {
         shuffle(array, random());
@@ -7776,7 +7776,7 @@ public class ArrayUtils {
      * @param array  the array to shuffle
      * @param random the source of randomness used to permute the elements
      * @see <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Fisher-Yates shuffle algorithm</a>
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void shuffle(final short[] array, final Random random) {
         for (int i = array.length; i > 1; i--) {
@@ -7803,7 +7803,7 @@ public class ArrayUtils {
      * @return a new array containing the elements between
      * the start and end indices.
      * @see Arrays#copyOfRange(boolean[], int, int)
-     * @since 3.1
+     * @since 0.3.1
      */
     public static boolean[] subarray(final boolean[] array, int startIndexInclusive, int endIndexExclusive) {
         if (array == null) {
@@ -7844,7 +7844,7 @@ public class ArrayUtils {
      * @return a new array containing the elements between
      * the start and end indices.
      * @see Arrays#copyOfRange(byte[], int, int)
-     * @since 3.1
+     * @since 0.3.1
      */
     public static byte[] subarray(final byte[] array, int startIndexInclusive, int endIndexExclusive) {
         if (array == null) {
@@ -7885,7 +7885,7 @@ public class ArrayUtils {
      * @return a new array containing the elements between
      * the start and end indices.
      * @see Arrays#copyOfRange(char[], int, int)
-     * @since 3.1
+     * @since 0.3.1
      */
     public static char[] subarray(final char[] array, int startIndexInclusive, int endIndexExclusive) {
         if (array == null) {
@@ -7926,7 +7926,7 @@ public class ArrayUtils {
      * @return a new array containing the elements between
      * the start and end indices.
      * @see Arrays#copyOfRange(double[], int, int)
-     * @since 3.1
+     * @since 0.3.1
      */
     public static double[] subarray(final double[] array, int startIndexInclusive, int endIndexExclusive) {
         if (array == null) {
@@ -7967,7 +7967,7 @@ public class ArrayUtils {
      * @return a new array containing the elements between
      * the start and end indices.
      * @see Arrays#copyOfRange(float[], int, int)
-     * @since 3.1
+     * @since 0.3.1
      */
     public static float[] subarray(final float[] array, int startIndexInclusive, int endIndexExclusive) {
         if (array == null) {
@@ -8008,7 +8008,7 @@ public class ArrayUtils {
      * @return a new array containing the elements between
      * the start and end indices.
      * @see Arrays#copyOfRange(int[], int, int)
-     * @since 3.1
+     * @since 0.3.1
      */
     public static int[] subarray(final int[] array, int startIndexInclusive, int endIndexExclusive) {
         if (array == null) {
@@ -8049,7 +8049,7 @@ public class ArrayUtils {
      * @return a new array containing the elements between
      * the start and end indices.
      * @see Arrays#copyOfRange(long[], int, int)
-     * @since 3.1
+     * @since 0.3.1
      */
     public static long[] subarray(final long[] array, int startIndexInclusive, int endIndexExclusive) {
         if (array == null) {
@@ -8090,7 +8090,7 @@ public class ArrayUtils {
      * @return a new array containing the elements between
      * the start and end indices.
      * @see Arrays#copyOfRange(short[], int, int)
-     * @since 3.1
+     * @since 0.3.1
      */
     public static short[] subarray(final short[] array, int startIndexInclusive, int endIndexExclusive) {
         if (array == null) {
@@ -8140,7 +8140,7 @@ public class ArrayUtils {
      * @return a new array containing the elements between
      * the start and end indices.
      * @see Arrays#copyOfRange(Object[], int, int)
-     * @since 3.1
+     * @since 0.3.1
      */
     public static <T> T[] subarray(final T[] array, int startIndexInclusive, int endIndexExclusive) {
         if (array == null) {
@@ -8181,7 +8181,7 @@ public class ArrayUtils {
      * @param array   the array to swap, may be {@code null}
      * @param offset1 the index of the first element to swap
      * @param offset2 the index of the second element to swap
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void swap(final boolean[] array, final int offset1, final int offset2) {
         swap(array, offset1, offset2, 1);
@@ -8210,7 +8210,7 @@ public class ArrayUtils {
      * @param offset1 the index of the first element in the series to swap
      * @param offset2 the index of the second element in the series to swap
      * @param len     the number of elements to swap starting with the given indices
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void swap(final boolean[] array, int offset1, int offset2, int len) {
         if (isEmpty(array) || offset1 >= array.length || offset2 >= array.length) {
@@ -8249,7 +8249,7 @@ public class ArrayUtils {
      * @param array   the array to swap, may be {@code null}
      * @param offset1 the index of the first element to swap
      * @param offset2 the index of the second element to swap
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void swap(final byte[] array, final int offset1, final int offset2) {
         swap(array, offset1, offset2, 1);
@@ -8277,7 +8277,7 @@ public class ArrayUtils {
      * @param offset1 the index of the first element in the series to swap
      * @param offset2 the index of the second element in the series to swap
      * @param len     the number of elements to swap starting with the given indices
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void swap(final byte[] array, int offset1, int offset2, int len) {
         if (isEmpty(array) || offset1 >= array.length || offset2 >= array.length) {
@@ -8316,7 +8316,7 @@ public class ArrayUtils {
      * @param array   the array to swap, may be {@code null}
      * @param offset1 the index of the first element to swap
      * @param offset2 the index of the second element to swap
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void swap(final char[] array, final int offset1, final int offset2) {
         swap(array, offset1, offset2, 1);
@@ -8344,7 +8344,7 @@ public class ArrayUtils {
      * @param offset1 the index of the first element in the series to swap
      * @param offset2 the index of the second element in the series to swap
      * @param len     the number of elements to swap starting with the given indices
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void swap(final char[] array, int offset1, int offset2, int len) {
         if (isEmpty(array) || offset1 >= array.length || offset2 >= array.length) {
@@ -8383,7 +8383,7 @@ public class ArrayUtils {
      * @param array   the array to swap, may be {@code null}
      * @param offset1 the index of the first element to swap
      * @param offset2 the index of the second element to swap
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void swap(final double[] array, final int offset1, final int offset2) {
         swap(array, offset1, offset2, 1);
@@ -8411,7 +8411,7 @@ public class ArrayUtils {
      * @param offset1 the index of the first element in the series to swap
      * @param offset2 the index of the second element in the series to swap
      * @param len     the number of elements to swap starting with the given indices
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void swap(final double[] array, int offset1, int offset2, int len) {
         if (isEmpty(array) || offset1 >= array.length || offset2 >= array.length) {
@@ -8450,7 +8450,7 @@ public class ArrayUtils {
      * @param array   the array to swap, may be {@code null}
      * @param offset1 the index of the first element to swap
      * @param offset2 the index of the second element to swap
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void swap(final float[] array, final int offset1, final int offset2) {
         swap(array, offset1, offset2, 1);
@@ -8478,7 +8478,7 @@ public class ArrayUtils {
      * @param offset1 the index of the first element in the series to swap
      * @param offset2 the index of the second element in the series to swap
      * @param len     the number of elements to swap starting with the given indices
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void swap(final float[] array, int offset1, int offset2, int len) {
         if (isEmpty(array) || offset1 >= array.length || offset2 >= array.length) {
@@ -8518,7 +8518,7 @@ public class ArrayUtils {
      * @param array   the array to swap, may be {@code null}
      * @param offset1 the index of the first element to swap
      * @param offset2 the index of the second element to swap
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void swap(final int[] array, final int offset1, final int offset2) {
         swap(array, offset1, offset2, 1);
@@ -8546,7 +8546,7 @@ public class ArrayUtils {
      * @param offset1 the index of the first element in the series to swap
      * @param offset2 the index of the second element in the series to swap
      * @param len     the number of elements to swap starting with the given indices
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void swap(final int[] array, int offset1, int offset2, int len) {
         if (isEmpty(array) || offset1 >= array.length || offset2 >= array.length) {
@@ -8585,7 +8585,7 @@ public class ArrayUtils {
      * @param array   the array to swap, may be {@code null}
      * @param offset1 the index of the first element to swap
      * @param offset2 the index of the second element to swap
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void swap(final long[] array, final int offset1, final int offset2) {
         swap(array, offset1, offset2, 1);
@@ -8613,7 +8613,7 @@ public class ArrayUtils {
      * @param offset1 the index of the first element in the series to swap
      * @param offset2 the index of the second element in the series to swap
      * @param len     the number of elements to swap starting with the given indices
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void swap(final long[] array, int offset1, int offset2, int len) {
         if (isEmpty(array) || offset1 >= array.length || offset2 >= array.length) {
@@ -8652,7 +8652,7 @@ public class ArrayUtils {
      * @param array   the array to swap, may be {@code null}
      * @param offset1 the index of the first element to swap
      * @param offset2 the index of the second element to swap
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void swap(final Object[] array, final int offset1, final int offset2) {
         swap(array, offset1, offset2, 1);
@@ -8680,7 +8680,7 @@ public class ArrayUtils {
      * @param offset1 the index of the first element in the series to swap
      * @param offset2 the index of the second element in the series to swap
      * @param len     the number of elements to swap starting with the given indices
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void swap(final Object[] array, int offset1, int offset2, int len) {
         if (isEmpty(array) || offset1 >= array.length || offset2 >= array.length) {
@@ -8719,7 +8719,7 @@ public class ArrayUtils {
      * @param array   the array to swap, may be {@code null}
      * @param offset1 the index of the first element to swap
      * @param offset2 the index of the second element to swap
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void swap(final short[] array, final int offset1, final int offset2) {
         swap(array, offset1, offset2, 1);
@@ -8747,7 +8747,7 @@ public class ArrayUtils {
      * @param offset1 the index of the first element in the series to swap
      * @param offset2 the index of the second element in the series to swap
      * @param len     the number of elements to swap starting with the given indices
-     * @since 3.1
+     * @since 0.3.1
      */
     public static void swap(final short[] array, int offset1, int offset2, int len) {
         if (isEmpty(array) || offset1 >= array.length || offset2 >= array.length) {
@@ -8807,7 +8807,7 @@ public class ArrayUtils {
      * @param <T>   the array's element type
      * @param items the varargs array items, null allowed
      * @return the array, not null unless a null array is passed in
-     * @since 3.1
+     * @since 0.3.1
      */
     public static <T> T[] toArray(@SuppressWarnings("unchecked") final T... items) {
         return items;
@@ -9355,7 +9355,7 @@ public class ArrayUtils {
      *
      * @param array an array of wrapper object
      * @return an array of the corresponding primitive type, or the original array
-     * @since 3.1
+     * @since 0.3.1
      */
     public static Object toPrimitive(final Object array) {
         if (array == null) {
@@ -9487,7 +9487,7 @@ public class ArrayUtils {
      * @return {@code String[]} of the same size as the source with its element's string representation,
      * {@code null} if null array input
      * @throws NullPointerException if an array element is {@code null}
-     * @since 3.1
+     * @since 0.3.1
      */
     public static String[] toStringArray(final Object[] array) {
         if (array == null) {
@@ -9515,7 +9515,7 @@ public class ArrayUtils {
      * @param array                the Object[] to be processed, may be null
      * @param valueForNullElements the value to insert if {@code null} is found
      * @return a {@link String} array, {@code null} if null array input
-     * @since 3.1
+     * @since 0.3.1
      */
     public static String[] toStringArray(final Object[] array, final String valueForNullElements) {
         if (null == array) {

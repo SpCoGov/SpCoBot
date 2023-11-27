@@ -19,8 +19,8 @@ package top.spco.api.message;
  * 消息的来源信息
  *
  * @author SpCo
- * @version 3.0
- * @since 3.0
+ * @version 0.3.0
+ * @since 0.3.0
  */
 public interface MessageSource {
     /**

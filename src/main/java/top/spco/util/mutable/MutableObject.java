@@ -22,7 +22,7 @@ import java.util.Objects;
  * A mutable {@link Object} wrapper.
  *
  * @param <T> the type to set and get
- * @since 3.1
+ * @since 0.3.1
  */
 public class MutableObject<T> implements Mutable<T>, Serializable {
     /**

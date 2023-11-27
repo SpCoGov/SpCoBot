@@ -29,8 +29,8 @@ import top.spco.user.UserPermission;
 
 /**
  * @author SpCo
- * @version 3.1
- * @since 3.0
+ * @version 0.3.1
+ * @since 0.3.0
  */
 public class GetotherCommand extends AbstractCommand {
     @Override

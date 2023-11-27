@@ -21,8 +21,8 @@ import top.spco.api.message.Message;
 
 /**
  * @author SpCo
- * @version 3.0
- * @since 1.0
+ * @version 0.3.0
+ * @since 0.1.0
  */
 record MiraiFriend(net.mamoe.mirai.contact.Friend friend) implements Friend {
     @Override

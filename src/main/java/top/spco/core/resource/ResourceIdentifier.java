@@ -22,8 +22,8 @@ import org.jetbrains.annotations.Nullable;
  * 表示一个资源的标识符，包含命名空间和路径
  *
  * @author SpCo
- * @version 1.0
- * @since 1.0
+ * @version 0.1.0
+ * @since 0.1.0
  */
 public class ResourceIdentifier implements Comparable<ResourceIdentifier> {
     private final String namespace;

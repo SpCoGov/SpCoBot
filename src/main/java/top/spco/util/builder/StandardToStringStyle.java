@@ -28,7 +28,7 @@ import java.util.Map;
  * store the result in a public static final variable for the rest of the
  * program to access.</p>
  *
- * @since 1.0
+ * @since 0.1.0
  */
 public class StandardToStringStyle extends ToStringStyle {
     /**
@@ -68,7 +68,7 @@ public class StandardToStringStyle extends ToStringStyle {
      * Gets whether to output short or long class names.
      *
      * @return the current useShortClassName flag
-     * @since 3.1
+     * @since 0.3.1
      */
     @Override
     public boolean isUseShortClassName() {
@@ -79,7 +79,7 @@ public class StandardToStringStyle extends ToStringStyle {
      * Sets whether to output short or long class names.
      *
      * @param useShortClassName the new useShortClassName flag
-     * @since 3.1
+     * @since 0.3.1
      */
     @Override
     public void setUseShortClassName(final boolean useShortClassName) {
@@ -334,7 +334,7 @@ public class StandardToStringStyle extends ToStringStyle {
      * of each buffer.
      *
      * @return the fieldSeparatorAtStart flag
-     * @since 3.1
+     * @since 0.3.1
      */
     @Override
     public boolean isFieldSeparatorAtStart() {
@@ -346,7 +346,7 @@ public class StandardToStringStyle extends ToStringStyle {
      * of each buffer.
      *
      * @param fieldSeparatorAtStart the fieldSeparatorAtStart flag
-     * @since 3.1
+     * @since 0.3.1
      */
     @Override
     public void setFieldSeparatorAtStart(final boolean fieldSeparatorAtStart) {
@@ -358,7 +358,7 @@ public class StandardToStringStyle extends ToStringStyle {
      * of each buffer.
      *
      * @return fieldSeparatorAtEnd flag
-     * @since 3.1
+     * @since 0.3.1
      */
     @Override
     public boolean isFieldSeparatorAtEnd() {
@@ -370,7 +370,7 @@ public class StandardToStringStyle extends ToStringStyle {
      * of each buffer.
      *
      * @param fieldSeparatorAtEnd the fieldSeparatorAtEnd flag
-     * @since 3.1
+     * @since 0.3.1
      */
     @Override
     public void setFieldSeparatorAtEnd(final boolean fieldSeparatorAtEnd) {

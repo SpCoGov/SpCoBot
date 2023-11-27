@@ -23,8 +23,8 @@ import java.util.Collection;
 
 /**
  * @author SpCo
- * @version 1.0
- * @since 1.0
+ * @version 0.1.0
+ * @since 0.1.0
  */
 record MiraiFriendGroup(net.mamoe.mirai.contact.friendgroup.FriendGroup friendGroup) implements FriendGroup {
     @Override

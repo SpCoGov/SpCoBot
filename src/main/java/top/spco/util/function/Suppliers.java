@@ -20,7 +20,7 @@ import java.util.function.Supplier;
 /**
  * Helps use {@link Supplier}.
  *
- * @since 3.1
+ * @since 0.3.1
  */
 public class Suppliers {
     /**

@@ -20,8 +20,8 @@ import top.spco.api.Identifiable;
 
 /**
  * @author SpCo
- * @version 1.0
- * @since 1.0
+ * @version 0.1.0
+ * @since 0.1.0
  */
 record MiraiIdentifiable(ContactOrBot contactOrBot) implements Identifiable {
     @Override

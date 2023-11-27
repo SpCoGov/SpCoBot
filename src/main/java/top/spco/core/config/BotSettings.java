@@ -17,8 +17,8 @@ package top.spco.core.config;
 
 /**
  * @author SpCo
- * @version 3.2
- * @since 2.0
+ * @version 0.3.2
+ * @since 0.2.0
  */
 public enum BotSettings implements SettingsGroup {
     BOT_ID("bot_id", 0L),

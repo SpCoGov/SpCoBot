@@ -22,8 +22,8 @@ import java.security.NoSuchAlgorithmException;
  * 哈希值工具类
  *
  * @author SpCo
- * @version 1.0
- * @since 1.0
+ * @version 0.1.0
+ * @since 0.1.0
  */
 public class HashUtils {
     /**

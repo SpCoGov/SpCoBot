@@ -24,7 +24,7 @@ import java.util.Comparator;
  * </p>
  *
  * @param <N> The Number class.
- * @since 3.1
+ * @since 0.3.1
  */
 public class NumberRange<N extends Number> extends Range<N> {
 

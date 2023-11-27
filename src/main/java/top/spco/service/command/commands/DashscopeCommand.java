@@ -30,8 +30,8 @@ import top.spco.user.BotUser;
 
 /**
  * @author SpCo
- * @version 3.0
- * @since 2.1
+ * @version 0.3.0
+ * @since 0.2.1
  */
 public class DashscopeCommand extends AbstractCommand {
     @Override
