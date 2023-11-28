@@ -38,7 +38,7 @@ public class AutoAgreeValorant {
         }
         registered = true;
         MessageEvents.GROUP_MESSAGE.register((bot, source, sender, message, time) -> {
-            if (source.getId() == SpCoBot.getInstance().getSettings().getLongProperty(ValorantGroupSettings.VALORANT_GROUP) || source.getId() == SpCoBot.getInstance().TEST_GROUP_ID) {
+            if (source.getId() == SpCoBot.getInstance().getSettings().getLongProperty(ValorantGroupSettings.VALORANT_GROUP) || source.getId() == SpCoBot.getInstance().testGroupId) {
                 if (message.toMessageContext().equals("瓦") || message.toMessageContext().endsWith("瓦吗") || message.toMessageContext().endsWith("打不打瓦")
                         || message.toMessageContext().endsWith(" 瓦") || message.toMessageContext().equals("有无瓦") || message.toMessageContext().equals("有没有瓦")
                         || message.toMessageContext().endsWith("瓦不瓦")) {

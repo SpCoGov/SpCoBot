@@ -28,7 +28,7 @@ import java.util.List;
  * 自动签到
  *
  * @author SpCo
- * @version 0.1.2
+ * @version 0.3.4
  * @since 0.1.2
  */
 public class AutoSign {
@@ -49,7 +49,7 @@ public class AutoSign {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        Friend friend = SpCoBot.getInstance().getBot().getFriend(SpCoBot.getInstance().BOT_OWNER_ID);
+                        Friend friend = SpCoBot.getInstance().getBot().getFriend(SpCoBot.getInstance().botOwnerId);
                         friend.handleException("自动签到时抛出了意料之外的异常", e);
                     }
                 }

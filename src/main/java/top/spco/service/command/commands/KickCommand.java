@@ -61,7 +61,7 @@ public class KickCommand extends AbstractCommand {
                     return;
                 }
                 long id;
-                if (args.length == 1) {
+                if (args.length == 0) {
                     var quote = SpCoBot.getInstance().getMessageService().getQuote(message);
                     id = quote.getLeft().getFromId();
                 } else {
@@ -73,7 +73,7 @@ public class KickCommand extends AbstractCommand {
                     return;
                 }
                 target.kick("您被管理员移出了本群", false);
-                from.quoteReply(message, "已将 " + target.getNameCard() + "(" + target.getId() + ")" + " 移出本群");
+                from.quoteReply(message, "已将 " + target.getNick() + "(" + target.getId() + ")" + " 移出本群");
             }
         } catch (CommandSyntaxException e) {
             from.handleException(message, e.getMessage());

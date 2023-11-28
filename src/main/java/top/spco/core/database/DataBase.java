@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco.database;
+package top.spco.core.database;
 
 import cn.hutool.core.util.ObjectUtil;
 import lombok.SneakyThrows;

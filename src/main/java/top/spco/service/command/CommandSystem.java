@@ -70,6 +70,7 @@ public class CommandSystem {
         toBeRegistered.add(new GetotherCommand());
         toBeRegistered.add(new NoteCommand());
         toBeRegistered.add(new KickCommand());
+        toBeRegistered.add(new MemoryCommand());
 
         toBeRegistered.add(new TestCommand());
 

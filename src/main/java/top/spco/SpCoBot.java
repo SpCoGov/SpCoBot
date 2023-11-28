@@ -22,7 +22,7 @@ import top.spco.core.CAATP;
 import top.spco.core.config.BotSettings;
 import top.spco.core.config.Settings;
 import top.spco.core.config.SettingsVersion;
-import top.spco.database.DataBase;
+import top.spco.core.database.DataBase;
 import top.spco.events.*;
 import top.spco.service.AutoAgreeValorant;
 import top.spco.service.AutoSign;
@@ -97,8 +97,8 @@ public class SpCoBot {
      * <b>更新版本号(仅限核心的 Feature)时请不要忘记在 build.gradle 中同步修改版本号</b>
      */
     public static final String MAIN_VERSION = "0.3.4";
-    public static final String VERSION = "v" + MAIN_VERSION + "-alpha.3";
-    public static final String UPDATED_TIME = "2023-11-25 17:56";
+    public static final String VERSION = "v" + MAIN_VERSION + "-alpha.4";
+    public static final String UPDATED_TIME = "2023-11-28 15:40";
 
     private SpCoBot() {
         initEvents();
