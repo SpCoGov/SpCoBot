@@ -1,11 +1,11 @@
 /*
- * Copyright 2023 SpCo
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,10 +19,12 @@ import org.jetbrains.annotations.ApiStatus;
 import top.spco.core.resource.ResourceIdentifier;
 
 /**
- * Event
+ * Base class for Fabric's event implementations.
  *
- * @author SpCo
+ * @param <T> The listener type.
+ * @author Fabric
  * @version 0.1.2
+ * @see EventFactory
  * @since 0.1.0
  */
 @ApiStatus.NonExtendable
@@ -65,7 +67,7 @@ public abstract class Event<T> {
      * Register a listener to the event for the specified phase.
      * Have a look at {@link EventFactory#createWithPhases} for an explanation of event phases.
      *
-     * @param phase Identifier of the phase this listener should be registered for. It will be created if it didn't exist yet.
+     * @param phase    Identifier of the phase this listener should be registered for. It will be created if it didn't exist yet.
      * @param listener The desired listener.
      */
     public void register(ResourceIdentifier phase, T listener) {
@@ -81,7 +83,7 @@ public abstract class Event<T> {
      * <p>Incompatible ordering constraints such as cycles will lead to inconsistent behavior:
      * some constraints will be respected and some will be ignored. If this happens, a warning will be logged.
      *
-     * @param firstPhase The identifier of the phase that should run before the other. It will be created if it didn't exist yet.
+     * @param firstPhase  The identifier of the phase that should run before the other. It will be created if it didn't exist yet.
      * @param secondPhase The identifier of the phase that should run after the other. It will be created if it didn't exist yet.
      */
     public void addPhaseOrdering(ResourceIdentifier firstPhase, ResourceIdentifier secondPhase) {

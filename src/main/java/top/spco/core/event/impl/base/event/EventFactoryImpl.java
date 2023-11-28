@@ -1,11 +1,11 @@
 /*
- * Copyright 2023 SpCo
+ * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco.core.event.base;
+package top.spco.core.event.impl.base.event;
 
 import com.google.common.collect.MapMaker;
 import top.spco.core.event.Event;
-import top.spco.core.event.base.event.ArrayBackedEvent;
+import top.spco.core.event.impl.base.event.ArrayBackedEvent;
 import top.spco.core.resource.ResourceIdentifier;
 
 import java.util.Collections;
@@ -27,7 +27,7 @@ import java.util.function.Function;
 /**
  * 事件工厂的实现类，用于创建和管理各种类型的事件
  *
- * @author SpCo
+ * @author Fabric
  * @version 0.1.2
  * @since 0.1.0
  */
