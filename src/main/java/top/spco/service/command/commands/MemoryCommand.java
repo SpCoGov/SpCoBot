@@ -54,9 +54,13 @@ public class MemoryCommand extends AbstractCommand {
     }
 
     private String memoryUsage(MemoryUsage usage) {
-        return "初始化时的内存大小：" + usage.getInit() + "\n" +
-                "已使用的内存大小：" + usage.getUsed() + "\n" +
-                "已提交（分配）的内存大小：" + usage.getCommitted() + "\n" +
-                "可以使用的最大内存大小：" + usage.getMax() + "\n";
+        long initMB = usage.getInit() / (1024 * 1024);
+        long usedMB = usage.getUsed() / (1024 * 1024);
+        long committedMB = usage.getCommitted() / (1024 * 1024);
+        long maxMB = usage.getMax() == Long.MAX_VALUE ? -1 : usage.getMax() / (1024 * 1024);
+        return "初始化时的内存大小：" + initMB + "MB\n" +
+                "已使用的内存大小：" + usedMB + "MB\n" +
+                "已提交（分配）的内存大小：" + committedMB + "MB\n" +
+                "可以使用的最大内存大小：" + maxMB + "MB\n";
     }
 }
