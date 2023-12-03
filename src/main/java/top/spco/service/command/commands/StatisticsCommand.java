@@ -34,7 +34,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @author SpCo
- * @version 0.3.4
+ * @version 1.0.0
  * @since 0.1.1
  */
 public class StatisticsCommand extends AbstractCommand {
@@ -64,7 +64,7 @@ public class StatisticsCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot bot1, Interactive from1, User sender1, BotUser user1, Message message1, int time1, String command, String label, String[] args, CommandMeta meta) {
+    public void onCommand(Bot bot1, Interactive from1, User sender1, BotUser user1, Message message1, int time1, String command, String label, String[] args, CommandMeta meta, String usageName) {
         // 在每次调用命令时，重置
         StringBuilder sb = new StringBuilder();
         Map<String, Integer> ranks = new HashMap<>();

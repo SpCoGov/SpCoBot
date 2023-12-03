@@ -27,7 +27,7 @@ import java.security.SecureRandom;
 
 /**
  * @author SpCo
- * @version 0.3.3
+ * @version 1.0.0
  * @since 0.1.0
  */
 public class BanmeCommand extends AbstractCommand {
@@ -47,26 +47,28 @@ public class BanmeCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta) {
-        try {
-            meta.max(0);
-            if (from instanceof Group group) {
-                if (!group.botPermission().isOperator()) {
-                    from.quoteReply(message, "机器人权限不足");
-                    return;
-                }
-                if (sender instanceof Member member) {
-                    if (member.getPermission().getLevel() >= group.botAsMember().getPermission().getLevel()) {
-                        from.quoteReply(message, "大佬，惹不起");
+    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
+        if (usageName.equals("禁言我")) {
+            try {
+                meta.max(0);
+                if (from instanceof Group group) {
+                    if (!group.botPermission().isOperator()) {
+                        from.quoteReply(message, "机器人权限不足");
                         return;
                     }
-                    int d = new SecureRandom().nextInt(1, 61);
-                    member.mute(d);
-                    from.quoteReply(message, "恭喜，您已被禁言" + d + "秒");
+                    if (sender instanceof Member member) {
+                        if (member.getPermission().getLevel() >= group.botAsMember().getPermission().getLevel()) {
+                            from.quoteReply(message, "大佬，惹不起");
+                            return;
+                        }
+                        int d = new SecureRandom().nextInt(1, 61);
+                        member.mute(d);
+                        from.quoteReply(message, "恭喜，您已被禁言" + d + "秒");
+                    }
                 }
+            } catch (CommandSyntaxException e) {
+                from.handleException(message, e.getMessage());
             }
-        } catch (CommandSyntaxException e) {
-            from.handleException(message, e.getMessage());
         }
     }
 }

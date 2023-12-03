@@ -21,11 +21,15 @@ import top.spco.api.User;
 import top.spco.api.message.Message;
 import top.spco.service.command.AbstractCommand;
 import top.spco.service.command.CommandMeta;
+import top.spco.service.command.CommandParam;
+import top.spco.service.command.CommandUsage;
 import top.spco.user.BotUser;
+
+import java.util.List;
 
 /**
  * @author SpCo
- * @version 0.3.0
+ * @version 1.0.0
  * @since 0.1.0
  */
 public final class GetmeCommand extends AbstractCommand {
@@ -40,7 +44,9 @@ public final class GetmeCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta) {
-        from.quoteReply(message, user.toString());
+    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
+        if (usageName.equals("获取个人信息")) {
+            from.quoteReply(message, user.toString());
+        }
     }
 }

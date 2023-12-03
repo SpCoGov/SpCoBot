@@ -66,7 +66,7 @@ import java.util.concurrent.TimeUnit;
  * </pre>
  *
  * @author SpCo
- * @version 0.3.4
+ * @version 1.0.0
  * @since 0.1.0
  */
 public class SpCoBot {
@@ -96,9 +96,9 @@ public class SpCoBot {
      * </ul>
      * <b>更新版本号(仅限核心的 Feature)时请不要忘记在 build.gradle 中同步修改版本号</b>
      */
-    public static final String MAIN_VERSION = "0.3.4";
-    public static final String VERSION = "v" + MAIN_VERSION + "-alpha.4";
-    public static final String UPDATED_TIME = "2023-11-28 15:40";
+    public static final String MAIN_VERSION = "1.0.0";
+    public static final String VERSION = "v" + MAIN_VERSION + "-3";
+    public static final String UPDATED_TIME = "2023-12-3 13:00";
 
     private SpCoBot() {
         initEvents();
@@ -175,7 +175,7 @@ public class SpCoBot {
                 try {
                     BotUser botUser = BotUser.getOrCreate(sender.getId());
                     if (command.hasPermission(botUser)) {
-                        command.onCommand(bot, source, sender, botUser, message, time, context, "sign", new String[]{}, new CommandMeta(context));
+                        command.onCommand(bot, source, sender, botUser, message, time, context, "sign", new String[]{}, new CommandMeta(context), command.getUsages().get(0).name);
                     }
                 } catch (Exception e) {
                     source.quoteReply(message, "SpCoBot获取用户时失败: \n" + ExceptionUtils.getStackTraceAsString(e));
@@ -187,7 +187,7 @@ public class SpCoBot {
                 try {
                     BotUser botUser = BotUser.getOrCreate(sender.getId());
                     if (command.hasPermission(botUser)) {
-                        command.onCommand(bot, source, sender, botUser, message, time, context, "getme", new String[]{}, new CommandMeta(context));
+                        command.onCommand(bot, source, sender, botUser, message, time, context, "getme", new String[]{}, new CommandMeta(context), command.getUsages().get(0).name);
                     }
                 } catch (Exception e) {
                     source.quoteReply(message, "SpCoBot获取用户时失败: \n" + ExceptionUtils.getStackTraceAsString(e));

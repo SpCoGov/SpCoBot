@@ -20,16 +20,16 @@ import top.spco.api.Bot;
 import top.spco.api.Interactive;
 import top.spco.api.User;
 import top.spco.api.message.Message;
-import top.spco.service.command.AbstractCommand;
-import top.spco.service.command.CommandMeta;
-import top.spco.service.command.CommandSyntaxException;
+import top.spco.service.command.*;
 import top.spco.user.BotUser;
 import top.spco.user.UserFetchException;
 import top.spco.user.UserPermission;
 
+import java.util.List;
+
 /**
  * @author SpCo
- * @version 0.3.1
+ * @version 1.0.0
  * @since 0.3.0
  */
 public class GetotherCommand extends AbstractCommand {
@@ -40,7 +40,7 @@ public class GetotherCommand extends AbstractCommand {
 
     @Override
     public String getDescriptions() {
-        return "获取其他人的个人资料";
+        return "获取其他人的个人信息";
     }
 
     @Override
@@ -49,7 +49,12 @@ public class GetotherCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot bot, Interactive from, User sender, BotUser user1, Message message, int time, String command, String label, String[] args, CommandMeta meta) {
+    public List<CommandUsage> getUsages() {
+        return List.of(new CommandUsage(getLabels()[0], getDescriptions(), new CommandParam("目标用户", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.TARGET_USER_ID)));
+    }
+
+    @Override
+    public void onCommand(Bot bot, Interactive from, User sender, BotUser user1, Message message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
         try {
             meta.max(1);
             if (args.length == 0) {

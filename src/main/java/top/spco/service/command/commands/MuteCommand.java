@@ -27,7 +27,7 @@ import top.spco.user.UserPermission;
 
 /**
  * @author SpCo
- * @version 0.3.3
+ * @version 1.0.0
  * @since 0.3.0
  */
 public class MuteCommand extends AbstractCommand {
@@ -52,7 +52,7 @@ public class MuteCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta) {
+    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
         try {
             meta.max(2);
             if (from instanceof Group group) {
