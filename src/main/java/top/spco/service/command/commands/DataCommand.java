@@ -56,7 +56,7 @@ public final class DataCommand extends AbstractCommand {
                         new CommandParam("记录值", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.TEXT),
                         new CommandParam("待查询的字段名", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.TEXT)),
                 new CommandUsage("data", "编辑记录",
-                        new CommandParam("表名", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.SELECTION, "set"),
+                        new CommandParam("操作类型", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.SELECTION, "set"),
                         new CommandParam("表名", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.TEXT),
                         new CommandParam("字段名", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.TEXT),
                         new CommandParam("记录值", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.TEXT),
