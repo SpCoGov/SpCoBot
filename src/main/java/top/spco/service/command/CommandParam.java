@@ -51,36 +51,36 @@ public class CommandParam {
     @Override
     public String toString() {
         if (this.content == ParamContent.TARGET_USER_ID) {
-            return "{" + this.name + "}";
+            return CommandSystem.USAGE_TARGET_USER_ID_OPEN + this.name + CommandSystem.USAGE_TARGET_USER_ID_CLOSE;
         } else if (this.type == ParamType.REQUIRED) {
             if (this.content == ParamContent.SELECTION) {
                 StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < this.options.length; i++) {
                     if (i > 0) {
-                        sb.append("|");
+                        sb.append(CommandSystem.USAGE_OR);
                     }
                     sb.append(this.options[i]);
                 }
                 if (this.options.length == 1) {
                     return sb.toString();
                 }
-                return "<" + sb + ">";
+                return CommandSystem.USAGE_REQUIRED_OPEN + sb.toString() + CommandSystem.USAGE_REQUIRED_CLOSE;
             }
-            return "<" + this.name + ">";
+            return CommandSystem.USAGE_REQUIRED_OPEN + this.name + CommandSystem.USAGE_REQUIRED_CLOSE;
         } else if (this.type == ParamType.OPTIONAL) {
             if (this.content == ParamContent.SELECTION) {
                 StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < this.options.length; i++) {
                     if (i > 0) {
-                        sb.append("|");
+                        sb.append(CommandSystem.USAGE_OR);
                     }
                     sb.append(this.options[i]);
                 }
-                return "[" + sb + "]";
+                return CommandSystem.USAGE_OPTIONAL_OPEN + sb.toString() + CommandSystem.USAGE_OPTIONAL_CLOSE;
             }
-            return "[" + this.name + "]";
+            return CommandSystem.USAGE_OPTIONAL_OPEN + this.name + CommandSystem.USAGE_OPTIONAL_CLOSE;
         }
-        return "(?)";
+        return "";
     }
 
     /**

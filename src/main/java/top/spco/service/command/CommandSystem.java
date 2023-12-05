@@ -40,6 +40,17 @@ import java.util.*;
  * @since 0.1.0
  */
 public class CommandSystem {
+    public static final String COMMAND_START_SYMBOL_STRING = "/";
+    public static final char COMMAND_START_SYMBOL_CHAR = '/';
+    public static final String ARGUMENT_SEPARATOR_STRING = " ";
+    public static final char ARGUMENT_SEPARATOR_CHAR = ' ';
+    public static final char USAGE_OPTIONAL_OPEN = '[';
+    public static final char USAGE_OPTIONAL_CLOSE = ']';
+    public static final char USAGE_REQUIRED_OPEN = '<';
+    public static final char USAGE_REQUIRED_CLOSE = '>';
+    public static final char USAGE_TARGET_USER_ID_OPEN = '{';
+    public static final char USAGE_TARGET_USER_ID_CLOSE = '}';
+    public static final char USAGE_OR = '|';
     private static CommandSystem instance;
     private static boolean registered = false;
     private static final List<Command> allCommands = new ArrayList<>();

@@ -148,27 +148,31 @@ public class SpCoBot {
         // 处理好友命令
         MessageEvents.FRIEND_MESSAGE.register((bot, sender, message, time) -> {
             String context = message.toMessageContext();
-            CommandMeta meta = new CommandMeta(context);
             if (this.chatManager.isInChat(sender, ChatType.FRIEND)) {
                 this.chatManager.onMessage(ChatType.FRIEND, bot, sender, sender, message, time);
                 return;
             }
-            if (meta.getArgs() != null) {
-                CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs(), meta);
-                CommandEvents.FRIEND_COMMAND.invoker().onFriendCommand(bot, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs(), meta);
+            if (context.startsWith(CommandSystem.COMMAND_START_SYMBOL_STRING)) {
+                CommandMeta meta = new CommandMeta(context);
+                if (meta.getArgs() != null) {
+                    CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs(), meta);
+                    CommandEvents.FRIEND_COMMAND.invoker().onFriendCommand(bot, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs(), meta);
+                }
             }
         });
         // 处理群聊命令
         MessageEvents.GROUP_MESSAGE.register((bot, source, sender, message, time) -> {
             String context = message.toMessageContext();
-            CommandMeta meta = new CommandMeta(context);
             if (this.chatManager.isInChat(source, ChatType.GROUP)) {
                 this.chatManager.onMessage(ChatType.GROUP, bot, source, sender, message, time);
                 return;
             }
-            if (meta.getArgs() != null) {
-                CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs(), meta);
-                CommandEvents.GROUP_COMMAND.invoker().onGroupCommand(bot, source, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs(), meta);
+            if (context.startsWith(CommandSystem.COMMAND_START_SYMBOL_STRING)) {
+                CommandMeta meta = new CommandMeta(context);
+                if (meta.getArgs() != null) {
+                    CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs(), meta);
+                    CommandEvents.GROUP_COMMAND.invoker().onGroupCommand(bot, source, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs(), meta);
+                }
             }
             if (context.equals("签到")) {
                 Command command = this.commandSystem.getGroupCommand("sign");
@@ -198,14 +202,16 @@ public class SpCoBot {
         // 处理群临时消息命令
         MessageEvents.GROUP_TEMP_MESSAGE.register((bot, source, sender, message, time) -> {
             String context = message.toMessageContext();
-            CommandMeta meta = new CommandMeta(context);
             if (this.chatManager.isInChat(source, ChatType.GROUP_TEMP)) {
                 this.chatManager.onMessage(ChatType.GROUP_TEMP, bot, source, sender, message, time);
                 return;
             }
-            if (meta.getArgs() != null) {
-                CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs(), meta);
-                CommandEvents.GROUP_TEMP_COMMAND.invoker().onGroupTempCommand(bot, source, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs(), meta);
+            if (context.startsWith(CommandSystem.COMMAND_START_SYMBOL_STRING)) {
+                CommandMeta meta = new CommandMeta(context);
+                if (meta.getArgs() != null) {
+                    CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs(), meta);
+                    CommandEvents.GROUP_TEMP_COMMAND.invoker().onGroupTempCommand(bot, source, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs(), meta);
+                }
             }
         });
     }

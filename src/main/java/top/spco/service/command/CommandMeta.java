@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
  * 命令的数据
  *
  * @author SpCo
- * @version 0.3.0
+ * @version 1.0.0
  * @since 0.1.1
  */
 public class CommandMeta {
@@ -61,10 +61,9 @@ public class CommandMeta {
      */
     public CommandMeta(String context) {
         this.command = context;
-        String cleanedString = convertMultipleSpaces(context);
-        if (cleanedString.startsWith("/")) {
+        if (context.startsWith(CommandSystem.COMMAND_START_SYMBOL_STRING)) {
             // 将用户的输入以 空格 为分隔符分割
-            String[] parts = cleanedString.split(" ");
+            String[] parts = context.split(CommandSystem.ARGUMENT_SEPARATOR_STRING);
             // 检查parts数组是否为空
             if (parts.length > 0) {
                 // 创建一个长度为parts数组的长度减一的数组, 用于存储命令的参数
@@ -73,18 +72,13 @@ public class CommandMeta {
                 System.arraycopy(parts, 1, args, 0, parts.length - 1);
                 // 标签转换为小写
                 this.label = parts[0].toLowerCase(Locale.ENGLISH).substring(1);
-                // 删除args中每个元素的空格
-                for (int i = 0; i < args.length; i++) {
-                    args[i] = args[i].replaceAll(" ", "");
-                }
+//                // 删除args中每个元素的空格
+//                for (int i = 0; i < args.length; i++) {
+//                    args[i] = args[i].replaceAll(" ", "");
+//                }
                 this.args = args;
             }
         }
-    }
-
-    private static String convertMultipleSpaces(String input) {
-        // 使用正则表达式替换连续空格为单个空格，并去掉末尾空格
-        return input.replaceAll("\\s++$", "").replaceAll("\\s+", " ");
     }
 
     /**
