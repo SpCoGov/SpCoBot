@@ -17,12 +17,11 @@ package top.spco.service.command.commands;
 
 import top.spco.api.*;
 import top.spco.api.message.Message;
-import top.spco.service.command.AbstractCommand;
-import top.spco.service.command.CommandMeta;
-import top.spco.service.command.CommandScope;
-import top.spco.service.command.CommandSyntaxException;
+import top.spco.service.command.*;
 import top.spco.user.BotUser;
 import top.spco.user.UserPermission;
+
+import java.util.List;
 
 /**
  * @author SpCo
@@ -48,6 +47,12 @@ public class MuteCommand extends AbstractCommand {
     @Override
     public CommandScope getScope() {
         return CommandScope.ONLY_GROUP;
+    }
+
+    @Override
+    public List<CommandUsage> getUsages() {
+        return List.of(new CommandUsage("mute", "禁言一位群员", new CommandParam("目标用户", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.TARGET_USER_ID),
+                new CommandParam("禁言时间", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.INTEGER)));
     }
 
     @Override

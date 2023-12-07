@@ -189,7 +189,7 @@ public class CommandMeta {
      */
     public String argument(int index) throws CommandSyntaxException {
         if (args.length < index + 1) {
-            throw CommandSyntaxException.expectedSeparator(label, args, args.length - 1);
+            throw CommandSyntaxException.error("需要文本型", label, args, index);
         }
         return args[index];
     }
