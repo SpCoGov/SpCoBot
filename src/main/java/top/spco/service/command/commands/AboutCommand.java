@@ -22,10 +22,7 @@ import top.spco.api.User;
 import top.spco.api.message.Message;
 import top.spco.service.command.AbstractCommand;
 import top.spco.service.command.CommandMeta;
-import top.spco.service.command.CommandUsage;
 import top.spco.user.BotUser;
-
-import java.util.List;
 
 /**
  * @author SpCo

@@ -201,7 +201,7 @@ public class CommandSystem {
                     return;
                 }
                 // 用户提交的参数不符合命令的任何用法
-                from.quoteReply(message, lastException.getMessage());
+                from.handleException(message, lastException.getMessage());
             } catch (UserFetchException e) {
                 from.handleException(message, "SpCoBot获取用户时失败", e);
             } catch (Exception e) {

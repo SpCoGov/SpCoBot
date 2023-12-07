@@ -15,7 +15,6 @@
  */
 package top.spco.service.command.commands;
 
-import top.spco.SpCoBot;
 import top.spco.api.Bot;
 import top.spco.api.Interactive;
 import top.spco.api.User;
@@ -56,16 +55,8 @@ public class GetotherCommand extends AbstractCommand {
     @Override
     public void onCommand(Bot bot, Interactive from, User sender, BotUser user1, Message message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
         try {
-            meta.max(1);
-            if (args.length == 0) {
-                var quote = SpCoBot.getInstance().getMessageService().getQuote(message);
-                BotUser user = BotUser.getOrCreate(quote.getLeft().getFromId());
-                from.quoteReply(message, user.toString());
-            } else {
-                long id = meta.userIdArgument(0);
-                BotUser user = BotUser.getOrCreate(id);
-                from.quoteReply(message, user.toString());
-            }
+            BotUser user = BotUser.getOrCreate(meta.targetUserIdArgument(0, message));
+            from.quoteReply(message, user.toString());
         } catch (CommandSyntaxException e) {
             from.handleException(message, e.getMessage());
         } catch (UserFetchException e) {

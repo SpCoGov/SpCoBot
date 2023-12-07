@@ -161,7 +161,7 @@ public class SpCoBot {
                         CommandEvents.FRIEND_COMMAND.invoker().onFriendCommand(bot, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs(), meta);
                     }
                 } catch (CommandSyntaxException e) {
-                    sender.quoteReply(message, e.getMessage());
+                    sender.handleException(message, e.getMessage());
                 }
             }
         });
@@ -180,7 +180,7 @@ public class SpCoBot {
                         CommandEvents.GROUP_COMMAND.invoker().onGroupCommand(bot, source, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs(), meta);
                     }
                 } catch (CommandSyntaxException e) {
-                    source.quoteReply(message, e.getMessage());
+                    source.handleException(message, e.getMessage());
                 }
 
             }
@@ -224,7 +224,7 @@ public class SpCoBot {
                         CommandEvents.GROUP_TEMP_COMMAND.invoker().onGroupTempCommand(bot, source, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs(), meta);
                     }
                 } catch (CommandSyntaxException e) {
-                    source.quoteReply(message, e.getMessage());
+                    source.handleException(message, e.getMessage());
                 }
             }
         });

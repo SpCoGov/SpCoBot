@@ -16,6 +16,7 @@
 package top.spco.service.command;
 
 import top.spco.SpCoBot;
+import top.spco.api.message.Message;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -204,17 +205,6 @@ public class CommandMeta {
     }
 
     /**
-     * 检测提交的参数是否过多
-     *
-     * @throws CommandSyntaxException 提交的参数过多
-     */
-    public void max(int amount) throws CommandSyntaxException {
-        if (args.length > amount) {
-            throw CommandSyntaxException.expectedSeparator(label, args, args.length - 1);
-        }
-    }
-
-    /**
      * 获取命令的用户id类型参数
      *
      * @param index 参数的索引
@@ -241,6 +231,26 @@ public class CommandMeta {
             } catch (CommandSyntaxException e) {
                 throw CommandSyntaxException.error("需要用户ID或@一位用户", label, args, index);
             }
+        }
+    }
+
+    /**
+     * 获取命令的目标用户id类型参数
+     *
+     * @param index 参数的索引
+     * @param message 发送的消息
+     * @return 对应参数的值
+     * @throws CommandSyntaxException 索引超出了参数数组的范围或该参数不是预期类型
+     */
+    public long targetUserIdArgument(int index, Message message) throws CommandSyntaxException {
+        try {
+          return userIdArgument(index);
+        } catch (Exception e) {
+            var quote = SpCoBot.getInstance().getMessageService().getQuote(message);
+            if (quote == null) {
+                throw CommandSyntaxException.error("需要用户ID或@一位用户或在回复时发送这条命令", this.label, this.args, index);
+            }
+            return quote.getLeft().getFromId();
         }
     }
 
