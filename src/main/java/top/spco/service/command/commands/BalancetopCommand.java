@@ -35,7 +35,7 @@ import java.util.Map;
 
 /**
  * @author SpCo
- * @version 0.3.0
+ * @version 1.0.0
  * @since 0.1.0
  */
 public class BalancetopCommand extends AbstractCommand {
@@ -50,27 +50,29 @@ public class BalancetopCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta) {
-        try {
-            List<Map.Entry<Long, Integer>> topRecords = new ArrayList<>(getRecords().entrySet());
-            // 使用比较器进行值的降序排序
-            topRecords.sort((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()));
-            // 取前10个记录
-            if (topRecords.size() > 10) {
-                topRecords = topRecords.subList(0, 10);
+    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
+        if (usageName.equals("查看海绵山币排行榜")) {
+            try {
+                List<Map.Entry<Long, Integer>> topRecords = new ArrayList<>(getRecords().entrySet());
+                // 使用比较器进行值的降序排序
+                topRecords.sort((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()));
+                // 取前10个记录
+                if (topRecords.size() > 10) {
+                    topRecords = topRecords.subList(0, 10);
+                }
+                // 处理前十个最大值的记录
+                StringBuilder sb = new StringBuilder("海绵山富豪榜\n");
+                int no = 1;
+                for (Map.Entry<Long, Integer> entry : topRecords) {
+                    long id = entry.getKey();
+                    int coin = entry.getValue();
+                    sb.append(no).append(". ").append(id).append(" - ").append(coin).append("\n");
+                    no += 1;
+                }
+                from.quoteReply(message, sb.toString());
+            } catch (SQLException e) {
+                from.handleException("查询记录失败", e);
             }
-            // 处理前十个最大值的记录
-            StringBuilder sb = new StringBuilder("海绵山富豪榜\n");
-            int no = 1;
-            for (Map.Entry<Long, Integer> entry : topRecords) {
-                long id = entry.getKey();
-                int coin = entry.getValue();
-                sb.append(no).append(". ").append(id).append(" - ").append(coin).append("\n");
-                no += 1;
-            }
-            from.quoteReply(message, sb.toString());
-        } catch (SQLException e) {
-            from.handleException("查询记录失败", e);
         }
     }
 

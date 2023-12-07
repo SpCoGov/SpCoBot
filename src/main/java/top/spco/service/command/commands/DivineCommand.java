@@ -21,6 +21,8 @@ import top.spco.api.User;
 import top.spco.api.message.Message;
 import top.spco.service.command.AbstractCommand;
 import top.spco.service.command.CommandMeta;
+import top.spco.service.command.CommandParam;
+import top.spco.service.command.CommandUsage;
 import top.spco.user.BotUser;
 import top.spco.util.DateUtils;
 import top.spco.util.HashUtils;
@@ -30,14 +32,11 @@ import java.math.RoundingMode;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author SpCo
- * @version 0.3.0
+ * @version 1.0.0
  * @since 0.1.0
  */
 public class DivineCommand extends AbstractCommand {
@@ -52,51 +51,57 @@ public class DivineCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta) {
-        LocalDate today = DateUtils.today();
-        try {
-            BigDecimal hundred = new BigDecimal("100.00");
-            StringBuilder sb = new StringBuilder();
-            sb.append("你好，").append(user.getId()).append("\n");
-            if (args.length == 0) {
-                BigDecimal probability = getProbability(user.getId() + "在" + today);
-                String fortune = getFortune(probability.doubleValue());
-                sb.append("汝的今日运势：").append(fortune).append("\n");
-                if (fortune.equals("大凶") || fortune.equals("凶")) {
-                    sb.append("汝今天倒大霉概率是 ").append(probability).append("%");
-                } else {
-                    sb.append("汝今天行大运概率是 ").append(hundred.subtract(probability)).append("%");
-                }
-            } else {
-                String event = command.substring(8);
-                sb.append("所求事项：").append(event).append("\n");
-                if (isHentai(event)) {
-                    if (randomBoolean(user.getId() + "在" + today + "做" + event)) {
-                        sb.append("结果：").append("好变态哦!").append("\n");
-                    } else {
-                        sb.append("结果：").append("变态!").append("\n");
-                    }
-                    if (randomBoolean(user.getId() + "在" + today + "做2" + event)) {
-                        sb.append("此事有 ").append("0.00").append("% 的概率不发生");
-                    } else {
-                        sb.append("此事有 ").append("100.00").append("% 的概率发生");
-                    }
-                } else {
-                    BigDecimal probability = getProbability(user.getId() + "在" + today + "做" + event);
-                    String fortune = getFortune(probability.doubleValue());
-                    sb.append("结果：").append(fortune).append("\n");
-                    if (fortune.equals("大凶") || fortune.equals("凶")) {
-                        sb.append("此事有 ").append(probability).append("% 的概率不发生");
-                    } else {
-                        sb.append("此事有 ").append(hundred.subtract(probability)).append("% 的概率发生");
-                    }
-                }
-            }
-            from.quoteReply(message, sb.toString());
-        } catch (NoSuchAlgorithmException e) {
-            from.quoteReply(message, "[错误发生] 占卜失败，占卜师说：" + e.getMessage());
-        }
+    public List<CommandUsage> getUsages() {
+        return List.of(new CommandUsage(getLabels()[0], getDescriptions(), new CommandParam("所求事件", CommandParam.ParamType.OPTIONAL, CommandParam.ParamContent.TEXT)));
+    }
 
+    @Override
+    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
+        if (usageName.equals("占卜")) {
+            LocalDate today = DateUtils.today();
+            try {
+                BigDecimal hundred = new BigDecimal("100.00");
+                StringBuilder sb = new StringBuilder();
+                sb.append("你好，").append(user.getId()).append("\n");
+                if (args.length == 0) {
+                    BigDecimal probability = getProbability(user.getId() + "在" + today);
+                    String fortune = getFortune(probability.doubleValue());
+                    sb.append("汝的今日运势：").append(fortune).append("\n");
+                    if (fortune.equals("大凶") || fortune.equals("凶")) {
+                        sb.append("汝今天倒大霉概率是 ").append(probability).append("%");
+                    } else {
+                        sb.append("汝今天行大运概率是 ").append(hundred.subtract(probability)).append("%");
+                    }
+                } else {
+                    String event = args[0];
+                    sb.append("所求事项：").append(event).append("\n");
+                    if (isHentai(event)) {
+                        if (randomBoolean(user.getId() + "在" + today + "做" + event)) {
+                            sb.append("结果：").append("好变态哦!").append("\n");
+                        } else {
+                            sb.append("结果：").append("变态!").append("\n");
+                        }
+                        if (randomBoolean(user.getId() + "在" + today + "做2" + event)) {
+                            sb.append("此事有 ").append("0.00").append("% 的概率不发生");
+                        } else {
+                            sb.append("此事有 ").append("100.00").append("% 的概率发生");
+                        }
+                    } else {
+                        BigDecimal probability = getProbability(user.getId() + "在" + today + "做" + event);
+                        String fortune = getFortune(probability.doubleValue());
+                        sb.append("结果：").append(fortune).append("\n");
+                        if (fortune.equals("大凶") || fortune.equals("凶")) {
+                            sb.append("此事有 ").append(probability).append("% 的概率不发生");
+                        } else {
+                            sb.append("此事有 ").append(hundred.subtract(probability)).append("% 的概率发生");
+                        }
+                    }
+                }
+                from.quoteReply(message, sb.toString());
+            } catch (NoSuchAlgorithmException e) {
+                from.quoteReply(message, "[错误发生] 占卜失败，占卜师说：" + e.getMessage());
+            }
+        }
     }
 
     /**

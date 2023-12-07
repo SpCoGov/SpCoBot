@@ -27,7 +27,7 @@ import java.sql.SQLException;
 
 /**
  * @author SpCo
- * @version 0.3.0
+ * @version 1.0.0
  * @since 0.1.0
  */
 public final class SignCommand extends AbstractCommand {
@@ -42,7 +42,7 @@ public final class SignCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta) {
+    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
         try {
             int i = user.sign();
             if (i == -1) {

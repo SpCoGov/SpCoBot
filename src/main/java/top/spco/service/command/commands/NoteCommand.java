@@ -30,7 +30,7 @@ import java.io.File;
 
 /**
  * @author SpCo
- * @version 0.3.3
+ * @version 1.0.0
  * @since 0.3.2
  */
 public class NoteCommand extends AbstractCommand {
@@ -55,7 +55,7 @@ public class NoteCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta) {
+    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
         String context = SpCoBot.getInstance().getMessageService().getQuote(message).getRight().toMessageContext();
         if (!context.endsWith("，不打")) {
             context += "，不打";

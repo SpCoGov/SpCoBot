@@ -25,12 +25,16 @@ import top.spco.api.message.Message;
 import top.spco.core.config.DashScopeSettings;
 import top.spco.service.command.AbstractCommand;
 import top.spco.service.command.CommandMeta;
+import top.spco.service.command.CommandParam;
+import top.spco.service.command.CommandUsage;
 import top.spco.service.dashscope.DashScope;
 import top.spco.user.BotUser;
 
+import java.util.List;
+
 /**
  * @author SpCo
- * @version 0.3.0
+ * @version 1.0.0
  * @since 0.2.1
  */
 public class DashscopeCommand extends AbstractCommand {
@@ -45,29 +49,33 @@ public class DashscopeCommand extends AbstractCommand {
     }
 
     @Override
+    public List<CommandUsage> getUsages() {
+        return List.of(new CommandUsage(getLabels()[0], getDescriptions(), new CommandParam("内容", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.TEXT)));
+    }
+
+    @Override
     public void init() {
         Constants.apiKey = SpCoBot.getInstance().getSettings().getProperty(DashScopeSettings.API_KET).toString();
     }
 
     @Override
-    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta) {
-        if (!user.isPremium()) {
-            from.quoteReply(message, "仅Premium会员可使用此命令。");
-            return;
-        }
-        if (args.length == 0) {
-            from.quoteReply(message, "参数错误");
-            return;
-        }
-        try {
-            DashScope dashScope = SpCoBot.getInstance().dashScopeManager.getDashScopeOrCreate(user, from, message);
-            String result = dashScope.callWithMessage(command.substring(label.length() + 1), 10000).getOutput().getChoices().get(0).getMessage().getContent();
-            dashScope.setLastMessage(from, message);
-            from.quoteReply(message, result);
-        } catch (ApiException e) {
-            from.handleException(message, e.getStatus().getMessage(), e);
-        } catch (Exception e) {
-            from.handleException(message, "创建或获取DashScope实例时发生了意料之外的异常", e);
+    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
+        if (usageName.equals(getDescriptions())) {
+            if (!user.isPremium()) {
+                from.quoteReply(message, "仅Premium会员可使用此命令。");
+                return;
+            }
+            try {
+                DashScope dashScope = SpCoBot.getInstance().dashScopeManager.getDashScopeOrCreate(user, from, message);
+                String request = args[0];
+                String result = dashScope.callWithMessage(request, 10000).getOutput().getChoices().get(0).getMessage().getContent();
+                dashScope.setLastMessage(from, message);
+                from.quoteReply(message, result);
+            } catch (ApiException e) {
+                from.handleException(message, e.getStatus().getMessage(), e);
+            } catch (Exception e) {
+                from.handleException(message, "创建或获取DashScope实例时发生了意料之外的异常", e);
+            }
         }
     }
 }
