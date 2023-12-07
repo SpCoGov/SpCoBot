@@ -15,6 +15,8 @@
  */
 package top.spco.service.command;
 
+import java.util.Arrays;
+
 /**
  * 用于处理用户使用命令时的语法错误
  *
@@ -30,8 +32,14 @@ public class CommandSyntaxException extends Exception {
     }
 
     public static final CommandSyntaxException DISPATCHER_UNKNOWN_COMMAND = new CommandSyntaxException(CommandReturn.UNKNOWN_COMMAND);
-    public static final CommandSyntaxException DISPATCHER_UNKNOWN_ARGUMENT = new CommandSyntaxException(CommandReturn.UNKNOWN_ARGUMENT);
-    public static final CommandSyntaxException DISPATCHER_EXPECTED_SEPARATOR = new CommandSyntaxException(CommandReturn.EXPECTED_SEPARATOR);
+
+    public static CommandSyntaxException unknownArgument(String label, String[] args, int unknownArgIndex) {
+        return error(CommandReturn.UNKNOWN_ARGUMENT, label, args, unknownArgIndex);
+    }
+
+    public static CommandSyntaxException expectedSeparator(String label, String[] args, int unknownArgIndex) {
+        return error(CommandReturn.EXPECTED_SEPARATOR, label, args, unknownArgIndex);
+    }
 
     public static CommandSyntaxException error(String message, String label, String[] args, int unknownArgIndex) {
         if (args.length >= unknownArgIndex + 1) {
@@ -49,9 +57,12 @@ public class CommandSyntaxException extends Exception {
             }
             context += command.substring(Math.max(0, cursor - CONTEXT_AMOUNT), cursor);
             context += "<--[HERE]";
-            message += " at position " + cursor + ": " + context;
-            return new CommandSyntaxException(message);
+            String errormessage = "在第" + cursor + "个字符处发现" + message + ": " + context;
+            return new CommandSyntaxException(errormessage);
+        } else {
+            String[] emptyArray = new String[unknownArgIndex + 1];
+            Arrays.fill(emptyArray, "");
+            return error(message, label, emptyArray, unknownArgIndex);
         }
-        throw new RuntimeException(CommandReturn.FAILED);
     }
 }

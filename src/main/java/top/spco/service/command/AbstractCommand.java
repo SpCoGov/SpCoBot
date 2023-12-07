@@ -18,16 +18,23 @@ package top.spco.service.command;
 import top.spco.user.BotUser;
 import top.spco.user.UserPermission;
 
+import java.util.List;
+
 /**
  * {@link AbstractCommand} 是所有命令的抽象基类，实现了{@link Command} 接口。
  * 提供了基本的命令信息和权限控制的默认实现。
  *
  * @author SpCo
- * @version 0.3.3
+ * @version 1.0.0
  * @see Command
  * @since 0.1.0
  */
 public abstract class AbstractCommand implements Command {
+    @Override
+    public List<CommandUsage> getUsages() {
+        return List.of(new CommandUsage(getLabels()[0], getDescriptions()));
+    }
+
     @Override
     public CommandScope getScope() {
         return CommandScope.ALL;

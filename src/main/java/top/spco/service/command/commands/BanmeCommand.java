@@ -19,7 +19,6 @@ import top.spco.api.*;
 import top.spco.api.message.Message;
 import top.spco.service.command.AbstractCommand;
 import top.spco.service.command.CommandMeta;
-import top.spco.service.command.CommandSyntaxException;
 import top.spco.service.command.CommandScope;
 import top.spco.user.BotUser;
 
@@ -27,7 +26,7 @@ import java.security.SecureRandom;
 
 /**
  * @author SpCo
- * @version 0.3.3
+ * @version 1.0.0
  * @since 0.1.0
  */
 public class BanmeCommand extends AbstractCommand {
@@ -47,9 +46,8 @@ public class BanmeCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta) {
-        try {
-            meta.max(0);
+    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
+        if (usageName.equals("禁言我")) {
             if (from instanceof Group group) {
                 if (!group.botPermission().isOperator()) {
                     from.quoteReply(message, "机器人权限不足");
@@ -65,8 +63,6 @@ public class BanmeCommand extends AbstractCommand {
                     from.quoteReply(message, "恭喜，您已被禁言" + d + "秒");
                 }
             }
-        } catch (CommandSyntaxException e) {
-            from.handleException(message, e.getMessage());
         }
     }
 }

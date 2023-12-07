@@ -25,6 +25,7 @@ import top.spco.user.BotUser;
 import top.spco.user.UserPermission;
 
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * {@link Command 命令}是一种用户与机器人交互的方式。与{@link Chat 对话}可能有以下不同：
@@ -39,7 +40,7 @@ import java.sql.SQLException;
  * <b>不建议命令实现此接口，而是继承 {@link AbstractCommand}类</b>
  *
  * @author SpCo
- * @version 0.3.3
+ * @version 1.0.0
  * @see AbstractCommand
  * @since 0.1.0
  */
@@ -56,6 +57,8 @@ public interface Command {
      * </pre>
      */
     String[] getLabels();
+
+    List<CommandUsage> getUsages();
 
     /**
      * 命令的描述
@@ -115,7 +118,7 @@ public interface Command {
      * @param meta    命令的元数据
      * @see CommandEvents
      */
-    void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta);
+    void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta, String usageName);
 
     /**
      * 在帮助列表是否可见

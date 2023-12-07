@@ -26,7 +26,7 @@ import top.spco.user.BotUser;
 
 /**
  * @author SpCo
- * @version 0.3.0
+ * @version 1.0.0
  * @since 0.1.0
  */
 public final class AboutCommand extends AbstractCommand {
@@ -41,8 +41,11 @@ public final class AboutCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta) {
-        String sb = "你好，这里是SpCoBot。" + "\n" + "Github: " + "https://github.com/SpCoGov/SpCoBot" + "\n" + "Version: " + SpCoBot.VERSION + "\n" + "Updated: " + SpCoBot.UPDATED_TIME + "\n";
-        from.quoteReply(message, sb);
+    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
+        if (usageName.equals("获取机器人信息")) {
+            String sb = "你好，这里是SpCoBot。" + "\n" + "Github: " + "https://github.com/SpCoGov/SpCoBot" + "\n" + "Version: " + SpCoBot.VERSION + "\n" + "Updated: " + SpCoBot.UPDATED_TIME + "\n";
+            from.quoteReply(message, sb);
+        }
+
     }
 }
