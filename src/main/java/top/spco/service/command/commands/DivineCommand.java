@@ -73,7 +73,7 @@ public class DivineCommand extends AbstractCommand {
                         sb.append("汝今天行大运概率是 ").append(hundred.subtract(probability)).append("%");
                     }
                 } else {
-                    String event = command.substring(8);
+                    String event = args[0];
                     sb.append("所求事项：").append(event).append("\n");
                     if (isHentai(event)) {
                         if (randomBoolean(user.getId() + "在" + today + "做" + event)) {

@@ -40,9 +40,7 @@ import java.util.*;
  * @since 0.1.0
  */
 public class CommandSystem {
-    public static final String COMMAND_START_SYMBOL_STRING = "/";
-    public static final char COMMAND_START_SYMBOL_CHAR = '/';
-    public static final String ARGUMENT_SEPARATOR_STRING = " ";
+    public static final String COMMAND_START_SYMBOL = "/";
     public static final char ARGUMENT_SEPARATOR_CHAR = ' ';
     public static final char USAGE_OPTIONAL_OPEN = '[';
     public static final char USAGE_OPTIONAL_CLOSE = ']';
@@ -142,6 +140,7 @@ public class CommandSystem {
                 } catch (SQLException e) {
                     from.handleException(message, "获取用户权限失败", e);
                 }
+                Exception lastException = CommandSyntaxException.DISPATCHER_UNKNOWN_COMMAND;
                 // 判断用户提交的参数是否符合命令的用法
                 for (CommandUsage usage : object.getUsages()) {
                     // 先判断用户提交的参数的数量是否符合此用法需提交的参数数量
@@ -158,31 +157,35 @@ public class CommandSystem {
                     }
                     // 若实际提交的参数数量小于最少参数数量或大于用法的要求参数数量，跳过这个参数
                     if (args.length < minParamSize) {
+                        lastException = CommandSyntaxException.unknownArgument(usage.getLabel(), args, args.length - 1);
                         continue;
                     } else if (args.length > usage.params.size()) {
+                        lastException = CommandSyntaxException.expectedSeparator(usage.getLabel(), args, args.length - 1);
                         continue;
                     }
                     // 判断用法的每个参数是否与用户提交的匹配
                     int index = 0;
                     try {
                         for (CommandParam param : usage.params) {
-                            switch (param.content) {
-                                case INTEGER -> meta.integerArgument(index);
-                                case LONG -> meta.longArgument(index);
-                                case USER_ID -> meta.userIdArgument(index);
-                                case TEXT -> meta.argument(index);
-                                case SELECTION -> {
-                                    String userSend = meta.argument(index);
-                                    if (!ArrayUtils.contains(param.options, userSend)) {
-                                        throw CommandSyntaxException.DISPATCHER_UNKNOWN_ARGUMENT;
+                            if (param.type != CommandParam.ParamType.OPTIONAL) {
+                                switch (param.content) {
+                                    case INTEGER -> meta.integerArgument(index);
+                                    case LONG -> meta.longArgument(index);
+                                    case USER_ID -> meta.userIdArgument(index);
+                                    case TEXT -> meta.argument(index);
+                                    case SELECTION -> {
+                                        String userSend = meta.argument(index);
+                                        if (!ArrayUtils.contains(param.options, userSend)) {
+                                            throw CommandSyntaxException.error("未知的" + param.name, usage.getLabel(), args, index);
+                                        }
                                     }
-                                }
-                                case TARGET_USER_ID -> {
-                                    try {
-                                        meta.userIdArgument(index);
-                                    } catch (Exception e) {
-                                        if (SpCoBot.getInstance().getMessageService().getQuote(message).getLeft().getFromId() == 0L) {
-                                            throw CommandSyntaxException.DISPATCHER_UNKNOWN_ARGUMENT;
+                                    case TARGET_USER_ID -> {
+                                        try {
+                                            meta.userIdArgument(index);
+                                        } catch (Exception e) {
+                                            if (SpCoBot.getInstance().getMessageService().getQuote(message) == null) {
+                                                throw CommandSyntaxException.error("需要用户ID或@一位用户或在回复时发送这条命令", usage.getLabel(), args, index);
+                                            }
                                         }
                                     }
                                 }
@@ -190,6 +193,7 @@ public class CommandSystem {
                             index += 1;
                         }
                     } catch (Exception e) {
+                        lastException = e;
                         continue;
                     }
                     // 如用户的提交参数符合用法需求，退出循环并交由命令对象处理
@@ -197,7 +201,7 @@ public class CommandSystem {
                     return;
                 }
                 // 用户提交的参数不符合命令的任何用法
-                from.quoteReply(message, "语法错误");
+                from.quoteReply(message, lastException.getMessage());
             } catch (UserFetchException e) {
                 from.handleException(message, "SpCoBot获取用户时失败", e);
             } catch (Exception e) {

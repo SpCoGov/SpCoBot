@@ -31,6 +31,7 @@ import top.spco.service.chat.ChatManager;
 import top.spco.service.chat.ChatType;
 import top.spco.service.command.Command;
 import top.spco.service.command.CommandMeta;
+import top.spco.service.command.CommandSyntaxException;
 import top.spco.service.command.CommandSystem;
 import top.spco.service.dashscope.DashScopeManager;
 import top.spco.service.statistics.StatisticsManager;
@@ -97,8 +98,8 @@ public class SpCoBot {
      * <b>更新版本号(仅限核心的 Feature)时请不要忘记在 build.gradle 中同步修改版本号</b>
      */
     public static final String MAIN_VERSION = "1.0.0";
-    public static final String VERSION = "v" + MAIN_VERSION + "-4";
-    public static final String UPDATED_TIME = "2023-12-4 19:27";
+    public static final String VERSION = "v" + MAIN_VERSION + "-5";
+    public static final String UPDATED_TIME = "2023-12-7 17:03";
 
     private SpCoBot() {
         initEvents();
@@ -152,11 +153,15 @@ public class SpCoBot {
                 this.chatManager.onMessage(ChatType.FRIEND, bot, sender, sender, message, time);
                 return;
             }
-            if (context.startsWith(CommandSystem.COMMAND_START_SYMBOL_STRING)) {
-                CommandMeta meta = new CommandMeta(context);
-                if (meta.getArgs() != null) {
-                    CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs(), meta);
-                    CommandEvents.FRIEND_COMMAND.invoker().onFriendCommand(bot, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs(), meta);
+            if (context.startsWith(CommandSystem.COMMAND_START_SYMBOL)) {
+                try {
+                    CommandMeta meta = new CommandMeta(context);
+                    if (meta.getArgs() != null) {
+                        CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs(), meta);
+                        CommandEvents.FRIEND_COMMAND.invoker().onFriendCommand(bot, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs(), meta);
+                    }
+                } catch (CommandSyntaxException e) {
+                    sender.quoteReply(message, e.getMessage());
                 }
             }
         });
@@ -167,12 +172,17 @@ public class SpCoBot {
                 this.chatManager.onMessage(ChatType.GROUP, bot, source, sender, message, time);
                 return;
             }
-            if (context.startsWith(CommandSystem.COMMAND_START_SYMBOL_STRING)) {
-                CommandMeta meta = new CommandMeta(context);
-                if (meta.getArgs() != null) {
-                    CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs(), meta);
-                    CommandEvents.GROUP_COMMAND.invoker().onGroupCommand(bot, source, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs(), meta);
+            if (context.startsWith(CommandSystem.COMMAND_START_SYMBOL)) {
+                try {
+                    CommandMeta meta = new CommandMeta(context);
+                    if (meta.getArgs() != null) {
+                        CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs(), meta);
+                        CommandEvents.GROUP_COMMAND.invoker().onGroupCommand(bot, source, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs(), meta);
+                    }
+                } catch (CommandSyntaxException e) {
+                    source.quoteReply(message, e.getMessage());
                 }
+
             }
             if (context.equals("签到")) {
                 Command command = this.commandSystem.getGroupCommand("sign");
@@ -206,11 +216,15 @@ public class SpCoBot {
                 this.chatManager.onMessage(ChatType.GROUP_TEMP, bot, source, sender, message, time);
                 return;
             }
-            if (context.startsWith(CommandSystem.COMMAND_START_SYMBOL_STRING)) {
-                CommandMeta meta = new CommandMeta(context);
-                if (meta.getArgs() != null) {
-                    CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs(), meta);
-                    CommandEvents.GROUP_TEMP_COMMAND.invoker().onGroupTempCommand(bot, source, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs(), meta);
+            if (context.startsWith(CommandSystem.COMMAND_START_SYMBOL)) {
+                try {
+                    CommandMeta meta = new CommandMeta(context);
+                    if (meta.getArgs() != null) {
+                        CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs(), meta);
+                        CommandEvents.GROUP_TEMP_COMMAND.invoker().onGroupTempCommand(bot, source, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs(), meta);
+                    }
+                } catch (CommandSyntaxException e) {
+                    source.quoteReply(message, e.getMessage());
                 }
             }
         });

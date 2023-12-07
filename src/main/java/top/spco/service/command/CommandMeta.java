@@ -17,6 +17,9 @@ package top.spco.service.command;
 
 import top.spco.SpCoBot;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,7 +32,10 @@ import java.util.regex.Pattern;
  * @since 0.1.1
  */
 public class CommandMeta {
+    private static final char SYNTAX_ESCAPE = '\\';
+    private static final char SYNTAX_DOUBLE_QUOTE = '"';
     private final String command;
+    private int cursor;
     private String label = null;
     private String[] args = null;
 
@@ -59,26 +65,96 @@ public class CommandMeta {
      *
      * @param context 命令的原始文本
      */
-    public CommandMeta(String context) {
+    public CommandMeta(String context) throws CommandSyntaxException {
         this.command = context;
-        if (context.startsWith(CommandSystem.COMMAND_START_SYMBOL_STRING)) {
-            // 将用户的输入以 空格 为分隔符分割
-            String[] parts = context.split(CommandSystem.ARGUMENT_SEPARATOR_STRING);
-            // 检查parts数组是否为空
-            if (parts.length > 0) {
-                // 创建一个长度为parts数组的长度减一的数组, 用于存储命令的参数
-                String[] args = new String[parts.length - 1];
-                // 将parts数组中从第二个元素开始的所有元素复制到新的数组中
-                System.arraycopy(parts, 1, args, 0, parts.length - 1);
-                // 标签转换为小写
-                this.label = parts[0].toLowerCase(Locale.ENGLISH).substring(1);
-//                // 删除args中每个元素的空格
-//                for (int i = 0; i < args.length; i++) {
-//                    args[i] = args[i].replaceAll(" ", "");
-//                }
-                this.args = args;
+        if (context.startsWith(CommandSystem.COMMAND_START_SYMBOL)) {
+            List<String> partList = new ArrayList<>();
+            StringBuilder currentArgument = new StringBuilder();
+            boolean inQuote = false;
+            boolean inEscape = false;
+            boolean afterQuoteClose = false;
+            while (canRead()) {
+                boolean skip = false;
+                final char next = peek();
+                if (inEscape) {
+                    currentArgument.append(next);
+                    inEscape = false;
+                } else {
+                    if (next == SYNTAX_DOUBLE_QUOTE) {
+                        if (inQuote) {
+                            skip = true;
+                        }
+                        inQuote = !inQuote;
+                    } else if (next == SYNTAX_ESCAPE) {
+                        inEscape = true;
+                    } else if (next == CommandSystem.ARGUMENT_SEPARATOR_CHAR) {
+                        if (inQuote) {
+                            currentArgument.append(next);
+                        } else {
+                            partList.add(currentArgument.toString());
+                            currentArgument = new StringBuilder();
+                        }
+                    } else {
+                        currentArgument.append(next);
+                    }
+                }
+                if (afterQuoteClose && next != CommandSystem.ARGUMENT_SEPARATOR_CHAR) {
+                    currentArgument.append(next);
+                    partList.add(currentArgument.toString());
+                    String[] parts = partList.toArray(new String[0]);
+                    // 标签转换为小写
+                    this.label = parts[0].toLowerCase(Locale.ENGLISH).substring(1);
+                    // 创建一个长度为parts数组的长度减一的数组, 用于存储命令的参数
+                    String[] args = new String[parts.length - 1];
+                    // 将parts数组中从第二个元素开始的所有元素复制到新的数组中
+                    System.arraycopy(parts, 1, args, 0, parts.length - 1);
+                    throw CommandSyntaxException.expectedSeparator(this.label, args, args.length - 1);
+                }
+                afterQuoteClose = skip;
+                skip();
             }
+            partList.add(currentArgument.toString());
+            String[] parts = partList.toArray(new String[0]);
+            // 标签转换为小写
+            this.label = parts[0].toLowerCase(Locale.ENGLISH).substring(1);
+            // 创建一个长度为parts数组的长度减一的数组, 用于存储命令的参数
+            String[] args = new String[parts.length - 1];
+            // 将parts数组中从第二个元素开始的所有元素复制到新的数组中
+            System.arraycopy(parts, 1, args, 0, parts.length - 1);
+            if (inQuote) {
+                throw CommandSyntaxException.error("需要\"", this.label, args, args.length - 1);
+            }
+            this.args = removeEmptyStrings(args);
         }
+    }
+
+    public boolean canRead(final int length) {
+        return cursor + length <= command.length();
+    }
+
+    public boolean canRead() {
+        return canRead(1);
+    }
+
+    public char peek() {
+        return command.charAt(cursor);
+    }
+
+    public char read() {
+        return command.charAt(cursor++);
+    }
+
+    public void skip() {
+        cursor++;
+    }
+
+    @Override
+    public String toString() {
+        return "CommandMeta{" +
+                "command='" + command + '\'' +
+                ", label='" + label + '\'' +
+                ", args=" + Arrays.toString(args) +
+                '}';
     }
 
     /**
@@ -90,7 +166,7 @@ public class CommandMeta {
      */
     public String argument(int index) throws CommandSyntaxException {
         if (args.length < index + 1) {
-            throw CommandSyntaxException.DISPATCHER_UNKNOWN_ARGUMENT;
+            throw CommandSyntaxException.expectedSeparator(label, args, args.length - 1);
         }
         return args[index];
     }
@@ -107,7 +183,7 @@ public class CommandMeta {
         try {
             return Integer.parseInt(arg);
         } catch (NumberFormatException e) {
-            throw CommandSyntaxException.error("Expected integer", label, args, index);
+            throw CommandSyntaxException.error("需要整型", label, args, index);
         }
     }
 
@@ -123,7 +199,7 @@ public class CommandMeta {
         try {
             return Long.parseLong(arg);
         } catch (NumberFormatException e) {
-            throw CommandSyntaxException.error("Expected Long", label, args, index);
+            throw CommandSyntaxException.error("需要长整型", label, args, index);
         }
     }
 
@@ -134,7 +210,7 @@ public class CommandMeta {
      */
     public void max(int amount) throws CommandSyntaxException {
         if (args.length > amount) {
-            throw CommandSyntaxException.DISPATCHER_EXPECTED_SEPARATOR;
+            throw CommandSyntaxException.expectedSeparator(label, args, args.length - 1);
         }
     }
 
@@ -157,14 +233,28 @@ public class CommandMeta {
                 String id = atMatcher.group(1);
                 return Long.parseLong(id);
             } catch (NumberFormatException e) {
-                throw CommandSyntaxException.error("Expected UserId or at a user", label, args, index);
+                throw CommandSyntaxException.error("需要用户ID或@一位用户", label, args, index);
             }
         } else {
             try {
                 return longArgument(index);
             } catch (CommandSyntaxException e) {
-                throw CommandSyntaxException.error("Expected UserId or at a user", label, args, index);
+                throw CommandSyntaxException.error("需要用户ID或@一位用户", label, args, index);
             }
         }
+    }
+
+    public static String[] removeEmptyStrings(String[] array) {
+        List<String> resultList = new ArrayList<>();
+
+        for (String str : array) {
+            if (str != null && !str.trim().isEmpty()) {
+                // 如果字符串不为空且不只包含空格，则将其添加到结果列表中
+                resultList.add(str);
+            }
+        }
+
+        // 将结果列表转换为字符串数组
+        return resultList.toArray(new String[0]);
     }
 }
