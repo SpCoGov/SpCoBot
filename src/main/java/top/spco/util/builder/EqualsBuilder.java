@@ -16,6 +16,7 @@
  */
 package top.spco.util.builder;
 
+import top.spco.core.Builder;
 import top.spco.util.ArrayUtils;
 import top.spco.util.ClassUtils;
 import top.spco.util.tuple.Pair;

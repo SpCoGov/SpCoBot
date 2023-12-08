@@ -29,7 +29,7 @@ import java.lang.management.MemoryUsage;
 
 /**
  * @author SpCo
- * @version 1.0.0
+ * @version 1.0.1
  * @since 0.3.4
  */
 public class MemoryCommand extends AbstractCommand {

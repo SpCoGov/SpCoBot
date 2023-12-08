@@ -19,7 +19,7 @@ package top.spco.util.text;
 import top.spco.util.ArrayUtils;
 import top.spco.util.CharUtils;
 import top.spco.util.StringUtils;
-import top.spco.util.builder.Builder;
+import top.spco.core.Builder;
 
 import java.io.IOException;
 import java.io.Reader;

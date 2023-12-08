@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
  * 命令的数据
  *
  * @author SpCo
- * @version 1.0.0
+ * @version 1.0.1
  * @since 0.1.1
  */
 public class CommandMeta {

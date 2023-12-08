@@ -20,7 +20,7 @@ import top.spco.api.Friend;
 import top.spco.api.Group;
 import top.spco.api.Interactive;
 import top.spco.api.NormalMember;
-import top.spco.util.builder.Builder;
+import top.spco.core.Builder;
 
 /**
  * {@link ChatBuilder}是一个用于构建{@link Chat}对象的构建器。<p>
@@ -77,6 +77,7 @@ public class ChatBuilder implements Builder<Chat> {
      *
      * @return 创建的Chat对象
      */
+    @Override
     public Chat build() {
         chat.freeze();
         SpCoBot.getInstance().chatManager.register(chat);

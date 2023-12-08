@@ -25,7 +25,7 @@ import java.util.List;
 
 /**
  * @author SpCo
- * @version 1.0.0
+ * @version 1.0.1
  * @since 0.3.3
  */
 public class KickCommand extends AbstractCommand {
