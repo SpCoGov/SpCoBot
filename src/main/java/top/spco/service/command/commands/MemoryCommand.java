@@ -29,7 +29,7 @@ import java.lang.management.MemoryUsage;
 
 /**
  * @author SpCo
- * @version 1.0.0
+ * @version 1.0.1
  * @since 0.3.4
  */
 public class MemoryCommand extends AbstractCommand {
@@ -51,6 +51,7 @@ public class MemoryCommand extends AbstractCommand {
 
         from.quoteReply(message, "堆内存的使用情况\n" + memoryUsage(heapMemoryUsage));
         from.quoteReply(message, "非堆内存的使用情况\n" + memoryUsage(nonHeapMemoryUsage));
+        from.quoteReply(message, "机器人总占用内存：" + ((heapMemoryUsage.getUsed() / (1024 * 1024)) + (nonHeapMemoryUsage.getUsed() / (1024 * 1024))) + "MB");
     }
 
     private String memoryUsage(MemoryUsage usage) {

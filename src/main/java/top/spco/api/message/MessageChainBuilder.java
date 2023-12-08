@@ -15,15 +15,15 @@
  */
 package top.spco.api.message;
 
+import top.spco.core.Builder;
+
 /**
  * @author SpCo
  * @version 0.1.0
  * @since 0.1.0
  */
-public interface MessageChainBuilder {
+public interface MessageChainBuilder extends Builder<Message> {
     MessageChainBuilder append(Message message);
 
     MessageChainBuilder append(String message);
-
-    Message build();
 }

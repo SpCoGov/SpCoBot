@@ -17,16 +17,15 @@ package top.spco.service.command.commands;
 
 import top.spco.api.*;
 import top.spco.api.message.Message;
-import top.spco.service.command.AbstractCommand;
-import top.spco.service.command.CommandMeta;
-import top.spco.service.command.CommandScope;
-import top.spco.service.command.CommandSyntaxException;
+import top.spco.service.command.*;
 import top.spco.user.BotUser;
 import top.spco.user.UserPermission;
 
+import java.util.List;
+
 /**
  * @author SpCo
- * @version 1.0.0
+ * @version 1.0.1
  * @since 0.3.3
  */
 public class KickCommand extends AbstractCommand {
@@ -48,6 +47,11 @@ public class KickCommand extends AbstractCommand {
     @Override
     public CommandScope getScope() {
         return CommandScope.ONLY_GROUP;
+    }
+
+    @Override
+    public List<CommandUsage> getUsages() {
+        return List.of(new CommandUsage("kick", "踢出一名群成员", new CommandParam("目标用户", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.TARGET_USER_ID)));
     }
 
     @Override

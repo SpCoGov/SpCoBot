@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
  * 命令的数据
  *
  * @author SpCo
- * @version 1.0.0
+ * @version 1.0.1
  * @since 0.1.1
  */
 public class CommandMeta {
@@ -189,7 +189,7 @@ public class CommandMeta {
      */
     public String argument(int index) throws CommandSyntaxException {
         if (args.length < index + 1) {
-            throw CommandSyntaxException.expectedSeparator(label, args, args.length - 1);
+            throw CommandSyntaxException.error("需要文本型", label, args, index);
         }
         return args[index];
     }

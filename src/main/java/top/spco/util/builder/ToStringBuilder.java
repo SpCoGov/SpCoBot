@@ -16,6 +16,7 @@
  */
 package top.spco.util.builder;
 
+import top.spco.core.Builder;
 import top.spco.util.ObjectUtils;
 
 import java.util.Objects;
