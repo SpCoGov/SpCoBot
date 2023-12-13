@@ -143,6 +143,7 @@ public class CommandDispatcher {
                 Exception lastException = CommandSyntaxException.DISPATCHER_UNKNOWN_COMMAND;
                 // 判断用户提交的参数是否符合命令的用法
                 for (CommandUsage usage : object.getUsages()) {
+                    meta.setUsage(usage);
                     // 先判断用户提交的参数的数量是否符合此用法需提交的参数数量
                     // 在一些情况下 用户正确提交的参数会比需要提交的参数数量少
                     // 先确定这个方法所需的最少参数数量
@@ -196,7 +197,6 @@ public class CommandDispatcher {
                         lastException = e;
                         continue;
                     }
-                    meta.setUsage(usage);
                     // 如用户的提交参数符合用法需求，退出循环并交由命令对象处理
                     object.onCommand(bot, from, sender, user, message, time, command, label, args, meta, usage.name);
                     return;

@@ -41,6 +41,7 @@ public class CommandMeta {
     private int cursor;
     private String label = null;
     private String[] args = null;
+    private String[] originalArgs = null;
 
     /**
      * 获取命令的原始文本
@@ -152,23 +153,34 @@ public class CommandMeta {
                 throw CommandSyntaxException.error("需要后引号(\")", this.label, args, args.length - 1);
             }
             // 移除参数中的空字符串
-            this.args = removeEmptyStrings(args);
+            this.originalArgs = removeEmptyStrings(args);
+            this.args = this.originalArgs;
         }
     }
 
     public void setUsage(final CommandUsage usage) {
         var args = usage.params;
-        if (args.get(args.size() - 1).type == CommandParam.ParamType.OPTIONAL) {
-
+        if (args.size() == this.args.length) {
+            return;
+        }
+        int index = 0;
+        for (var arg : args) {
+            if (arg.content == CommandParam.ParamContent.TARGET_USER_ID) {
+                var quote = SpCoBot.getInstance().getMessageService().getQuote(this.sourceMessage);
+                if (quote != null) {
+                    this.args = insertIntoArray(this.originalArgs, String.valueOf(quote.getLeft().getFromId()), index);
+                }
+            }
+            index += 1;
         }
     }
 
     /**
      * 在数组中插入一个元素并返回新数组。
      *
-     * @param originalArray 原始数组。
+     * @param originalArray   原始数组。
      * @param elementToInsert 要插入的元素。
-     * @param insertIndex 插入的索引位置。
+     * @param insertIndex     插入的索引位置。
      * @return 包含了新元素的新数组。
      */
     public static <T> T[] insertIntoArray(T[] originalArray, T elementToInsert, int insertIndex) {

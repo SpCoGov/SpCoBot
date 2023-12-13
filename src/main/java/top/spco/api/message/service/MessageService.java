@@ -15,6 +15,7 @@
  */
 package top.spco.api.message.service;
 
+import org.jetbrains.annotations.Nullable;
 import top.spco.api.message.Message;
 import top.spco.api.message.MessageSource;
 import top.spco.util.tuple.ImmutablePair;
@@ -80,5 +81,6 @@ public interface MessageService {
      * @param message 源消息
      * @return 如果有引用时返回被引用的消息，如果没有时返回null
      */
+    @Nullable
     ImmutablePair<MessageSource, Message> getQuote(Message message);
 }
