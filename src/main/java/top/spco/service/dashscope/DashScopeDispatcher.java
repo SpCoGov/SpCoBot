@@ -27,24 +27,24 @@ import java.util.Map;
  * 用于管理{@link DashScope}的单例类
  *
  * @author SpCo
- * @version 0.2.1
+ * @version 1.1.0
  * @since 0.2.1
  */
-public class DashScopeManager {
-    private static DashScopeManager instance;
+public class DashScopeDispatcher {
+    private static DashScopeDispatcher instance;
     private static boolean registered = false;
     private final Map<Long, DashScope> dashScopes = new HashMap<>();
 
-    private DashScopeManager() {
+    private DashScopeDispatcher() {
         if (registered) {
             return;
         }
         registered = true;
     }
 
-    public static DashScopeManager getInstance() {
+    public static DashScopeDispatcher getInstance() {
         if (instance == null) {
-            instance = new DashScopeManager();
+            instance = new DashScopeDispatcher();
         }
         return instance;
     }

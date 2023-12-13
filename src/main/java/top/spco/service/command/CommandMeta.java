@@ -18,6 +18,7 @@ package top.spco.service.command;
 import top.spco.SpCoBot;
 import top.spco.api.message.Message;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,13 +30,14 @@ import java.util.regex.Pattern;
  * 命令的数据
  *
  * @author SpCo
- * @version 1.0.1
+ * @version 1.1.0
  * @since 0.1.1
  */
 public class CommandMeta {
     private static final char SYNTAX_ESCAPE = '\\';
     private static final char SYNTAX_DOUBLE_QUOTE = '"';
     private final String command;
+    private final Message sourceMessage;
     private int cursor;
     private String label = null;
     private String[] args = null;
@@ -66,9 +68,10 @@ public class CommandMeta {
      *
      * @param context 命令的原始文本
      */
-    public CommandMeta(String context) throws CommandSyntaxException {
+    public CommandMeta(String context, Message sourceMessage) throws CommandSyntaxException {
+        this.sourceMessage = sourceMessage;
         this.command = context;
-        if (context.startsWith(CommandSystem.COMMAND_START_SYMBOL)) {
+        if (context.startsWith(CommandDispatcher.COMMAND_START_SYMBOL)) {
             List<String> partList = new ArrayList<>();
             StringBuilder currentArgument = new StringBuilder();
             // 标志：是否在引号内
@@ -102,7 +105,7 @@ public class CommandMeta {
                         // 进入转义状态
                         inEscape = true;
                         // 如果下一个字符是参数分隔符
-                    } else if (next == CommandSystem.ARGUMENT_SEPARATOR_CHAR) {
+                    } else if (next == CommandDispatcher.ARGUMENT_SEPARATOR_CHAR) {
                         // 如果在引号内
                         if (inQuote) {
                             // 将字符添加到当前参数中
@@ -119,7 +122,7 @@ public class CommandMeta {
                     }
                 }
                 // 如果在引号关闭后且下一个字符不是参数分隔符
-                if (afterQuoteClose && next != CommandSystem.ARGUMENT_SEPARATOR_CHAR) {
+                if (afterQuoteClose && next != CommandDispatcher.ARGUMENT_SEPARATOR_CHAR) {
                     // 将字符添加到当前参数中
                     currentArgument.append(next);
                     // 添加当前参数到参数列表中
@@ -151,6 +154,29 @@ public class CommandMeta {
             // 移除参数中的空字符串
             this.args = removeEmptyStrings(args);
         }
+    }
+
+    public void setUsage(final CommandUsage usage) {
+        var args = usage.params;
+        if (args.get(args.size() - 1).type == CommandParam.ParamType.OPTIONAL) {
+
+        }
+    }
+
+    /**
+     * 在数组中插入一个元素并返回新数组。
+     *
+     * @param originalArray 原始数组。
+     * @param elementToInsert 要插入的元素。
+     * @param insertIndex 插入的索引位置。
+     * @return 包含了新元素的新数组。
+     */
+    public static <T> T[] insertIntoArray(T[] originalArray, T elementToInsert, int insertIndex) {
+        List<T> list = new ArrayList<>(Arrays.asList(originalArray));
+        list.add(insertIndex, elementToInsert);
+        @SuppressWarnings("unchecked")
+        T[] newArray = (T[]) Array.newInstance(originalArray.getClass().getComponentType(), list.size());
+        return list.toArray(newArray);
     }
 
     /**
@@ -259,16 +285,15 @@ public class CommandMeta {
     /**
      * 获取命令的目标用户id类型参数
      *
-     * @param index   参数的索引
-     * @param message 发送的消息
+     * @param index 参数的索引
      * @return 对应参数的值
      * @throws CommandSyntaxException 索引超出了参数数组的范围或该参数不是预期类型
      */
-    public long targetUserIdArgument(int index, Message message) throws CommandSyntaxException {
+    public long targetUserIdArgument(int index) throws CommandSyntaxException {
         try {
             return userIdArgument(index);
         } catch (Exception e) {
-            var quote = SpCoBot.getInstance().getMessageService().getQuote(message);
+            var quote = SpCoBot.getInstance().getMessageService().getQuote(this.sourceMessage);
             if (quote == null) {
                 throw CommandSyntaxException.error("需要用户ID或@一位用户或在回复时发送这条命令", this.label, this.args, index);
             }

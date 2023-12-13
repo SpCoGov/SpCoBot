@@ -27,26 +27,26 @@ import java.util.Map;
  * 用于管理{@link Chat}的单例类
  *
  * @author SpCo
- * @version 0.1.1
+ * @version 1.1.0
  * @since 0.1.1
  */
-public class ChatManager {
-    private static ChatManager instance;
+public class ChatDispatcher {
+    private static ChatDispatcher instance;
     private static boolean registered = false;
     private final Map<Long, Chat> friendChats = new HashMap<>();
     private final Map<Long, Chat> groupChats = new HashMap<>();
     private final Map<Long, Chat> groupTempChats = new HashMap<>();
 
-    private ChatManager() {
+    private ChatDispatcher() {
         if (!registered) {
             registered = true;
         }
     }
 
-    public static ChatManager getInstance() {
+    public static ChatDispatcher getInstance() {
         if (instance == null) {
 
-            instance = new ChatManager();
+            instance = new ChatDispatcher();
         }
         return instance;
     }

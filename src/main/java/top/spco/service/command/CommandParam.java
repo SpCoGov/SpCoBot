@@ -19,7 +19,7 @@ package top.spco.service.command;
  * 表示命令参数。
  *
  * @author SpCo
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0
  */
 public class CommandParam {
@@ -51,34 +51,34 @@ public class CommandParam {
     @Override
     public String toString() {
         if (this.content == ParamContent.TARGET_USER_ID) {
-            return CommandSystem.USAGE_TARGET_USER_ID_OPEN + this.name + CommandSystem.USAGE_TARGET_USER_ID_CLOSE;
+            return CommandDispatcher.USAGE_TARGET_USER_ID_OPEN + this.name + CommandDispatcher.USAGE_TARGET_USER_ID_CLOSE;
         } else if (this.type == ParamType.REQUIRED) {
             if (this.content == ParamContent.SELECTION) {
                 StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < this.options.length; i++) {
                     if (i > 0) {
-                        sb.append(CommandSystem.USAGE_OR);
+                        sb.append(CommandDispatcher.USAGE_OR);
                     }
                     sb.append(this.options[i]);
                 }
                 if (this.options.length == 1) {
                     return sb.toString();
                 }
-                return CommandSystem.USAGE_REQUIRED_OPEN + sb.toString() + CommandSystem.USAGE_REQUIRED_CLOSE;
+                return CommandDispatcher.USAGE_REQUIRED_OPEN + sb.toString() + CommandDispatcher.USAGE_REQUIRED_CLOSE;
             }
-            return CommandSystem.USAGE_REQUIRED_OPEN + this.name + CommandSystem.USAGE_REQUIRED_CLOSE;
+            return CommandDispatcher.USAGE_REQUIRED_OPEN + this.name + CommandDispatcher.USAGE_REQUIRED_CLOSE;
         } else if (this.type == ParamType.OPTIONAL) {
             if (this.content == ParamContent.SELECTION) {
                 StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < this.options.length; i++) {
                     if (i > 0) {
-                        sb.append(CommandSystem.USAGE_OR);
+                        sb.append(CommandDispatcher.USAGE_OR);
                     }
                     sb.append(this.options[i]);
                 }
-                return CommandSystem.USAGE_OPTIONAL_OPEN + sb.toString() + CommandSystem.USAGE_OPTIONAL_CLOSE;
+                return CommandDispatcher.USAGE_OPTIONAL_OPEN + sb.toString() + CommandDispatcher.USAGE_OPTIONAL_CLOSE;
             }
-            return CommandSystem.USAGE_OPTIONAL_OPEN + this.name + CommandSystem.USAGE_OPTIONAL_CLOSE;
+            return CommandDispatcher.USAGE_OPTIONAL_OPEN + this.name + CommandDispatcher.USAGE_OPTIONAL_CLOSE;
         }
         return "";
     }

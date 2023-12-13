@@ -25,7 +25,7 @@ import java.util.List;
 
 /**
  * @author SpCo
- * @version 1.0.1
+ * @version 1.1.0
  * @since 0.3.0
  */
 public class UnmuteCommand extends AbstractCommand {
@@ -62,7 +62,7 @@ public class UnmuteCommand extends AbstractCommand {
                     from.quoteReply(message, "机器人权限不足");
                     return;
                 }
-                long id = meta.targetUserIdArgument(0, message);
+                long id = meta.targetUserIdArgument(0);
                 NormalMember target = group.getMember(id);
                 if (target.getPermission().getLevel() >= group.botPermission().getLevel()) {
                     from.quoteReply(message, "大佬，惹不起");

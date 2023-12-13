@@ -30,7 +30,7 @@ import java.util.Map;
  * 统计
  *
  * @author SpCo
- * @version 0.1.1
+ * @version 1.1.0
  * @since 0.1.1
  */
 public class Statistics {
@@ -112,7 +112,7 @@ public class Statistics {
     }
 
     public void stop() {
-        SpCoBot.getInstance().statisticsManager.remove(group);
+        SpCoBot.getInstance().statisticsDispatcher.remove(group);
         this.mapping = null;
         this.statistics = null;
         this.group = null;

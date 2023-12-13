@@ -21,7 +21,7 @@ import top.spco.api.User;
 import top.spco.api.message.Message;
 import top.spco.service.command.AbstractCommand;
 import top.spco.service.command.CommandMeta;
-import top.spco.service.command.CommandSystem;
+import top.spco.service.command.CommandDispatcher;
 import top.spco.user.BotUser;
 
 /**
@@ -43,7 +43,7 @@ public final class HelpCommand extends AbstractCommand {
     @Override
     public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
         StringBuilder sb = new StringBuilder();
-        for (String help : CommandSystem.getHelpList()) {
+        for (String help : CommandDispatcher.getHelpList()) {
             sb.append(help).append("\n");
         }
         from.quoteReply(message, sb.toString());

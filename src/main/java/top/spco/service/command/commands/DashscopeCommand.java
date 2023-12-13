@@ -66,7 +66,7 @@ public class DashscopeCommand extends AbstractCommand {
                 return;
             }
             try {
-                DashScope dashScope = SpCoBot.getInstance().dashScopeManager.getDashScopeOrCreate(user, from, message);
+                DashScope dashScope = SpCoBot.getInstance().dashScopeDispatcher.getDashScopeOrCreate(user, from, message);
                 String request = args[0];
                 String result = dashScope.callWithMessage(request, 10000).getOutput().getChoices().get(0).getMessage().getContent();
                 dashScope.setLastMessage(from, message);
