@@ -27,7 +27,7 @@ import java.util.List;
  * {@link Chat 对话}是一种用户与机器人交互的方式。
  *
  * @author SpCo
- * @version 0.1.1
+ * @version 1.1.0
  * @since 0.1.1
  */
 public class Chat {
@@ -126,7 +126,7 @@ public class Chat {
     public void stop() {
         this.stages = null;
         this.stopped = true;
-        SpCoBot.getInstance().chatManager.stopChat(target, type);
+        SpCoBot.getInstance().chatDispatcher.stopChat(target, type);
     }
 
     private Stage getCurrentStage() {

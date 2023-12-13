@@ -28,7 +28,7 @@ import java.util.List;
 
 /**
  * @author SpCo
- * @version 1.0.1
+ * @version 1.1.0
  * @since 0.3.0
  */
 public class GetotherCommand extends AbstractCommand {
@@ -55,7 +55,7 @@ public class GetotherCommand extends AbstractCommand {
     @Override
     public void onCommand(Bot bot, Interactive from, User sender, BotUser user1, Message message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
         try {
-            BotUser user = BotUser.getOrCreate(meta.targetUserIdArgument(0, message));
+            BotUser user = BotUser.getOrCreate(meta.targetUserIdArgument(0));
             from.quoteReply(message, user.toString());
         } catch (CommandSyntaxException e) {
             from.handleException(message, e.getMessage());

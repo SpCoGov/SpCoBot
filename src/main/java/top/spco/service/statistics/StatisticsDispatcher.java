@@ -19,7 +19,6 @@ import top.spco.api.Group;
 import top.spco.api.NormalMember;
 import top.spco.events.MessageEvents;
 import top.spco.service.RegistrationException;
-import top.spco.service.dashscope.DashScope;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,15 +27,15 @@ import java.util.Map;
  * 用于管理{@link Statistics}的单例类
  *
  * @author SpCo
- * @version 0.1.1
+ * @version 1.1.0
  * @since 0.1.1
  */
-public class StatisticsManager {
-    private static StatisticsManager instance;
+public class StatisticsDispatcher {
+    private static StatisticsDispatcher instance;
     private static boolean registered = false;
     private final Map<Long, Statistics> statistics = new HashMap<>();
 
-    private StatisticsManager() {
+    private StatisticsDispatcher() {
         if (registered) {
             return;
         }
@@ -58,9 +57,9 @@ public class StatisticsManager {
         return null;
     }
 
-    public static StatisticsManager getInstance() {
+    public static StatisticsDispatcher getInstance() {
         if (instance == null) {
-            instance = new StatisticsManager();
+            instance = new StatisticsDispatcher();
         }
         return instance;
     }

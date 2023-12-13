@@ -40,7 +40,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 用户个人的DashScope
  *
  * @author SpCo
- * @version 0.2.1
+ * @version 1.1.0
  * @since 0.2.1
  */
 public class DashScope {
@@ -85,7 +85,7 @@ public class DashScope {
             }
             msgManager = null;
             generation = null;
-            SpCoBot.getInstance().dashScopeManager.remove(userId);
+            SpCoBot.getInstance().dashScopeDispatcher.remove(userId);
         }
     }
 

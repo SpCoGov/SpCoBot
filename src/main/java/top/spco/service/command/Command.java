@@ -40,7 +40,7 @@ import java.util.List;
  * <b>不建议命令实现此接口，而是继承 {@link AbstractCommand}类</b>
  *
  * @author SpCo
- * @version 1.0.0
+ * @version 1.1.0
  * @see AbstractCommand
  * @since 0.1.0
  */
@@ -98,7 +98,7 @@ public interface Command {
      * 初始化命令<p>
      * 会在命令被成功注册时被调用。
      *
-     * @see CommandSystem#registerCommand(Command)
+     * @see CommandDispatcher#registerCommand(Command)
      */
     void init();
 
@@ -116,9 +116,10 @@ public interface Command {
      * @param label   触发命令的标签
      * @param args    触发命令提交的参数
      * @param meta    命令的元数据
+     * @throws CommandSyntaxException 用户调用命令发生语法错误时抛出
      * @see CommandEvents
      */
-    void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta, String usageName);
+    void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) throws CommandSyntaxException;
 
     /**
      * 在帮助列表是否可见

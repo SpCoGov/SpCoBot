@@ -27,7 +27,7 @@ import top.spco.core.Builder;
  * 该类允许您创建{@link Chat}对象，管理用户与机器人之间的交互，并添加{@link Stage 交互阶段}。
  *
  * @author SpCo
- * @version 0.1.1
+ * @version 1.1.0
  * @since 0.3.1
  */
 public class ChatBuilder implements Builder<Chat> {
@@ -73,14 +73,14 @@ public class ChatBuilder implements Builder<Chat> {
     }
 
     /**
-     * 构建{@link Chat}对象，冻结它以防止添加更多{@link Stage 阶段}，并将其注册到{@link ChatManager}中。
+     * 构建{@link Chat}对象，冻结它以防止添加更多{@link Stage 阶段}，并将其注册到{@link ChatDispatcher}中。
      *
      * @return 创建的Chat对象
      */
     @Override
     public Chat build() {
         chat.freeze();
-        SpCoBot.getInstance().chatManager.register(chat);
+        SpCoBot.getInstance().chatDispatcher.register(chat);
         return chat;
     }
 }

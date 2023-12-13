@@ -36,10 +36,10 @@ import java.util.*;
  * 它负责注册、执行和管理各种命令的权限
  *
  * @author SpCo
- * @version 1.0.0
+ * @version 1.1.0
  * @since 0.1.0
  */
-public class CommandSystem {
+public class CommandDispatcher {
     public static final String COMMAND_START_SYMBOL = "/";
     public static final char ARGUMENT_SEPARATOR_CHAR = ' ';
     public static final char USAGE_OPTIONAL_OPEN = '[';
@@ -49,14 +49,14 @@ public class CommandSystem {
     public static final char USAGE_TARGET_USER_ID_OPEN = '{';
     public static final char USAGE_TARGET_USER_ID_CLOSE = '}';
     public static final char USAGE_OR = '|';
-    private static CommandSystem instance;
+    private static CommandDispatcher instance;
     private static boolean registered = false;
     private static final List<Command> allCommands = new ArrayList<>();
     private static final Map<String, Command> friendCommands = new HashMap<>();
     private static final Map<String, Command> groupTempCommands = new HashMap<>();
     private static final Map<String, Command> groupCommands = new HashMap<>();
 
-    private CommandSystem() {
+    private CommandDispatcher() {
         if (registered) {
             return;
         }
@@ -105,19 +105,19 @@ public class CommandSystem {
 
     private void init() {
         CommandEvents.FRIEND_COMMAND.register((bot, interactor, message, time, command, label, args, meta) -> {
-            if (SpCoBot.getInstance().chatManager.isInChat(interactor, ChatType.FRIEND)) {
+            if (SpCoBot.getInstance().chatDispatcher.isInChat(interactor, ChatType.FRIEND)) {
                 return;
             }
             callCommand(friendCommands, label, interactor, interactor, message, bot, time, command, args, meta);
         });
         CommandEvents.GROUP_COMMAND.register((bot, from, sender, message, time, command, label, args, meta) -> {
-            if (SpCoBot.getInstance().chatManager.isInChat(from, ChatType.GROUP)) {
+            if (SpCoBot.getInstance().chatDispatcher.isInChat(from, ChatType.GROUP)) {
                 return;
             }
             callCommand(groupCommands, label, from, sender, message, bot, time, command, args, meta);
         });
         CommandEvents.GROUP_TEMP_COMMAND.register((bot, interactor, message, time, command, label, args, meta) -> {
-            if (SpCoBot.getInstance().chatManager.isInChat(interactor, ChatType.GROUP_TEMP)) {
+            if (SpCoBot.getInstance().chatDispatcher.isInChat(interactor, ChatType.GROUP_TEMP)) {
                 return;
             }
             callCommand(groupTempCommands, label, interactor, interactor, message, bot, time, command, args, meta);
@@ -143,6 +143,7 @@ public class CommandSystem {
                 Exception lastException = CommandSyntaxException.DISPATCHER_UNKNOWN_COMMAND;
                 // 判断用户提交的参数是否符合命令的用法
                 for (CommandUsage usage : object.getUsages()) {
+                    meta.setUsage(usage);
                     // 先判断用户提交的参数的数量是否符合此用法需提交的参数数量
                     // 在一些情况下 用户正确提交的参数会比需要提交的参数数量少
                     // 先确定这个方法所需的最少参数数量
@@ -212,11 +213,11 @@ public class CommandSystem {
     }
 
     /**
-     * 获取{@link CommandSystem}单例
+     * 获取{@link CommandDispatcher}单例
      */
-    public static CommandSystem getInstance() {
+    public static CommandDispatcher getInstance() {
         if (instance == null) {
-            instance = new CommandSystem();
+            instance = new CommandDispatcher();
         }
         return instance;
     }
