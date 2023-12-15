@@ -24,25 +24,41 @@ package top.spco.api;
  */
 public interface Group extends Interactive {
     /**
-     * 群名称
+     * 获取该群群名称
+     *
+     * @return 群名称
      */
     String getName();
 
     /**
-     * 群主
+     * 获取该群群主
+     *
+     * @return 群主对象
      */
     NormalMember getOwner();
 
     /**
      * 让机器人退出这个群
      *
-     * @return 退出成功时 {@code true}; 已经退出时 {@code false}
+     * @return 退出成功时返回 {@code true}; 已经退出时返回 {@code false}
      */
     boolean quit();
 
     MemberPermission botPermission();
 
+    /**
+     * 获取机器人在群中的成员对象
+     *
+     * @return 成员对象
+     */
     NormalMember botAsMember();
 
+
+    /**
+     * 查询群成员对象
+     *
+     * @param id 成员Id
+     * @return 查询结果. 不存在时返回 {@code null}
+     */
     NormalMember getMember(long id);
 }

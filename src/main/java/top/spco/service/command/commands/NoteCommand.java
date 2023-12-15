@@ -30,7 +30,7 @@ import java.io.File;
 
 /**
  * @author SpCo
- * @version 1.0.0
+ * @version 1.2.0
  * @since 0.3.2
  */
 public class NoteCommand extends AbstractCommand {
@@ -56,11 +56,15 @@ public class NoteCommand extends AbstractCommand {
 
     @Override
     public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
-        String context = SpCoBot.getInstance().getMessageService().getQuote(message).getRight().toMessageContext();
-        if (!context.endsWith("，不打")) {
-            context += "，不打";
+        try {
+            String context = SpCoBot.getInstance().getMessageService().getQuote(message).getRight().toMessageContext();
+            if (!context.endsWith("，不打")) {
+                context += "，不打";
+            }
+            new FileManipulation(SpCoBot.configFolder + File.separator + "valorant.spco").writeToFile(context + "\n");
+            from.quoteReply(message, "已记录「" + context + "」");
+        } catch (NullPointerException e) {
+            from.quoteReply(message, "请在回复消息时使用此命令");
         }
-        new FileManipulation(SpCoBot.configFolder + File.separator + "valorant.spco").writeToFile(context + "\n");
-        from.quoteReply(message, "已记录「" + context + "」");
     }
 }

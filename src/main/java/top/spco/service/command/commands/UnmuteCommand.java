@@ -15,20 +15,22 @@
  */
 package top.spco.service.command.commands;
 
-import top.spco.api.*;
+import top.spco.api.Bot;
+import top.spco.api.Interactive;
+import top.spco.api.NormalMember;
+import top.spco.api.User;
 import top.spco.api.message.Message;
 import top.spco.service.command.*;
 import top.spco.user.BotUser;
-import top.spco.user.UserPermission;
 
 import java.util.List;
 
 /**
  * @author SpCo
- * @version 1.1.0
+ * @version 1.2.0
  * @since 0.3.0
  */
-public class UnmuteCommand extends AbstractCommand {
+public class UnmuteCommand extends GroupAbstractCommand {
     @Override
     public String[] getLabels() {
         return new String[]{"unmute"};
@@ -40,16 +42,6 @@ public class UnmuteCommand extends AbstractCommand {
     }
 
     @Override
-    public UserPermission needPermission() {
-        return UserPermission.ADMINISTRATOR;
-    }
-
-    @Override
-    public CommandScope getScope() {
-        return CommandScope.ONLY_GROUP;
-    }
-
-    @Override
     public List<CommandUsage> getUsages() {
         return List.of(new CommandUsage("unmute", "解除禁言一位群员", new CommandParam("目标用户", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.TARGET_USER_ID)));
     }
@@ -57,24 +49,14 @@ public class UnmuteCommand extends AbstractCommand {
     @Override
     public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
         try {
-            if (from instanceof Group group) {
-                if (!group.botPermission().isOperator()) {
-                    from.quoteReply(message, "机器人权限不足");
-                    return;
-                }
-                long id = meta.targetUserIdArgument(0);
-                NormalMember target = group.getMember(id);
-                if (target.getPermission().getLevel() >= group.botPermission().getLevel()) {
-                    from.quoteReply(message, "大佬，惹不起");
-                    return;
-                }
+            long id = meta.targetUserIdArgument(0);
+            NormalMember target = GroupMemberCommandValidator.verifyAdminStatus(from, user, message, id);
+            if (target != null) {
                 target.unmute();
                 from.quoteReply(message, "已将 " + target.getNameCard() + "(" + target.getId() + ")" + " 解除禁言");
             }
         } catch (CommandSyntaxException e) {
             from.handleException(message, e.getMessage());
-        } catch (NullPointerException e) {
-            from.quoteReply(message, "该用户不存在");
         }
     }
 }

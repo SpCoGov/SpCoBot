@@ -25,10 +25,10 @@ import java.util.List;
 
 /**
  * @author SpCo
- * @version 1.1.0
+ * @version 1.2.0
  * @since 0.3.0
  */
-public class MuteCommand extends AbstractCommand {
+public class MuteCommand extends GroupAbstractCommand {
     @Override
     public String[] getLabels() {
         return new String[]{"mute"};
@@ -45,11 +45,6 @@ public class MuteCommand extends AbstractCommand {
     }
 
     @Override
-    public CommandScope getScope() {
-        return CommandScope.ONLY_GROUP;
-    }
-
-    @Override
     public List<CommandUsage> getUsages() {
         return List.of(new CommandUsage("mute", "禁言一位群员", new CommandParam("目标用户", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.TARGET_USER_ID),
                 new CommandParam("禁言时间", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.INTEGER)));
@@ -58,26 +53,15 @@ public class MuteCommand extends AbstractCommand {
     @Override
     public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
         try {
-            if (from instanceof Group group) {
-                if (!group.botPermission().isOperator()) {
-                    from.quoteReply(message, "机器人权限不足");
-                    return;
-                }
-                long id = meta.targetUserIdArgument(0);
-                NormalMember target = group.getMember(id);
-                if (target.getPermission().getLevel() >= group.botPermission().getLevel()) {
-                    from.quoteReply(message, "大佬，惹不起");
-                    return;
-                }
+            long id = meta.targetUserIdArgument(0);
+            NormalMember target = GroupMemberCommandValidator.verifyAdminStatus(from, user, message, id);
+            if (target != null) {
                 int duration = meta.integerArgument(1);
                 target.mute(duration);
                 from.quoteReply(message, "已将 " + target.getNameCard() + "(" + target.getId() + ")" + " 禁言" + duration + "秒");
             }
         } catch (CommandSyntaxException e) {
             from.handleException(message, e.getMessage());
-        } catch (NullPointerException e) {
-            from.quoteReply(message, "该用户不存在");
         }
-
     }
 }
