@@ -20,6 +20,7 @@ import top.spco.api.Interactive;
 import top.spco.api.NormalMember;
 import top.spco.api.message.Message;
 import top.spco.user.BotUser;
+import top.spco.user.UserPermission;
 
 /**
  * 群组成员命令验证器。<p>
@@ -46,7 +47,7 @@ import top.spco.user.BotUser;
  * 这些方法有助于在执行群管理命令之前确保权限和安全性。
  *
  * @author SpCo
- * @version 1.2.0
+ * @version 1.2.1
  * @since 1.2.0
  */
 public class GroupMemberCommandValidator {
@@ -66,8 +67,10 @@ public class GroupMemberCommandValidator {
         try {
             if (from instanceof Group group) {
                 if (!group.getMember(user.getId()).getPermission().isOperator()) {
-                    from.quoteReply(message, "[告知] 您无权使用此命令.");
-                    return null;
+                    if (user.getPermission() < UserPermission.ADMINISTRATOR.getLevel()) {
+                        from.quoteReply(message, "[告知] 您无权使用此命令.");
+                        return null;
+                    }
                 }
                 NormalMember target = group.getMember(targetId);
                 if (verifyBotStatus(from, message, target)) {
