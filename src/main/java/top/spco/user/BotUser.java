@@ -15,9 +15,6 @@
  */
 package top.spco.user;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import top.spco.SpCoBot;
 import top.spco.api.Bot;
 import top.spco.api.User;
@@ -34,18 +31,79 @@ import java.util.concurrent.ThreadLocalRandom;
  * 用户类，用于表示机器人用户。
  *
  * @author SpCo
- * @version 0.1.2
+ * @version 1.2.2
  * @since 0.1.0
  */
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class BotUser {
     private long id;
     private int permission;
     private int smfCoin;
     private String sign;
     private int premium;
+
+    public BotUser() {
+    }
+
+    public BotUser(long id, int permission, int smfCoin, String sign, int premium) {
+        this.id = id;
+        this.permission = permission;
+        this.smfCoin = smfCoin;
+        this.sign = sign;
+        this.premium = premium;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public int getPermission() {
+        return permission;
+    }
+
+    public void setPermission(int permission) {
+        this.permission = permission;
+    }
+
+    public void setSmfCoin(int smfCoin) {
+        this.smfCoin = smfCoin;
+    }
+
+    public int getSmfCoin() {
+        return smfCoin;
+    }
+
+    public void setSign(String sign) {
+        this.sign = sign;
+    }
+
+    public String getSign() {
+        return sign;
+    }
+
+    public int getPremium() {
+        return premium;
+    }
+
+    public void setPremium(int premium) {
+        this.premium = premium;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BotUser user = (BotUser) o;
+        return id == user.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 
     /**
      * 签到
@@ -56,7 +114,7 @@ public class BotUser {
     public int sign() throws SQLException {
         LocalDate today = DateUtils.today();
         String signDate = SpCoBot.getInstance().getDataBase().select("user", "sign", "id", id);
-        if (Objects.equals(signDate, today.toString())) {
+        if (signDate.equals(today.toString())) {
             return -1;
         }
         SpCoBot.getInstance().getDataBase().update("update user set sign=? where id=?", today, id);
@@ -158,6 +216,6 @@ public class BotUser {
 
     @Override
     public String toString() {
-        return  "QQ: " + this.id + "\n海绵山币: " + smfCoin + "\n会员信息: " + (isPremium() ? "Premium会员" : "普通会员") + "\n权限信息: " + toUserPermission();
+        return "QQ: " + this.id + "\n海绵山币: " + smfCoin + "\n会员信息: " + (isPremium() ? "Premium会员" : "普通会员") + "\n权限信息: " + toUserPermission();
     }
 }

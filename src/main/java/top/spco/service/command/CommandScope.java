@@ -15,6 +15,8 @@
  */
 package top.spco.service.command;
 
+import top.spco.api.*;
+
 /**
  * 命令的作用域
  *
@@ -38,5 +40,22 @@ public enum CommandScope {
     /**
      * 可以在任何来源中发送
      */
-    ALL
+    ALL;
+
+    /**
+     * 根据传入的 {@link Interactive} 对象推测对应的命令作用域。
+     *
+     * @param interactive 要推测作用域的 {@link Interactive} 对象
+     * @return 对应的指令作用域，或者 {@code null} 如果未能确定作用域
+     */
+    public static CommandScope getCommandScope(Interactive interactive) {
+        if (interactive instanceof Group) {
+            return ONLY_GROUP;
+        } else if (interactive instanceof Friend) {
+            return ONLY_FRIEND;
+        } else if (interactive instanceof NormalMember) {
+            return ONLY_PRIVATE;
+        }
+        return null;
+    }
 }
