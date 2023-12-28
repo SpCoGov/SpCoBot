@@ -39,12 +39,12 @@ public final class UsageCommand extends AbstractCommand {
 
     @Override
     public String getDescriptions() {
-        return "获取一个命令的所有用法";
+        return "获取命令在当前作用域下的所有用法";
     }
 
     @Override
     public List<CommandUsage> getUsages() {
-        return List.of(new CommandUsage("usage", "获取命令的所有用法", new CommandParam("命令名", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.TEXT)));
+        return List.of(new CommandUsage("usage", "获取命令在当前作用域下的所有用法", new CommandParam("命令名", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.TEXT)));
     }
 
     @Override
