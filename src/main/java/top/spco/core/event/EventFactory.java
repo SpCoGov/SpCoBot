@@ -70,12 +70,16 @@ public final class EventFactory {
      */
     public static <T> Event<T> createArrayBacked(Class<T> type, T emptyInvoker, Function<T[], T> invokerFactory) {
         return createArrayBacked(type, listeners -> {
-            if (listeners.length == 0) {
-                return emptyInvoker;
-            } else if (listeners.length == 1) {
-                return listeners[0];
-            } else {
-                return invokerFactory.apply(listeners);
+            switch (listeners.length) {
+                case 0 -> {
+                    return emptyInvoker;
+                }
+                case 1 -> {
+                    return listeners[0];
+                }
+                default -> {
+                    return invokerFactory.apply(listeners);
+                }
             }
         });
     }

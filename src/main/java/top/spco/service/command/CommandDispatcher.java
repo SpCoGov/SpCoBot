@@ -15,7 +15,6 @@
  */
 package top.spco.service.command;
 
-import lombok.SneakyThrows;
 import top.spco.SpCoBot;
 import top.spco.api.Bot;
 import top.spco.api.Interactive;
@@ -36,7 +35,7 @@ import java.util.*;
  * 它负责注册、执行和管理各种命令的权限
  *
  * @author SpCo
- * @version 1.1.0
+ * @version 1.2.2
  * @since 0.1.0
  */
 public class CommandDispatcher {
@@ -51,10 +50,11 @@ public class CommandDispatcher {
     public static final char USAGE_OR = '|';
     private static CommandDispatcher instance;
     private static boolean registered = false;
-    private static final List<Command> allCommands = new ArrayList<>();
-    private static final Map<String, Command> friendCommands = new HashMap<>();
-    private static final Map<String, Command> groupTempCommands = new HashMap<>();
-    private static final Map<String, Command> groupCommands = new HashMap<>();
+    private final List<Command> allCommands = new ArrayList<>();
+    private final Map<String, Command> friendCommands = new HashMap<>();
+    private final Map<String, Command> groupTempCommands = new HashMap<>();
+    private final Map<String, Command> groupCommands = new HashMap<>();
+    private int commandCount;
 
     private CommandDispatcher() {
         if (registered) {
@@ -65,7 +65,6 @@ public class CommandDispatcher {
         registerCommands();
     }
 
-    @SneakyThrows
     private void registerCommands() {
         List<Command> toBeRegistered = new ArrayList<>();
         toBeRegistered.add(new InfoCommand());
@@ -85,11 +84,16 @@ public class CommandDispatcher {
         toBeRegistered.add(new NoteCommand());
         toBeRegistered.add(new KickCommand());
         toBeRegistered.add(new MemoryCommand());
+        toBeRegistered.add(new UsageCommand());
 
         toBeRegistered.add(new TestCommand());
 
         for (var command : toBeRegistered) {
-            registerCommand(command);
+            try {
+                registerCommand(command);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -286,6 +290,7 @@ public class CommandDispatcher {
                         throw new CommandRegistrationException("The command: " + command.getLabels()[0] + " registration failed.");
             }
         }
+        commandCount++;
         allCommands.add(command);
         command.init();
     }
@@ -351,8 +356,8 @@ public class CommandDispatcher {
      *
      * @see HelpCommand
      */
-    public static List<String> getHelpList() {
-        List<String> helpList = new ArrayList<>();
+    public List<String> getHelpList() {
+        List<String> helpList = new ArrayList<>(commandCount);
         for (Command command : allCommands) {
             if (command.isVisible()) {
                 int index = 0;
@@ -370,5 +375,30 @@ public class CommandDispatcher {
         }
         helpList.sort(String::compareToIgnoreCase);
         return helpList;
+    }
+
+    public List<String> getUsages(String label, Interactive from) {
+        CommandScope scope = CommandScope.getCommandScope(from);
+        if (scope == null) {
+            return null;
+        }
+        Map<String, Command> commands;
+        switch (scope) {
+            case ONLY_GROUP -> commands = groupCommands;
+            case ONLY_FRIEND -> commands = friendCommands;
+            case ONLY_PRIVATE -> commands = groupTempCommands;
+            default -> {
+                return null;
+            }
+        }
+        if (!commands.containsKey(label)) {
+            return null;
+        }
+        var ite = commands.get(label).getUsages().iterator();
+        List<String> usages = new ArrayList<>();
+        while (ite.hasNext()) {
+            usages.add(ite.next().toString());
+        }
+        return usages;
     }
 }

@@ -35,12 +35,12 @@ package top.spco.core.config;
  *         this.defaultValue = defaultValue;
  *     }
  *
- *     {@literal @}Override
+ *     @Override
  *     public String groupName() {
  *         return "Bot";
  *     }
  *
- *     {@literal @}Override
+ *     @Override
  *     public Object defaultValue() {
  *         return defaultValue;
  *     }

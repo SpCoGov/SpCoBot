@@ -17,6 +17,7 @@ package top.spco.service.command;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 表示命令的一个用法。
@@ -84,5 +85,18 @@ public class CommandUsage {
             sb.append(" ").append(param.toString());
         }
         return this.name + "：" + sb;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CommandUsage usage = (CommandUsage) o;
+        return usage.toString().equals(toString());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(toString());
     }
 }

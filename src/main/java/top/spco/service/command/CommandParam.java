@@ -15,6 +15,8 @@
  */
 package top.spco.service.command;
 
+import java.util.Objects;
+
 /**
  * 表示命令参数。
  *
@@ -81,6 +83,19 @@ public class CommandParam {
             return CommandDispatcher.USAGE_OPTIONAL_OPEN + this.name + CommandDispatcher.USAGE_OPTIONAL_CLOSE;
         }
         return "";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CommandParam param = (CommandParam) o;
+        return param.toString().equals(this.toString());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(toString());
     }
 
     /**

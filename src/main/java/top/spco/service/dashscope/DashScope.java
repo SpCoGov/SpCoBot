@@ -30,6 +30,7 @@ import top.spco.api.message.Message;
 import top.spco.user.BotUser;
 import top.spco.util.tuple.MutablePair;
 
+import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
@@ -40,7 +41,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 用户个人的DashScope
  *
  * @author SpCo
- * @version 1.1.0
+ * @version 1.2.2
  * @since 0.2.1
  */
 public class DashScope {
@@ -107,5 +108,18 @@ public class DashScope {
         msgManager.add(result);
 
         return result;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DashScope dashScope = (DashScope) o;
+        return userId == dashScope.userId;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId);
     }
 }

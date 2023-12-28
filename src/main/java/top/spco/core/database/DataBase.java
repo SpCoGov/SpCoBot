@@ -16,7 +16,6 @@
 package top.spco.core.database;
 
 import cn.hutool.core.util.ObjectUtil;
-import lombok.SneakyThrows;
 import top.spco.SpCoBot;
 import top.spco.api.Logger;
 
@@ -274,8 +273,7 @@ public class DataBase {
      * @param pstmt  PreparedStatement
      * @param params 参数数组
      */
-    @SneakyThrows
-    private void setParameters(PreparedStatement pstmt, Object... params) {
+    private void setParameters(PreparedStatement pstmt, Object... params) throws SQLException {
         if (params != null && params.length > 0) {
             for (int i = 0; i < params.length; i++) {
                 pstmt.setObject(i + 1, params[i]);
