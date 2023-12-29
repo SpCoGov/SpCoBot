@@ -36,6 +36,7 @@ import top.spco.service.command.CommandDispatcher;
 import top.spco.service.dashscope.DashScopeDispatcher;
 import top.spco.service.statistics.StatisticsDispatcher;
 import top.spco.user.BotUser;
+import top.spco.user.BotUsers;
 import top.spco.util.ExceptionUtils;
 
 import java.io.File;
@@ -67,7 +68,7 @@ import java.util.concurrent.TimeUnit;
  * </pre>
  *
  * @author SpCo
- * @version 1.2.2
+ * @version 1.2.3
  * @since 0.1.0
  */
 public class SpCoBot {
@@ -97,9 +98,9 @@ public class SpCoBot {
      * </ul>
      * <b>更新版本号(仅限核心的 Feature)时请不要忘记在 build.gradle 中同步修改版本号</b>
      */
-    public static final String MAIN_VERSION = "1.2.2";
+    public static final String MAIN_VERSION = "1.2.3";
     public static final String VERSION = "v" + MAIN_VERSION + "-1";
-    public static final String UPDATED_TIME = "2023-12-28 7:55";
+    public static final String UPDATED_TIME = "2023-12-28 13:02";
 
     private SpCoBot() {
         initEvents();
@@ -187,7 +188,7 @@ public class SpCoBot {
             if (context.equals("签到")) {
                 Command command = this.commandDispatcher.getGroupCommand("sign");
                 try {
-                    BotUser botUser = BotUser.getOrCreate(sender.getId());
+                    BotUser botUser = BotUsers.getOrCreate(sender.getId());
                     if (command.hasPermission(botUser)) {
                         command.onCommand(bot, source, sender, botUser, message, time, context, "sign", new String[]{}, new CommandMeta(context, message), command.getUsages().get(0).name);
                     }
@@ -199,7 +200,7 @@ public class SpCoBot {
             if (context.equals("个人信息")) {
                 Command command = this.commandDispatcher.getGroupCommand("getme");
                 try {
-                    BotUser botUser = BotUser.getOrCreate(sender.getId());
+                    BotUser botUser = BotUsers.getOrCreate(sender.getId());
                     if (command.hasPermission(botUser)) {
                         command.onCommand(bot, source, sender, botUser, message, time, context, "getme", new String[]{}, new CommandMeta(context, message), command.getUsages().get(0).name);
                     }

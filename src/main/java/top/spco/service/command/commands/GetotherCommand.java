@@ -21,6 +21,7 @@ import top.spco.api.User;
 import top.spco.api.message.Message;
 import top.spco.service.command.*;
 import top.spco.user.BotUser;
+import top.spco.user.BotUsers;
 import top.spco.user.UserFetchException;
 import top.spco.user.UserPermission;
 
@@ -28,7 +29,7 @@ import java.util.List;
 
 /**
  * @author SpCo
- * @version 1.1.0
+ * @version 1.2.3
  * @since 0.3.0
  */
 public class GetotherCommand extends AbstractCommand {
@@ -55,7 +56,7 @@ public class GetotherCommand extends AbstractCommand {
     @Override
     public void onCommand(Bot bot, Interactive from, User sender, BotUser user1, Message message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
         try {
-            BotUser user = BotUser.getOrCreate(meta.targetUserIdArgument(0));
+            BotUser user = BotUsers.getOrCreate(meta.targetUserIdArgument(0));
             from.quoteReply(message, user.toString());
         } catch (CommandSyntaxException e) {
             from.handleException(message, e.getMessage());

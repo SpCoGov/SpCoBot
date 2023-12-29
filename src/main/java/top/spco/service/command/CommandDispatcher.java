@@ -24,6 +24,7 @@ import top.spco.events.CommandEvents;
 import top.spco.service.chat.ChatType;
 import top.spco.service.command.commands.*;
 import top.spco.user.BotUser;
+import top.spco.user.BotUsers;
 import top.spco.user.UserFetchException;
 import top.spco.util.ArrayUtils;
 
@@ -35,7 +36,7 @@ import java.util.*;
  * 它负责注册、执行和管理各种命令的权限
  *
  * @author SpCo
- * @version 1.2.2
+ * @version 1.2.3
  * @since 0.1.0
  */
 public class CommandDispatcher {
@@ -134,7 +135,7 @@ public class CommandDispatcher {
             try {
                 // 获取命令实例和发送者和发送者的用户实例
                 Command object = targetCommands.get(label);
-                BotUser user = BotUser.getOrCreate(sender.getId());
+                BotUser user = BotUsers.getOrCreate(sender.getId());
                 // 先检测发送者是否有权限
                 try {
                     if (!object.hasPermission(user)) {

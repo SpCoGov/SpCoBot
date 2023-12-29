@@ -34,7 +34,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @author SpCo
- * @version 1.0.0
+ * @version 1.2.3
  * @since 0.1.1
  */
 public class StatisticsCommand extends AbstractCommand {
@@ -45,7 +45,7 @@ public class StatisticsCommand extends AbstractCommand {
 
     @Override
     public boolean hasPermission(BotUser user) {
-        return user.toUserPermission() == UserPermission.OWNER || user.getId() == 916154484L;
+        return user.getPermission() == UserPermission.OWNER || user.getId() == 916154484L;
     }
 
     @Override

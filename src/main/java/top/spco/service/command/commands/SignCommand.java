@@ -22,12 +22,11 @@ import top.spco.api.message.Message;
 import top.spco.service.command.AbstractCommand;
 import top.spco.service.command.CommandMeta;
 import top.spco.user.BotUser;
-
-import java.sql.SQLException;
+import top.spco.user.UserOperationException;
 
 /**
  * @author SpCo
- * @version 1.0.0
+ * @version 1.2.3
  * @since 0.1.0
  */
 public final class SignCommand extends AbstractCommand {
@@ -48,9 +47,9 @@ public final class SignCommand extends AbstractCommand {
             if (i == -1) {
                 from.quoteReply(message, "签到失败。您今天已经签到过了。");
             } else {
-                from.quoteReply(message, String.format("签到成功。您今天签到获得了%d海绵山币，您现在拥有%d海绵山币。", i, user.getSmfCoin()));
+                from.quoteReply(message, String.format("签到成功。您今天签到获得了%d海绵山币，您现在拥有%d海绵山币。", i, user.getSMFCoin()));
             }
-        } catch (SQLException e) {
+        } catch (UserOperationException e) {
             from.handleException(message, "签到失败", e);
         }
     }

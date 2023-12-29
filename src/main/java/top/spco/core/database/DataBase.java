@@ -31,7 +31,7 @@ import java.util.List;
  * 数据库
  *
  * @author SpCo
- * @version 0.1.2
+ * @version 1.2.3
  * @since 0.1.0
  */
 public class DataBase {
@@ -52,7 +52,7 @@ public class DataBase {
                     }
                     LOGGER.info("已成功创建数据库文件");
                 } catch (IOException e) {
-                    throw new RuntimeException("创建数据库文件 (试图于" + dbFilePath + " ) 时发生错误: " + e.getMessage());
+                    throw new RuntimeException("试图于 " + dbFilePath + " 创建数据库文件时发生错误: " + e.getMessage());
                 }
             }
 
@@ -113,14 +113,12 @@ public class DataBase {
      * @throws SQLException 如果在执行数据库查询时发生错误
      */
     public String select(String table, String columns, String whereClause, Object whereValues) throws SQLException {
-        ResultSet rs = select(table, new String[]{columns}, whereClause + " = ?", new Object[]{whereValues});
-        if (rs.next()) {
-            String s = rs.getString(columns);
-            rs.close();
-            return s;
-        } else {
-            rs.close();
-            return null;
+        try (ResultSet rs = select(table, new String[]{columns}, whereClause + " = ?", new Object[]{whereValues})) {
+            if (rs.next()) {
+                return rs.getString(columns);
+            } else {
+                return null;
+            }
         }
     }
 
@@ -134,14 +132,12 @@ public class DataBase {
      * @return 指定字段的值. 如果结果集中没有数据, 则返回null
      */
     public Integer selectInt(String table, String columns, String whereClause, Object whereValues) throws SQLException {
-        ResultSet rs = select(table, new String[]{columns}, whereClause + " = ?", new Object[]{whereValues});
-        if (rs.next()) {
-            int i = rs.getInt(columns);
-            rs.close();
-            return i;
-        } else {
-            rs.close();
-            return null;
+        try (ResultSet rs = select(table, new String[]{columns}, whereClause + " = ?", new Object[]{whereValues})) {
+            if (rs.next()) {
+                return rs.getInt(columns);
+            } else {
+                return null;
+            }
         }
     }
 
@@ -157,8 +153,7 @@ public class DataBase {
             }
         }
         sql.append(" FROM ").append(table).append(" WHERE ").append(whereClause);
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+        try (PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
             for (int i = 0; i < whereValues.length; i++) {
                 pstmt.setObject(i + 1, whereValues[i]);
             }
@@ -180,11 +175,10 @@ public class DataBase {
         if (conn == null || conn.isClosed()) {
             openConn();
         }
-        PreparedStatement pstmt = conn.prepareStatement(sql);
-        setParameters(pstmt, params);
-        int result = pstmt.executeUpdate();
-        closeStatement(pstmt);
-        return result;
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            setParameters(pstmt, params);
+            return pstmt.executeUpdate();
+        }
     }
 
     /**
@@ -195,7 +189,9 @@ public class DataBase {
      * @param params 参数数组
      * @param <T>    实体类类型
      * @return 实体类对象
+     * @deprecated 请开发者自行编写对应类的查询方法
      */
+    @Deprecated
     public <T> T queryForObject(String sql, Class<T> clazz, Object... params) throws SQLException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         if (conn == null || conn.isClosed()) {
             openConn();
@@ -204,34 +200,31 @@ public class DataBase {
         // 初始化结果对象
         T result = null;
 
-        PreparedStatement pstmt = conn.prepareStatement(sql);
-        setParameters(pstmt, params);
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            setParameters(pstmt, params);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                // 如果结果集中有数据，进行处理
+                if (rs.next()) {
+                    // 使用反射创建实体类对象
+                    result = clazz.getDeclaredConstructor().newInstance();
 
-        // 执行查询，获取结果集
-        ResultSet rs = pstmt.executeQuery();
+                    // 获取结果集的元数据
+                    ResultSetMetaData metaData = rs.getMetaData();
+                    int columnCount = metaData.getColumnCount();
 
-        // 如果结果集中有数据，进行处理
-        if (rs.next()) {
-            // 使用反射创建实体类对象
-            result = clazz.getDeclaredConstructor().newInstance();
-
-            // 获取结果集的元数据
-            ResultSetMetaData metaData = rs.getMetaData();
-            int columnCount = metaData.getColumnCount();
-
-            // 遍历结果集的每一列
-            for (int i = 1; i <= columnCount; i++) {
-                // 将数据库列名转换为驼峰命名规则
-                String columnName = underlineToCamel(metaData.getColumnName(i));
-                // 获取数据库列的值
-                Object columnValue = rs.getObject(metaData.getColumnName(i));
-                // 使用反射设置实体类的属性值
-                setProperty(result, columnName, columnValue);
+                    // 遍历结果集的每一列
+                    for (int i = 1; i <= columnCount; i++) {
+                        // 将数据库列名转换为驼峰命名规则
+                        String columnName = underlineToCamel(metaData.getColumnName(i));
+                        // 获取数据库列的值
+                        Object columnValue = rs.getObject(metaData.getColumnName(i));
+                        // 使用反射设置实体类的属性值
+                        setProperty(result, columnName, columnValue);
+                    }
+                }
+                return result;
             }
         }
-        closeResultSet(rs);
-        closeStatement(pstmt);
-        return result;
     }
 
     /**
@@ -242,29 +235,33 @@ public class DataBase {
      * @param params 参数数组
      * @param <T>    实体类类型
      * @return 实体类对象列表
+     * @deprecated 请开发者自行编写对应类的查询方法
      */
+    @Deprecated
     public <T> List<T> queryForList(String sql, Class<T> clazz, Object... params) throws SQLException, InstantiationException, IllegalAccessException {
         if (conn == null || conn.isClosed()) {
             openConn();
         }
         List<T> resultList = new ArrayList<>();
-        PreparedStatement pstmt = conn.prepareStatement(sql);
-        setParameters(pstmt, params);
-        ResultSet rs = pstmt.executeQuery();
-        while (rs.next()) {
-            T result = clazz.newInstance();
-            ResultSetMetaData metaData = rs.getMetaData();
-            int columnCount = metaData.getColumnCount();
-            for (int i = 1; i <= columnCount; i++) {
-                String columnName = underlineToCamel(metaData.getColumnName(i));
-                Object columnValue = rs.getObject(metaData.getColumnName(i));
-                setProperty(result, columnName, columnValue);
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            setParameters(pstmt, params);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    T result = clazz.getDeclaredConstructor().newInstance();
+                    ResultSetMetaData metaData = rs.getMetaData();
+                    int columnCount = metaData.getColumnCount();
+                    for (int i = 1; i <= columnCount; i++) {
+                        String columnName = underlineToCamel(metaData.getColumnName(i));
+                        Object columnValue = rs.getObject(metaData.getColumnName(i));
+                        setProperty(result, columnName, columnValue);
+                    }
+                    resultList.add(result);
+                }
+                return resultList;
+            } catch (InvocationTargetException | NoSuchMethodException e) {
+                throw new RuntimeException(e);
             }
-            resultList.add(result);
         }
-        closeResultSet(rs);
-        closeStatement(pstmt);
-        return resultList;
     }
 
     /**
@@ -282,34 +279,13 @@ public class DataBase {
     }
 
     /**
-     * 关闭结果集
-     *
-     * @param rs 结果集
-     */
-    private void closeResultSet(ResultSet rs) throws SQLException {
-        if (rs != null) {
-            rs.close();
-        }
-    }
-
-    /**
-     * 关闭PreparedStatement
-     *
-     * @param pstmt PreparedStatement
-     */
-    private void closeStatement(PreparedStatement pstmt) throws SQLException {
-        if (pstmt != null) {
-            pstmt.close();
-        }
-    }
-
-    /**
      * 为实体类设置属性值
      *
      * @param obj          实体类对象
      * @param propertyName 属性名
      * @param value        属性值
      */
+    @Deprecated
     private void setProperty(Object obj, String propertyName, Object value) throws IllegalAccessException {
         Field field = getFieldByName(obj.getClass(), propertyName);
         if (ObjectUtil.isNotEmpty(field)) {
@@ -340,6 +316,7 @@ public class DataBase {
      * @param str 下划线命名的字符串
      * @return 驼峰式命名的字符串
      */
+    @Deprecated
     private String underlineToCamel(String str) {
         StringBuilder sb = new StringBuilder();
         boolean upperCase = false;

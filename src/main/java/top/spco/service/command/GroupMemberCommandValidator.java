@@ -47,7 +47,7 @@ import top.spco.user.UserPermission;
  * 这些方法有助于在执行群管理命令之前确保权限和安全性。
  *
  * @author SpCo
- * @version 1.2.1
+ * @version 1.2.3
  * @since 1.2.0
  */
 public class GroupMemberCommandValidator {
@@ -55,19 +55,19 @@ public class GroupMemberCommandValidator {
      * 验证发起命令的用户是否具有管理员权限，并检查机器人是否有权操作目标用户。<p>
      * 此方法首先检查发起命令的用户在群组中是否具有管理员权限。
      * 接着，它会验证机器人是否有足够的权限操作目标用户。
-     * 如果任一条件不满足，方法将发送相应的告知消息并返回 null。
+     * 如果任一条件不满足，方法将发送相应的告知消息并返回 {@code null}。
      *
      * @param from     命令来源
      * @param user     命令发送者
      * @param message  命令源消息
      * @param targetId 命令操作的目标Id
-     * @return 可操作返回被操作的目标对象，不可操作返回{@code null}
+     * @return 可操作返回被操作的目标对象，不可操作返回 {@code null}
      */
     public static NormalMember verifyAdminStatus(Interactive from, BotUser user, Message message, long targetId) {
         try {
             if (from instanceof Group group) {
                 if (!group.getMember(user.getId()).getPermission().isOperator()) {
-                    if (user.getPermission() < UserPermission.ADMINISTRATOR.getLevel()) {
+                    if (user.getPermission().getLevel() < UserPermission.ADMINISTRATOR.getLevel()) {
                         from.quoteReply(message, "[告知] 您无权使用此命令.");
                         return null;
                     }

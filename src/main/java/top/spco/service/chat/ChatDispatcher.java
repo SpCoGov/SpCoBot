@@ -45,7 +45,6 @@ public class ChatDispatcher {
 
     public static ChatDispatcher getInstance() {
         if (instance == null) {
-
             instance = new ChatDispatcher();
         }
         return instance;
