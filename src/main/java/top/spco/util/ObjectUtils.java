@@ -593,32 +593,6 @@ public class ObjectUtils {
     // Null-safe equals/hashCode
 
     /**
-     * Compares two objects for equality, where either one or both
-     * objects may be {@code null}.
-     *
-     * <pre>
-     * ObjectUtils.equals(null, null)                  = true
-     * ObjectUtils.equals(null, "")                    = false
-     * ObjectUtils.equals("", null)                    = false
-     * ObjectUtils.equals("", "")                      = true
-     * ObjectUtils.equals(Boolean.TRUE, null)          = false
-     * ObjectUtils.equals(Boolean.TRUE, "true")        = false
-     * ObjectUtils.equals(Boolean.TRUE, Boolean.TRUE)  = true
-     * ObjectUtils.equals(Boolean.TRUE, Boolean.FALSE) = false
-     * </pre>
-     *
-     * @param object1 the first object, may be {@code null}
-     * @param object2 the second object, may be {@code null}
-     * @return {@code true} if the values of both objects are the same
-     * @deprecated this method has been replaced by {@code java.util.Objects.equals(Object, Object)} in Java 7 and will
-     * be removed from future releases.
-     */
-    @Deprecated
-    public static boolean equals(final Object object1, final Object object2) {
-        return Objects.equals(object1, object2);
-    }
-
-    /**
      * Returns the first value in the array which is not {@code null}.
      * If all the values are {@code null} or the array is {@code null}
      * or empty then {@code null} is returned.
@@ -715,27 +689,6 @@ public class ObjectUtils {
     }
 
     /**
-     * Gets the hash code of an object returning zero when the
-     * object is {@code null}.
-     *
-     * <pre>
-     * ObjectUtils.hashCode(null)   = 0
-     * ObjectUtils.hashCode(obj)    = obj.hashCode()
-     * </pre>
-     *
-     * @param obj the object to obtain the hash code of, may be {@code null}
-     * @return the hash code of the object, or zero if null
-     * @since 0.3.1
-     * @deprecated this method has been replaced by {@code java.util.Objects.hashCode(Object)} in Java 7 and will be
-     * removed in future releases
-     */
-    @Deprecated
-    public static int hashCode(final Object obj) {
-        // hashCode(Object) for performance vs. hashCodeMulti(Object[]), as hash code is often critical
-        return Objects.hashCode(obj);
-    }
-
-    /**
      * Returns the hex hash code for the given object per {@link Objects#hashCode(Object)}.
      * <p>
      * Short hand for {@code Integer.toHexString(Objects.hashCode(object))}.
@@ -747,41 +700,6 @@ public class ObjectUtils {
      */
     public static String hashCodeHex(final Object object) {
         return Integer.toHexString(Objects.hashCode(object));
-    }
-
-
-    /**
-     * Gets the hash code for multiple objects.
-     *
-     * <p>This allows a hash code to be rapidly calculated for a number of objects.
-     * The hash code for a single object is the <em>not</em> same as {@link #hashCode(Object)}.
-     * The hash code for multiple objects is the same as that calculated by an
-     * {@link ArrayList} containing the specified objects.</p>
-     *
-     * <pre>
-     * ObjectUtils.hashCodeMulti()                 = 1
-     * ObjectUtils.hashCodeMulti((Object[]) null)  = 1
-     * ObjectUtils.hashCodeMulti(a)                = 31 + a.hashCode()
-     * ObjectUtils.hashCodeMulti(a,b)              = (31 + a.hashCode()) * 31 + b.hashCode()
-     * ObjectUtils.hashCodeMulti(a,b,c)            = ((31 + a.hashCode()) * 31 + b.hashCode()) * 31 + c.hashCode()
-     * </pre>
-     *
-     * @param objects the objects to obtain the hash code of, may be {@code null}
-     * @return the hash code of the objects, or zero if null
-     * @since 0.3.1
-     * @deprecated this method has been replaced by {@code java.util.Objects.hash(Object...)} in Java 7 and will be
-     * removed in future releases.
-     */
-    @Deprecated
-    public static int hashCodeMulti(final Object... objects) {
-        int hash = 1;
-        if (objects != null) {
-            for (final Object object : objects) {
-                final int tmpHash = Objects.hashCode(object);
-                hash = hash * 31 + tmpHash;
-            }
-        }
-        return hash;
     }
 
     /**
@@ -850,34 +768,6 @@ public class ObjectUtils {
                 .append(hexString);
         // @formatter:on
         return builder.toString();
-    }
-
-    /**
-     * Appends the toString that would be produced by {@link Object}
-     * if a class did not override toString itself. {@code null}
-     * will throw a NullPointerException for either of the two parameters.
-     *
-     * <pre>
-     * ObjectUtils.identityToString(builder, "")            = builder.append("java.lang.String@1e23")
-     * ObjectUtils.identityToString(builder, Boolean.TRUE)  = builder.append("java.lang.Boolean@7fa")
-     * ObjectUtils.identityToString(builder, Boolean.TRUE)  = builder.append("java.lang.Boolean@7fa")
-     * </pre>
-     *
-     * @param builder the builder to append to
-     * @param object  the object to create a toString for
-     * @since 0.3.1
-     * @deprecated as of 3.6, because StrBuilder was moved to commons-text,
-     * use one of the other {@code identityToString} methods instead
-     */
-    @Deprecated
-    public static void identityToString(final StrBuilder builder, final Object object) {
-        Objects.requireNonNull(object, "object");
-        final String name = object.getClass().getName();
-        final String hexString = identityHashCodeHex(object);
-        builder.ensureCapacity(builder.length() + name.length() + 1 + hexString.length());
-        builder.append(name)
-                .append(AT_SIGN)
-                .append(hexString);
     }
 
     /**
@@ -1273,57 +1163,6 @@ public class ObjectUtils {
             throw new IllegalArgumentException(message);
         }
         return obj;
-    }
-
-    /**
-     * Gets the {@code toString} of an {@link Object} returning
-     * an empty string ("") if {@code null} input.
-     *
-     * <pre>
-     * ObjectUtils.toString(null)         = ""
-     * ObjectUtils.toString("")           = ""
-     * ObjectUtils.toString("bat")        = "bat"
-     * ObjectUtils.toString(Boolean.TRUE) = "true"
-     * </pre>
-     *
-     * @param obj the Object to {@code toString}, may be null
-     * @return the passed in Object's toString, or {@code ""} if {@code null} input
-     * @see StringUtils#defaultString(String)
-     * @see String#valueOf(Object)
-     * @since 0.3.1
-     * @deprecated this method has been replaced by {@code java.util.Objects.toString(Object)} in Java 7 and will be
-     * removed in future releases. Note however that said method will return "null" for null references, while this
-     * method returns an empty String. To preserve behavior use {@code java.util.Objects.toString(myObject, "")}
-     */
-    @Deprecated
-    public static String toString(final Object obj) {
-        return obj == null ? StringUtils.EMPTY : obj.toString();
-    }
-
-    /**
-     * Gets the {@code toString} of an {@link Object} returning
-     * a specified text if {@code null} input.
-     *
-     * <pre>
-     * ObjectUtils.toString(null, null)           = null
-     * ObjectUtils.toString(null, "null")         = "null"
-     * ObjectUtils.toString("", "null")           = ""
-     * ObjectUtils.toString("bat", "null")        = "bat"
-     * ObjectUtils.toString(Boolean.TRUE, "null") = "true"
-     * </pre>
-     *
-     * @param obj     the Object to {@code toString}, may be null
-     * @param nullStr the String to return if {@code null} input, may be null
-     * @return the passed in Object's toString, or {@code nullStr} if {@code null} input
-     * @see StringUtils#defaultString(String, String)
-     * @see String#valueOf(Object)
-     * @since 0.3.1
-     * @deprecated this method has been replaced by {@code java.util.Objects.toString(Object, String)} in Java 7 and
-     * will be removed in future releases.
-     */
-    @Deprecated
-    public static String toString(final Object obj, final String nullStr) {
-        return obj == null ? nullStr : obj.toString();
     }
 
     /**

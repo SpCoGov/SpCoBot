@@ -97,23 +97,6 @@ public class StringEscapeUtils {
             );
 
     /**
-     * Translator object for escaping XML.
-     * <p>
-     * While {@link #escapeXml(String)} is the expected method of use, this
-     * object allows the XML escaping functionality to be used
-     * as the foundation for a custom translator.
-     *
-     * @since 0.3.1
-     * @deprecated use {@link #ESCAPE_XML10} or {@link #ESCAPE_XML11} instead.
-     */
-    @Deprecated
-    public static final CharSequenceTranslator ESCAPE_XML =
-            new AggregateTranslator(
-                    new LookupTranslator(EntityArrays.BASIC_ESCAPE()),
-                    new LookupTranslator(EntityArrays.APOS_ESCAPE())
-            );
-
-    /**
      * Translator object for escaping XML 1.0.
      * <p>
      * While {@link #escapeXml10(String)} is the expected method of use, this
@@ -622,31 +605,6 @@ public class StringEscapeUtils {
      * {@code &quot;bread&quot; &amp; &quot;butter&quot;}.
      * </p>
      *
-     * <p>Supports only the five basic XML entities (gt, lt, quot, amp, apos).
-     * Does not support DTDs or external entities.</p>
-     *
-     * <p>Note that Unicode characters greater than 0x7f are as of 3.0, no longer
-     * escaped. If you still wish this functionality, you can achieve it
-     * via the following:
-     * {@code StringEscapeUtils.ESCAPE_XML.with( NumericEntityEscaper.between(0x7f, Integer.MAX_VALUE) );}</p>
-     *
-     * @param input the {@link String} to escape, may be null
-     * @return a new escaped {@link String}, {@code null} if null string input
-     * @see #unescapeXml(String)
-     * @deprecated use {@link #escapeXml10(java.lang.String)} or {@link #escapeXml11(java.lang.String)} instead.
-     */
-    @Deprecated
-    public static final String escapeXml(final String input) {
-        return ESCAPE_XML.translate(input);
-    }
-
-    /**
-     * Escapes the characters in a {@link String} using XML entities.
-     *
-     * <p>For example: {@code "bread" & "butter"} =&gt;
-     * {@code &quot;bread&quot; &amp; &quot;butter&quot;}.
-     * </p>
-     *
      * <p>Note that XML 1.0 is a text-only format: it cannot represent control
      * characters or unpaired Unicode surrogate code points, even after escaping.
      * {@code escapeXml10} will remove characters that do not fit in the
@@ -715,7 +673,6 @@ public class StringEscapeUtils {
      *
      * @param input the {@link String} to unescape, may be null
      * @return a new unescaped {@link String}, {@code null} if null string input
-     * @see #escapeXml(String)
      * @see #escapeXml10(String)
      * @see #escapeXml11(String)
      */

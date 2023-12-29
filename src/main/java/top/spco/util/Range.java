@@ -57,53 +57,6 @@ public class Range<T> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * Creates a range with the specified minimum and maximum values (both inclusive).
-     *
-     * <p>The range uses the natural ordering of the elements to determine where
-     * values lie in the range.</p>
-     *
-     * <p>The arguments may be passed in the order (min,max) or (max,min).
-     * The getMinimum and getMaximum methods will return the correct values.</p>
-     *
-     * @param <T>           the type of the elements in this range
-     * @param fromInclusive the first value that defines the edge of the range, inclusive
-     * @param toInclusive   the second value that defines the edge of the range, inclusive
-     * @return the range object, not null
-     * @throws NullPointerException when fromInclusive is null.
-     * @throws NullPointerException when toInclusive is null.
-     * @throws ClassCastException   if the elements are not {@link Comparable}
-     * @deprecated Use {@link #of(Comparable, Comparable)}.
-     */
-    @Deprecated
-    public static <T extends Comparable<? super T>> Range<T> between(final T fromInclusive, final T toInclusive) {
-        return of(fromInclusive, toInclusive, null);
-    }
-
-    /**
-     * Creates a range with the specified minimum and maximum values (both inclusive).
-     *
-     * <p>The range uses the specified {@link Comparator} to determine where
-     * values lie in the range.</p>
-     *
-     * <p>The arguments may be passed in the order (min,max) or (max,min).
-     * The getMinimum and getMaximum methods will return the correct values.</p>
-     *
-     * @param <T>           the type of the elements in this range
-     * @param fromInclusive the first value that defines the edge of the range, inclusive
-     * @param toInclusive   the second value that defines the edge of the range, inclusive
-     * @param comparator    the comparator to be used, null for natural ordering
-     * @return the range object, not null
-     * @throws NullPointerException when fromInclusive is null.
-     * @throws NullPointerException when toInclusive is null.
-     * @throws ClassCastException   if using natural ordering and the elements are not {@link Comparable}
-     * @deprecated Use {@link #of(Object, Object, Comparator)}.
-     */
-    @Deprecated
-    public static <T> Range<T> between(final T fromInclusive, final T toInclusive, final Comparator<T> comparator) {
-        return new Range<>(fromInclusive, toInclusive, comparator);
-    }
-
-    /**
      * Creates a range using the specified element as both the minimum
      * and maximum in this range.
      *

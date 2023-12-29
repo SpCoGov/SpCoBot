@@ -183,27 +183,6 @@ public class Validate {
 
     /**
      * Validate that the specified argument is not {@code null};
-     * otherwise throwing an exception.
-     *
-     * <pre>Validate.notNull(myObject, "The object must not be null");</pre>
-     *
-     * <p>The message of the exception is &quot;The validated object is
-     * null&quot;.
-     *
-     * @param <T>    the object type
-     * @param object the object to check
-     * @return the validated object (never {@code null} for method chaining)
-     * @throws NullPointerException if the object is {@code null}
-     * @see #notNull(Object, String, Object...)
-     * @deprecated Use {@link Objects#requireNonNull(Object)}.
-     */
-    @Deprecated
-    public static <T> T notNull(final T object) {
-        return notNull(object, DEFAULT_IS_NULL_EX_MESSAGE);
-    }
-
-    /**
-     * Validate that the specified argument is not {@code null};
      * otherwise throwing an exception with the specified message.
      *
      * <pre>Validate.notNull(myObject, "The object must not be null");</pre>
