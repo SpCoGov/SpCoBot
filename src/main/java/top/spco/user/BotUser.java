@@ -41,7 +41,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * <p>需要创建或获取用户，可以通过 {@link BotUsers} 类中的方法 {@link BotUsers#get(long)} 或 {@link BotUsers#getOrCreate(long)}
  *
  * @author SpCo
- * @version 1.2.3
+ * @version 1.2.4
  * @since 0.1.0
  * @see BotUsers
  */
@@ -52,7 +52,7 @@ public class BotUser {
     private String sign;
     private int premium;
 
-    public BotUser(long id, UserPermission permission, int smfCoin, String sign, int premium) {
+    BotUser(long id, UserPermission permission, int smfCoin, String sign, int premium) {
         this.id = id;
         this.permission = permission;
         this.smfCoin = smfCoin;

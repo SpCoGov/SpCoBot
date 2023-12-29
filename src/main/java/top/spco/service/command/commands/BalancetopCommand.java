@@ -24,7 +24,6 @@ import top.spco.service.command.AbstractCommand;
 import top.spco.service.command.CommandMeta;
 import top.spco.user.BotUser;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -35,7 +34,7 @@ import java.util.Map;
 
 /**
  * @author SpCo
- * @version 1.0.0
+ * @version 1.2.4
  * @since 0.1.0
  */
 public class BalancetopCommand extends AbstractCommand {
@@ -80,17 +79,14 @@ public class BalancetopCommand extends AbstractCommand {
         Map<Long, Integer> recordsMap = new HashMap<>();
         // 创建查询语句
         String sql = "SELECT id, smf_coin FROM user";
-        Connection conn = SpCoBot.getInstance().getDataBase().getConn();
-        Statement statement = conn.createStatement();
-        ResultSet resultSet = statement.executeQuery(sql);
-
-        while (resultSet.next()) {
-            long id = resultSet.getLong("id");
-            int coin = resultSet.getInt("smf_coin");
-            recordsMap.put(id, coin);
+        try (Statement statement = SpCoBot.getInstance().getDataBase().getConn().createStatement();
+             ResultSet resultSet = statement.executeQuery(sql)) {
+            while (resultSet.next()) {
+                long id = resultSet.getLong("id");
+                int coin = resultSet.getInt("smf_coin");
+                recordsMap.put(id, coin);
+            }
+            return recordsMap;
         }
-        statement.close();
-        resultSet.close();
-        return recordsMap;
     }
 }

@@ -27,7 +27,7 @@ import java.sql.SQLException;
  * <p>该类中的方法操作 {@link BotUser} 类，并在机器人的上下文中处理与用户相关的操作。
  *
  * @author SpCo
- * @version 1.2.3
+ * @version 1.2.4
  * @see BotUser
  * @since 1.2.3
  */
@@ -92,7 +92,7 @@ public class BotUsers {
     public static boolean isUserExists(long id) throws SQLException {
         String query = "SELECT COUNT(*) FROM user WHERE id = ?";
         try (PreparedStatement pstmt = SpCoBot.getInstance().getDataBase().getConn().prepareStatement(query)) {
-            pstmt.setLong(1, id); // 设置查询参数 ID
+            pstmt.setLong(1, id);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     int count = rs.getInt(1);

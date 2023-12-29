@@ -31,7 +31,7 @@ import java.util.List;
  * 数据库
  *
  * @author SpCo
- * @version 1.2.3
+ * @version 1.2.4
  * @since 0.1.0
  */
 public class DataBase {
@@ -87,9 +87,6 @@ public class DataBase {
     }
 
     private void createTables() throws SQLException {
-        if (conn == null || conn.isClosed()) {
-            openConn();
-        }
         String createUserTableSql =
                 "CREATE TABLE IF NOT EXISTS user " +
                         "(id INTEGER NOT NULL PRIMARY KEY, " +
@@ -97,28 +94,24 @@ public class DataBase {
                         "permission INTEGER DEFAULT 1, " +
                         "sign TEXT DEFAULT '从未签到过')";
 
-        try (PreparedStatement stmt = conn.prepareStatement(createUserTableSql)) {
+        try (PreparedStatement stmt = getConn().prepareStatement(createUserTableSql)) {
             stmt.execute();
         }
     }
-    
+
     /**
      * 从数据库表中查询符合指定条件的数据，并返回结果中的某个字段的值。
      *
-     * @param tableName             表名
-     * @param columnName            要获取值的字段名
-     * @param primaryKeyColumnName  作为查询条件的主键字段名
-     * @param primaryKeyValue       主键字段的值
+     * @param tableName            表名
+     * @param columnName           要获取值的字段名
+     * @param primaryKeyColumnName 作为查询条件的主键字段名，字段必须为 {@code PRIMARY KEY}
+     * @param primaryKeyValue      主键字段的值
      * @return 符合条件的记录中指定字段的值，如果未找到记录则返回 null
-     * @throws SQLException         如果执行 SQL 查询时发生错误
+     * @throws SQLException 如果执行 SQL 查询时发生错误
      */
     public String selectString(String tableName, String columnName, String primaryKeyColumnName, Object primaryKeyValue) throws SQLException {
-        if (conn == null || conn.isClosed()) {
-            openConn();
-        }
-
         String sql = "SELECT " + columnName + " FROM " + tableName + " WHERE " + primaryKeyColumnName + " = ?";
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = getConn().prepareStatement(sql)) {
             pstmt.setObject(1, primaryKeyValue);
             ResultSet rs = pstmt.executeQuery();
 
@@ -135,20 +128,16 @@ public class DataBase {
     /**
      * 从数据库表中查询符合指定条件的数据，并返回结果中的某个字段的值。
      *
-     * @param tableName             表名
-     * @param columnName            要获取值的字段名
-     * @param primaryKeyColumnName  作为查询条件的主键字段名
-     * @param primaryKeyValue       主键字段的值
+     * @param tableName            表名
+     * @param columnName           要获取值的字段名
+     * @param primaryKeyColumnName 作为查询条件的主键字段名，字段必须为 {@code PRIMARY KEY}
+     * @param primaryKeyValue      主键字段的值
      * @return 符合条件的记录中指定字段的值，如果未找到记录则返回 null
-     * @throws SQLException         如果执行 SQL 查询时发生错误
+     * @throws SQLException 如果执行 SQL 查询时发生错误
      */
     public Integer selectInt(String tableName, String columnName, String primaryKeyColumnName, Object primaryKeyValue) throws SQLException {
-        if (conn == null || conn.isClosed()) {
-            openConn();
-        }
-
         String sql = "SELECT " + columnName + " FROM " + tableName + " WHERE " + primaryKeyColumnName + " = ?";
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = getConn().prepareStatement(sql)) {
             pstmt.setObject(1, primaryKeyValue);
             ResultSet rs = pstmt.executeQuery();
 
@@ -186,9 +175,6 @@ public class DataBase {
 
     @Deprecated
     public ResultSet select(String table, String[] columns, String whereClause, Object[] whereValues) throws SQLException {
-        if (conn == null || conn.isClosed()) {
-            openConn();
-        }
         StringBuilder sql = new StringBuilder("SELECT ");
         for (int i = 0; i < columns.length; i++) {
             sql.append(columns[i]);
@@ -197,7 +183,7 @@ public class DataBase {
             }
         }
         sql.append(" FROM ").append(table).append(" WHERE ").append(whereClause);
-        try (PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
+        try (PreparedStatement pstmt = getConn().prepareStatement(sql.toString())) {
             for (int i = 0; i < whereValues.length; i++) {
                 pstmt.setObject(i + 1, whereValues[i]);
             }
@@ -213,10 +199,7 @@ public class DataBase {
      * @return 影响行数
      */
     public int update(String sql, Object... params) throws SQLException {
-        if (conn == null || conn.isClosed()) {
-            openConn();
-        }
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = getConn().prepareStatement(sql)) {
             setParameters(pstmt, params);
             return pstmt.executeUpdate();
         }
@@ -234,14 +217,10 @@ public class DataBase {
      */
     @Deprecated
     public <T> T queryForObject(String sql, Class<T> clazz, Object... params) throws SQLException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        if (conn == null || conn.isClosed()) {
-            openConn();
-        }
-
         // 初始化结果对象
         T result = null;
 
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = getConn().prepareStatement(sql)) {
             setParameters(pstmt, params);
             try (ResultSet rs = pstmt.executeQuery()) {
                 // 如果结果集中有数据，进行处理
@@ -280,11 +259,8 @@ public class DataBase {
      */
     @Deprecated
     public <T> List<T> queryForList(String sql, Class<T> clazz, Object... params) throws SQLException, InstantiationException, IllegalAccessException {
-        if (conn == null || conn.isClosed()) {
-            openConn();
-        }
         List<T> resultList = new ArrayList<>();
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = getConn().prepareStatement(sql)) {
             setParameters(pstmt, params);
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
@@ -311,7 +287,7 @@ public class DataBase {
      * @param pstmt  PreparedStatement
      * @param params 参数数组
      */
-    private void setParameters(PreparedStatement pstmt, Object... params) throws SQLException {
+    public void setParameters(PreparedStatement pstmt, Object... params) throws SQLException {
         if (params != null && params.length > 0) {
             for (int i = 0; i < params.length; i++) {
                 pstmt.setObject(i + 1, params[i]);
@@ -385,10 +361,7 @@ public class DataBase {
      * @return 如果列存在则返回 true，否则返回 false
      */
     public boolean columnExistsInTable(String tableName, String columnName) throws SQLException {
-        if (conn == null || conn.isClosed()) {
-            openConn();
-        }
-        try (Statement stmt = conn.createStatement();
+        try (Statement stmt = getConn().createStatement();
              ResultSet rs = stmt.executeQuery("PRAGMA table_info(" + tableName + ");")) {
 
             while (rs.next()) {
@@ -430,11 +403,7 @@ public class DataBase {
     }
 
     public void insertData(String sql, Object... params) throws SQLException {
-        if (conn == null || conn.isClosed()) {
-            openConn();
-        }
-
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = getConn().prepareStatement(sql)) {
             // 设置参数
             for (int i = 0; i < params.length; i++) {
                 pstmt.setObject(i + 1, params[i]);

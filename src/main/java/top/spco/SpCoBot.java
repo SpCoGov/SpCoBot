@@ -68,7 +68,7 @@ import java.util.concurrent.TimeUnit;
  * </pre>
  *
  * @author SpCo
- * @version 1.2.3
+ * @version 1.2.4
  * @since 0.1.0
  */
 public class SpCoBot {
@@ -98,9 +98,9 @@ public class SpCoBot {
      * </ul>
      * <b>更新版本号(仅限核心的 Feature)时请不要忘记在 build.gradle 中同步修改版本号</b>
      */
-    public static final String MAIN_VERSION = "1.2.3";
+    public static final String MAIN_VERSION = "1.2.4";
     public static final String VERSION = "v" + MAIN_VERSION + "-1";
-    public static final String UPDATED_TIME = "2023-12-28 13:02";
+    public static final String UPDATED_TIME = "2023-12-29 22:37";
 
     private SpCoBot() {
         initEvents();

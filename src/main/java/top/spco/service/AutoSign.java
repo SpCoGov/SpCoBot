@@ -18,22 +18,24 @@ package top.spco.service;
 import top.spco.SpCoBot;
 import top.spco.api.Friend;
 import top.spco.events.PeriodicSchedulerEvents;
-import top.spco.user.BotUser;
+import top.spco.user.BotUsers;
 import top.spco.util.DateUtils;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 /**
  * 自动签到
  *
  * @author SpCo
- * @version 0.3.4
+ * @version 1.2.4
  * @since 0.1.2
  */
 public class AutoSign {
     private static boolean registered = false;
 
+    @SuppressWarnings("all")
     public AutoSign() {
         if (registered) {
             return;
@@ -43,9 +45,16 @@ public class AutoSign {
             try {
                 if (DateUtils.now().format(DateTimeFormatter.ofPattern("HH:mm")).equals("00:00")) {
                     try {
-                        List<BotUser> premiumUsers = SpCoBot.getInstance().getDataBase().queryForList("select * from user where sign!=? and premium=?", BotUser.class, DateUtils.today(), 1);
-                        for (BotUser botUser : premiumUsers) {
-                            botUser.sign();
+                        // 创建查询语句
+                        String sql = "SELECT id, smf_coin FROM user";
+                        try (PreparedStatement pstmt = SpCoBot.getInstance().getDataBase().getConn().prepareStatement(sql)) {
+                            SpCoBot.getInstance().getDataBase().setParameters(pstmt);
+                            try (ResultSet rs = pstmt.executeQuery()) {
+                                while (rs.next()) {
+                                    long id = rs.getLong("id");
+                                    BotUsers.get(id).sign();
+                                }
+                            }
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
