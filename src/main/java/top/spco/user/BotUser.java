@@ -38,9 +38,12 @@ import java.util.concurrent.ThreadLocalRandom;
  * <p>可以创建具有指定属性或未指定属性的此类实例。
  * 用户可以检索和修改其属性，执行签到等操作，检查Premium会员资格，并将权限级别转换为{@link UserPermission}。
  *
+ * <p>需要创建或获取用户，可以通过 {@link BotUsers} 类中的方法 {@link BotUsers#get(long)} 或 {@link BotUsers#getOrCreate(long)}
+ *
  * @author SpCo
  * @version 1.2.3
  * @since 0.1.0
+ * @see BotUsers
  */
 public class BotUser {
     private final long id;
@@ -113,7 +116,7 @@ public class BotUser {
     public int sign() throws UserOperationException {
         try {
             LocalDate today = DateUtils.today();
-            String signDate = SpCoBot.getInstance().getDataBase().select("user", "sign", "id", id);
+            String signDate = SpCoBot.getInstance().getDataBase().selectString("user", "sign", "id", id);
             if (signDate.equals(today.toString())) {
                 return -1;
             }

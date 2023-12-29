@@ -101,6 +101,66 @@ public class DataBase {
             stmt.execute();
         }
     }
+    
+    /**
+     * 从数据库表中查询符合指定条件的数据，并返回结果中的某个字段的值。
+     *
+     * @param tableName             表名
+     * @param columnName            要获取值的字段名
+     * @param primaryKeyColumnName  作为查询条件的主键字段名
+     * @param primaryKeyValue       主键字段的值
+     * @return 符合条件的记录中指定字段的值，如果未找到记录则返回 null
+     * @throws SQLException         如果执行 SQL 查询时发生错误
+     */
+    public String selectString(String tableName, String columnName, String primaryKeyColumnName, Object primaryKeyValue) throws SQLException {
+        if (conn == null || conn.isClosed()) {
+            openConn();
+        }
+
+        String sql = "SELECT " + columnName + " FROM " + tableName + " WHERE " + primaryKeyColumnName + " = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setObject(1, primaryKeyValue);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getString(columnName);
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error executing SQL query: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 从数据库表中查询符合指定条件的数据，并返回结果中的某个字段的值。
+     *
+     * @param tableName             表名
+     * @param columnName            要获取值的字段名
+     * @param primaryKeyColumnName  作为查询条件的主键字段名
+     * @param primaryKeyValue       主键字段的值
+     * @return 符合条件的记录中指定字段的值，如果未找到记录则返回 null
+     * @throws SQLException         如果执行 SQL 查询时发生错误
+     */
+    public Integer selectInt(String tableName, String columnName, String primaryKeyColumnName, Object primaryKeyValue) throws SQLException {
+        if (conn == null || conn.isClosed()) {
+            openConn();
+        }
+
+        String sql = "SELECT " + columnName + " FROM " + tableName + " WHERE " + primaryKeyColumnName + " = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setObject(1, primaryKeyValue);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(columnName);
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error executing SQL query: " + e.getMessage());
+        }
+    }
 
     /**
      * 从数据库表中查询符合指定条件的数据，并返回结果中的某个字段的值。只有一个占位符！！！
@@ -111,7 +171,9 @@ public class DataBase {
      * @param whereValues 查询条件中占位符的值
      * @return 指定字段的值. 如果结果集中没有数据, 则返回null
      * @throws SQLException 如果在执行数据库查询时发生错误
+     * @deprecated 请用 {@link #selectString(String, String, String, Object)} 替代
      */
+    @Deprecated
     public String select(String table, String columns, String whereClause, Object whereValues) throws SQLException {
         try (ResultSet rs = select(table, new String[]{columns}, whereClause + " = ?", new Object[]{whereValues})) {
             if (rs.next()) {
@@ -122,25 +184,7 @@ public class DataBase {
         }
     }
 
-    /**
-     * 从数据库表中查询符合指定条件的整数数据，并返回结果中的某个字段的值。只有一个占位符！！！
-     *
-     * @param table       查询的数据表名称
-     * @param columns     要查询的字段名称
-     * @param whereClause 查询条件语句，占位符用"?"
-     * @param whereValues 查询条件中占位符的值
-     * @return 指定字段的值. 如果结果集中没有数据, 则返回null
-     */
-    public Integer selectInt(String table, String columns, String whereClause, Object whereValues) throws SQLException {
-        try (ResultSet rs = select(table, new String[]{columns}, whereClause + " = ?", new Object[]{whereValues})) {
-            if (rs.next()) {
-                return rs.getInt(columns);
-            } else {
-                return null;
-            }
-        }
-    }
-
+    @Deprecated
     public ResultSet select(String table, String[] columns, String whereClause, Object[] whereValues) throws SQLException {
         if (conn == null || conn.isClosed()) {
             openConn();
@@ -158,9 +202,6 @@ public class DataBase {
                 pstmt.setObject(i + 1, whereValues[i]);
             }
             return pstmt.executeQuery();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
         }
     }
 
