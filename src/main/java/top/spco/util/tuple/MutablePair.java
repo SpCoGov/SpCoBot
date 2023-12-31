@@ -29,33 +29,11 @@ import java.util.Objects;
  * @since 0.3.1
  */
 public class MutablePair<L, R> extends Pair<L, R> {
-    /**
-     * An empty array.
-     * <p>
-     * Consider using {@link #emptyArray()} to avoid generics warnings.
-     * </p>
-     *
-     * @since 0.3.1
-     */
-    public static final MutablePair<?, ?>[] EMPTY_ARRAY = {};
 
     /**
      * Serialization version
      */
     private static final long serialVersionUID = 4954918890077093841L;
-
-    /**
-     * Returns the empty array singleton that can be assigned without compiler warning.
-     *
-     * @param <L> the left element type
-     * @param <R> the right element type
-     * @return the empty array singleton that can be assigned without compiler warning.
-     * @since 0.3.1
-     */
-    @SuppressWarnings("unchecked")
-    public static <L, R> MutablePair<L, R>[] emptyArray() {
-        return (MutablePair<L, R>[]) EMPTY_ARRAY;
-    }
 
     /**
      * Creates a mutable pair of two objects inferring the generic types.
@@ -95,24 +73,6 @@ public class MutablePair<L, R> extends Pair<L, R> {
             right = null;
         }
         return new MutablePair<>(left, right);
-    }
-
-    /**
-     * Creates a mutable pair of two non-null objects inferring the generic types.
-     *
-     * <p>This factory allows the pair to be created using inference to
-     * obtain the generic types.</p>
-     *
-     * @param <L>   the left element type
-     * @param <R>   the right element type
-     * @param left  the left element, may not be null
-     * @param right the right element, may not be null
-     * @return a pair formed from the two parameters, not null
-     * @throws NullPointerException if any input is null
-     * @since 0.3.1
-     */
-    public static <L, R> MutablePair<L, R> ofNonNull(final L left, final R right) {
-        return of(Objects.requireNonNull(left, "left"), Objects.requireNonNull(right, "right"));
     }
 
     /**

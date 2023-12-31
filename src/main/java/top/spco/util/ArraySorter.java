@@ -30,18 +30,6 @@ public class ArraySorter {
      *
      * @param array the array to sort.
      * @return the given array.
-     * @see Arrays#sort(byte[])
-     */
-    public static byte[] sort(final byte[] array) {
-        Arrays.sort(array);
-        return array;
-    }
-
-    /**
-     * Sorts and returns the given array.
-     *
-     * @param array the array to sort.
-     * @return the given array.
      * @see Arrays#sort(char[])
      */
     public static char[] sort(final char[] array) {

@@ -16,6 +16,8 @@
  */
 package top.spco.util;
 
+import java.io.Serial;
+
 /**
  * Specializes {@link NumberRange} for {@link Long}s.
  *
@@ -26,6 +28,7 @@ package top.spco.util;
  * @since 0.3.1
  */
 public final class LongRange extends NumberRange<Long> {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

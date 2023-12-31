@@ -141,7 +141,7 @@ public class DivineCommand extends AbstractCommand {
     }
 
     private static boolean isHentai(String event) {
-        if (event.contains("手冲") || event.contains("帮我口")) {
+        if (event.contains("手冲") || event.contains("帮我口") || event.contains("被超市")) {
             return true;
         }
         Set<String> hentaiEvents = new HashSet<>();

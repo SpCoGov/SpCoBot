@@ -336,45 +336,6 @@ public class CharSequenceUtils {
         return true;
     }
 
-    /**
-     * Returns a new {@link CharSequence} that is a subsequence of this
-     * sequence starting with the {@code char} value at the specified index.
-     *
-     * <p>This provides the {@link CharSequence} equivalent to {@link String#substring(int)}.
-     * The length (in {@code char}) of the returned sequence is {@code length() - start},
-     * so if {@code start == end} then an empty sequence is returned.</p>
-     *
-     * @param cs  the specified subsequence, null returns null
-     * @param start  the start index, inclusive, valid
-     * @return a new subsequence, may be null
-     * @throws IndexOutOfBoundsException if {@code start} is negative or if
-     *  {@code start} is greater than {@code length()}
-     */
-    public static CharSequence subSequence(final CharSequence cs, final int start) {
-        return cs == null ? null : cs.subSequence(start, cs.length());
-    }
-
-    /**
-     * Converts the given CharSequence to a char[].
-     *
-     * @param source the {@link CharSequence} to be processed.
-     * @return the resulting char array, never null.
-     * @since 0.3.1
-     */
-    public static char[] toCharArray(final CharSequence source) {
-        final int len = StringUtils.length(source);
-        if (len == 0) {
-            return ArrayUtils.EMPTY_CHAR_ARRAY;
-        }
-        if (source instanceof String) {
-            return ((String) source).toCharArray();
-        }
-        final char[] array = new char[len];
-        for (int i = 0; i < len; i++) {
-            array[i] = source.charAt(i);
-        }
-        return array;
-    }
 
     /**
      * {@link CharSequenceUtils} instances should NOT be constructed in

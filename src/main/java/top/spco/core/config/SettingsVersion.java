@@ -18,6 +18,18 @@ package top.spco.core.config;
 import top.spco.SpCoBot;
 
 /**
+ * 本配置组表示当前配置的版本，将来会用于检测配置文件是否需要更新，包含以下配置项：
+ * <table border="1">
+ *   <tr>
+ *     <th>配置项名</th>
+ *     <th>描述</th>
+ *   </tr>
+ *   <tr>
+ *     <td>config_version</td>
+ *     <td>配置文件最后一次修改时对应的机器人版本。</td>
+ *   </tr>
+ * </table>
+ *
  * @author SpCo
  * @version 0.2.1
  * @since 0.2.1

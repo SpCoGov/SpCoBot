@@ -35,16 +35,6 @@ import java.util.Objects;
  */
 public class ImmutablePair<L, R> extends Pair<L, R> {
     /**
-     * An empty array.
-     * <p>
-     * Consider using {@link #emptyArray()} to avoid generics warnings.
-     * </p>
-     *
-     * @since 0.3.1
-     */
-    public static final ImmutablePair<?, ?>[] EMPTY_ARRAY = {};
-
-    /**
      * An immutable pair of nulls.
      */
     // This is not defined with generics to avoid warnings in call sites.
@@ -55,19 +45,6 @@ public class ImmutablePair<L, R> extends Pair<L, R> {
      * Serialization version
      */
     private static final long serialVersionUID = 4954918890077093841L;
-
-    /**
-     * Returns the empty array singleton that can be assigned without compiler warning.
-     *
-     * @param <L> the left element type
-     * @param <R> the right element type
-     * @return the empty array singleton that can be assigned without compiler warning.
-     * @since 0.3.1
-     */
-    @SuppressWarnings("unchecked")
-    public static <L, R> ImmutablePair<L, R>[] emptyArray() {
-        return (ImmutablePair<L, R>[]) EMPTY_ARRAY;
-    }
 
     /**
      * Creates an immutable pair of two objects inferring the generic types.
@@ -128,24 +105,6 @@ public class ImmutablePair<L, R> extends Pair<L, R> {
      */
     public static <L, R> ImmutablePair<L, R> of(final Map.Entry<L, R> pair) {
         return pair != null ? new ImmutablePair<>(pair.getKey(), pair.getValue()) : nullPair();
-    }
-
-    /**
-     * Creates an immutable pair of two non-null objects inferring the generic types.
-     *
-     * <p>This factory allows the pair to be created using inference to
-     * obtain the generic types.</p>
-     *
-     * @param <L>   the left element type
-     * @param <R>   the right element type
-     * @param left  the left element, may not be null
-     * @param right the right element, may not  be null
-     * @return a pair formed from the two parameters, not null
-     * @throws NullPointerException if any input is null
-     * @since 0.3.1
-     */
-    public static <L, R> ImmutablePair<L, R> ofNonNull(final L left, final R right) {
-        return of(Objects.requireNonNull(left, "left"), Objects.requireNonNull(right, "right"));
     }
 
     /**

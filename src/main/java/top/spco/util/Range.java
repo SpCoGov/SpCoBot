@@ -199,46 +199,6 @@ public class Range<T> implements Serializable {
     }
 
     /**
-     * Checks whether this range contains all the elements of the specified range.
-     *
-     * <p>This method may fail if the ranges have two different comparators or element types.</p>
-     *
-     * @param otherRange the range to check, null returns false
-     * @return true if this range contains the specified range
-     * @throws RuntimeException if ranges cannot be compared
-     */
-    public boolean containsRange(final Range<T> otherRange) {
-        if (otherRange == null) {
-            return false;
-        }
-        return contains(otherRange.minimum)
-                && contains(otherRange.maximum);
-    }
-
-    /**
-     * Checks where the specified element occurs relative to this range.
-     *
-     * <p>The API is reminiscent of the Comparable interface returning {@code -1} if
-     * the element is before the range, {@code 0} if contained within the range and
-     * {@code 1} if the element is after the range.</p>
-     *
-     * @param element the element to check for, not null
-     * @return -1, 0 or +1 depending on the element's location relative to the range
-     * @throws NullPointerException if {@code element} is {@code null}
-     */
-    public int elementCompareTo(final T element) {
-        // Comparable API says throw NPE on null
-        Objects.requireNonNull(element, "element");
-        if (isAfter(element)) {
-            return -1;
-        }
-        if (isBefore(element)) {
-            return 1;
-        }
-        return 0;
-    }
-
-    /**
      * Compares this range to another object to test if they are equal..
      *
      * <p>To be equal, the minimum and maximum values must be equal, which
@@ -295,36 +255,6 @@ public class Range<T> implements Serializable {
     }
 
     /**
-     * Gets the comparator being used to determine if objects are within the range.
-     *
-     * <p>Natural ordering uses an internal comparator implementation, thus this
-     * method never returns null. See {@link #isNaturalOrdering()}.</p>
-     *
-     * @return the comparator being used, not null
-     */
-    public Comparator<T> getComparator() {
-        return comparator;
-    }
-
-    /**
-     * Gets the maximum value in this range.
-     *
-     * @return the maximum value in this range, not null
-     */
-    public T getMaximum() {
-        return maximum;
-    }
-
-    /**
-     * Gets the minimum value in this range.
-     *
-     * @return the minimum value in this range, not null
-     */
-    public T getMinimum() {
-        return minimum;
-    }
-
-    /**
      * Gets a suitable hash code for the range.
      *
      * @return a hash code value for this object
@@ -343,27 +273,6 @@ public class Range<T> implements Serializable {
     }
 
     /**
-     * Calculate the intersection of {@code this} and an overlapping Range.
-     *
-     * @param other overlapping Range
-     * @return range representing the intersection of {@code this} and {@code other} ({@code this} if equal)
-     * @throws IllegalArgumentException if {@code other} does not overlap {@code this}
-     * @since 0.3.1
-     */
-    public Range<T> intersectionWith(final Range<T> other) {
-        if (!this.isOverlappedBy(other)) {
-            throw new IllegalArgumentException(String.format(
-                    "Cannot calculate intersection with non-overlapping range %s", other));
-        }
-        if (this.equals(other)) {
-            return this;
-        }
-        final T min = getComparator().compare(minimum, other.minimum) < 0 ? other.minimum : minimum;
-        final T max = getComparator().compare(maximum, other.maximum) < 0 ? maximum : other.maximum;
-        return of(min, max, getComparator());
-    }
-
-    /**
      * Checks whether this range is after the specified element.
      *
      * @param element the element to check for, null returns false
@@ -377,22 +286,6 @@ public class Range<T> implements Serializable {
     }
 
     /**
-     * Checks whether this range is completely after the specified range.
-     *
-     * <p>This method may fail if the ranges have two different comparators or element types.</p>
-     *
-     * @param otherRange the range to check, null returns false
-     * @return true if this range is completely after the specified range
-     * @throws RuntimeException if ranges cannot be compared
-     */
-    public boolean isAfterRange(final Range<T> otherRange) {
-        if (otherRange == null) {
-            return false;
-        }
-        return isAfter(otherRange.maximum);
-    }
-
-    /**
      * Checks whether this range is before the specified element.
      *
      * @param element the element to check for, null returns false
@@ -403,81 +296,6 @@ public class Range<T> implements Serializable {
             return false;
         }
         return comparator.compare(element, maximum) > 0;
-    }
-
-    /**
-     * Checks whether this range is completely before the specified range.
-     *
-     * <p>This method may fail if the ranges have two different comparators or element types.</p>
-     *
-     * @param otherRange the range to check, null returns false
-     * @return true if this range is completely before the specified range
-     * @throws RuntimeException if ranges cannot be compared
-     */
-    public boolean isBeforeRange(final Range<T> otherRange) {
-        if (otherRange == null) {
-            return false;
-        }
-        return isBefore(otherRange.minimum);
-    }
-
-    /**
-     * Checks whether this range ends with the specified element.
-     *
-     * @param element the element to check for, null returns false
-     * @return true if the specified element occurs within this range
-     */
-    public boolean isEndedBy(final T element) {
-        if (element == null) {
-            return false;
-        }
-        return comparator.compare(element, maximum) == 0;
-    }
-
-    /**
-     * Whether or not the Range is using the natural ordering of the elements.
-     *
-     * <p>Natural ordering uses an internal comparator implementation, thus this
-     * method is the only way to check if a null comparator was specified.</p>
-     *
-     * @return true if using natural ordering
-     */
-    public boolean isNaturalOrdering() {
-        return comparator == Range.ComparableComparator.INSTANCE;
-    }
-
-    /**
-     * Checks whether this range is overlapped by the specified range.
-     *
-     * <p>Two ranges overlap if there is at least one element in common.</p>
-     *
-     * <p>This method may fail if the ranges have two different comparators or element types.</p>
-     *
-     * @param otherRange the range to test, null returns false
-     * @return true if the specified range overlaps with this
-     * range; otherwise, {@code false}
-     * @throws RuntimeException if ranges cannot be compared
-     */
-    public boolean isOverlappedBy(final Range<T> otherRange) {
-        if (otherRange == null) {
-            return false;
-        }
-        return otherRange.contains(minimum)
-                || otherRange.contains(maximum)
-                || contains(otherRange.minimum);
-    }
-
-    /**
-     * Checks whether this range starts with the specified element.
-     *
-     * @param element the element to check for, null returns false
-     * @return true if the specified element occurs within this range
-     */
-    public boolean isStartedBy(final T element) {
-        if (element == null) {
-            return false;
-        }
-        return comparator.compare(element, minimum) == 0;
     }
 
     /**

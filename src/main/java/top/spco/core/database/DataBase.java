@@ -15,14 +15,12 @@
  */
 package top.spco.core.database;
 
-import cn.hutool.core.util.ObjectUtil;
 import top.spco.SpCoBot;
 import top.spco.api.Logger;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +29,7 @@ import java.util.List;
  * 数据库
  *
  * @author SpCo
- * @version 1.2.4
+ * @version 1.2.5
  * @since 0.1.0
  */
 public class DataBase {
@@ -206,82 +204,6 @@ public class DataBase {
     }
 
     /**
-     * 查询单个对象
-     *
-     * @param sql    SQL语句 如："select * from product where shop_id=? and data=? and price=?"
-     * @param clazz  实体类
-     * @param params 参数数组
-     * @param <T>    实体类类型
-     * @return 实体类对象
-     * @deprecated 请开发者自行编写对应类的查询方法
-     */
-    @Deprecated
-    public <T> T queryForObject(String sql, Class<T> clazz, Object... params) throws SQLException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        // 初始化结果对象
-        T result = null;
-
-        try (PreparedStatement pstmt = getConn().prepareStatement(sql)) {
-            setParameters(pstmt, params);
-            try (ResultSet rs = pstmt.executeQuery()) {
-                // 如果结果集中有数据，进行处理
-                if (rs.next()) {
-                    // 使用反射创建实体类对象
-                    result = clazz.getDeclaredConstructor().newInstance();
-
-                    // 获取结果集的元数据
-                    ResultSetMetaData metaData = rs.getMetaData();
-                    int columnCount = metaData.getColumnCount();
-
-                    // 遍历结果集的每一列
-                    for (int i = 1; i <= columnCount; i++) {
-                        // 将数据库列名转换为驼峰命名规则
-                        String columnName = underlineToCamel(metaData.getColumnName(i));
-                        // 获取数据库列的值
-                        Object columnValue = rs.getObject(metaData.getColumnName(i));
-                        // 使用反射设置实体类的属性值
-                        setProperty(result, columnName, columnValue);
-                    }
-                }
-                return result;
-            }
-        }
-    }
-
-    /**
-     * 查询多个对象
-     *
-     * @param sql    SQL语句 如："select * from product where shop_id=? and data=?"
-     * @param clazz  实体类
-     * @param params 参数数组
-     * @param <T>    实体类类型
-     * @return 实体类对象列表
-     * @deprecated 请开发者自行编写对应类的查询方法
-     */
-    @Deprecated
-    public <T> List<T> queryForList(String sql, Class<T> clazz, Object... params) throws SQLException, InstantiationException, IllegalAccessException {
-        List<T> resultList = new ArrayList<>();
-        try (PreparedStatement pstmt = getConn().prepareStatement(sql)) {
-            setParameters(pstmt, params);
-            try (ResultSet rs = pstmt.executeQuery()) {
-                while (rs.next()) {
-                    T result = clazz.getDeclaredConstructor().newInstance();
-                    ResultSetMetaData metaData = rs.getMetaData();
-                    int columnCount = metaData.getColumnCount();
-                    for (int i = 1; i <= columnCount; i++) {
-                        String columnName = underlineToCamel(metaData.getColumnName(i));
-                        Object columnValue = rs.getObject(metaData.getColumnName(i));
-                        setProperty(result, columnName, columnValue);
-                    }
-                    resultList.add(result);
-                }
-                return resultList;
-            } catch (InvocationTargetException | NoSuchMethodException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
-    /**
      * 设置PreparedStatement的参数
      *
      * @param pstmt  PreparedStatement
@@ -292,22 +214,6 @@ public class DataBase {
             for (int i = 0; i < params.length; i++) {
                 pstmt.setObject(i + 1, params[i]);
             }
-        }
-    }
-
-    /**
-     * 为实体类设置属性值
-     *
-     * @param obj          实体类对象
-     * @param propertyName 属性名
-     * @param value        属性值
-     */
-    @Deprecated
-    private void setProperty(Object obj, String propertyName, Object value) throws IllegalAccessException {
-        Field field = getFieldByName(obj.getClass(), propertyName);
-        if (ObjectUtil.isNotEmpty(field)) {
-            field.setAccessible(true);
-            field.set(obj, value);
         }
     }
 

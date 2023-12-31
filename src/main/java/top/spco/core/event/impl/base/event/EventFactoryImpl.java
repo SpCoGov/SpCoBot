@@ -17,7 +17,6 @@ package top.spco.core.event.impl.base.event;
 
 import com.google.common.collect.MapMaker;
 import top.spco.core.event.Event;
-import top.spco.core.event.impl.base.event.ArrayBackedEvent;
 import top.spco.core.resource.ResourceIdentifier;
 
 import java.util.Collections;
@@ -35,7 +34,8 @@ public final class EventFactoryImpl {
     private static final Set<ArrayBackedEvent<?>> ARRAY_BACKED_EVENTS
             = Collections.newSetFromMap(new MapMaker().weakKeys().makeMap());
 
-    private EventFactoryImpl() { }
+    private EventFactoryImpl() {
+    }
 
     public static void invalidate() {
         ARRAY_BACKED_EVENTS.forEach(ArrayBackedEvent::update);
@@ -59,7 +59,7 @@ public final class EventFactoryImpl {
 
     public static void ensureNoDuplicates(ResourceIdentifier[] defaultPhases) {
         for (int i = 0; i < defaultPhases.length; ++i) {
-            for (int j = i+1; j < defaultPhases.length; ++j) {
+            for (int j = i + 1; j < defaultPhases.length; ++j) {
                 if (defaultPhases[i].equals(defaultPhases[j])) {
                     throw new IllegalArgumentException("Duplicate event phase: " + defaultPhases[i]);
                 }

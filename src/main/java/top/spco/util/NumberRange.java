@@ -16,6 +16,7 @@
  */
 package top.spco.util;
 
+import java.io.Serial;
 import java.util.Comparator;
 
 /**
@@ -29,6 +30,7 @@ import java.util.Comparator;
  */
 public class NumberRange<N extends Number> extends Range<N> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

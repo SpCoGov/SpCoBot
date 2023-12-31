@@ -23,25 +23,6 @@ package top.spco.util.text.translate;
  */
 @Deprecated
 public class JavaUnicodeEscaper extends UnicodeEscaper {
-    /**
-     * Constructs a {@link JavaUnicodeEscaper} above the specified value (exclusive).
-     *
-     * @param codePoint above which to escape
-     * @return the newly created {@link UnicodeEscaper} instance
-     */
-    public static JavaUnicodeEscaper above(final int codePoint) {
-        return outsideOf(0, codePoint);
-    }
-
-    /**
-     * Constructs a {@link JavaUnicodeEscaper} below the specified value (exclusive).
-     *
-     * @param codePoint below which to escape
-     * @return the newly created {@link UnicodeEscaper} instance
-     */
-    public static JavaUnicodeEscaper below(final int codePoint) {
-        return outsideOf(codePoint, Integer.MAX_VALUE);
-    }
 
     /**
      * Constructs a {@link JavaUnicodeEscaper} between the specified values (inclusive).

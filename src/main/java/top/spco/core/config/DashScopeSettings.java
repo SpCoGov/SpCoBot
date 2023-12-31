@@ -15,9 +15,24 @@
  */
 package top.spco.core.config;
 
+import top.spco.service.command.commands.DashscopeCommand;
+
 /**
+ * 本配置组包含了 {@link DashscopeCommand} 的相关配置，包含以下配置项：
+ * <table border="1">
+ *   <tr>
+ *     <th>配置项名</th>
+ *     <th>描述</th>
+ *   </tr>
+ *   <tr>
+ *     <td>api_key</td>
+ *     <td>调用DashScope模型所需的API KEY。</td>
+ *   </tr>
+ * </table>
+ *
  * @author SpCo
  * @version 0.2.1
+ * @see DashscopeCommand
  * @since 0.2.1
  */
 public enum DashScopeSettings implements SettingsGroup {

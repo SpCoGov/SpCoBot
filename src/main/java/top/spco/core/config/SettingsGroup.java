@@ -44,6 +44,11 @@ package top.spco.core.config;
  *     public Object defaultValue() {
  *         return defaultValue;
  *     }
+ *
+ *     @Override
+ *     public String toString() {
+ *         return key;
+ *     }
  * }
  * }
  * </pre>

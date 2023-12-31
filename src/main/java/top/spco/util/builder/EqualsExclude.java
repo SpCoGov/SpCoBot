@@ -22,8 +22,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Excludes a field from being used by the various {@code reflectionEquals} methods defined on {@link EqualsBuilder}.
- *
  * @since 0.3.1
  */
 @Retention(RetentionPolicy.RUNTIME)

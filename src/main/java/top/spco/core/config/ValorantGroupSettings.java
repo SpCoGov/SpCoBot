@@ -15,8 +15,23 @@
  */
 package top.spco.core.config;
 
+import top.spco.service.AutoAgreeValorant;
+
 /**
+ * 本配置组包含了 {@link AutoAgreeValorant} 的相关配置，包含以下配置项：
+ * <table border="1">
+ *   <tr>
+ *     <th>配置项名</th>
+ *     <th>描述</th>
+ *   </tr>
+ *   <tr>
+ *     <td>valorant_group</td>
+ *     <td>该功能启用的群ID。</td>
+ *   </tr>
+ * </table>
+ *
  * @author SpCo
+ * @see AutoAgreeValorant
  * @version 0.3.2
  * @since 0.3.2
  */

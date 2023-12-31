@@ -95,38 +95,6 @@ public class StringEscapeUtils {
         }
     }
 
-    static class CsvUnescaper extends CharSequenceTranslator {
-
-        private static final char CSV_DELIMITER = ',';
-        private static final char CSV_QUOTE = '"';
-        private static final String CSV_QUOTE_STR = String.valueOf(CSV_QUOTE);
-        private static final char[] CSV_SEARCH_CHARS = {CSV_DELIMITER, CSV_QUOTE, CharUtils.CR, CharUtils.LF};
-
-        @Override
-        public int translate(final CharSequence input, final int index, final Writer out) throws IOException {
-
-            if (index != 0) {
-                throw new IllegalStateException("CsvUnescaper should never reach the [1] index");
-            }
-
-            if (input.charAt(0) != CSV_QUOTE || input.charAt(input.length() - 1) != CSV_QUOTE) {
-                out.write(input.toString());
-                return Character.codePointCount(input, 0, input.length());
-            }
-
-            // strip quotes
-            final String quoteless = input.subSequence(1, input.length() - 1).toString();
-
-            if (StringUtils.containsAny(quoteless, CSV_SEARCH_CHARS)) {
-                // deal with escaped quotes; ie) ""
-                out.write(StringUtils.replace(quoteless, CSV_QUOTE_STR + CSV_QUOTE_STR, CSV_QUOTE_STR));
-            } else {
-                out.write(input.toString());
-            }
-            return Character.codePointCount(input, 0, input.length());
-        }
-    }
-
     /* Helper functions */
 
     /**

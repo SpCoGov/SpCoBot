@@ -16,115 +16,18 @@
  */
 package top.spco.util.builder;
 
-import top.spco.util.ArraySorter;
 import top.spco.util.ArrayUtils;
 import top.spco.util.ClassUtils;
-import top.spco.util.stream.Streams;
 
-import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Comparator;
 import java.util.Objects;
 
 /**
- * Assists in implementing {@link Object#toString()} methods using reflection.
- *
- * <p>
- * This class uses reflection to determine the fields to append. Because these fields are usually private, the class
- * uses {@link AccessibleObject#setAccessible(java.lang.reflect.AccessibleObject[], boolean)} to
- * change the visibility of the fields. This will fail under a security manager, unless the appropriate permissions are
- * set up correctly.
- * </p>
- * <p>
- * Using reflection to access (private) fields circumvents any synchronization protection guarding access to these
- * fields. If a toString method cannot safely read a field, you should exclude it from the toString method, or use
- * synchronization consistent with the class' lock management around the invocation of the method. Take special care to
- * exclude non-thread-safe collection classes, because these classes may throw ConcurrentModificationException if
- * modified while the toString method is executing.
- * </p>
- * <p>
- * A typical invocation for this method would look like:
- * </p>
- * <pre>
- * public String toString() {
- *     return ReflectionToStringBuilder.toString(this);
- * }
- * </pre>
- * <p>
- * You can also use the builder to debug 3rd party objects:
- * </p>
- * <pre>
- * System.out.println(&quot;An object: &quot; + ReflectionToStringBuilder.toString(anObject));
- * </pre>
- * <p>
- * A subclass can control field output by overriding the methods:
- * </p>
- * <ul>
- * <li>{@link #accept(java.lang.reflect.Field)}</li>
- * <li>{@link #getValue(java.lang.reflect.Field)}</li>
- * </ul>
- * <p>
- * For example, this method does <i>not</i> include the {@code password} field in the returned {@link String}:
- * </p>
- * <pre>
- * public String toString() {
- *     return (new ReflectionToStringBuilder(this) {
- *         protected boolean accept(Field f) {
- *             return super.accept(f) &amp;&amp; !f.getName().equals(&quot;password&quot;);
- *         }
- *     }).toString();
- * }
- * </pre>
- * <p>
- * Alternatively the {@link ToStringExclude} annotation can be used to exclude fields from being incorporated in the
- * result.
- * </p>
- * <p>
- * It is also possible to use the {@link ToStringSummary} annotation to output the summary information instead of the
- * detailed information of a field.
- * </p>
- * <p>
- * The exact format of the {@code toString} is determined by the {@link ToStringStyle} passed into the constructor.
- * </p>
- *
- * <p>
- * <b>Note:</b> the default {@link ToStringStyle} will only do a "shallow" formatting, i.e. composed objects are not
- * further traversed. To get "deep" formatting, use an instance of {@link RecursiveToStringStyle}.
- * </p>
- *
  * @since 0.3.1
  */
 public class ReflectionToStringBuilder extends ToStringBuilder {
-    /**
-     * Converts the given Collection into an array of Strings. The returned array does not contain {@code null}
-     * entries. Note that {@link Arrays#sort(Object[])} will throw an {@link NullPointerException} if an array element
-     * is {@code null}.
-     *
-     * @param collection The collection to convert
-     * @return A new array of Strings.
-     */
-    static String[] toNoNullStringArray(final Collection<String> collection) {
-        if (collection == null) {
-            return ArrayUtils.EMPTY_STRING_ARRAY;
-        }
-        return toNoNullStringArray(collection.toArray());
-    }
-
-    /**
-     * Returns a new array of Strings without null elements. Internal method used to normalize exclude lists
-     * (arrays and collections). Note that {@link Arrays#sort(Object[])} will throw an {@link NullPointerException}
-     * if an array element is {@code null}.
-     *
-     * @param array The array to check
-     * @return The given array or a new array without null.
-     */
-    static String[] toNoNullStringArray(final Object[] array) {
-        return Streams.nonNull(array).map(Objects::toString).toArray(String[]::new);
-    }
-
     /**
      * Builds a {@code toString} value using the default {@link ToStringStyle} through reflection.
      *
@@ -349,54 +252,6 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
     }
 
     /**
-     * Builds a String for a toString method excluding the given field names.
-     *
-     * @param object            The object to "toString".
-     * @param excludeFieldNames The field names to exclude. Null excludes nothing.
-     * @return The toString value.
-     */
-    public static String toStringExclude(final Object object, final Collection<String> excludeFieldNames) {
-        return toStringExclude(object, toNoNullStringArray(excludeFieldNames));
-    }
-
-    /**
-     * Builds a String for a toString method excluding the given field names.
-     *
-     * @param object            The object to "toString".
-     * @param excludeFieldNames The field names to exclude
-     * @return The toString value.
-     */
-    public static String toStringExclude(final Object object, final String... excludeFieldNames) {
-        return new ReflectionToStringBuilder(object).setExcludeFieldNames(excludeFieldNames).toString();
-    }
-
-
-    /**
-     * Builds a String for a toString method including the given field names.
-     *
-     * @param object            The object to "toString".
-     * @param includeFieldNames {@code null} or empty means all fields are included. All fields are included by default. This method will override the default behavior.
-     * @return The toString value.
-     * @since 0.3.1
-     */
-    public static String toStringInclude(final Object object, final Collection<String> includeFieldNames) {
-        return toStringInclude(object, toNoNullStringArray(includeFieldNames));
-    }
-
-    /**
-     * Builds a String for a toString method including the given field names.
-     *
-     * @param object            The object to "toString".
-     * @param includeFieldNames The field names to include. {@code null} or empty means all fields are included. All fields are included by default. This method will override the default
-     *                          behavior.
-     * @return The toString value.
-     * @since 0.3.1
-     */
-    public static String toStringInclude(final Object object, final String... includeFieldNames) {
-        return new ReflectionToStringBuilder(object).setIncludeFieldNames(includeFieldNames).toString();
-    }
-
-    /**
      * Whether or not to append static fields.
      */
     private boolean appendStatics;
@@ -429,55 +284,6 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      * The last super class to stop appending fields for.
      */
     private Class<?> upToClass;
-
-    /**
-     * Constructs a new instance.
-     *
-     * <p>
-     * This constructor outputs using the default style set with {@code setDefaultStyle}.
-     * </p>
-     *
-     * @param object the Object to build a {@code toString} for, must not be {@code null}
-     * @throws IllegalArgumentException if the Object passed in is {@code null}
-     */
-    public ReflectionToStringBuilder(final Object object) {
-        super(Objects.requireNonNull(object, "obj"));
-    }
-
-    /**
-     * Constructs a new instance.
-     *
-     * <p>
-     * If the style is {@code null}, the default style is used.
-     * </p>
-     *
-     * @param object the Object to build a {@code toString} for, must not be {@code null}
-     * @param style  the style of the {@code toString} to create, may be {@code null}
-     * @throws IllegalArgumentException if the Object passed in is {@code null}
-     */
-    public ReflectionToStringBuilder(final Object object, final ToStringStyle style) {
-        super(Objects.requireNonNull(object, "obj"), style);
-    }
-
-    /**
-     * Constructs a new instance.
-     *
-     * <p>
-     * If the style is {@code null}, the default style is used.
-     * </p>
-     *
-     * <p>
-     * If the buffer is {@code null}, a new one is created.
-     * </p>
-     *
-     * @param object the Object to build a {@code toString} for
-     * @param style  the style of the {@code toString} to create, may be {@code null}
-     * @param buffer the {@link StringBuffer} to populate, may be {@code null}
-     * @throws IllegalArgumentException if the Object passed in is {@code null}
-     */
-    public ReflectionToStringBuilder(final Object object, final ToStringStyle style, final StringBuffer buffer) {
-        super(Objects.requireNonNull(object, "obj"), style, buffer);
-    }
 
     /**
      * Constructs a new instance.
@@ -564,64 +370,6 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
     }
 
     /**
-     * Appends the fields and values defined by the given object of the given Class.
-     *
-     * <p>
-     * If a cycle is detected as an object is &quot;toString()'ed&quot;, such an object is rendered as if
-     * {@code Object.toString()} had been called and not implemented by the object.
-     * </p>
-     *
-     * @param clazz The class of object parameter
-     */
-    protected void appendFieldsIn(final Class<?> clazz) {
-        if (clazz.isArray()) {
-            this.reflectionAppendArray(this.getObject());
-            return;
-        }
-        // The elements in the returned array are not sorted and are not in any particular order.
-        final Field[] fields = ArraySorter.sort(clazz.getDeclaredFields(), Comparator.comparing(Field::getName));
-        AccessibleObject.setAccessible(fields, true);
-        for (final Field field : fields) {
-            final String fieldName = field.getName();
-            if (this.accept(field)) {
-                // Warning: Field.get(Object) creates wrappers objects for primitive types.
-                final Object fieldValue = Reflection.getUnchecked(field, getObject());
-                if (!excludeNullValues || fieldValue != null) {
-                    this.append(fieldName, fieldValue, !field.isAnnotationPresent(ToStringSummary.class));
-                }
-            }
-        }
-    }
-
-    /**
-     * Gets the excludeFieldNames.
-     *
-     * @return the excludeFieldNames.
-     */
-    public String[] getExcludeFieldNames() {
-        return this.excludeFieldNames.clone();
-    }
-
-    /**
-     * Gets the includeFieldNames
-     *
-     * @return the includeFieldNames.
-     * @since 0.3.1
-     */
-    public String[] getIncludeFieldNames() {
-        return this.includeFieldNames.clone();
-    }
-
-    /**
-     * Gets the last super class to stop appending fields for.
-     *
-     * @return The last super class to stop appending fields for.
-     */
-    public Class<?> getUpToClass() {
-        return this.upToClass;
-    }
-
-    /**
      * Calls {@code java.lang.reflect.Field.get(Object)}.
      *
      * @param field The Field to query.
@@ -654,27 +402,6 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
     }
 
     /**
-     * Gets whether or not to append fields whose values are null.
-     *
-     * @return Whether or not to append fields whose values are null.
-     * @since 0.3.1
-     */
-    public boolean isExcludeNullValues() {
-        return this.excludeNullValues;
-    }
-
-    /**
-     * Appends to the {@code toString} an {@link Object} array.
-     *
-     * @param array the array to add to the {@code toString}
-     * @return this
-     */
-    public ReflectionToStringBuilder reflectionAppendArray(final Object array) {
-        this.getStyle().reflectionAppendArrayDetail(this.getStringBuffer(), null, array);
-        return this;
-    }
-
-    /**
      * Sets whether or not to append static fields.
      *
      * @param appendStatics Whether or not to append static fields.
@@ -694,22 +421,6 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
     }
 
     /**
-     * Sets the field names to exclude.
-     *
-     * @param excludeFieldNamesParam The excludeFieldNames to excluding from toString or {@code null}.
-     * @return {@code this}
-     */
-    public ReflectionToStringBuilder setExcludeFieldNames(final String... excludeFieldNamesParam) {
-        if (excludeFieldNamesParam == null) {
-            this.excludeFieldNames = null;
-        } else {
-            // clone and remove nulls
-            this.excludeFieldNames = ArraySorter.sort(toNoNullStringArray(excludeFieldNamesParam));
-        }
-        return this;
-    }
-
-    /**
      * Sets whether or not to append fields whose values are null.
      *
      * @param excludeNullValues Whether or not to append fields whose values are null.
@@ -717,23 +428,6 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      */
     public void setExcludeNullValues(final boolean excludeNullValues) {
         this.excludeNullValues = excludeNullValues;
-    }
-
-    /**
-     * Sets the field names to include. {@code null} or empty means all fields are included. All fields are included by default. This method will override the default behavior.
-     *
-     * @param includeFieldNamesParam The includeFieldNames that must be on toString or {@code null}.
-     * @return {@code this}
-     * @since 0.3.1
-     */
-    public ReflectionToStringBuilder setIncludeFieldNames(final String... includeFieldNamesParam) {
-        if (includeFieldNamesParam == null) {
-            this.includeFieldNames = null;
-        } else {
-            // clone and remove nulls
-            this.includeFieldNames = ArraySorter.sort(toNoNullStringArray(includeFieldNamesParam));
-        }
-        return this;
     }
 
     /**
@@ -749,37 +443,5 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
             }
         }
         this.upToClass = clazz;
-    }
-
-    /**
-     * Gets the String built by this builder.
-     *
-     * @return the built string
-     */
-    @Override
-    public String toString() {
-        if (this.getObject() == null) {
-            return this.getStyle().getNullText();
-        }
-
-        validate();
-
-        Class<?> clazz = this.getObject().getClass();
-        this.appendFieldsIn(clazz);
-        while (clazz.getSuperclass() != null && clazz != this.getUpToClass()) {
-            clazz = clazz.getSuperclass();
-            this.appendFieldsIn(clazz);
-        }
-        return super.toString();
-    }
-
-    /**
-     * Validates that include and exclude names do not intersect.
-     */
-    private void validate() {
-        if (ArrayUtils.containsAny(this.excludeFieldNames, (Object[]) this.includeFieldNames)) {
-            ToStringStyle.unregister(this.getObject());
-            throw new IllegalStateException("includeFieldNames and excludeFieldNames must not intersect");
-        }
     }
 }

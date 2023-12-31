@@ -17,9 +17,8 @@
 package top.spco.util.tuple;
 
 import top.spco.util.builder.CompareToBuilder;
-import top.spco.util.function.FailableBiConsumer;
-import top.spco.util.function.FailableBiFunction;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Formattable;
 import java.util.Map;
@@ -44,30 +43,8 @@ public abstract class Pair<L, R> implements Map.Entry<L, R>, Comparable<Pair<L, 
     /**
      * Serialization version
      */
+    @Serial
     private static final long serialVersionUID = 4954918890077093841L;
-
-    /**
-     * An empty array.
-     * <p>
-     * Consider using {@link #emptyArray()} to avoid generics warnings.
-     * </p>
-     *
-     * @since 0.3.1
-     */
-    public static final Pair<?, ?>[] EMPTY_ARRAY = {};
-
-    /**
-     * Returns the empty array singleton that can be assigned without compiler warning.
-     *
-     * @param <L> the left element type
-     * @param <R> the right element type
-     * @return the empty array singleton that can be assigned without compiler warning.
-     * @since 0.3.1
-     */
-    @SuppressWarnings("unchecked")
-    public static <L, R> Pair<L, R>[] emptyArray() {
-        return (Pair<L, R>[]) EMPTY_ARRAY;
-    }
 
     /**
      * Creates an immutable pair of two objects inferring the generic types.
@@ -102,50 +79,6 @@ public abstract class Pair<L, R> implements Map.Entry<L, R>, Comparable<Pair<L, 
     }
 
     /**
-     * Creates an immutable pair of two non-null objects inferring the generic types.
-     *
-     * <p>This factory allows the pair to be created using inference to
-     * obtain the generic types.</p>
-     *
-     * @param <L>   the left element type
-     * @param <R>   the right element type
-     * @param left  the left element, may not be null
-     * @param right the right element, may not  be null
-     * @return a pair formed from the two parameters, not null
-     * @throws NullPointerException if any input is null
-     * @since 0.3.1
-     */
-    public static <L, R> Pair<L, R> ofNonNull(final L left, final R right) {
-        return ImmutablePair.ofNonNull(left, right);
-    }
-
-    /**
-     * Accepts this key and value as arguments to the given consumer.
-     *
-     * @param <E>      The kind of thrown exception or error.
-     * @param consumer the consumer to call.
-     * @throws E Thrown when the consumer fails.
-     * @since 0.3.1
-     */
-    public <E extends Throwable> void accept(final FailableBiConsumer<L, R, E> consumer) throws E {
-        consumer.accept(getKey(), getValue());
-    }
-
-    /**
-     * Applies this key and value as arguments to the given function.
-     *
-     * @param <V>      The function return type.
-     * @param <E>      The kind of thrown exception or error.
-     * @param function the consumer to call.
-     * @return the function's return value.
-     * @throws E Thrown when the consumer fails.
-     * @since 0.3.1
-     */
-    public <V, E extends Throwable> V apply(final FailableBiFunction<L, R, V, E> function) throws E {
-        return function.apply(getKey(), getValue());
-    }
-
-    /**
      * Compares the pair based on the left element followed by the right element.
      * The types must be {@link Comparable}.
      *
@@ -169,8 +102,7 @@ public abstract class Pair<L, R> implements Map.Entry<L, R>, Comparable<Pair<L, 
         if (obj == this) {
             return true;
         }
-        if (obj instanceof Map.Entry<?, ?>) {
-            final Map.Entry<?, ?> other = (Map.Entry<?, ?>) obj;
+        if (obj instanceof Map.Entry<?, ?> other) {
             return Objects.equals(getKey(), other.getKey())
                     && Objects.equals(getValue(), other.getValue());
         }
