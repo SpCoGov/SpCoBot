@@ -35,7 +35,7 @@ import java.util.Map;
  * 每个键值对的键为枚举常量的名称，值为该枚举常量的默认值。
  *
  * @author SpCo
- * @version 0.3.2
+ * @version 1.2.6
  * @since 0.2.1
  */
 public class Settings {
@@ -145,12 +145,25 @@ public class Settings {
     }
 
     /**
-     * 获取配置项的值，并将其转换为long类型。
+     * 获取配置项的值，并将其转换为 {@code String}类型。
      *
      * @param key 配置项的枚举常量
      * @param <T> 实现了{@link SettingsGroup}接口的枚举类型
-     * @return 配置项的long值
-     * @throws IllegalArgumentException 如果配置项的值不是long类型
+     * @return 配置项的 {@code String} 值
+     * @throws IllegalArgumentException 如果配置项的值不是 {@code String} 类型
+     */
+    public <T extends Enum<T> & SettingsGroup> String getStringProperty(T key) {
+        Object value = getProperty(key);
+        return value.toString();
+    }
+
+    /**
+     * 获取配置项的值，并将其转换为 {@code long} 类型。
+     *
+     * @param key 配置项的枚举常量
+     * @param <T> 实现了{@link SettingsGroup}接口的枚举类型
+     * @return 配置项的 {@code long} 值
+     * @throws IllegalArgumentException 如果配置项的值不是 {@code long} 类型
      */
     public <T extends Enum<T> & SettingsGroup> long getLongProperty(T key) {
         Object value = getProperty(key);

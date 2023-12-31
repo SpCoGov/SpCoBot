@@ -18,7 +18,7 @@ package top.spco.core.config;
 import top.spco.SpCoBot;
 
 /**
- * 本配置组表示当前配置的版本，将来会用于检测配置文件是否需要更新，包含以下配置项：
+ * 本配置组表示当前配置的版本，包含以下配置项：
  * <table border="1">
  *   <tr>
  *     <th>配置项名</th>

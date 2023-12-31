@@ -30,9 +30,9 @@ import top.spco.service.GroupMessageRecorder;
 import top.spco.service.chat.ChatDispatcher;
 import top.spco.service.chat.ChatType;
 import top.spco.service.command.Command;
+import top.spco.service.command.CommandDispatcher;
 import top.spco.service.command.CommandMeta;
 import top.spco.service.command.CommandSyntaxException;
-import top.spco.service.command.CommandDispatcher;
 import top.spco.service.dashscope.DashScopeDispatcher;
 import top.spco.service.statistics.StatisticsDispatcher;
 import top.spco.user.BotUser;
@@ -68,7 +68,7 @@ import java.util.concurrent.TimeUnit;
  * </pre>
  *
  * @author SpCo
- * @version 1.2.5
+ * @version 1.2.6
  * @since 0.1.0
  */
 public class SpCoBot {
@@ -98,9 +98,10 @@ public class SpCoBot {
      * </ul>
      * <b>更新版本号(仅限核心的 Feature)时请不要忘记在 build.gradle 中同步修改版本号</b>
      */
-    public static final String MAIN_VERSION = "1.2.5";
+    public static final String MAIN_VERSION = "1.2.6";
     public static final String VERSION = "v" + MAIN_VERSION + "-1";
-    public static final String UPDATED_TIME = "2023-12-31 00:13";
+    public static final String UPDATED_TIME = "2023-12-31 17:55";
+    public static final String OLDEST_SUPPORTED_CONFIG_VERSION = "0.3.2";
 
     private SpCoBot() {
         initEvents();
@@ -113,7 +114,7 @@ public class SpCoBot {
         new AutoSign();
         new AutoAgreeValorant();
         this.settings = new Settings(configFolder.getAbsolutePath() + File.separator + "config.yaml");
-        if (!MAIN_VERSION.equals(settings.getProperty(SettingsVersion.CONFIG_VERSION))) {
+        if (expired(settings.getStringProperty(SettingsVersion.CONFIG_VERSION))) {
             logger.error("配置版本过时，请备份配置后删除配置重新启动机器人以生成新配置。");
             System.exit(-2);
         }
@@ -276,5 +277,33 @@ public class SpCoBot {
             instance = new SpCoBot();
         }
         return instance;
+    }
+
+    private static boolean expired(String currentVersion) {
+        if (!isValidVersion(currentVersion) || !isValidVersion(SpCoBot.OLDEST_SUPPORTED_CONFIG_VERSION)) {
+            return true;
+        }
+        var cv = getVersionNumber(currentVersion);
+        var rv = getVersionNumber(SpCoBot.OLDEST_SUPPORTED_CONFIG_VERSION);
+        for (int i = 0; i < 3; i++) {
+            if (cv[i] < rv[i]){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean isValidVersion(String version) {
+        String regex = "\\d+\\.\\d+\\.\\d+";
+        return version.matches(regex);
+    }
+
+    private static int[] getVersionNumber(String version) {
+        String[] v = version.split("\\.");
+        int[] vn = new int[3];
+        for (int i = 0; i < 3; i++) {
+            vn[i] = Integer.parseInt(v[i]);
+        }
+        return vn;
     }
 }
