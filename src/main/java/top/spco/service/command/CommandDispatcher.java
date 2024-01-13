@@ -23,6 +23,7 @@ import top.spco.api.message.Message;
 import top.spco.events.CommandEvents;
 import top.spco.service.chat.ChatType;
 import top.spco.service.command.commands.*;
+import top.spco.service.command.commands.valorant.ValorantCommand;
 import top.spco.user.BotUser;
 import top.spco.user.BotUsers;
 import top.spco.user.UserFetchException;
@@ -36,7 +37,7 @@ import java.util.*;
  * 它负责注册、执行和管理各种命令的权限
  *
  * @author SpCo
- * @version 1.2.3
+ * @version 1.3.0
  * @since 0.1.0
  */
 public class CommandDispatcher {
@@ -86,6 +87,7 @@ public class CommandDispatcher {
         toBeRegistered.add(new KickCommand());
         toBeRegistered.add(new MemoryCommand());
         toBeRegistered.add(new UsageCommand());
+        toBeRegistered.add(new ValorantCommand());
 
         toBeRegistered.add(new TestCommand());
 

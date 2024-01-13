@@ -17,11 +17,13 @@ package top.spco.api;
 
 import top.spco.api.message.Message;
 
+import java.io.File;
+
 /**
  * 代表匿名群成员
  *
  * @author SpCo
- * @version 0.3.0
+ * @version 1.3.0
  * @see Member
  * @see NormalMember
  * @since 0.1.0
@@ -89,5 +91,10 @@ public interface AnonymousMember extends Member {
     @Deprecated
     @Override
     default void quoteReply(Message sourceMessage, String message) {
+    }
+
+    @Deprecated
+    @Override
+    default void sendImage(File image) {
     }
 }

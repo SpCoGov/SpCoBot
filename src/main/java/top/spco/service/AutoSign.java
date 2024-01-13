@@ -29,7 +29,7 @@ import java.time.format.DateTimeFormatter;
  * 自动签到
  *
  * @author SpCo
- * @version 1.2.4
+ * @version 1.3.0
  * @since 0.1.2
  */
 public class AutoSign {
@@ -46,8 +46,9 @@ public class AutoSign {
                 if (DateUtils.now().format(DateTimeFormatter.ofPattern("HH:mm")).equals("00:00")) {
                     try {
                         // 创建查询语句
-                        String sql = "SELECT id, smf_coin FROM user";
+                        String sql = "SELECT id FROM user WHERE sign != ? AND premium = 1";
                         try (PreparedStatement pstmt = SpCoBot.getInstance().getDataBase().getConn().prepareStatement(sql)) {
+                            pstmt.setString(1, DateUtils.today().toString());
                             SpCoBot.getInstance().getDataBase().setParameters(pstmt);
                             try (ResultSet rs = pstmt.executeQuery()) {
                                 while (rs.next()) {

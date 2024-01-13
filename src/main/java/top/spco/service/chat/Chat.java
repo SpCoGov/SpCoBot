@@ -24,11 +24,52 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * {@link Chat 对话}是一种用户与机器人交互的方式。
+ * {@code Chat} 类定义了用户与机器人之间的对话交互。它允许创建多个交互阶段，每个阶段可以定义特定的交互逻辑。
+ * 该类支持动态添加阶段、冻结对话以防止更改、处理消息、以及控制对话流程。
+ * <p>使用方法：</p>
+ * <ol>
+ *     <li>使用{@link ChatBuilder}创建一个新的{@code Chat}对象，指定对话的类型和交互目标。</li>
+ *     <li>使用{@link #addStage(Stage)}方法添加一个或多个交互阶段。</li>
+ *     <li>每个阶段定义一个开始消息和一个基于用户回复的处理逻辑。</li>
+ *     <li>通过调用{@link ChatBuilder#build()}方法完成构建过程。</li>
+ *     <li>调用{@link #start()}方法来启动对话。</li>
+ * </ol>
+ *
+ * <p>示例代码：</p>
+ * <pre>{@code
+ * StringBuilder sb = new StringBuilder();
+ * Chat chat = new ChatBuilder(ChatType.FRIEND, from)
+ *     .addStage(new Stage(() -> "请输入你好", (chat, bot, source, sender, message, time) -> {
+ *         if (message.toMessageContext().equals("你好")) {
+ *             sb.append("你好，").append(sender.getId());
+ *             chat.next();
+ *         } else {
+ *             chat.replay();
+ *         }
+ *     }))
+ *     .addStage(new Stage(() -> "请随意输入文本", (chat, bot, source, sender, message, time) -> {
+ *         sb.append("\n").append(message.toMessageContext());
+ *         chat.next();
+ *     }))
+ *     .addStage(new Stage(() -> "最终文本为\n" + sb + "\n输入确定即可发送，输入取消退出", (chat, bot, source, sender, message, time) -> {
+ *         switch (message.toMessageContext()) {
+ *             case "取消" -> chat.stop();
+ *             case "确定" -> {
+ *                 source.sendMessage(sb.toString());
+ *                 chat.next();
+ *             }
+ *             default -> chat.replay();
+ *         }
+ *     }))
+ *     .build();
+ * chat.start();
+ * }</pre>
  *
  * @author SpCo
  * @version 1.1.0
  * @since 0.1.1
+ * @see Stage
+ * @see ChatBuilder
  */
 public class Chat {
     private final ChatType type;

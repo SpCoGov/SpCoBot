@@ -16,10 +16,13 @@
 package top.spco.api.message.service;
 
 import org.jetbrains.annotations.Nullable;
+import top.spco.api.Image;
+import top.spco.api.Interactive;
 import top.spco.api.message.Message;
 import top.spco.api.message.MessageSource;
 import top.spco.util.tuple.ImmutablePair;
 
+import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,7 +30,7 @@ import java.util.regex.Pattern;
  * 消息服务
  *
  * @author SpCo
- * @version 0.3.0
+ * @version 1.3.0
  * @since 0.1.1
  */
 public interface MessageService {
@@ -83,4 +86,27 @@ public interface MessageService {
      */
     @Nullable
     ImmutablePair<MessageSource, Message> getQuote(Message message);
+
+    /**
+     * 撤回一条消息<p>
+     * 当机器人撤回自己的消息时，不需要权限。
+     *
+     * @param original 需要撤回的消息
+     */
+    void recall(Message original);
+
+    /**
+     * 将字符串转换为 {@code Message} 对象
+     *
+     * @param content 需要转换的内容
+     */
+    Message toMessage(String content);
+
+    /**
+     * 将文件转换为 {@code Image} 对象
+     *
+     * @param image       需要转换的图片
+     * @param interactive 发送的对象
+     */
+    Image toImage(File image, Interactive interactive);
 }

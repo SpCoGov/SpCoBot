@@ -23,8 +23,24 @@ import top.spco.api.NormalMember;
 import top.spco.core.Builder;
 
 /**
- * {@link ChatBuilder}是一个用于构建{@link Chat}对象的构建器。<p>
- * 该类允许您创建{@link Chat}对象，管理用户与机器人之间的交互，并添加{@link Stage 交互阶段}。
+ * {@code ChatBuilder} 类是用于构建 {@link Chat} 对象的构建器。
+ * 它提供了一个流畅的接口来设置对话的类型、目标对象以及添加多个交互阶段（{@link Stage}）。
+ * 使用此类可以轻松构建和配置一个{@link Chat}对象，以管理用户与机器人之间的交互。
+ *
+ * <p>基本用法：</p>
+ * <ol>
+ *     <li>首先，使用{@code ChatBuilder}构造函数，指定聊天类型和目标交互对象。</li>
+ *     <li>然后，通过调用{@code addStage(Stage stage)}方法添加一个或多个交互阶段。</li>
+ *     <li>最后，调用{@code build()}方法来构建并冻结{@link Chat}对象，防止更多阶段的添加。</li>
+ * </ol>
+ *
+ * <p>示例：</p>
+ * <pre>{@code
+ * Chat chat = new ChatBuilder(ChatType.FRIEND, targetInteractive)
+ *     .addStage(new Stage(...)) // 添加第一个交互阶段
+ *     .addStage(new Stage(...)) // 添加更多交互阶段
+ *     .build(); // 构建并获取Chat对象
+ * }</pre>
  *
  * @author SpCo
  * @version 1.1.0
@@ -34,7 +50,7 @@ public class ChatBuilder implements Builder<Chat> {
     private final Chat chat;
 
     /**
-     * 创建一个{@link ChatBuilder}实例，根据给定的{@link ChatType}和目标{@link Interactive}对象。
+     * 创建一个{@code ChatBuilder}实例，根据给定的{@link ChatType}和目标{@link Interactive}对象。
      *
      * @param chatType {@link ChatType 聊天类型}，可以是{@link ChatType#GROUP}、{@link ChatType#FRIEND}或{@link ChatType#GROUP_TEMP}之一
      * @param target   目标{@link Interactive}对象，根据{@link ChatType 聊天类型}的不同可以是{@link Group}、{@link Friend}或{@link NormalMember}

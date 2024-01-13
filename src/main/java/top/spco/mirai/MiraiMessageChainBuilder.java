@@ -38,7 +38,13 @@ class MiraiMessageChainBuilder implements MessageChainBuilder {
 
     @Override
     public MessageChainBuilder append(Message message) {
-        this.builder.append(((MiraiMessage) message).message());
+        net.mamoe.mirai.message.data.Message messages;
+        if (message instanceof MiraiImage image) {
+            messages = image.image();
+        } else {
+            messages = ((MiraiMessage) message).message();
+        }
+        this.builder.append(messages);
         return this;
     }
 

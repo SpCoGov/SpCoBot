@@ -17,11 +17,13 @@ package top.spco.api;
 
 import top.spco.api.message.Message;
 
+import java.io.File;
+
 /**
  * 表示具有消息发送和异常处理功能
  *
  * @author SpCo
- * @version 0.3.0
+ * @version 1.3.0
  * @since 0.1.0
  */
 public interface Interactive extends Identifiable {
@@ -56,4 +58,6 @@ public interface Interactive extends Identifiable {
      * @param message       要发送的回复消息
      */
     void quoteReply(Message sourceMessage, String message);
+
+    void sendImage(File image);
 }

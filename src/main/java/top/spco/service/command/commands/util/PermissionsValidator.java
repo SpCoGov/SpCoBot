@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco.service.command;
+package top.spco.service.command.commands.util;
 
 import top.spco.api.Group;
 import top.spco.api.Interactive;
@@ -33,11 +33,11 @@ import top.spco.user.UserPermission;
  *     <th>描述</th>
  *   </tr>
  *   <tr>
- *     <td>{@link #verifyAdminStatus}</td>
+ *     <td>{@link #verifyMemberPermissions}</td>
  *     <td>验证发起命令的用户是否具有管理员权限，并检查机器人是否有权操作目标用户。</td>
  *   </tr>
  *   <tr>
- *     <td>{@link #verifyBotStatus(Interactive, Message, long)} 和 {@link #verifyBotStatus(Interactive, Message, NormalMember)}</td>
+ *     <td>{@link #verifyBotPermissions(Interactive, Message, long)} 和 {@link #verifyBotPermissions(Interactive, Message, NormalMember)}</td>
  *     <td>只验证机器人是否有权限操作指定的群成员。</td>
  *   </tr>
  * </table>
@@ -47,10 +47,10 @@ import top.spco.user.UserPermission;
  * 这些方法有助于在执行群管理命令之前确保权限和安全性。
  *
  * @author SpCo
- * @version 1.2.3
+ * @version 1.3.0
  * @since 1.2.0
  */
-public class GroupMemberCommandValidator {
+public class PermissionsValidator {
     /**
      * 验证发起命令的用户是否具有管理员权限，并检查机器人是否有权操作目标用户。<p>
      * 此方法首先检查发起命令的用户在群组中是否具有管理员权限。
@@ -63,7 +63,7 @@ public class GroupMemberCommandValidator {
      * @param targetId 命令操作的目标Id
      * @return 可操作返回被操作的目标对象，不可操作返回 {@code null}
      */
-    public static NormalMember verifyAdminStatus(Interactive from, BotUser user, Message message, long targetId) {
+    public static NormalMember verifyMemberPermissions(Interactive from, BotUser user, Message message, long targetId) {
         try {
             if (from instanceof Group group) {
                 if (!group.getMember(user.getId()).getPermission().isOperator()) {
@@ -73,7 +73,7 @@ public class GroupMemberCommandValidator {
                     }
                 }
                 NormalMember target = group.getMember(targetId);
-                if (verifyBotStatus(from, message, target)) {
+                if (verifyBotPermissions(from, message, target)) {
                     return target;
                 }
                 return null;
@@ -92,11 +92,11 @@ public class GroupMemberCommandValidator {
      * @param message  命令源消息
      * @param targetId 命令操作的目标Id
      * @return 可操作返回 {@code true}，不可操作返回 {@code false}
-     * @see #verifyBotStatus(Interactive, Message, NormalMember)
+     * @see #verifyBotPermissions(Interactive, Message, NormalMember)
      */
-    public static boolean verifyBotStatus(Interactive from, Message message, long targetId) {
+    public static boolean verifyBotPermissions(Interactive from, Message message, long targetId) {
         if (from instanceof Group group) {
-            return verifyBotStatus(from, message, group.getMember(targetId));
+            return verifyBotPermissions(from, message, group.getMember(targetId));
         }
         return false;
     }
@@ -112,14 +112,18 @@ public class GroupMemberCommandValidator {
      * @param target  命令操作的目标对象
      * @return 可操作返回 {@code true}，不可操作返回 {@code false}
      */
-    public static boolean verifyBotStatus(Interactive from, Message message, NormalMember target) {
+    public static boolean verifyBotPermissions(Interactive from, Message message, NormalMember target) {
+        return verifyBotPermissions(from, message, target, true);
+    }
+
+    public static boolean verifyBotPermissions(Interactive from, Message message, NormalMember target, boolean prompt) {
         if (from instanceof Group group) {
             if (!group.botPermission().isOperator()) {
-                from.quoteReply(message, "[告知] 机器人权限不足");
+                if (prompt) from.quoteReply(message, "[告知] 机器人权限不足");
                 return false;
             }
             if (target.getPermission().getLevel() >= group.botPermission().getLevel()) {
-                from.quoteReply(message, "[告知] 大佬，惹不起");
+                if (prompt) from.quoteReply(message, "[告知] 大佬，惹不起");
                 return false;
             }
             return true;

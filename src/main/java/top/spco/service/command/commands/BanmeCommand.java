@@ -18,6 +18,7 @@ package top.spco.service.command.commands;
 import top.spco.api.*;
 import top.spco.api.message.Message;
 import top.spco.service.command.*;
+import top.spco.service.command.commands.util.PermissionsValidator;
 import top.spco.user.BotUser;
 
 import java.security.SecureRandom;
@@ -41,7 +42,7 @@ public class BanmeCommand extends GroupAbstractCommand {
     @Override
     public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
         if (sender instanceof NormalMember member) {
-            if (GroupMemberCommandValidator.verifyBotStatus(from, message, member)) {
+            if (PermissionsValidator.verifyBotPermissions(from, message, member)) {
                 int d = new SecureRandom().nextInt(1, 61);
                 member.mute(d);
                 from.quoteReply(message, "恭喜，您已被禁言" + d + "秒");

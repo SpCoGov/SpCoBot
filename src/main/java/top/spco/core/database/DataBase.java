@@ -29,7 +29,7 @@ import java.util.List;
  * 数据库
  *
  * @author SpCo
- * @version 1.2.5
+ * @version 1.3.0
  * @since 0.1.0
  */
 public class DataBase {
@@ -91,9 +91,23 @@ public class DataBase {
                         "smf_coin INTEGER DEFAULT 0, " +
                         "permission INTEGER DEFAULT 1, " +
                         "sign TEXT DEFAULT '从未签到过')";
-
-        try (PreparedStatement stmt = getConn().prepareStatement(createUserTableSql)) {
+        String createValorantUserTableSql =
+                "CREATE TABLE IF NOT EXISTS valorant_user " +
+                        "(id INTEGER NOT NULL PRIMARY KEY, " +
+                        "username TEXT DEFAULT 'null', " +
+                        "password TEXT DEFAULT 'null', " +
+                        "access_token TEXT DEFAULT 'null', " +
+                        "entitlements TEXT DEFAULT 'null', " +
+                        "uuid TEXT DEFAULT 'null', " +
+                        "name TEXT DEFAULT 'null', " +
+                        "tag TEXT DEFAULT 'null', " +
+                        "create_data TEXT DEFAULT 'null', " +
+                        "ban_type TEXT DEFAULT 'null', " +
+                        "region TEXT DEFAULT 'null')";
+        try (PreparedStatement stmt = getConn().prepareStatement(createUserTableSql);
+             PreparedStatement stmt2 = getConn().prepareStatement(createValorantUserTableSql)) {
             stmt.execute();
+            stmt2.execute();
         }
     }
 

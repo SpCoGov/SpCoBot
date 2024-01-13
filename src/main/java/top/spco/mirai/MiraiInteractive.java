@@ -19,9 +19,11 @@ import net.mamoe.mirai.contact.Contact;
 import top.spco.api.Interactive;
 import top.spco.api.message.Message;
 
+import java.io.File;
+
 /**
  * @author SpCo
- * @version 0.3.0
+ * @version 1.3.0
  * @since 0.1.0
  */
 record MiraiInteractive(Contact contact) implements Interactive {
@@ -78,5 +80,10 @@ record MiraiInteractive(Contact contact) implements Interactive {
     @Override
     public void quoteReply(Message sourceMessage, String message) {
         this.sendMessage(new MiraiMessageChainBuilder(sourceMessage).append(message).build());
+    }
+
+    @Override
+    public void sendImage(File image) {
+        Contact.uploadImage(this.contact, image);
     }
 }
