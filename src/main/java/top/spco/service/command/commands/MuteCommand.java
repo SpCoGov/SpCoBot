@@ -18,14 +18,14 @@ package top.spco.service.command.commands;
 import top.spco.api.*;
 import top.spco.api.message.Message;
 import top.spco.service.command.*;
+import top.spco.service.command.commands.util.PermissionsValidator;
 import top.spco.user.BotUser;
-import top.spco.user.UserPermission;
 
 import java.util.List;
 
 /**
  * @author SpCo
- * @version 1.2.0
+ * @version 1.3.0
  * @since 0.3.0
  */
 public class MuteCommand extends GroupAbstractCommand {
@@ -40,11 +40,6 @@ public class MuteCommand extends GroupAbstractCommand {
     }
 
     @Override
-    public UserPermission needPermission() {
-        return UserPermission.ADMINISTRATOR;
-    }
-
-    @Override
     public List<CommandUsage> getUsages() {
         return List.of(new CommandUsage("mute", "禁言一位群员", new CommandParam("目标用户", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.TARGET_USER_ID),
                 new CommandParam("禁言时间", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.INTEGER)));
@@ -54,7 +49,7 @@ public class MuteCommand extends GroupAbstractCommand {
     public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
         try {
             long id = meta.targetUserIdArgument(0);
-            NormalMember target = GroupMemberCommandValidator.verifyAdminStatus(from, user, message, id);
+            NormalMember target = PermissionsValidator.verifyMemberPermissions(from, user, message, id);
             if (target != null) {
                 int duration = meta.integerArgument(1);
                 target.mute(duration);

@@ -18,14 +18,14 @@ package top.spco.service.command.commands;
 import top.spco.api.*;
 import top.spco.api.message.Message;
 import top.spco.service.command.*;
+import top.spco.service.command.commands.util.PermissionsValidator;
 import top.spco.user.BotUser;
-import top.spco.user.UserPermission;
 
 import java.util.List;
 
 /**
  * @author SpCo
- * @version 1.2.0
+ * @version 1.3.0
  * @since 0.3.3
  */
 public class KickCommand extends GroupAbstractCommand {
@@ -40,11 +40,6 @@ public class KickCommand extends GroupAbstractCommand {
     }
 
     @Override
-    public UserPermission needPermission() {
-        return UserPermission.ADMINISTRATOR;
-    }
-
-    @Override
     public List<CommandUsage> getUsages() {
         return List.of(new CommandUsage("kick", "踢出一名群成员", new CommandParam("目标用户", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.TARGET_USER_ID)));
     }
@@ -53,7 +48,7 @@ public class KickCommand extends GroupAbstractCommand {
     public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
         try {
             long id = meta.targetUserIdArgument(0);
-            NormalMember target = GroupMemberCommandValidator.verifyAdminStatus(from, user, message, id);
+            NormalMember target = PermissionsValidator.verifyMemberPermissions(from, user, message, id);
             if (target != null) {
                 target.kick("您被管理员移出了本群", false);
                 from.quoteReply(message, "已将 " + target.getNick() + "(" + target.getId() + ")" + " 移出本群");

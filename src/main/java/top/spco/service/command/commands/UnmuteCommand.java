@@ -21,6 +21,7 @@ import top.spco.api.NormalMember;
 import top.spco.api.User;
 import top.spco.api.message.Message;
 import top.spco.service.command.*;
+import top.spco.service.command.commands.util.PermissionsValidator;
 import top.spco.user.BotUser;
 
 import java.util.List;
@@ -50,7 +51,7 @@ public class UnmuteCommand extends GroupAbstractCommand {
     public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
         try {
             long id = meta.targetUserIdArgument(0);
-            NormalMember target = GroupMemberCommandValidator.verifyAdminStatus(from, user, message, id);
+            NormalMember target = PermissionsValidator.verifyMemberPermissions(from, user, message, id);
             if (target != null) {
                 target.unmute();
                 from.quoteReply(message, "已将 " + target.getNameCard() + "(" + target.getId() + ")" + " 解除禁言");
