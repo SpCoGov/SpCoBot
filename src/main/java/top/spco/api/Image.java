@@ -21,13 +21,44 @@ import top.spco.api.message.Message;
  * 图片
  *
  * @author SpCo
- * @version 1.3.0
+ * @version 2.0.0
  * @since 1.3.0
  */
-public interface Image extends Message {
-    String getImageId();
+public abstract class Image<T> extends Message<T> {
+    protected Image(T image) {
+        super(image);
+    }
 
-    int getWidth();
+    public abstract String getImageId();
 
-    int getHeight();
+    public abstract int getWidth();
+
+    public abstract int getHeight();
+
+    /**
+     * @deprecated {@code Image} 表示一张图片，不能在后添加消息。如需添加消息请使用 {@link Message}
+     */
+    @Override
+    @Deprecated
+    public Message<T> append(Message<?> message) {
+        return this;
+    }
+
+    /**
+     * @deprecated {@code Image} 表示一张图片，不能在后添加消息。如需添加消息请使用 {@link Message}
+     */
+    @Override
+    @Deprecated
+    public Message<T> append(String message) {
+        return this;
+    }
+
+    /**
+     * @deprecated {@code Image} 表示一张图片，如需引用它先将其转换为普通的 {@code Message}。
+     */
+    @Override
+    @Deprecated
+    public Message<T> quoteReply(Message<?> toQuote) {
+        return this;
+    }
 }

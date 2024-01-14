@@ -27,7 +27,7 @@ import top.spco.core.event.EventFactory;
  * 消息相关事件
  *
  * @author SpCo
- * @version 0.1.1
+ * @version 2.0.0
  * @since 0.1.0
  */
 public class MessageEvents {
@@ -45,7 +45,7 @@ public class MessageEvents {
 
     @FunctionalInterface
     public interface GroupMessage {
-        void onGroupMessage(Bot bot, Group source, Member sender, Message message, int time);
+        void onGroupMessage(Bot<?> bot, Group<?> source, Member<?> sender, Message<?> message, int time);
     }
 
     /**
@@ -59,7 +59,7 @@ public class MessageEvents {
 
     @FunctionalInterface
     public interface GroupTempMessage {
-        void onGroupTempMessage(Bot bot, Member source, Member sender, Message message, int time);
+        void onGroupTempMessage(Bot<?> bot, Member<?> source, Member<?> sender, Message<?> message, int time);
     }
 
     /**
@@ -73,7 +73,7 @@ public class MessageEvents {
 
     @FunctionalInterface
     public interface FriendMessage {
-        void onFriendMessage(Bot bot, Friend sender, Message message, int time);
+        void onFriendMessage(Bot<?> bot, Friend<?> sender, Message<?> message, int time);
     }
 
     /**
@@ -87,6 +87,6 @@ public class MessageEvents {
 
     @FunctionalInterface
     public interface GroupMessagePostSend {
-        void onGroupMessagePostSend(Bot bot, Group group, Message message);
+        void onGroupMessagePostSend(Bot<?> bot, Group<?> group, Message<?> message);
     }
 }

@@ -21,25 +21,29 @@ import java.util.Collection;
  * 用户的所有好友分组
  *
  * @author SpCo
- * @version 0.1.0
+ * @version 2.0.0
  * @since 0.1.0
  */
-public interface FriendGroups {
+public abstract class FriendGroups<T> extends Wrapper<T> {
+    protected FriendGroups(T object) {
+        super(object);
+    }
+
     /**
      * 获取 {@link FriendGroup#getId() id} 为 {@code 0} 的默认分组 ("我的好友")
      */
-    FriendGroup getDefault();
+    public abstract FriendGroup<?> getDefault();
 
     /**
      * 新建一个好友分组<p>
      * 允许名称重复, 当新建一个已存在名称的分组时, 服务器会返回一个拥有重复名字的新分组
      */
-    FriendGroup create(String name);
+    public abstract FriendGroup<?> create(String name);
 
     /**
      * 获取指定 ID 的好友分组, 不存在时返回 {@code null}
      */
-    FriendGroup get(int id);
+    public abstract FriendGroup<?> get(int id);
 
-    Collection<FriendGroup> asCollection();
+    public abstract Collection<FriendGroup<?>> asCollection();
 }

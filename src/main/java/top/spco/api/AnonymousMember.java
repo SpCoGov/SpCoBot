@@ -23,18 +23,14 @@ import java.io.File;
  * 代表匿名群成员
  *
  * @author SpCo
- * @version 1.3.0
+ * @version 2.0.0
  * @see Member
  * @see NormalMember
  * @since 0.1.0
  */
-public interface AnonymousMember extends Member {
-    /**
-     * @deprecated 无法发送信息至 AnonymousMember
-     */
-    @Override
-    @Deprecated
-    default void sendMessage(String message) {
+public abstract class AnonymousMember<T> extends Member<T> {
+    public AnonymousMember(T objcet) {
+        super(objcet);
     }
 
     /**
@@ -42,7 +38,15 @@ public interface AnonymousMember extends Member {
      */
     @Override
     @Deprecated
-    default void sendMessage(Message message) {
+    public void sendMessage(String message) {
+    }
+
+    /**
+     * @deprecated 无法发送信息至 AnonymousMember
+     */
+    @Override
+    @Deprecated
+    public void sendMessage(Message<?> message) {
     }
 
     /**
@@ -50,51 +54,51 @@ public interface AnonymousMember extends Member {
      */
     @Override
     @Deprecated
-    default void nudge() {
+    public void nudge() {
     }
 
     @Deprecated
     @Override
-    default void handleException(Message sourceMessage, String message, Throwable throwable) {
+    public void handleException(Message<?> sourceMessage, String message, Throwable throwable) {
     }
 
     @Deprecated
     @Override
-    default void handleException(Message sourceMessage, Throwable throwable) {
+    public void handleException(Message<?> sourceMessage, Throwable throwable) {
     }
 
     @Deprecated
     @Override
-    default void handleException(String message, Throwable throwable) {
+    public void handleException(String message, Throwable throwable) {
     }
 
     @Deprecated
     @Override
-    default void handleException(Throwable throwable) {
+    public void handleException(Throwable throwable) {
     }
 
     @Deprecated
     @Override
-    default void handleException(String message) {
+    public void handleException(String message) {
     }
 
     @Deprecated
     @Override
-    default void handleException(Message sourceMessage, String message) {
+    public void handleException(Message<?> sourceMessage, String message) {
     }
 
     @Deprecated
     @Override
-    default void quoteReply(Message sourceMessage, Message message) {
+    public void quoteReply(Message<?> sourceMessage, Message<?> message) {
     }
 
     @Deprecated
     @Override
-    default void quoteReply(Message sourceMessage, String message) {
+    public void quoteReply(Message<?> sourceMessage, String message) {
     }
 
     @Deprecated
     @Override
-    default void sendImage(File image) {
+    public void sendImage(File image) {
     }
 }

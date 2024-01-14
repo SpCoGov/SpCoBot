@@ -19,10 +19,14 @@ package top.spco.api;
  * 代表一位用户
  *
  * @author SpCo
- * @version 0.1.0
+ * @version 2.0.0
  * @since 0.1.0
  */
-public interface User extends Interactive {
+public abstract class User<T> extends Interactive<T> {
+    public User(T user) {
+        super(user);
+    }
+
     /**
      * 备注信息<p>
      * 仅与 {@link User} 存在好友关系的时候才可能存在备注<p>
@@ -30,17 +34,17 @@ public interface User extends Interactive {
      *
      * @return 备注信息
      */
-    String getRemark();
+    public abstract String getRemark();
 
     /**
      * 戳一戳
      */
-    void nudge();
+    public abstract void nudge();
 
     /**
      * 昵称
      *
      * @return 昵称
      */
-    String getNick();
+    public abstract String getNick();
 }

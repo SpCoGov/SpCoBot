@@ -16,6 +16,7 @@
 package top.spco.mirai;
 
 import net.mamoe.mirai.contact.Contact;
+import top.spco.SpCoBot;
 import top.spco.api.Friend;
 import top.spco.api.FriendGroup;
 import top.spco.api.message.Message;
@@ -24,58 +25,62 @@ import java.io.File;
 
 /**
  * @author SpCo
- * @version 1.3.0
+ * @version 2.0.0
  * @since 0.1.0
  */
-record MiraiFriend(net.mamoe.mirai.contact.Friend friend) implements Friend {
+class MiraiFriend extends Friend<net.mamoe.mirai.contact.Friend> {
+    MiraiFriend(net.mamoe.mirai.contact.Friend friend) {
+        super(friend);
+    }
+
     @Override
     public long getId() {
-        return this.friend.getId();
+        return this.wrapped().getId();
     }
 
     @Override
     public void sendMessage(String message) {
-        this.friend.sendMessage(message);
+        this.wrapped().sendMessage(message);
     }
 
     @Override
-    public void sendMessage(Message message) {
-        this.friend.sendMessage(((MiraiMessage) message).message());
+    public void sendMessage(Message<?> message) {
+        this.wrapped().sendMessage((net.mamoe.mirai.message.data.Message) message.wrapped());
     }
 
     @Override
-    public void handleException(Message sourceMessage, String message) {
-        this.sendMessage(new MiraiMessageChainBuilder(sourceMessage).append("[错误发生] " + message).build());
+    public void handleException(Message<?> sourceMessage, String message) {
+        this.sendMessage(SpCoBot.getInstance().getMessageService().asMessage("[错误发生] " + message).quoteReply(sourceMessage));
     }
 
     @Override
     public String getRemark() {
-        return this.friend.getRemark();
+        return this.wrapped().getRemark();
     }
 
     @Override
     public void nudge() {
-        this.friend.nudge();
+        this.wrapped().nudge();
     }
 
     @Override
     public String getNick() {
-        return this.friend.getNick();
+        return this.wrapped().getNick();
     }
 
     @Override
-    public FriendGroup getFriendGroup() {
-        return new MiraiFriendGroup(this.friend.getFriendGroup());
+    public FriendGroup<net.mamoe.mirai.contact.friendgroup.FriendGroup> getFriendGroup() {
+        return new MiraiFriendGroup(this.wrapped().getFriendGroup());
     }
 
     @Override
-    public void handleException(Message sourceMessage, String message, Throwable throwable) {
-        this.sendMessage(new MiraiMessageChainBuilder(sourceMessage).append("[错误发生] " + message + ": " + throwable.getMessage()).build());
+    public void handleException(Message<?> sourceMessage, String message, Throwable throwable) {
+        this.sendMessage(SpCoBot.getInstance().getMessageService().asMessage("[错误发生] " + message + ": " + throwable.getMessage()).quoteReply(sourceMessage));
     }
 
     @Override
-    public void handleException(Message sourceMessage, Throwable throwable) {
-        this.sendMessage(new MiraiMessageChainBuilder(sourceMessage).append("[错误发生] SpCoBot运行时抛出了意料之外的异常: " + throwable.getMessage()).build());
+    public void handleException(Message<?> sourceMessage, Throwable throwable) {
+        this.sendMessage(SpCoBot.getInstance().getMessageService().asMessage("[错误发生] SpCoBot运行时抛出了意料之外的异常: " + throwable.getMessage()).quoteReply(sourceMessage));
     }
 
     @Override
@@ -95,21 +100,21 @@ record MiraiFriend(net.mamoe.mirai.contact.Friend friend) implements Friend {
 
     @Override
     public void delete() {
-        this.friend.delete();
+        this.wrapped().delete();
     }
 
     @Override
-    public void quoteReply(Message sourceMessage, Message message) {
-        this.sendMessage(new MiraiMessageChainBuilder(sourceMessage).append(message).build());
+    public void quoteReply(Message<?> sourceMessage, Message<?> message) {
+        this.sendMessage(message.quoteReply(sourceMessage));
     }
 
     @Override
-    public void quoteReply(Message sourceMessage, String message) {
-        this.sendMessage(new MiraiMessageChainBuilder(sourceMessage).append(message).build());
+    public void quoteReply(Message<?> sourceMessage, String message) {
+        this.sendMessage(SpCoBot.getInstance().getMessageService().asMessage(message).quoteReply(sourceMessage));
     }
 
     @Override
     public void sendImage(File image) {
-        Contact.uploadImage(this.friend(), image);
+        Contact.uploadImage(this.wrapped(), image);
     }
 }

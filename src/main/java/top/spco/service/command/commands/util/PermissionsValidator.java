@@ -47,7 +47,7 @@ import top.spco.user.UserPermission;
  * 这些方法有助于在执行群管理命令之前确保权限和安全性。
  *
  * @author SpCo
- * @version 1.3.0
+ * @version 2.0.0
  * @since 1.2.0
  */
 public class PermissionsValidator {
@@ -63,16 +63,16 @@ public class PermissionsValidator {
      * @param targetId 命令操作的目标Id
      * @return 可操作返回被操作的目标对象，不可操作返回 {@code null}
      */
-    public static NormalMember verifyMemberPermissions(Interactive from, BotUser user, Message message, long targetId) {
+    public static NormalMember<?> verifyMemberPermissions(Interactive<?> from, BotUser user, Message<?> message, long targetId) {
         try {
-            if (from instanceof Group group) {
+            if (from instanceof Group<?> group) {
                 if (!group.getMember(user.getId()).getPermission().isOperator()) {
                     if (user.getPermission().getLevel() < UserPermission.ADMINISTRATOR.getLevel()) {
                         from.quoteReply(message, "[告知] 您无权使用此命令.");
                         return null;
                     }
                 }
-                NormalMember target = group.getMember(targetId);
+                NormalMember<?> target = group.getMember(targetId);
                 if (verifyBotPermissions(from, message, target)) {
                     return target;
                 }
@@ -94,8 +94,8 @@ public class PermissionsValidator {
      * @return 可操作返回 {@code true}，不可操作返回 {@code false}
      * @see #verifyBotPermissions(Interactive, Message, NormalMember)
      */
-    public static boolean verifyBotPermissions(Interactive from, Message message, long targetId) {
-        if (from instanceof Group group) {
+    public static boolean verifyBotPermissions(Interactive<?> from, Message<?> message, long targetId) {
+        if (from instanceof Group<?> group) {
             return verifyBotPermissions(from, message, group.getMember(targetId));
         }
         return false;
@@ -112,12 +112,12 @@ public class PermissionsValidator {
      * @param target  命令操作的目标对象
      * @return 可操作返回 {@code true}，不可操作返回 {@code false}
      */
-    public static boolean verifyBotPermissions(Interactive from, Message message, NormalMember target) {
+    public static boolean verifyBotPermissions(Interactive<?> from, Message<?> message, NormalMember<?> target) {
         return verifyBotPermissions(from, message, target, true);
     }
 
-    public static boolean verifyBotPermissions(Interactive from, Message message, NormalMember target, boolean prompt) {
-        if (from instanceof Group group) {
+    public static boolean verifyBotPermissions(Interactive<?> from, Message<?> message, NormalMember<?> target, boolean prompt) {
+        if (from instanceof Group<?> group) {
             if (!group.botPermission().isOperator()) {
                 if (prompt) from.quoteReply(message, "[告知] 机器人权限不足");
                 return false;

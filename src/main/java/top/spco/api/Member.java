@@ -20,25 +20,29 @@ package top.spco.api;
  * 群成员分为{@link NormalMember 普通成员}和{@link AnonymousMember 匿名成员}
  *
  * @author SpCo
- * @version 0.1.0
+ * @version 2.0.0
  * @see NormalMember
  * @see AnonymousMember
  * @since 0.1.0
  */
-public interface Member extends User {
+public abstract class Member<T> extends User<T> {
+    public Member(T objcet) {
+        super(objcet);
+    }
+
     /**
      * 所在的群
      *
      * @return 所在的群
      */
-    Group getGroup();
+    public abstract Group<?> getGroup();
 
     /**
      * 群名片
      *
      * @return 群名片. 可能为空
      */
-    String getNameCard();
+    public abstract String getNameCard();
 
     /**
      * 群特殊头衔<p>
@@ -46,7 +50,7 @@ public interface Member extends User {
      *
      * @return 群特殊头衔
      */
-    String getSpecialTitle();
+    public abstract String getSpecialTitle();
 
     /**
      * 成员的权限<p>
@@ -54,7 +58,7 @@ public interface Member extends User {
      *
      * @return 成员的权限
      */
-    MemberPermission getPermission();
+    public abstract MemberPermission getPermission();
 
     /**
      * 禁言这个群成员 {@link time} 秒<p>
@@ -63,5 +67,5 @@ public interface Member extends User {
      *
      * @param time 持续时间. 精确到秒. 最短 0 秒, 最长 30 天
      */
-    void mute(int time);
+    public abstract void mute(int time);
 }

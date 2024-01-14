@@ -19,17 +19,21 @@ package top.spco.api;
  * 代表一位好友
  *
  * @author SpCo
- * @version 0.1.0
+ * @version 2.0.0
  * @since 0.1.0
  */
-public interface Friend extends User {
+public abstract class Friend<T> extends User<T> {
+    public Friend(T objcet) {
+        super(objcet);
+    }
+
     /**
      * 该好友所在的好友分组
      */
-    FriendGroup getFriendGroup();
+    public abstract FriendGroup<?> getFriendGroup();
 
     /**
      * 删除并屏蔽该好友, 屏蔽后对方将无法发送临时会话消息
      */
-    void delete();
+    public abstract void delete();
 }

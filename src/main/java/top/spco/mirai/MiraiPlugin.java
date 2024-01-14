@@ -54,7 +54,7 @@ public final class MiraiPlugin extends JavaPlugin {
         });
         e.subscribeAlways(NudgeEvent.class, n -> BotEvents.NUDGED_TICK.invoker().onNudgedTick(new MiraiIdentifiable(n.getFrom()), new MiraiIdentifiable(n.getTarget()), new MiraiInteractive(n.getSubject()), n.getAction(), n.getSuffix()));
         e.subscribeAlways(BotOnlineEvent.class, bo -> {
-            Bot bot = new MiraiBot(bo.getBot());
+            Bot<?> bot = new MiraiBot(bo.getBot());
             SpCoBot.getInstance().setBot(bot);
             BotEvents.ONLINE_TICK.invoker().onOnlineTick(bot);
         });

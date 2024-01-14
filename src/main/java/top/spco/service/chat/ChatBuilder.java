@@ -43,7 +43,7 @@ import top.spco.core.Builder;
  * }</pre>
  *
  * @author SpCo
- * @version 1.1.0
+ * @version 2.0.0
  * @since 0.3.1
  */
 public class ChatBuilder implements Builder<Chat> {
@@ -56,7 +56,7 @@ public class ChatBuilder implements Builder<Chat> {
      * @param target   目标{@link Interactive}对象，根据{@link ChatType 聊天类型}的不同可以是{@link Group}、{@link Friend}或{@link NormalMember}
      * @throws ChatTypeMismatchException 如果{@link ChatType 聊天类型}与目标{@link Interactive}对象不匹配时抛出异常
      */
-    public ChatBuilder(ChatType chatType, Interactive target) throws ChatTypeMismatchException {
+    public ChatBuilder(ChatType chatType, Interactive<?> target) throws ChatTypeMismatchException {
         switch (chatType) {
             case GROUP -> {
                 if (!(target instanceof Group)) {

@@ -27,7 +27,7 @@ import top.spco.user.UserPermission;
 
 /**
  * @author SpCo
- * @version 1.2.3
+ * @version 2.0.0
  * @since 0.1.0
  */
 public final class InfoCommand extends AbstractCommand {
@@ -42,7 +42,7 @@ public final class InfoCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
+    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
         if (user.getPermission() == UserPermission.OWNER) {
             from.quoteReply(message, "机器人运行状态: 正常\n" + (SpCoBot.getInstance().getCAATP().isConnected() ? "CAATP连接状态: 已连接" : "CAATP连接状态: 连接断开"));
         } else {

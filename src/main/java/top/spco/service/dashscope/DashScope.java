@@ -41,7 +41,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 用户个人的DashScope
  *
  * @author SpCo
- * @version 1.2.2
+ * @version 2.0.0
  * @since 0.2.1
  */
 public class DashScope {
@@ -49,9 +49,9 @@ public class DashScope {
     private int timer;
     private Generation generation;
     private MessageManager msgManager;
-    private final MutablePair<Interactive, Message> lastMessage = new MutablePair<>();
+    private final MutablePair<Interactive<?>, Message<?>> lastMessage = new MutablePair<>();
 
-    public DashScope(BotUser user, Interactive from, Message message) {
+    public DashScope(BotUser user, Interactive<?> from, Message<?> message) {
         this.userId = user.getId();
         setLastMessage(from, message);
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1, new ThreadFactory() {
@@ -74,7 +74,7 @@ public class DashScope {
         }, 0, 1, TimeUnit.SECONDS);
     }
 
-    public void setLastMessage(Interactive from, Message lastMessage) {
+    public void setLastMessage(Interactive<?> from, Message<?> lastMessage) {
         this.lastMessage.setLeft(from);
         this.lastMessage.setRight(lastMessage);
     }

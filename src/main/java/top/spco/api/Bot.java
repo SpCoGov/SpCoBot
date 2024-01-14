@@ -22,52 +22,56 @@ import top.spco.user.UserFetchException;
  * 机器人
  *
  * @author SpCo
- * @version 0.1.0
+ * @version 2.0.0
  * @since 0.1.0
  */
-public interface Bot extends Identifiable {
+public abstract class Bot<T> extends Wrapper<T> implements Identifiable {
+    protected Bot(T bot) {
+        super(bot);
+    }
+
     /**
      * 当 BotSettings 在线 (可正常收发消息) 时返回 {@code true}.
      */
-    boolean isOnline();
+    public abstract boolean isOnline();
 
     /**
      * 全部的好友分组
      */
-    FriendGroups getFriendGroups();
+    public abstract FriendGroups<?> getFriendGroups();
 
     /**
      * 好友列表
      */
-    InteractiveList<Friend> getFriends();
+    public abstract InteractiveList<Friend<?>> getFriends();
 
     /**
      * 群列表
      */
-    InteractiveList<Group> getGroups();
+    public abstract InteractiveList<Group<?>> getGroups();
 
     /**
      * 获取一个好友对象, 在获取失败时返回 {@code null}
      *
      * @param id 对方 QQ 号码
      */
-    Friend getFriend(long id);
+    public abstract Friend<?> getFriend(long id);
 
     /**
      * 当 {@link Bot} 拥有 {@link Friend#getId()} 为 id 的好友时返回 {@code true}
      *
      * @param id 好友的id
      */
-    boolean hasFriend(long id);
+    public abstract boolean hasFriend(long id);
 
     /**
      * 当 {@link Bot} 拥有 {@link Group#getId()} 为 id 的群组时返回 {@code true}
      *
      * @param id 群组的id
      */
-    boolean hasGroup(long id);
+    public abstract boolean hasGroup(long id);
 
-    User getUser(long id) throws UserFetchException;
+    public abstract User<?> getUser(long id) throws UserFetchException;
 
-    Group getGroup(long id);
+    public abstract Group<?> getGroup(long id);
 }

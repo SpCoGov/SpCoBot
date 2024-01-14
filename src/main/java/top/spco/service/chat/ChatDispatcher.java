@@ -27,7 +27,7 @@ import java.util.Map;
  * 用于管理{@link Chat}的单例类
  *
  * @author SpCo
- * @version 1.1.0
+ * @version 2.0.0
  * @since 0.1.1
  */
 public class ChatDispatcher {
@@ -50,7 +50,7 @@ public class ChatDispatcher {
         return instance;
     }
 
-    public void onMessage(ChatType chatType, Bot bot, Interactive source, Interactive sender, Message message, int time) {
+    public void onMessage(ChatType chatType, Bot<?> bot, Interactive<?> source, Interactive<?> sender, Message<?> message, int time) {
         Chat chat = getChat(source, chatType);
         if (chat == null) {
             return;

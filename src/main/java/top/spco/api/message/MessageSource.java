@@ -15,21 +15,27 @@
  */
 package top.spco.api.message;
 
+import top.spco.api.Wrapper;
+
 /**
  * 消息的来源信息
  *
  * @author SpCo
- * @version 0.3.0
+ * @version 2.0.0
  * @since 0.3.0
  */
-public interface MessageSource {
+public abstract class MessageSource<T> extends Wrapper<T> {
+protected MessageSource(T object) {
+        super(object);
+    }
+
     /**
      * 发送人用户 ID
      */
-    long getFromId();
+    public abstract long getFromId();
 
     /**
      * 消息发送目标用户或群号码
      */
-    long getTargetId();
+    public abstract long getTargetId();
 }

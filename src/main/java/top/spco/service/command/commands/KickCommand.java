@@ -25,7 +25,7 @@ import java.util.List;
 
 /**
  * @author SpCo
- * @version 1.3.0
+ * @version 2.0.0
  * @since 0.3.3
  */
 public class KickCommand extends GroupAbstractCommand {
@@ -45,10 +45,10 @@ public class KickCommand extends GroupAbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
+    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
         try {
             long id = meta.targetUserIdArgument(0);
-            NormalMember target = PermissionsValidator.verifyMemberPermissions(from, user, message, id);
+            NormalMember<?> target = PermissionsValidator.verifyMemberPermissions(from, user, message, id);
             if (target != null) {
                 target.kick("您被管理员移出了本群", false);
                 from.quoteReply(message, "已将 " + target.getNick() + "(" + target.getId() + ")" + " 移出本群");

@@ -26,7 +26,7 @@ import java.util.function.Supplier;
  *
  * @see Chat
  * @author SpCo
- * @version 0.1.1
+ * @version 2.0.0
  * @since 0.1.1
  */
 public class Stage {
@@ -39,6 +39,6 @@ public class Stage {
     }
 
     public interface StageExecuter {
-        void onMessage(Chat chat, Bot bot, Interactive source, Interactive sender, Message message, int time);
+        void onMessage(Chat chat, Bot<?> bot, Interactive<?> source, Interactive<?> sender, Message<?> message, int time);
     }
 }

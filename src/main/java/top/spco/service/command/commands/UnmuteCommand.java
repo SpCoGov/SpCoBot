@@ -28,7 +28,7 @@ import java.util.List;
 
 /**
  * @author SpCo
- * @version 1.2.0
+ * @version 2.0.0
  * @since 0.3.0
  */
 public class UnmuteCommand extends GroupAbstractCommand {
@@ -48,10 +48,10 @@ public class UnmuteCommand extends GroupAbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
+    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
         try {
             long id = meta.targetUserIdArgument(0);
-            NormalMember target = PermissionsValidator.verifyMemberPermissions(from, user, message, id);
+            NormalMember<?> target = PermissionsValidator.verifyMemberPermissions(from, user, message, id);
             if (target != null) {
                 target.unmute();
                 from.quoteReply(message, "已将 " + target.getNameCard() + "(" + target.getId() + ")" + " 解除禁言");

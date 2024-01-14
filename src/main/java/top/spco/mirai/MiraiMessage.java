@@ -15,21 +15,51 @@
  */
 package top.spco.mirai;
 
+import net.mamoe.mirai.message.data.MessageChain;
+import net.mamoe.mirai.message.data.MessageChainBuilder;
+import net.mamoe.mirai.message.data.QuoteReply;
 import top.spco.api.message.Message;
 
 /**
  * @author SpCo
- * @version 0.1.0
+ * @version 2.0.0
  * @since 0.1.0
  */
-record MiraiMessage(net.mamoe.mirai.message.data.MessageChain message) implements Message {
+class MiraiMessage extends Message<net.mamoe.mirai.message.data.MessageChain> {
+    protected MiraiMessage(MessageChain message) {
+        super(message);
+    }
+
     @Override
     public String toMessageContext() {
-        return message.contentToString();
+        return wrapped().contentToString();
+    }
+
+    @Override
+    public Message<MessageChain> quoteReply(Message<?> toQuote) {
+        wrap(new MessageChainBuilder().append(new QuoteReply((MessageChain)toQuote.wrapped())).append(wrapped()).build());
+        return this;
+    }
+
+    @Override
+    public Message<net.mamoe.mirai.message.data.MessageChain> append(Message<?> message) {
+        wrap(new MessageChainBuilder().append(wrapped()).append((net.mamoe.mirai.message.data.Message) message.wrapped()).build());
+        return this;
+    }
+
+    @Override
+    public Message<net.mamoe.mirai.message.data.MessageChain> append(String message) {
+        wrap(new MessageChainBuilder().append(wrapped()).append(message).build());
+        return this;
+    }
+
+    @Override
+    public Message<?> toMessage() {
+        return this;
     }
 
     @Override
     public String serialize() {
-        return this.message.serializeToMiraiCode();
+        return this.wrapped().serializeToMiraiCode();
     }
 }

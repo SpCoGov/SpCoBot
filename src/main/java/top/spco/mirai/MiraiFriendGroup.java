@@ -23,29 +23,33 @@ import java.util.Collection;
 
 /**
  * @author SpCo
- * @version 0.1.0
+ * @version 2.0.0
  * @since 0.1.0
  */
-record MiraiFriendGroup(net.mamoe.mirai.contact.friendgroup.FriendGroup friendGroup) implements FriendGroup {
+class MiraiFriendGroup extends FriendGroup<net.mamoe.mirai.contact.friendgroup.FriendGroup> {
+    protected MiraiFriendGroup(net.mamoe.mirai.contact.friendgroup.FriendGroup friendGroup) {
+        super(friendGroup);
+    }
+
     @Override
     public int getId() {
-        return this.friendGroup.getId();
+        return this.wrapped().getId();
     }
 
     @Override
     public String getName() {
-        return this.friendGroup.getName();
+        return this.wrapped().getName();
     }
 
     @Override
     public int getCount() {
-        return this.friendGroup.getCount();
+        return this.wrapped().getCount();
     }
 
     @Override
-    public Collection<Friend> getFriends() {
-        Collection<Friend> friends = new ArrayList<>();
-        for (var friend : this.friendGroup.getFriends()) {
+    public Collection<Friend<?>> getFriends() {
+        Collection<Friend<?>> friends = new ArrayList<>();
+        for (var friend : this.wrapped().getFriends()) {
             MiraiFriend miraiFriend = new MiraiFriend(friend);
             friends.add(miraiFriend);
         }
@@ -54,16 +58,16 @@ record MiraiFriendGroup(net.mamoe.mirai.contact.friendgroup.FriendGroup friendGr
 
     @Override
     public boolean renameTo(String newName) {
-        return this.friendGroup.renameTo(newName);
+        return this.wrapped().renameTo(newName);
     }
 
     @Override
-    public boolean moveIn(Friend friend) {
-        return this.friendGroup.moveIn(((MiraiFriend) friend).friend());
+    public boolean moveIn(Friend<?> friend) {
+        return this.wrapped().moveIn(((MiraiFriend) friend).wrapped());
     }
 
     @Override
     public boolean delete() {
-        return this.friendGroup.delete();
+        return this.wrapped().delete();
     }
 }

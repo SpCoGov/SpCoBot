@@ -21,7 +21,7 @@ import top.spco.api.*;
  * 命令的作用域
  *
  * @author SpCo
- * @version 0.3.3
+ * @version 2.0.0
  * @since 0.1.0
  */
 public enum CommandScope {
@@ -48,7 +48,7 @@ public enum CommandScope {
      * @param interactive 要推测作用域的 {@link Interactive} 对象
      * @return 对应的指令作用域，或者 {@code null} 如果未能确定作用域
      */
-    public static CommandScope getCommandScope(Interactive interactive) {
+    public static CommandScope getCommandScope(Interactive<?> interactive) {
         if (interactive instanceof Group) {
             return ONLY_GROUP;
         } else if (interactive instanceof Friend) {

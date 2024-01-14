@@ -37,7 +37,7 @@ import java.util.*;
  * 它负责注册、执行和管理各种命令的权限
  *
  * @author SpCo
- * @version 1.3.0
+ * @version 2.0.0
  * @since 0.1.0
  */
 public class CommandDispatcher {
@@ -131,7 +131,7 @@ public class CommandDispatcher {
         });
     }
 
-    private void callCommand(Map<String, Command> targetCommands, String label, Interactive from, User sender, Message message, Bot bot, int time, String command, String[] args, CommandMeta meta) {
+    private void callCommand(Map<String, Command> targetCommands, String label, Interactive<?> from, User<?> sender, Message<?> message, Bot<?> bot, int time, String command, String[] args, CommandMeta meta) {
         // 先检测用户提交的命令是否被注册
         if (targetCommands.containsKey(label)) {
             try {
@@ -380,7 +380,7 @@ public class CommandDispatcher {
         return helpList;
     }
 
-    public List<String> getUsages(String label, Interactive from) {
+    public List<String> getUsages(String label, Interactive<?> from) {
         CommandScope scope = CommandScope.getCommandScope(from);
         if (scope == null) {
             return null;

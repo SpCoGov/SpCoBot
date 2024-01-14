@@ -23,33 +23,29 @@ import java.io.File;
  * 表示具有消息发送和异常处理功能
  *
  * @author SpCo
- * @version 1.3.0
+ * @version 2.0.0
  * @since 0.1.0
  */
-public interface Interactive extends Identifiable {
-    void sendMessage(String message);
+public abstract class Interactive<T> extends Wrapper<T> implements Identifiable {
+    protected Interactive(T interactive) {
+        super(interactive);
+    }
 
-    void sendMessage(Message message);
+    public abstract void sendMessage(String message);
 
-    void handleException(Message sourceMessage, String message);
+    public abstract void sendMessage(Message<?> message);
 
-    void handleException(Message sourceMessage, String message, Throwable throwable);
+    public abstract void handleException(Message<?> sourceMessage, String message);
 
-    void handleException(Message sourceMessage, Throwable throwable);
+    public abstract void handleException(Message<?> sourceMessage, String message, Throwable throwable);
 
-    void handleException(String message, Throwable throwable);
+    public abstract void handleException(Message<?> sourceMessage, Throwable throwable);
 
-    void handleException(Throwable throwable);
+    public abstract void handleException(String message, Throwable throwable);
 
-    void handleException(String message);
+    public abstract void handleException(Throwable throwable);
 
-    /**
-     * 回复并引用源消息。
-     *
-     * @param sourceMessage 源消息，用于引用
-     * @param message       要发送的回复消息
-     */
-    void quoteReply(Message sourceMessage, Message message);
+    public abstract void handleException(String message);
 
     /**
      * 回复并引用源消息。
@@ -57,7 +53,15 @@ public interface Interactive extends Identifiable {
      * @param sourceMessage 源消息，用于引用
      * @param message       要发送的回复消息
      */
-    void quoteReply(Message sourceMessage, String message);
+    public abstract void quoteReply(Message<?> sourceMessage, Message<?> message);
 
-    void sendImage(File image);
+    /**
+     * 回复并引用源消息。
+     *
+     * @param sourceMessage 源消息，用于引用
+     * @param message       要发送的回复消息
+     */
+    public abstract void quoteReply(Message<?> sourceMessage, String message);
+
+    public abstract void sendImage(File image);
 }

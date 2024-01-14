@@ -34,7 +34,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @author SpCo
- * @version 1.2.3
+ * @version 2.0.0
  * @since 0.1.1
  */
 public class StatisticsCommand extends AbstractCommand {
@@ -64,7 +64,7 @@ public class StatisticsCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot bot1, Interactive from1, User sender1, BotUser user1, Message message1, int time1, String command, String label, String[] args, CommandMeta meta, String usageName) {
+    public void onCommand(Bot<?> bot1, Interactive<?> from1, User<?> sender1, BotUser user1, Message<?> message1, int time1, String command, String label, String[] args, CommandMeta meta, String usageName) {
         // 在每次调用命令时，重置
         StringBuilder sb = new StringBuilder();
         Map<String, Integer> ranks = new HashMap<>();
@@ -234,7 +234,7 @@ public class StatisticsCommand extends AbstractCommand {
                                 }
                                 try {
                                     chat.stop();
-                                    Group group = bot.getGroup(groupId[0]);
+                                    Group<?> group = bot.getGroup(groupId[0]);
                                     if (group == null) {
                                         source.quoteReply(message, "发送失败，无法获取群号为" + groupId[0] + "的群对象");
                                         return;
@@ -244,7 +244,7 @@ public class StatisticsCommand extends AbstractCommand {
                                     }
                                     group.sendMessage(sb.toString());
                                     source.sendMessage("消息已发送至目标群");
-                                    Friend friend = SpCoBot.getInstance().getBot().getFriend(SpCoBot.getInstance().testGroupId);
+                                    Friend<?> friend = SpCoBot.getInstance().getBot().getFriend(SpCoBot.getInstance().testGroupId);
                                     friend.sendMessage("有用户在群" + groupId[0] + "中发起了一场报名统计，如果需要重启机器人，请注意这场报名统计的结束情况。");
                                     SpCoBot.getInstance().statisticsDispatcher.register(group, statistics[0]);
                                     statistics[0] = null;
@@ -281,7 +281,7 @@ public class StatisticsCommand extends AbstractCommand {
                                                     records = randomSelectFromMap(records, need);
                                                 }
                                                 for (var record : records.entrySet()) {
-                                                    group.quoteReply(record.getValue(), SpCoBot.getInstance().getMessageService().append(SpCoBot.getInstance().getMessageService().at(record.getKey()), " 恭喜你参与本次上镜赛，请在 5 分钟内联系新晴"));
+                                                    group.quoteReply(record.getValue(), SpCoBot.getInstance().getMessageService().at(record.getKey()).append(" 恭喜你参与本次上镜赛，请在 5 分钟内联系新晴"));
                                                 }
                                             }
                                             statisticsFromManager.stop();

@@ -30,20 +30,20 @@ import java.util.Map;
  * 统计
  *
  * @author SpCo
- * @version 1.1.0
+ * @version 2.0.0
  * @since 0.1.1
  */
 public class Statistics {
     private Map<Integer, String> mapping = new HashMap<>();
-    private Map<Integer, Map<Long, Message>> statistics = new HashMap<>();
+    private Map<Integer, Map<Long, Message<?>>> statistics = new HashMap<>();
     /**
      * 已报名的用户
      */
     private List<Long> users = new ArrayList<>();
-    private Group group;
-    private PentaConsumer<Boolean, NormalMember, Message, Integer, Group> received;
+    private Group<?> group;
+    private PentaConsumer<Boolean, NormalMember<?>, Message<?>, Integer, Group<?>> received;
 
-    public Statistics(Group group, PentaConsumer<Boolean, NormalMember, Message, Integer, Group> received) {
+    public Statistics(Group<?> group, PentaConsumer<Boolean, NormalMember<?>, Message<?>, Integer, Group<?>> received) {
         this.group = group;
         this.received = received;
     }
@@ -60,7 +60,7 @@ public class Statistics {
         return i;
     }
 
-    public void receive(Group source, NormalMember sender, Message message) {
+    public void receive(Group<?> source, NormalMember<?> sender, Message<?> message) {
         if (group.getId() != source.getId()) {
             return;
         }
@@ -74,8 +74,8 @@ public class Statistics {
         }
     }
 
-    private boolean record(NormalMember sender, int itemId, Message message) {
-        Map<Long, Message> map;
+    private boolean record(NormalMember<?> sender, int itemId, Message<?> message) {
+        Map<Long, Message<?>> map;
         if (users.contains(sender.getId())) {
             return false;
         }
@@ -104,7 +104,7 @@ public class Statistics {
         return null;
     }
 
-    public Map<Long, Message> getRecords(int itemId) {
+    public Map<Long, Message<?>> getRecords(int itemId) {
         if (statistics.containsKey(itemId)) {
             return statistics.get(itemId);
         }

@@ -27,7 +27,7 @@ import top.spco.user.UserPermission;
 
 /**
  * @author SpCo
- * @version 1.0.0
+ * @version 2.0.0
  * @since 0.1.1
  */
 public final class TestCommand extends AbstractCommand {
@@ -52,7 +52,7 @@ public final class TestCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
+    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
         try {
             StringBuilder sb = new StringBuilder();
             Chat chat = new ChatBuilder(ChatType.FRIEND, from).addStage(new Stage(() -> "请输入你好", (chat1, bot1, source, sender1, message1, time1) -> {

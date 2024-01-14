@@ -29,7 +29,7 @@ import java.util.List;
 
 /**
  * @author SpCo
- * @version 1.2.3
+ * @version 2.0.0
  * @since 0.3.0
  */
 public class GetotherCommand extends AbstractCommand {
@@ -54,7 +54,7 @@ public class GetotherCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot bot, Interactive from, User sender, BotUser user1, Message message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
+    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user1, Message<?> message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
         try {
             BotUser user = BotUsers.getOrCreate(meta.targetUserIdArgument(0));
             from.quoteReply(message, user.toString());

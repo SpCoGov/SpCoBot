@@ -30,14 +30,14 @@ import java.util.regex.Pattern;
  * 命令的数据
  *
  * @author SpCo
- * @version 1.1.0
+ * @version 2.0.0
  * @since 0.1.1
  */
 public class CommandMeta {
     private static final char SYNTAX_ESCAPE = '\\';
     private static final char SYNTAX_DOUBLE_QUOTE = '"';
     private final String command;
-    private final Message sourceMessage;
+    private final Message<?> sourceMessage;
     private int cursor;
     private String label = null;
     private String[] args = null;
@@ -69,7 +69,7 @@ public class CommandMeta {
      *
      * @param context 命令的原始文本
      */
-    public CommandMeta(String context, Message sourceMessage) throws CommandSyntaxException {
+    public CommandMeta(String context, Message<?> sourceMessage) throws CommandSyntaxException {
         this.sourceMessage = sourceMessage;
         this.command = context;
         if (context.startsWith(CommandDispatcher.COMMAND_START_SYMBOL)) {

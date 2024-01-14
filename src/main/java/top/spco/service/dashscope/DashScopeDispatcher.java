@@ -27,7 +27,7 @@ import java.util.Map;
  * 用于管理{@link DashScope}的单例类
  *
  * @author SpCo
- * @version 1.1.0
+ * @version 2.0.0
  * @since 0.2.1
  */
 public class DashScopeDispatcher {
@@ -71,7 +71,7 @@ public class DashScopeDispatcher {
         return null;
     }
 
-    public DashScope getDashScopeOrCreate(BotUser user, Interactive from, Message message) throws RegistrationException {
+    public DashScope getDashScopeOrCreate(BotUser user, Interactive<?> from, Message<?> message) throws RegistrationException {
         var d = getDashScope(user.getId());
         if (d == null) {
             d = new DashScope(user, from, message);

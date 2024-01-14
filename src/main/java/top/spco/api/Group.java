@@ -19,39 +19,43 @@ package top.spco.api;
  * 代表一个群
  *
  * @author SpCo
- * @version 0.3.0
+ * @version 2.0.0
  * @since 0.1.0
  */
-public interface Group extends Interactive {
+public abstract class Group<T> extends Interactive<T> {
+    protected Group(T objcet) {
+        super(objcet);
+    }
+
     /**
      * 获取该群群名称
      *
      * @return 群名称
      */
-    String getName();
+    public abstract String getName();
 
     /**
      * 获取该群群主
      *
      * @return 群主对象
      */
-    NormalMember getOwner();
+    public abstract NormalMember<?> getOwner();
 
     /**
      * 让机器人退出这个群
      *
      * @return 退出成功时返回 {@code true}; 已经退出时返回 {@code false}
      */
-    boolean quit();
+    public abstract boolean quit();
 
-    MemberPermission botPermission();
+    public abstract MemberPermission botPermission();
 
     /**
      * 获取机器人在群中的成员对象
      *
      * @return 成员对象
      */
-    NormalMember botAsMember();
+    public abstract NormalMember<?> botAsMember();
 
 
     /**
@@ -60,5 +64,5 @@ public interface Group extends Interactive {
      * @param id 成员Id
      * @return 查询结果. 不存在时返回 {@code null}
      */
-    NormalMember getMember(long id);
+    public abstract NormalMember<?> getMember(long id);
 }

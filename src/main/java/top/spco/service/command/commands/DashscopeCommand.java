@@ -34,7 +34,7 @@ import java.util.List;
 
 /**
  * @author SpCo
- * @version 1.0.0
+ * @version 2.0.0
  * @since 0.2.1
  */
 public class DashscopeCommand extends AbstractCommand {
@@ -59,7 +59,7 @@ public class DashscopeCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
+    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
         if (usageName.equals(getDescriptions())) {
             if (!user.isPremium()) {
                 from.quoteReply(message, "仅Premium会员可使用此命令。");

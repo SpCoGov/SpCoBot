@@ -15,6 +15,7 @@
  */
 package top.spco.mirai;
 
+import top.spco.SpCoBot;
 import top.spco.api.Group;
 import top.spco.api.MemberPermission;
 import top.spco.api.NormalMember;
@@ -24,58 +25,62 @@ import java.io.File;
 
 /**
  * @author SpCo
- * @version 1.3.0
+ * @version 2.0.0
  * @since 0.1.0
  */
-record MiraiGroup(net.mamoe.mirai.contact.Group group) implements Group {
+class MiraiGroup extends Group<net.mamoe.mirai.contact.Group> {
+    protected MiraiGroup(net.mamoe.mirai.contact.Group group) {
+        super(group);
+    }
+
     @Override
     public String getName() {
-        return this.group.getName();
+        return this.wrapped().getName();
     }
 
     @Override
     public long getId() {
-        return this.group.getId();
+        return this.wrapped().getId();
     }
 
     @Override
-    public NormalMember getOwner() {
-        return new MiraiNormalMember(this.group.getOwner());
+    public NormalMember<net.mamoe.mirai.contact.NormalMember> getOwner() {
+        return new MiraiNormalMember(this.wrapped().getOwner());
     }
 
     @Override
-    public void sendMessage(Message message) {
-        this.group.sendMessage(((MiraiMessage) message).message());
+    public void sendMessage(Message<?> message) {
+        this.wrapped().sendMessage(((MiraiMessage) message).wrapped());
     }
 
     @Override
     public void sendMessage(String message) {
-        this.group.sendMessage(message);
+        this.wrapped().sendMessage(message);
     }
 
     @Override
     public boolean quit() {
-        return this.group.quit();
+        return this.wrapped().quit();
     }
 
     @Override
     public MemberPermission botPermission() {
-        return MemberPermission.byLevel(this.group.getBotPermission().getLevel());
+        return MemberPermission.byLevel(this.wrapped().getBotPermission().getLevel());
     }
 
     @Override
-    public void handleException(Message sourceMessage, String message, Throwable throwable) {
-        this.sendMessage(new MiraiMessageChainBuilder(sourceMessage).append("[错误发生] " + message + ": " + throwable.getMessage()).build());
+    public void handleException(Message<?> sourceMessage, String message, Throwable throwable) {
+        this.sendMessage(SpCoBot.getInstance().getMessageService().asMessage("[错误发生] " + message + ": " + throwable.getMessage()).quoteReply(sourceMessage));
     }
 
     @Override
-    public void handleException(Message sourceMessage, Throwable throwable) {
-        this.sendMessage(new MiraiMessageChainBuilder(sourceMessage).append("[错误发生] SpCoBot运行时抛出了意料之外的异常: " + throwable.getMessage()).build());
+    public void handleException(Message<?> sourceMessage, Throwable throwable) {
+        this.sendMessage(SpCoBot.getInstance().getMessageService().asMessage("[错误发生] SpCoBot运行时抛出了意料之外的异常: " + throwable.getMessage()).quoteReply(sourceMessage));
     }
 
     @Override
-    public void handleException(Message sourceMessage, String message) {
-        this.sendMessage(new MiraiMessageChainBuilder(sourceMessage).append("[错误发生] " + message).build());
+    public void handleException(Message<?> sourceMessage, String message) {
+        this.sendMessage(SpCoBot.getInstance().getMessageService().asMessage("[错误发生] " + message).quoteReply(sourceMessage));
     }
 
     @Override
@@ -94,27 +99,27 @@ record MiraiGroup(net.mamoe.mirai.contact.Group group) implements Group {
     }
 
     @Override
-    public NormalMember botAsMember() {
-        return new MiraiNormalMember(this.group.getBotAsMember());
+    public NormalMember<net.mamoe.mirai.contact.NormalMember> botAsMember() {
+        return new MiraiNormalMember(this.wrapped().getBotAsMember());
     }
 
     @Override
-    public NormalMember getMember(long id) {
-        return new MiraiNormalMember(group.get(id));
+    public NormalMember<net.mamoe.mirai.contact.NormalMember> getMember(long id) {
+        return new MiraiNormalMember(wrapped().get(id));
     }
 
     @Override
-    public void quoteReply(Message sourceMessage, Message message) {
-        this.sendMessage(new MiraiMessageChainBuilder(sourceMessage).append(message).build());
+    public void quoteReply(Message<?> sourceMessage, Message<?> message) {
+        this.sendMessage(message.quoteReply(sourceMessage));
     }
 
     @Override
-    public void quoteReply(Message sourceMessage, String message) {
-        this.sendMessage(new MiraiMessageChainBuilder(sourceMessage).append(message).build());
+    public void quoteReply(Message<?> sourceMessage, String message) {
+        this.sendMessage(SpCoBot.getInstance().getMessageService().asMessage(message).quoteReply(sourceMessage));
     }
 
     @Override
     public void sendImage(File image) {
-        net.mamoe.mirai.contact.Contact.uploadImage(this.group, image);
+        net.mamoe.mirai.contact.Contact.uploadImage(this.wrapped(), image);
     }
 }

@@ -15,15 +15,28 @@
  */
 package top.spco.api.message;
 
+import top.spco.api.Wrapper;
 import top.spco.core.Builder;
 
 /**
  * @author SpCo
- * @version 0.1.0
+ * @version 2.0.0
  * @since 0.1.0
  */
-public interface MessageChainBuilder extends Builder<Message> {
-    MessageChainBuilder append(Message message);
+public abstract class MessageChainBuilder<T> extends Wrapper<T> implements Builder<Message<?>> {
+    protected MessageChainBuilder(T builder) {
+        super(builder);
+    }
 
-    MessageChainBuilder append(String message);
+    /**
+     * @deprecated 请使用 {@link Message#append(Message)}
+     */
+    @Deprecated
+    public abstract MessageChainBuilder<T> append(Message<?> message);
+
+    /**
+     * @deprecated 请使用 {@link Message#append(String)}
+     */
+    @Deprecated
+    public abstract MessageChainBuilder<T> append(String message);
 }

@@ -15,47 +15,43 @@
  */
 package top.spco.mirai;
 
+import net.mamoe.mirai.message.data.MessageChain;
 import net.mamoe.mirai.message.data.QuoteReply;
 import top.spco.api.message.Message;
 import top.spco.api.message.MessageChainBuilder;
 
 /**
  * @author SpCo
- * @version 0.1.0
+ * @version 2.0.0
  * @since 0.1.0
  */
-class MiraiMessageChainBuilder implements MessageChainBuilder {
-    public final net.mamoe.mirai.message.data.MessageChainBuilder builder;
-
-    public MiraiMessageChainBuilder(Message toQuote) {
-        this.builder = new net.mamoe.mirai.message.data.MessageChainBuilder();
-        this.builder.append(new QuoteReply(((MiraiMessage) toQuote).message()));
+class MiraiMessageChainBuilder extends MessageChainBuilder<net.mamoe.mirai.message.data.MessageChainBuilder> {
+    /**
+     * @deprecated 需要回复一条消息请使用 {@link Message#quoteReply(Message)}*/
+    @Deprecated
+    public MiraiMessageChainBuilder(Message<?> toQuote) {
+        super(new net.mamoe.mirai.message.data.MessageChainBuilder());
+        this.wrapped().append(new QuoteReply((MessageChain) toQuote.wrapped()));
     }
 
     public MiraiMessageChainBuilder() {
-        this.builder = new net.mamoe.mirai.message.data.MessageChainBuilder();
+        super(new net.mamoe.mirai.message.data.MessageChainBuilder());
     }
 
     @Override
-    public MessageChainBuilder append(Message message) {
-        net.mamoe.mirai.message.data.Message messages;
-        if (message instanceof MiraiImage image) {
-            messages = image.image();
-        } else {
-            messages = ((MiraiMessage) message).message();
-        }
-        this.builder.append(messages);
+    public MessageChainBuilder<net.mamoe.mirai.message.data.MessageChainBuilder> append(Message<?> message) {
+        this.wrapped().append((net.mamoe.mirai.message.data.Message) message.wrapped());
         return this;
     }
 
     @Override
-    public MessageChainBuilder append(String message) {
-        this.builder.append(message);
+    public MessageChainBuilder<net.mamoe.mirai.message.data.MessageChainBuilder> append(String message) {
+        this.wrapped().append(message);
         return this;
     }
 
     @Override
-    public Message build() {
-        return new MiraiMessage(this.builder.build());
+    public Message<?> build() {
+        return new MiraiMessage(this.wrapped().build());
     }
 }

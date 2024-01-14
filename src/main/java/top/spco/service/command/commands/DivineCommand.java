@@ -36,7 +36,7 @@ import java.util.*;
 
 /**
  * @author SpCo
- * @version 1.0.0
+ * @version 2.0.0
  * @since 0.1.0
  */
 public class DivineCommand extends AbstractCommand {
@@ -56,7 +56,7 @@ public class DivineCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
+    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
         if (usageName.equals("占卜")) {
             LocalDate today = DateUtils.today();
             try {

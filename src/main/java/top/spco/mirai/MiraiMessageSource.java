@@ -20,17 +20,21 @@ import top.spco.api.message.MessageSource;
 
 /**
  * @author SpCo
- * @version 0.3.0
+ * @version 2.0.0
  * @since 0.3.0
  */
-record MiraiMessageSource(net.mamoe.mirai.message.data.MessageSource messageSource) implements MessageSource {
+class MiraiMessageSource extends MessageSource<net.mamoe.mirai.message.data.MessageSource> {
+    protected MiraiMessageSource(net.mamoe.mirai.message.data.MessageSource object) {
+        super(object);
+    }
+
     @Override
     public long getFromId() {
-        return messageSource.getFromId();
+        return wrapped().getFromId();
     }
 
     @Override
     public long getTargetId() {
-        return messageSource.getTargetId();
+        return wrapped().getTargetId();
     }
 }

@@ -16,6 +16,7 @@
 package top.spco.mirai;
 
 import net.mamoe.mirai.contact.Contact;
+import top.spco.SpCoBot;
 import top.spco.api.User;
 import top.spco.api.message.Message;
 
@@ -23,48 +24,52 @@ import java.io.File;
 
 /**
  * @author SpCo
- * @version 1.3.0
+ * @version 2.0.0
  * @since 0.1.0
  */
-record MiraiUser(net.mamoe.mirai.contact.User user) implements User {
+class MiraiUser extends User<net.mamoe.mirai.contact.User> {
+    MiraiUser(net.mamoe.mirai.contact.User user) {
+        super(user);
+    }
+
     @Override
     public long getId() {
-        return this.user.getId();
+        return this.wrapped().getId();
     }
 
     @Override
     public String getRemark() {
-        return this.user.getRemark();
+        return this.wrapped().getRemark();
     }
 
     @Override
     public void sendMessage(String message) {
-        user.sendMessage(message);
+        wrapped().sendMessage(message);
     }
 
     @Override
-    public void sendMessage(Message message) {
-        this.user.sendMessage(((MiraiMessage) message).message());
+    public void sendMessage(Message<?> message) {
+        this.wrapped().sendMessage(((MiraiMessage) message).wrapped());
     }
 
     @Override
     public void nudge() {
-        this.user.nudge();
+        this.wrapped().nudge();
     }
 
     @Override
-    public void handleException(Message sourceMessage, String message, Throwable throwable) {
-        this.sendMessage(new MiraiMessageChainBuilder(sourceMessage).append("[错误发生] " + message + ": " + throwable.getMessage()).build());
+    public void handleException(Message<?> sourceMessage, String message, Throwable throwable) {
+        this.sendMessage(SpCoBot.getInstance().getMessageService().asMessage("[错误发生] " + message + ": " + throwable.getMessage()).quoteReply(sourceMessage));
     }
 
     @Override
-    public void handleException(Message sourceMessage, Throwable throwable) {
-        this.sendMessage(new MiraiMessageChainBuilder(sourceMessage).append("[错误发生] SpCoBot运行时抛出了意料之外的异常: " + throwable.getMessage()).build());
+    public void handleException(Message<?> sourceMessage, Throwable throwable) {
+        this.sendMessage(SpCoBot.getInstance().getMessageService().asMessage("[错误发生] SpCoBot运行时抛出了意料之外的异常: " + throwable.getMessage()).quoteReply(sourceMessage));
     }
 
     @Override
-    public void handleException(Message sourceMessage, String message) {
-        this.sendMessage(new MiraiMessageChainBuilder(sourceMessage).append("[错误发生] " + message).build());
+    public void handleException(Message<?> sourceMessage, String message) {
+        this.sendMessage(SpCoBot.getInstance().getMessageService().asMessage("[错误发生] " + message).quoteReply(sourceMessage));
     }
 
     @Override
@@ -83,22 +88,22 @@ record MiraiUser(net.mamoe.mirai.contact.User user) implements User {
     }
 
     @Override
-    public void quoteReply(Message sourceMessage, Message message) {
-        this.sendMessage(new MiraiMessageChainBuilder(sourceMessage).append(message).build());
+    public void quoteReply(Message<?> sourceMessage, Message<?> message) {
+        this.sendMessage(message.quoteReply(sourceMessage));
     }
 
     @Override
-    public void quoteReply(Message sourceMessage, String message) {
-        this.sendMessage(new MiraiMessageChainBuilder(sourceMessage).append(message).build());
+    public void quoteReply(Message<?> sourceMessage, String message) {
+        this.sendMessage(SpCoBot.getInstance().getMessageService().asMessage(message).quoteReply(sourceMessage));
     }
 
     @Override
     public void sendImage(File image) {
-        Contact.uploadImage(this.user, image);
+        Contact.uploadImage(this.wrapped(), image);
     }
 
     @Override
     public String getNick() {
-        return this.user.getNick();
+        return this.wrapped().getNick();
     }
 }

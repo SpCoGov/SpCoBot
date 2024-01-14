@@ -16,70 +16,75 @@
 package top.spco.mirai;
 
 import top.spco.api.Logger;
+import top.spco.api.Wrapper;
 
 /**
  * @author SpCo
- * @version 0.1.0
+ * @version 2.0.0
  * @since 0.1.0
  */
-record MiraiLogger(net.mamoe.mirai.utils.MiraiLogger miraiLogger) implements Logger {
+class MiraiLogger extends Wrapper<net.mamoe.mirai.utils.MiraiLogger> implements Logger {
+    protected MiraiLogger(net.mamoe.mirai.utils.MiraiLogger logger) {
+        super(logger);
+    }
+
     @Override
     public void debug(String message) {
-        this.miraiLogger.debug(message);
+        this.wrapped().debug(message);
     }
 
     @Override
     public void debug(Throwable e) {
-        this.miraiLogger.debug(e);
+        this.wrapped().debug(e);
     }
 
     @Override
     public void debug(String message, Throwable e) {
-        this.miraiLogger.debug(message, e);
+        this.wrapped().debug(message, e);
     }
 
     @Override
     public void info(String message) {
-        this.miraiLogger.info(message);
+        this.wrapped().info(message);
     }
 
     @Override
     public void info(Throwable e) {
-        this.miraiLogger.info(e);
+        this.wrapped().info(e);
     }
 
     @Override
     public void info(String message, Throwable e) {
-        this.miraiLogger.info(message, e);
+        this.wrapped().info(message, e);
     }
 
     @Override
     public void warn(String message) {
-        this.miraiLogger.warning(message);
+        this.wrapped().warning(message);
     }
 
     @Override
     public void warn(Throwable e) {
-        this.miraiLogger.warning(e);
+        this.wrapped().warning(e);
     }
 
     @Override
     public void warn(String message, Throwable e) {
-        this.miraiLogger.warning(message, e);
+        this.wrapped().warning(message, e);
     }
 
     @Override
     public void error(String message) {
-        this.miraiLogger.error(message);
+        this.wrapped().error(message);
     }
 
     @Override
     public void error(Throwable e) {
-        this.miraiLogger.error(e);
+        this.wrapped().error(e);
     }
 
     @Override
     public void error(String message, Throwable e) {
-        this.miraiLogger.error(message, e);
+        this.wrapped().error(message, e);
     }
 }

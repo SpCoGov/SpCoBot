@@ -25,7 +25,7 @@ import top.spco.core.event.EventFactory;
  * 群组相关事件
  *
  * @author SpCo
- * @version 0.1.0
+ * @version 2.0.0
  * @since 0.1.0
  */
 public class GroupEvents {
@@ -43,7 +43,7 @@ public class GroupEvents {
 
     @FunctionalInterface
     public interface InvitedJoinGroup {
-        void invitedJoinGroup(long eventId, long invitorId, long groupId, Friend invitor, Behavior behavior);
+        void invitedJoinGroup(long eventId, long invitorId, long groupId, Friend<?> invitor, Behavior behavior);
     }
 
     /**
@@ -57,6 +57,6 @@ public class GroupEvents {
 
     @FunctionalInterface
     public interface RequestJoinGroup {
-        void requestJoinGroup(long eventId, long fromId, Group group, Behavior behavior);
+        void requestJoinGroup(long eventId, long fromId, Group<?> group, Behavior behavior);
     }
 }

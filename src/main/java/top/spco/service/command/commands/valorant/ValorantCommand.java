@@ -48,7 +48,7 @@ import java.util.List;
  * Valorant相关功能
  *
  * @author SpCo
- * @version 1.3.0
+ * @version 2.0.0
  * @since 1.3.0
  */
 public class ValorantCommand extends AbstractCommand {
@@ -81,12 +81,12 @@ public class ValorantCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) throws CommandSyntaxException {
+    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) throws CommandSyntaxException {
         switch (usageName) {
             case "登录拳头账户" -> {
                 if (from instanceof Group) {
                     // 检测机器人是否有权限撤回用户发送的消息
-                    if (PermissionsValidator.verifyBotPermissions(from, message, (NormalMember) sender, false)) {
+                    if (PermissionsValidator.verifyBotPermissions(from, message, (NormalMember<?>) sender, false)) {
                         SpCoBot.getInstance().getMessageService().recall(message);
                         from.sendMessage("为防止您的密码泄露，请在私聊使用该命令。");
                     } else {
@@ -96,42 +96,7 @@ public class ValorantCommand extends AbstractCommand {
                 }
                 String username = meta.argument(1);
                 String password = meta.argument(2);
-                try {
-                    RiotAuth riot = new RiotAuth(username, password);
-                    String[] tokens = riot.authorize();
-                    if (tokens[0].equals("x")) {
-                        if (tokens[1].equals("2fa_auth")) {
-                            ChatType ct = from instanceof Friend ? ChatType.FRIEND : ChatType.GROUP_TEMP;
-                            Chat authChat = new ChatBuilder(ct, from)
-                                    .addStage(new Stage(() -> "需要验证，请发送您收到的6位验证码。", (chat, bot1, source, sender1, message1, time1) -> {
-                                        String varCode = message1.toMessageContext();
-                                        try {
-                                            String[] authCode = riot.tfaAuth(varCode);
-                                            tokens[0] = authCode[0];
-                                            tokens[1] = authCode[1];
-                                            if (tokens[0].equals("x")) {
-                                                from.quoteReply(message, "与拳头官方服务验证时发生异常: " + tokens[1]);
-                                                return;
-                                            }
-                                            handleToken(riot, tokens, user.getId(), from, message1);
-                                        } catch (Exception e) {
-                                            from.handleException(message, e);
-                                        } finally {
-                                            chat.stop();
-                                        }
-                                    })).build();
-                            authChat.start();
-                        } else {
-                            from.quoteReply(message, "与拳头官方服务验证时发生异常: " + tokens[1]);
-                        }
-                        return;
-                    }
-                    handleToken(riot, tokens, user.getId(), from, message);
-                    riot.close();
-                } catch (Exception e) {
-                    from.handleException(message, e);
-                    e.printStackTrace();
-                }
+                auth(username, password, from, message, user);
             }
             case "获取每日商店皮肤" -> {
                 String sql = "SELECT username, password, access_token, entitlements, uuid FROM valorant_user WHERE id = ?";
@@ -146,7 +111,7 @@ public class ValorantCommand extends AbstractCommand {
                             String entitlements = rs.getString("entitlements");
                             String uuid = rs.getString("uuid");
                             if (accessToken.equals("null")) {
-                                from.quoteReply(message, "请在 ⌈私聊⌋ 中使用 " + loginUsage.toString() + " 命令来登录。\n\n***请注意：为了将来实现自动登录功能，您的账号和密码将在服务器内以⌈明文形式⌋存储，如介意请以勿使用该命令，其他用户请务必开启双重验证。");
+                                from.quoteReply(message, "请在 「私聊」 中使用 " + loginUsage.toString() + " 命令来登录。\n\n***请注意：为了将来实现自动登录功能，您的账号和密码将在服务器内以「明文形式」存储，如介意请以勿使用该命令，其他用户请务必开启双重验证。");
                                 return;
                             }
                             try (CloseableHttpClient session = HttpClients.custom().build()) {
@@ -157,31 +122,31 @@ public class ValorantCommand extends AbstractCommand {
                                 String response = EntityUtils.toString(session.execute(request).getEntity());
                                 JsonObject json = JsonParser.parseString(response).getAsJsonObject();
                                 if (json.has("httpStatus") && json.get("httpStatus").getAsInt() == 400) {
-                                    from.quoteReply(message, "获取每日商店时发生异常，可能是由于登录数据过期。（" + json.get("message").getAsString() + "）/n请在 ⌈私聊⌋ 中使用 " + loginUsage.toString() + " 命令来登录。\n\n***请注意：为了将来实现自动登录功能，您的账号和密码将在服务器内以⌈明文形式⌋存储，如介意请以勿使用该命令，其他用户请务必开启双重验证。");
+                                    from.quoteReply(message, "获取每日商店时发生异常，可能是由于登录数据过期。（" + json.get("message").getAsString() + "）\n请在 「私聊」 中使用 " + loginUsage.toString() + " 命令来登录。\n\n***请注意：为了将来实现自动登录功能，您的账号和密码将在服务器内以「明文形式」存储，如介意请以勿使用该命令，其他用户请务必开启双重验证。");
                                     return;
                                 }
                                 SkinsPanelLayoutContainer.SkinsPanelLayout store = SkinsPanelLayoutContainer.parseStore(response).getSkinsPanelLayout();
                                 int remainingTime = store.getRemainingTime();
                                 LinkedList<WeaponSkin> skins = store.getSkins();
                                 var ms = SpCoBot.getInstance().getMessageService();
-                                Message toReply = ms.toMessage("您今日的每日商店为：\n");
+                                Message<?> toReply = ms.asMessage("您今日的每日商店为：\n");
                                 for (var skin : skins) {
                                     try {
-                                        toReply = ms.append(toReply, skin.getDisplayName() + " " + skin.getCost() + "VP");
+                                        toReply.append(skin.getDisplayName() + " " + skin.getCost() + "VP");
                                         String filePath = SpCoBot.dataFolder.getAbsolutePath() + File.separator + "skinIcons" + File.separator + skin.getUuid() + ".png";
                                         downloadFile(skin.getaIconURL(), filePath);
-                                        toReply = ms.append(toReply, ms.toImage(new File(filePath), from));
+                                        toReply.append(ms.toImage(new File(filePath), from));
                                     } catch (IOException e) {
-                                        toReply = ms.append(toReply, "(皮肤图片下载失败)");
+                                        toReply.append("(皮肤图片下载失败)");
                                     }
-                                    toReply = ms.append(toReply, "\n");
+                                    toReply.append("\n");
                                 }
-                                toReply = ms.append(toReply, "\n距商店刷新还剩" + (remainingTime / 3600.0) + "小时");
+                                toReply.append("\n距商店刷新还剩" + (remainingTime / 3600.0) + "小时");
                                 from.quoteReply(message, toReply);
                                 return;
                             }
                         } else {
-                            from.quoteReply(message, "请在 ⌈私聊⌋ 中使用 " + loginUsage.toString() + " 命令来登录。\n\n***请注意：为了将来实现自动登录功能，您的账号和密码将在服务器内以⌈明文形式⌋存储，如介意请以勿使用该命令，其他用户请务必开启双重验证。");
+                            from.quoteReply(message, "请在 「私聊」 中使用 " + loginUsage.toString() + " 命令来登录。\n\n***请注意：为了将来实现自动登录功能，您的账号和密码将在服务器内以「明文形式」存储，如介意请以勿使用该命令，其他用户请务必开启双重验证。");
                             return;
                         }
                     }
@@ -193,7 +158,7 @@ public class ValorantCommand extends AbstractCommand {
         }
     }
 
-    private void handleToken(RiotAuth riot, String[] tokens, long userId, Interactive from, Message message) {
+    private void handleToken(RiotAuth riot, String[] tokens, long userId, Interactive<?> from, Message<?> message) {
         try {
             riot.parse(tokens);
             String sql = "INSERT INTO valorant_user (id, username, password, access_token, entitlements, uuid, name, tag, create_data, ban_type, region) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
@@ -260,5 +225,44 @@ public class ValorantCommand extends AbstractCommand {
     private boolean checkFileExists(String filePath) {
         File file = new File(filePath);
         return file.exists() && file.isFile();
+    }
+
+    private void auth(String username, String password, Interactive<?> from, Message<?> message, BotUser user) {
+        try {
+            RiotAuth riot = new RiotAuth(username, password);
+            String[] tokens = riot.authorize();
+            if (tokens[0].equals("x")) {
+                if (tokens[1].equals("2fa_auth")) {
+                    ChatType ct = from instanceof Friend ? ChatType.FRIEND : ChatType.GROUP_TEMP;
+                    Chat authChat = new ChatBuilder(ct, from)
+                            .addStage(new Stage(() -> "需要验证，请发送您收到的6位验证码。", (chat, bot1, source, sender1, message1, time1) -> {
+                                String varCode = message1.toMessageContext();
+                                try {
+                                    String[] authCode = riot.tfaAuth(varCode);
+                                    tokens[0] = authCode[0];
+                                    tokens[1] = authCode[1];
+                                    if (tokens[0].equals("x")) {
+                                        from.quoteReply(message, "与拳头官方服务验证时发生异常: " + tokens[1]);
+                                        return;
+                                    }
+                                    handleToken(riot, tokens, user.getId(), from, message1);
+                                } catch (Exception e) {
+                                    from.handleException(message, e);
+                                } finally {
+                                    chat.stop();
+                                }
+                            })).build();
+                    authChat.start();
+                } else {
+                    from.quoteReply(message, "与拳头官方服务验证时发生异常: " + tokens[1]);
+                }
+                return;
+            }
+            handleToken(riot, tokens, user.getId(), from, message);
+            riot.close();
+        } catch (Exception e) {
+            from.handleException(message, e);
+            e.printStackTrace();
+        }
     }
 }

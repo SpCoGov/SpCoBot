@@ -19,21 +19,25 @@ package top.spco.api;
  * 代表一位普通的群成员
  *
  * @author SpCo
- * @version 0.1.0
+ * @version 2.0.0
  * @see Member
  * @see AnonymousMember
  * @since 0.1.0
  */
-public interface NormalMember extends Member {
+public abstract class NormalMember<T> extends Member<T> {
+    public NormalMember(T objcet) {
+        super(objcet);
+    }
+
     /**
      * 群名片. 可能为空
      */
-    String getNameCard();
+    public abstract String getNameCard();
 
     /**
      * 群特殊头衔.
      */
-    String getSpecialTitle();
+    public abstract String getSpecialTitle();
 
     /**
      * 给予或移除群成员的管理员权限<p>
@@ -41,23 +45,23 @@ public interface NormalMember extends Member {
      *
      * @param operation true 为给予
      */
-    void modifyPermission(boolean operation);
+    public abstract void modifyPermission(boolean operation);
 
     /**
      * 被禁言剩余时长. 单位为秒
      */
-    int muteTimeRemaining();
+    public abstract int muteTimeRemaining();
 
     /**
      * 当该群员处于禁言状态时返回 {@code true}.
      */
-    boolean isMuted();
+    public abstract boolean isMuted();
 
     /**
      * 解除禁言<p>
      * 管理员可解除成员的禁言, 群主可解除管理员和群员的禁言
      */
-    void unmute();
+    public abstract void unmute();
 
     /**
      * 踢出该成员<p>
@@ -65,7 +69,5 @@ public interface NormalMember extends Member {
      *
      * @param block 为 {@code true} 时拉黑成员
      */
-    void kick(String message, boolean block);
-
-
+    public abstract void kick(String message, boolean block);
 }

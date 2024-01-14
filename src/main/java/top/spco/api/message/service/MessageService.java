@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
  * 消息服务
  *
  * @author SpCo
- * @version 1.3.0
+ * @version 2.0.0
  * @since 0.1.1
  */
 public interface MessageService {
@@ -40,14 +40,14 @@ public interface MessageService {
      * @param id 群成员的Id
      * @return 包含At的Message对象
      */
-    Message at(long id);
+    Message<?> at(long id);
 
     /**
      * At全体成员
      *
      * @return 包含At全体成员的Message对象
      */
-    Message atAll();
+    Message<?> atAll();
 
     /**
      * 往消息后添加一条消息
@@ -55,8 +55,10 @@ public interface MessageService {
      * @param original 原始消息
      * @param other    待添加的消息
      * @return 操作后的Message对象
+     * @deprecated 请使用 {@link Message#append(String)}
      */
-    Message append(Message original, Message other);
+    @Deprecated
+    Message<?> append(Message<?> original, Message<?> other);
 
     /**
      * 往消息后添加一则文本
@@ -64,8 +66,10 @@ public interface MessageService {
      * @param original 原始消息
      * @param other    待添加的文本
      * @return 操作后的Message对象
+     * @deprecated 请使用 {@link Message#append(String)}
      */
-    Message append(Message original, String other);
+    @Deprecated
+    Message<?> append(Message<?> original, String other);
 
     String getAtRegex();
 
@@ -85,7 +89,7 @@ public interface MessageService {
      * @return 如果有引用时返回被引用的消息，如果没有时返回null
      */
     @Nullable
-    ImmutablePair<MessageSource, Message> getQuote(Message message);
+    ImmutablePair<MessageSource<?>, Message<?>> getQuote(Message<?> message);
 
     /**
      * 撤回一条消息<p>
@@ -93,14 +97,14 @@ public interface MessageService {
      *
      * @param original 需要撤回的消息
      */
-    void recall(Message original);
+    void recall(Message<?> original);
 
     /**
      * 将字符串转换为 {@code Message} 对象
      *
      * @param content 需要转换的内容
      */
-    Message toMessage(String content);
+    Message<?> asMessage(String content);
 
     /**
      * 将文件转换为 {@code Image} 对象
@@ -108,5 +112,5 @@ public interface MessageService {
      * @param image       需要转换的图片
      * @param interactive 发送的对象
      */
-    Image toImage(File image, Interactive interactive);
+    Image<?> toImage(File image, Interactive<?> interactive);
 }

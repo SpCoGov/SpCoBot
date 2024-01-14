@@ -22,7 +22,7 @@ import top.spco.service.RegistrationException;
  * 当创建{@link Chat}对象时提交的聊天类型和聊天目标不匹配时会抛出此异常
  *
  * @author SpCo
- * @version 0.1.1
+ * @version 2.0.0
  * @since 0.1.1
  */
 public class ChatTypeMismatchException extends RegistrationException {
@@ -32,7 +32,7 @@ public class ChatTypeMismatchException extends RegistrationException {
      * @param chatType 待创建的{@link ChatType 对话类型}
      * @param target   对话作用于的目标
      */
-    public ChatTypeMismatchException(ChatType chatType, Interactive target) {
+    public ChatTypeMismatchException(ChatType chatType, Interactive<?> target) {
         super("Chat type mismatch: Cannot create Chat with " + chatType + " for target " + target);
     }
 }

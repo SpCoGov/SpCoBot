@@ -15,36 +15,47 @@
  */
 package top.spco.mirai;
 
+import net.mamoe.mirai.message.data.MessageChainBuilder;
 import top.spco.api.Image;
+import top.spco.api.message.Message;
 
 /**
  * @author SpCo
- * @version 1.3.0
+ * @version 2.0.0
  * @since 1.3.0
  */
-record MiraiImage(net.mamoe.mirai.message.data.Image image) implements Image {
+class MiraiImage extends Image<net.mamoe.mirai.message.data.Image> {
+    protected MiraiImage(net.mamoe.mirai.message.data.Image image) {
+        super(image);
+    }
+
     @Override
     public String getImageId() {
-        return image().getImageId();
+        return wrapped().getImageId();
     }
 
     @Override
     public int getWidth() {
-        return image().getWidth();
+        return wrapped().getWidth();
     }
 
     @Override
     public int getHeight() {
-        return image().getHeight();
+        return wrapped().getHeight();
     }
 
     @Override
     public String serialize() {
-        return image().serializeToMiraiCode();
+        return wrapped().serializeToMiraiCode();
     }
 
     @Override
     public String toMessageContext() {
-        return image().contentToString();
+        return wrapped().contentToString();
+    }
+
+    @Override
+    public Message<?> toMessage() {
+        return new MiraiMessage(new MessageChainBuilder().append(wrapped()).build());
     }
 }

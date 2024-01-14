@@ -23,29 +23,33 @@ import java.util.Collection;
 
 /**
  * @author SpCo
- * @version 0.1.0
+ * @version 2.0.0
  * @since 0.1.0
  */
-record MiraiFriendGroups(net.mamoe.mirai.contact.friendgroup.FriendGroups friendGroups) implements FriendGroups {
-    @Override
-    public FriendGroup getDefault() {
-        return new MiraiFriendGroup(this.friendGroups.getDefault());
+class MiraiFriendGroups extends FriendGroups<net.mamoe.mirai.contact.friendgroup.FriendGroups> {
+    protected MiraiFriendGroups(net.mamoe.mirai.contact.friendgroup.FriendGroups groups) {
+        super(groups);
     }
 
     @Override
-    public FriendGroup create(String name) {
-        return new MiraiFriendGroup(this.friendGroups.create(name));
+    public FriendGroup<net.mamoe.mirai.contact.friendgroup.FriendGroup> getDefault() {
+        return new MiraiFriendGroup(this.wrapped().getDefault());
     }
 
     @Override
-    public FriendGroup get(int id) {
-        return new MiraiFriendGroup(this.friendGroups.get(id));
+    public FriendGroup<net.mamoe.mirai.contact.friendgroup.FriendGroup> create(String name) {
+        return new MiraiFriendGroup(this.wrapped().create(name));
     }
 
     @Override
-    public Collection<FriendGroup> asCollection() {
-        var friendGroups = this.friendGroups.asCollection();
-        Collection<FriendGroup> c = new ArrayList<>();
+    public FriendGroup<net.mamoe.mirai.contact.friendgroup.FriendGroup> get(int id) {
+        return new MiraiFriendGroup(this.wrapped().get(id));
+    }
+
+    @Override
+    public Collection<FriendGroup<?>> asCollection() {
+        var friendGroups = this.wrapped().asCollection();
+        Collection<FriendGroup<?>> c = new ArrayList<>();
         for (var friendGroup : friendGroups) {
             c.add(new MiraiFriendGroup(friendGroup));
         }

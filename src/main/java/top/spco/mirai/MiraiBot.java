@@ -20,65 +20,69 @@ import top.spco.util.InteractiveList;
 
 /**
  * @author SpCo
- * @version 0.1.0
+ * @version 2.0.0
  * @since 0.1.0
  */
-record MiraiBot(net.mamoe.mirai.Bot bot) implements Bot {
+class MiraiBot extends Bot<net.mamoe.mirai.Bot> {
+    protected MiraiBot(net.mamoe.mirai.Bot bot) {
+        super(bot);
+    }
+
     @Override
     public boolean isOnline() {
-        return this.bot.isOnline();
+        return this.wrapped().isOnline();
     }
 
     @Override
-    public FriendGroups getFriendGroups() {
-        return new MiraiFriendGroups(this.bot.getFriendGroups());
+    public FriendGroups<net.mamoe.mirai.contact.friendgroup.FriendGroups> getFriendGroups() {
+        return new MiraiFriendGroups(this.wrapped().getFriendGroups());
     }
 
     @Override
-    public InteractiveList<Friend> getFriends() {
-        InteractiveList<Friend> n = new InteractiveList<>();
-        for (var friend : this.bot.getFriends().delegate) {
+    public InteractiveList<Friend<?>> getFriends() {
+        InteractiveList<Friend<?>> n = new InteractiveList<>();
+        for (var friend : this.wrapped().getFriends().delegate) {
             n.add(new MiraiFriend(friend));
         }
         return n;
     }
 
     @Override
-    public InteractiveList<Group> getGroups() {
-        InteractiveList<Group> n = new InteractiveList<>();
-        for (var group : this.bot.getGroups().delegate) {
+    public InteractiveList<Group<?>> getGroups() {
+        InteractiveList<Group<?>> n = new InteractiveList<>();
+        for (var group : this.wrapped().getGroups().delegate) {
             n.add(new MiraiGroup(group));
         }
         return n;
     }
 
     @Override
-    public Friend getFriend(long id) {
-        return new MiraiFriend(this.bot.getFriend(id));
+    public Friend<net.mamoe.mirai.contact.Friend> getFriend(long id) {
+        return new MiraiFriend(this.wrapped().getFriend(id));
     }
 
     @Override
     public boolean hasFriend(long id) {
-        return this.bot.getFriends().contains(id);
+        return this.wrapped().getFriends().contains(id);
     }
 
     @Override
     public boolean hasGroup(long id) {
-        return this.bot.getGroups().contains(id);
+        return this.wrapped().getGroups().contains(id);
     }
 
     @Override
-    public User getUser(long id) {
-        return new MiraiUser(this.bot.getStranger(id));
+    public User<net.mamoe.mirai.contact.User> getUser(long id) {
+        return new MiraiUser(this.wrapped().getStranger(id));
     }
 
     @Override
-    public Group getGroup(long id) {
-        return new MiraiGroup(this.bot.getGroup(id));
+    public Group<net.mamoe.mirai.contact.Group> getGroup(long id) {
+        return new MiraiGroup(this.wrapped().getGroup(id));
     }
 
     @Override
     public long getId() {
-        return this.bot.getId();
+        return this.wrapped().getId();
     }
 }

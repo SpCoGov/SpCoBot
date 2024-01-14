@@ -17,6 +17,7 @@ package top.spco.mirai;
 
 import net.mamoe.mirai.contact.Contact;
 import net.mamoe.mirai.message.data.At;
+import net.mamoe.mirai.message.data.MessageChain;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.QuoteReply;
 import net.mamoe.mirai.utils.ExternalResource;
@@ -31,28 +32,36 @@ import java.io.File;
 
 /**
  * @author SpCo
- * @version 1.3.0
+ * @version 2.0.0
  * @since 0.1.0
  */
 class MiraiMessageServiceImpl implements MessageService {
     @Override
-    public Message at(long id) {
+    public Message<?> at(long id) {
         return new MiraiMessage(new MessageChainBuilder().append(new At(id)).build());
     }
 
     @Override
-    public Message atAll() {
+    public Message<?> atAll() {
         return new MiraiMessage(new MessageChainBuilder().append(net.mamoe.mirai.message.data.AtAll.INSTANCE).build());
     }
 
+    /**
+     * @deprecated 请使用 {@link Message#append(String)}
+     */
     @Override
-    public Message append(Message original, Message other) {
-        return new MiraiMessageChainBuilder().append(original).append(other).build();
+    @Deprecated
+    public Message<?> append(Message<?> original, Message<?> other) {
+        return original.append(other);
     }
 
+    /**
+     * @deprecated 请使用 {@link Message#append(String)}
+     */
     @Override
-    public Message append(Message original, String other) {
-        return new MiraiMessageChainBuilder().append(original).append(other).build();
+    @Deprecated
+    public Message<?> append(Message<?> original, String other) {
+        return original.append(other);
     }
 
     @Override
@@ -61,10 +70,10 @@ class MiraiMessageServiceImpl implements MessageService {
     }
 
     @Override
-    public ImmutablePair<MessageSource, Message> getQuote(Message message) {
+    public ImmutablePair<MessageSource<?>, Message<?>> getQuote(Message<?> message) {
         try {
             MiraiMessage miraiMessage = ((MiraiMessage) message);
-            for (var singleMessage : miraiMessage.message()) {
+            for (var singleMessage : miraiMessage.wrapped()) {
                 if (singleMessage instanceof QuoteReply quoteReply) {
                     return new ImmutablePair<>(new MiraiMessageSource(quoteReply.getSource()), new MiraiMessage(quoteReply.getSource().getOriginalMessage()));
                 }
@@ -77,25 +86,17 @@ class MiraiMessageServiceImpl implements MessageService {
     }
 
     @Override
-    public void recall(Message original) {
-        net.mamoe.mirai.message.data.MessageSource.recall(((MiraiMessage) original).message());
+    public void recall(Message<?> original) {
+        net.mamoe.mirai.message.data.MessageSource.recall((MessageChain) original.wrapped());
     }
 
     @Override
-    public Message toMessage(String content) {
+    public Message<?> asMessage(String content) {
         return new MiraiMessageChainBuilder().append(content).build();
     }
 
     @Override
-    public Image toImage(File image, Interactive interactive) {
-        Contact contact;
-        if (interactive instanceof MiraiGroup group) {
-            contact = group.group();
-        } else if (interactive instanceof MiraiUser user) {
-            contact = user.user();
-        } else {
-            contact = ((MiraiNormalMember) interactive).member();
-        }
-        return new MiraiImage(ExternalResource.uploadAsImage(image, contact));
+    public Image<?> toImage(File image, Interactive<?> interactive) {
+        return new MiraiImage(ExternalResource.uploadAsImage(image, (Contact) interactive.wrapped()));
     }
 }

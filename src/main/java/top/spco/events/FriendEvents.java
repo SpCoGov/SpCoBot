@@ -24,7 +24,7 @@ import top.spco.core.event.EventFactory;
  * 好友相关事件
  *
  * @author SpCo
- * @version 0.1.0
+ * @version 2.0.0
  * @since 0.1.0
  */
 public class FriendEvents {
@@ -43,6 +43,6 @@ public class FriendEvents {
 
     @FunctionalInterface
     public interface RequestedAsFriend {
-        void requestedAsFriend(long eventId, String message, long fromId, long fromGroupId, Group fromGroup, Behavior behavior);
+        void requestedAsFriend(long eventId, String message, long fromId, long fromGroupId, Group<?> fromGroup, Behavior behavior);
     }
 }

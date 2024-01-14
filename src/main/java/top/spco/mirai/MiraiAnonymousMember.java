@@ -21,47 +21,51 @@ import top.spco.api.MemberPermission;
 
 /**
  * @author SpCo
- * @version 0.1.0
+ * @version 2.0.0
  * @since 0.1.0
  */
-record MiraiAnonymousMember(net.mamoe.mirai.contact.AnonymousMember member) implements AnonymousMember {
+class MiraiAnonymousMember extends AnonymousMember<net.mamoe.mirai.contact.AnonymousMember> {
+    public MiraiAnonymousMember(net.mamoe.mirai.contact.AnonymousMember member) {
+        super(member);
+    }
+
     @Override
-    public Group getGroup() {
-        return new MiraiGroup(this.member.getGroup());
+    public Group<net.mamoe.mirai.contact.Group> getGroup() {
+        return new MiraiGroup(this.wrapped().getGroup());
     }
 
     @Override
     public String getNameCard() {
-        return this.member.getNameCard();
+        return this.wrapped().getNameCard();
     }
 
     @Override
     public String getSpecialTitle() {
-        return this.member.getSpecialTitle();
+        return this.wrapped().getSpecialTitle();
     }
 
     @Override
     public MemberPermission getPermission() {
-        return MemberPermission.byLevel(this.member.getPermission().getLevel());
+        return MemberPermission.byLevel(this.wrapped().getPermission().getLevel());
     }
 
     @Override
     public void mute(int time) {
-        this.member.mute(time);
+        this.wrapped().mute(time);
     }
 
     @Override
     public long getId() {
-        return this.member.getId();
+        return this.wrapped().getId();
     }
 
     @Override
     public String getRemark() {
-        return this.member.getRemark();
+        return this.wrapped().getRemark();
     }
 
     @Override
     public String getNick() {
-        return this.member.getNick();
+        return this.wrapped().getNick();
     }
 }

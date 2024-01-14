@@ -25,7 +25,7 @@ import top.spco.service.command.CommandMeta;
  * 命令相关事件
  *
  * @author SpCo
- * @version 0.3.0
+ * @version 2.0.0
  * @since 0.3.0
  */
 public class CommandEvents {
@@ -53,7 +53,7 @@ public class CommandEvents {
          * @param args    命令的参数 (如 {@code ["a", "b", "c"]) }
          * @param meta    命令的元数据
          */
-        void onCommand(Bot bot, Interactive from, User sender, Message message, int time, String command, String label, String[] args, CommandMeta meta);
+        void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, Message<?> message, int time, String command, String label, String[] args, CommandMeta meta);
     }
 
     /**
@@ -79,7 +79,7 @@ public class CommandEvents {
          * @param args       命令的参数 (如 {@code ["a", "b", "c"]) }
          * @param meta       命令的元数据
          */
-        void onFriendCommand(Bot bot, Friend interactor, Message message, int time, String command, String label, String[] args, CommandMeta meta);
+        void onFriendCommand(Bot<?> bot, Friend<?> interactor, Message<?> message, int time, String command, String label, String[] args, CommandMeta meta);
     }
 
     /**
@@ -106,7 +106,7 @@ public class CommandEvents {
          * @param args    命令的参数 (如 {@code ["a", "b", "c"]) }
          * @param meta    命令的元数据
          */
-        void onGroupCommand(Bot bot, Group from, Member sender, Message message, int time, String command, String label, String[] args, CommandMeta meta);
+        void onGroupCommand(Bot<?> bot, Group<?> from, Member<?> sender, Message<?> message, int time, String command, String label, String[] args, CommandMeta meta);
     }
 
     /**
@@ -132,6 +132,6 @@ public class CommandEvents {
          * @param args       命令的参数 (如 {@code ["a", "b", "c"]) }
          * @param meta       命令的元数据
          */
-        void onGroupTempCommand(Bot bot, Member interactor, Message message, int time, String command, String label, String[] args, CommandMeta meta);
+        void onGroupTempCommand(Bot<?> bot, Member<?> interactor, Message<?> message, int time, String command, String label, String[] args, CommandMeta meta);
     }
 }

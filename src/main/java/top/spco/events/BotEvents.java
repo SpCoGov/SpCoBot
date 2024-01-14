@@ -25,7 +25,7 @@ import top.spco.core.event.EventFactory;
  * 机器人相关事件
  *
  * @author SpCo
- * @version 0.1.0
+ * @version 2.0.0
  * @since 0.1.0
  */
 public class BotEvents {
@@ -43,7 +43,7 @@ public class BotEvents {
 
     @FunctionalInterface
     public interface NudgedTick {
-        void onNudgedTick(Identifiable from, Identifiable target, Interactive subject, String action, String suffix);
+        void onNudgedTick(Identifiable from, Identifiable target, Interactive<?> subject, String action, String suffix);
     }
 
     /**
@@ -57,7 +57,7 @@ public class BotEvents {
 
     @FunctionalInterface
     public interface OnlineTick {
-        void onOnlineTick(Bot bot);
+        void onOnlineTick(Bot<?> bot);
     }
 
     /**
@@ -71,7 +71,7 @@ public class BotEvents {
 
     @FunctionalInterface
     public interface ActiveOfflineTick {
-        void onActiveOfflineTick(Bot bot);
+        void onActiveOfflineTick(Bot<?> bot);
     }
 
     /**
@@ -85,7 +85,7 @@ public class BotEvents {
 
     @FunctionalInterface
     public interface ForceOfflineTick {
-        void onForceOfflineTick(Bot bot);
+        void onForceOfflineTick(Bot<?> bot);
     }
 
     /**
@@ -99,7 +99,7 @@ public class BotEvents {
 
     @FunctionalInterface
     public interface DroppedOfflineTick {
-        void onDroppedOfflineTick(Bot bot);
+        void onDroppedOfflineTick(Bot<?> bot);
     }
 
     /**
@@ -113,6 +113,6 @@ public class BotEvents {
 
     @FunctionalInterface
     public interface RequireReconnectOfflineTick {
-        void onRequireReconnectOfflineTick(Bot bot);
+        void onRequireReconnectOfflineTick(Bot<?> bot);
     }
 }

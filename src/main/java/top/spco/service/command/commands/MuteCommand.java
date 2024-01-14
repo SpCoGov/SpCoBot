@@ -25,7 +25,7 @@ import java.util.List;
 
 /**
  * @author SpCo
- * @version 1.3.0
+ * @version 2.0.0
  * @since 0.3.0
  */
 public class MuteCommand extends GroupAbstractCommand {
@@ -46,10 +46,10 @@ public class MuteCommand extends GroupAbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
+    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
         try {
             long id = meta.targetUserIdArgument(0);
-            NormalMember target = PermissionsValidator.verifyMemberPermissions(from, user, message, id);
+            NormalMember<?> target = PermissionsValidator.verifyMemberPermissions(from, user, message, id);
             if (target != null) {
                 int duration = meta.integerArgument(1);
                 target.mute(duration);

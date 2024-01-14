@@ -25,7 +25,7 @@ import top.spco.user.BotUser;
 
 /**
  * @author SpCo
- * @version 1.0.0
+ * @version 2.0.0
  * @since 0.1.0
  */
 public final class GetmeCommand extends AbstractCommand {
@@ -40,7 +40,7 @@ public final class GetmeCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
+    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
         if (usageName.equals("获取个人信息")) {
             from.quoteReply(message, user.toString());
         }

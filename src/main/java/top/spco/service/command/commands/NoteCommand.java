@@ -27,10 +27,11 @@ import top.spco.user.BotUser;
 import top.spco.user.UserPermission;
 
 import java.io.File;
+import java.util.Objects;
 
 /**
  * @author SpCo
- * @version 1.2.0
+ * @version 2.0.0
  * @since 0.3.2
  */
 public class NoteCommand extends AbstractCommand {
@@ -55,9 +56,9 @@ public class NoteCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, Message message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
+    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
         try {
-            String context = SpCoBot.getInstance().getMessageService().getQuote(message).getRight().toMessageContext();
+            String context = Objects.requireNonNull(SpCoBot.getInstance().getMessageService().getQuote(message)).getRight().toMessageContext();
             if (!context.endsWith("，不打")) {
                 context += "，不打";
             }
