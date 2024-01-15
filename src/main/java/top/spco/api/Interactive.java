@@ -15,6 +15,7 @@
  */
 package top.spco.api;
 
+import top.spco.SpCoBot;
 import top.spco.api.message.Message;
 
 import java.io.File;
@@ -35,17 +36,29 @@ public abstract class Interactive<T> extends Wrapper<T> implements Identifiable 
 
     public abstract void sendMessage(Message<?> message);
 
-    public abstract void handleException(Message<?> sourceMessage, String message);
+    public void handleException(Message<?> sourceMessage, String message) {
+        this.sendMessage(SpCoBot.getInstance().getMessageService().asMessage("[错误发生] " + message).quoteReply(sourceMessage));
+    }
 
-    public abstract void handleException(Message<?> sourceMessage, String message, Throwable throwable);
+    public void handleException(Message<?> sourceMessage, String message, Throwable throwable) {
+        this.sendMessage(SpCoBot.getInstance().getMessageService().asMessage("[错误发生] " + message + ": " + throwable.getMessage()).quoteReply(sourceMessage));
+    }
 
-    public abstract void handleException(Message<?> sourceMessage, Throwable throwable);
+    public void handleException(Message<?> sourceMessage, Throwable throwable) {
+        this.sendMessage(SpCoBot.getInstance().getMessageService().asMessage("[错误发生] SpCoBot运行时抛出了意料之外的异常: " + throwable.getMessage()).quoteReply(sourceMessage));
+    }
 
-    public abstract void handleException(String message, Throwable throwable);
+    public void handleException(String message, Throwable throwable) {
+        this.handleException("[错误发生] " + message + ": " + throwable.getMessage());
+    }
 
-    public abstract void handleException(Throwable throwable);
+    public void handleException(Throwable throwable) {
+        this.handleException("[错误发生] SpCoBot运行时抛出了意料之外的异常: " + throwable.getMessage());
+    }
 
-    public abstract void handleException(String message);
+    public void handleException(String message) {
+        this.sendMessage(message);
+    }
 
     /**
      * 回复并引用源消息。
@@ -53,7 +66,9 @@ public abstract class Interactive<T> extends Wrapper<T> implements Identifiable 
      * @param sourceMessage 源消息，用于引用
      * @param message       要发送的回复消息
      */
-    public abstract void quoteReply(Message<?> sourceMessage, Message<?> message);
+    public void quoteReply(Message<?> sourceMessage, Message<?> message) {
+        this.sendMessage(message.quoteReply(sourceMessage));
+    }
 
     /**
      * 回复并引用源消息。
@@ -61,7 +76,9 @@ public abstract class Interactive<T> extends Wrapper<T> implements Identifiable 
      * @param sourceMessage 源消息，用于引用
      * @param message       要发送的回复消息
      */
-    public abstract void quoteReply(Message<?> sourceMessage, String message);
+    public void quoteReply(Message<?> sourceMessage, String message) {
+        this.sendMessage(SpCoBot.getInstance().getMessageService().asMessage(message).quoteReply(sourceMessage));
+    }
 
     public abstract void sendImage(File image);
 }

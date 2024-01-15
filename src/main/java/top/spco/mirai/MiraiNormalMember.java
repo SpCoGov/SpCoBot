@@ -16,7 +16,6 @@
 package top.spco.mirai;
 
 import net.mamoe.mirai.contact.Contact;
-import top.spco.SpCoBot;
 import top.spco.api.Group;
 import top.spco.api.MemberPermission;
 import top.spco.api.NormalMember;
@@ -84,6 +83,11 @@ class MiraiNormalMember extends NormalMember<net.mamoe.mirai.contact.NormalMembe
         this.wrapped().kick(message, block);
     }
 
+    @Override
+    public boolean isFriend() {
+        return wrapped().getBot().getFriends().contains(getId());
+    }
+
     public void kick(String message) {
         this.wrapped().kick(message);
     }
@@ -109,36 +113,6 @@ class MiraiNormalMember extends NormalMember<net.mamoe.mirai.contact.NormalMembe
     }
 
     @Override
-    public void handleException(Message<?> sourceMessage, String message, Throwable throwable) {
-        this.sendMessage(SpCoBot.getInstance().getMessageService().asMessage("[错误发生] " + message + ": " + throwable.getMessage()).quoteReply(sourceMessage));
-    }
-
-    @Override
-    public void handleException(Message<?> sourceMessage, String message) {
-        this.sendMessage(SpCoBot.getInstance().getMessageService().asMessage("[错误发生] " + message).quoteReply(sourceMessage));
-    }
-
-    @Override
-    public void handleException(Message<?> sourceMessage, Throwable throwable) {
-        this.sendMessage(SpCoBot.getInstance().getMessageService().asMessage("[错误发生] SpCoBot运行时抛出了意料之外的异常: " + throwable.getMessage()).quoteReply(sourceMessage));
-    }
-
-    @Override
-    public void handleException(String message, Throwable throwable) {
-        this.handleException("[错误发生] " + message + ": " + throwable.getMessage());
-    }
-
-    @Override
-    public void handleException(Throwable throwable) {
-        this.handleException("[错误发生] SpCoBot运行时抛出了意料之外的异常: " + throwable.getMessage());
-    }
-
-    @Override
-    public void handleException(String message) {
-        this.sendMessage(message);
-    }
-
-    @Override
     public void nudge() {
         this.wrapped().nudge();
     }
@@ -146,16 +120,6 @@ class MiraiNormalMember extends NormalMember<net.mamoe.mirai.contact.NormalMembe
     @Override
     public String getNick() {
         return this.wrapped().getNick();
-    }
-
-    @Override
-    public void quoteReply(Message<?> sourceMessage, Message<?> message) {
-        this.sendMessage(message.quoteReply(sourceMessage));
-    }
-
-    @Override
-    public void quoteReply(Message<?> sourceMessage, String message) {
-        this.sendMessage(SpCoBot.getInstance().getMessageService().asMessage(message).quoteReply(sourceMessage));
     }
 
     @Override

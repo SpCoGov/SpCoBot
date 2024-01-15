@@ -16,10 +16,7 @@
 package top.spco.service.chat;
 
 import top.spco.SpCoBot;
-import top.spco.api.Friend;
-import top.spco.api.Group;
-import top.spco.api.Interactive;
-import top.spco.api.NormalMember;
+import top.spco.api.*;
 import top.spco.core.Builder;
 
 /**
@@ -41,6 +38,10 @@ import top.spco.core.Builder;
  *     .addStage(new Stage(...)) // 添加更多交互阶段
  *     .build(); // 构建并获取Chat对象
  * }</pre>
+ *
+ * <h1>注意事项</h1>
+ * 如果要为 {@code NormalMember} 创建对话，创建前请使用 {@link NormalMember#isFriend()} 来确认群成员是否为机器人的好友。
+ * 如果该群成员是机器人的好友且创建的对话类型为 {@code GROUP_TEMP} 的话，对话对象无法获取该用户发来的消息。
  *
  * @author SpCo
  * @version 2.0.0
@@ -64,11 +65,16 @@ public class ChatBuilder implements Builder<Chat> {
                 }
             }
             case FRIEND -> {
-                if (!(target instanceof Friend)) {
+                boolean isFriend = false;
+                if (target instanceof NormalMember<?> member) {
+                    isFriend = member.isFriend();
+                }
+                if (!isFriend && !(target instanceof Friend)) {
                     throw new ChatTypeMismatchException(chatType, target);
                 }
             }
             case GROUP_TEMP -> {
+
                 if (!(target instanceof NormalMember)) {
                     throw new ChatTypeMismatchException(chatType, target);
                 }

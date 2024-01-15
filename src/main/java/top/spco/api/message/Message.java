@@ -129,16 +129,16 @@ public abstract class Message<T> extends Wrapper<T> implements Codable {
     /**
      * 在这条消息后添加 {@code Message} 对象
      *
-     * @param message 需要添加的 {@code Message} 对象
+     * @param another 需要添加的 {@code Message} 对象
      */
-    public abstract Message<T> append(Message<?> message);
+    public abstract Message<T> append(Message<?> another);
 
     /**
      * 在这条消息后添加文本
      *
-     * @param message 需要添加的文本
+     * @param another 需要添加的文本
      */
-    public abstract Message<T> append(String message);
+    public abstract Message<T> append(String another);
 
     /**
      * 将一条消息转换成普通的消息

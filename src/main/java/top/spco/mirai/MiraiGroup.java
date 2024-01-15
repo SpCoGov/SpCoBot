@@ -15,7 +15,6 @@
  */
 package top.spco.mirai;
 
-import top.spco.SpCoBot;
 import top.spco.api.Group;
 import top.spco.api.MemberPermission;
 import top.spco.api.NormalMember;
@@ -69,36 +68,6 @@ class MiraiGroup extends Group<net.mamoe.mirai.contact.Group> {
     }
 
     @Override
-    public void handleException(Message<?> sourceMessage, String message, Throwable throwable) {
-        this.sendMessage(SpCoBot.getInstance().getMessageService().asMessage("[错误发生] " + message + ": " + throwable.getMessage()).quoteReply(sourceMessage));
-    }
-
-    @Override
-    public void handleException(Message<?> sourceMessage, Throwable throwable) {
-        this.sendMessage(SpCoBot.getInstance().getMessageService().asMessage("[错误发生] SpCoBot运行时抛出了意料之外的异常: " + throwable.getMessage()).quoteReply(sourceMessage));
-    }
-
-    @Override
-    public void handleException(Message<?> sourceMessage, String message) {
-        this.sendMessage(SpCoBot.getInstance().getMessageService().asMessage("[错误发生] " + message).quoteReply(sourceMessage));
-    }
-
-    @Override
-    public void handleException(String message, Throwable throwable) {
-        this.handleException("[错误发生] " + message + ": " + throwable.getMessage());
-    }
-
-    @Override
-    public void handleException(Throwable throwable) {
-        this.handleException("[错误发生] SpCoBot运行时抛出了意料之外的异常: " + throwable.getMessage());
-    }
-
-    @Override
-    public void handleException(String message) {
-        this.sendMessage(message);
-    }
-
-    @Override
     public NormalMember<net.mamoe.mirai.contact.NormalMember> botAsMember() {
         return new MiraiNormalMember(this.wrapped().getBotAsMember());
     }
@@ -106,16 +75,6 @@ class MiraiGroup extends Group<net.mamoe.mirai.contact.Group> {
     @Override
     public NormalMember<net.mamoe.mirai.contact.NormalMember> getMember(long id) {
         return new MiraiNormalMember(wrapped().get(id));
-    }
-
-    @Override
-    public void quoteReply(Message<?> sourceMessage, Message<?> message) {
-        this.sendMessage(message.quoteReply(sourceMessage));
-    }
-
-    @Override
-    public void quoteReply(Message<?> sourceMessage, String message) {
-        this.sendMessage(SpCoBot.getInstance().getMessageService().asMessage(message).quoteReply(sourceMessage));
     }
 
     @Override

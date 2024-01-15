@@ -70,4 +70,11 @@ public abstract class NormalMember<T> extends Member<T> {
      * @param block 为 {@code true} 时拉黑成员
      */
     public abstract void kick(String message, boolean block);
+
+    /**
+     * 判断该群成员是否为机器人的好友
+     *
+     * @return 是好友返回 {@code true}
+     */
+    public abstract boolean isFriend();
 }

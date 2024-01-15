@@ -42,14 +42,14 @@ class MiraiMessage extends Message<net.mamoe.mirai.message.data.MessageChain> {
     }
 
     @Override
-    public Message<net.mamoe.mirai.message.data.MessageChain> append(Message<?> message) {
-        wrap(new MessageChainBuilder().append(wrapped()).append((net.mamoe.mirai.message.data.Message) message.wrapped()).build());
+    public Message<net.mamoe.mirai.message.data.MessageChain> append(Message<?> another) {
+        wrapped().plus((net.mamoe.mirai.message.data.Message) another.wrapped());
         return this;
     }
 
     @Override
-    public Message<net.mamoe.mirai.message.data.MessageChain> append(String message) {
-        wrap(new MessageChainBuilder().append(wrapped()).append(message).build());
+    public Message<net.mamoe.mirai.message.data.MessageChain> append(String another) {
+        wrapped().plus(another);
         return this;
     }
 
