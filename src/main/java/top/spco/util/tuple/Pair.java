@@ -16,8 +16,6 @@
  */
 package top.spco.util.tuple;
 
-import top.spco.util.builder.CompareToBuilder;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Formattable;
@@ -39,7 +37,7 @@ import java.util.Objects;
  * @param <R> the right element type
  * @since 0.3.1
  */
-public abstract class Pair<L, R> implements Map.Entry<L, R>, Comparable<Pair<L, R>>, Serializable {
+public abstract class Pair<L, R> implements Map.Entry<L, R>, Serializable {
     /**
      * Serialization version
      */
@@ -76,19 +74,6 @@ public abstract class Pair<L, R> implements Map.Entry<L, R>, Comparable<Pair<L, 
      */
     public static <L, R> Pair<L, R> of(final Map.Entry<L, R> pair) {
         return ImmutablePair.of(pair);
-    }
-
-    /**
-     * Compares the pair based on the left element followed by the right element.
-     * The types must be {@link Comparable}.
-     *
-     * @param other the other pair, not null
-     * @return negative if this is less, zero if equal, positive if greater
-     */
-    @Override
-    public int compareTo(final Pair<L, R> other) {
-        return new CompareToBuilder().append(getLeft(), other.getLeft())
-                .append(getRight(), other.getRight()).toComparison();
     }
 
     /**

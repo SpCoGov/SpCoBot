@@ -35,7 +35,7 @@ import java.util.List;
  * @version 2.0.0
  * @since 0.1.0
  */
-public final class DataCommand extends AbstractCommand {
+public class DataCommand extends AbstractCommand {
     @Override
     public String[] getLabels() {
         return new String[]{"data"};

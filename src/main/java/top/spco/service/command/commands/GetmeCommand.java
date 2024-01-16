@@ -28,7 +28,7 @@ import top.spco.user.BotUser;
  * @version 2.0.0
  * @since 0.1.0
  */
-public final class GetmeCommand extends AbstractCommand {
+public class GetmeCommand extends AbstractCommand {
     @Override
     public String[] getLabels() {
         return new String[]{"getme"};

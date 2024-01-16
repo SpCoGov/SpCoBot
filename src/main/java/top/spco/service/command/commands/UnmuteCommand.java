@@ -21,7 +21,7 @@ import top.spco.api.NormalMember;
 import top.spco.api.User;
 import top.spco.api.message.Message;
 import top.spco.service.command.*;
-import top.spco.service.command.commands.util.PermissionsValidator;
+import top.spco.service.command.util.PermissionsValidator;
 import top.spco.user.BotUser;
 
 import java.util.List;

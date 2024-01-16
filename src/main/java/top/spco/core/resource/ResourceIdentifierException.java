@@ -15,8 +15,6 @@
  */
 package top.spco.core.resource;
 
-import top.spco.util.StringEscapeUtils;
-
 /**
  * 用于表示资源标识符操作中的异常情况的异常类
  *
@@ -26,10 +24,32 @@ import top.spco.util.StringEscapeUtils;
  */
 public class ResourceIdentifierException extends RuntimeException {
     public ResourceIdentifierException(String message) {
-        super(StringEscapeUtils.escapeJava(message));
+        super(escapeJava(message));
     }
 
-    public ResourceIdentifierException(String message, Throwable throwable) {
-        super(StringEscapeUtils.escapeJava(message), throwable);
+    public static String escapeJava(String input) {
+        if (input == null) {
+            return null;
+        }
+
+        StringBuilder output = new StringBuilder();
+
+        for (int i = 0; i < input.length(); i++) {
+            char ch = input.charAt(i);
+
+            switch (ch) {
+                case '"' -> output.append("\\\"");
+                case '\'' -> output.append("\\'");
+                case '\\' -> output.append("\\\\");
+                case '\n' -> output.append("\\n");
+                case '\r' -> output.append("\\r");
+                case '\t' -> output.append("\\t");
+                case '\b' -> output.append("\\b");
+                case '\f' -> output.append("\\f");
+                default -> output.append(ch);
+            }
+        }
+
+        return output.toString();
     }
 }

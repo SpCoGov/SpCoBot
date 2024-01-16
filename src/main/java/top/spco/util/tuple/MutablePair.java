@@ -16,8 +16,8 @@
  */
 package top.spco.util.tuple;
 
+import java.io.Serial;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * A mutable pair consisting of two {@link Object} elements.
@@ -33,6 +33,7 @@ public class MutablePair<L, R> extends Pair<L, R> {
     /**
      * Serialization version
      */
+    @Serial
     private static final long serialVersionUID = 4954918890077093841L;
 
     /**

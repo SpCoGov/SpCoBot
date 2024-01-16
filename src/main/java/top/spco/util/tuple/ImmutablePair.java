@@ -16,8 +16,8 @@
  */
 package top.spco.util.tuple;
 
+import java.io.Serial;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * An immutable pair consisting of two {@link Object} elements.
@@ -44,6 +44,7 @@ public class ImmutablePair<L, R> extends Pair<L, R> {
     /**
      * Serialization version
      */
+    @Serial
     private static final long serialVersionUID = 4954918890077093841L;
 
     /**

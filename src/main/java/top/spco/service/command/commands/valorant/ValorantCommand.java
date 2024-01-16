@@ -29,7 +29,7 @@ import top.spco.service.chat.ChatBuilder;
 import top.spco.service.chat.ChatType;
 import top.spco.service.chat.Stage;
 import top.spco.service.command.*;
-import top.spco.service.command.commands.util.PermissionsValidator;
+import top.spco.service.command.util.PermissionsValidator;
 import top.spco.user.BotUser;
 
 import java.io.BufferedInputStream;
@@ -197,31 +197,33 @@ public class ValorantCommand extends AbstractCommand {
                                                         handleToken(riot, tokens, user.getId(), sender1, message1);
                                                         sender1.quoteReply(message1, "登录信息已更新，重新开始获取每日商店信息。");
                                                         // 登录信息已更新 重新开始获取每日商店信息
-                                                        HttpGet newRequest = new HttpGet("https://pd.ap.a.pvp.net/store/v2/storefront/" + riot.getSub());
-                                                        newRequest.setHeader("Content-Type", "application/json");
-                                                        newRequest.setHeader("Authorization", "Bearer " + riot.getAccessToken());
-                                                        newRequest.setHeader("X-Riot-Entitlements-JWT", riot.getEntitlement());
-                                                        var newResponse = EntityUtils.toString(session.execute(newRequest).getEntity());
-                                                        riot.close();
+                                                        try (CloseableHttpClient conn = HttpClients.custom().build()) {
+                                                            HttpGet newRequest = new HttpGet("https://pd.ap.a.pvp.net/store/v2/storefront/" + riot.getSub());
+                                                            newRequest.setHeader("Content-Type", "application/json");
+                                                            newRequest.setHeader("Authorization", "Bearer " + riot.getAccessToken());
+                                                            newRequest.setHeader("X-Riot-Entitlements-JWT", riot.getEntitlement());
+                                                            var newResponse = EntityUtils.toString(conn.execute(newRequest).getEntity());
+                                                            riot.close();
 
-                                                        SkinsPanelLayoutContainer.SkinsPanelLayout store = SkinsPanelLayoutContainer.parseStore(newResponse).getSkinsPanelLayout();
-                                                        int remainingTime = store.getRemainingTime();
-                                                        LinkedList<WeaponSkin> skins = store.getSkins();
+                                                            SkinsPanelLayoutContainer.SkinsPanelLayout store = SkinsPanelLayoutContainer.parseStore(newResponse).getSkinsPanelLayout();
+                                                            int remainingTime = store.getRemainingTime();
+                                                            LinkedList<WeaponSkin> skins = store.getSkins();
 
-                                                        Message<?> toReply = ms.asMessage("您今日的每日商店为：\n");
-                                                        for (var skin : skins) {
-                                                            try {
-                                                                toReply.append(skin.getDisplayName() + " " + skin.getCost() + "VP");
-                                                                String filePath = SpCoBot.dataFolder.getAbsolutePath() + File.separator + "skinIcons" + File.separator + skin.getUuid() + ".png";
-                                                                downloadFile(skin.getaIconURL(), filePath);
-                                                                toReply.append(ms.toImage(new File(filePath), from));
-                                                            } catch (IOException e) {
-                                                                toReply.append("(皮肤图片下载失败)");
+                                                            Message<?> toReply = ms.asMessage("您今日的每日商店为：\n");
+                                                            for (var skin : skins) {
+                                                                try {
+                                                                    toReply.append(skin.getDisplayName() + " " + skin.getCost() + "VP");
+                                                                    String filePath = SpCoBot.dataFolder.getAbsolutePath() + File.separator + "skinIcons" + File.separator + skin.getUuid() + ".png";
+                                                                    downloadFile(skin.getaIconURL(), filePath);
+                                                                    toReply.append(ms.toImage(new File(filePath), from));
+                                                                } catch (IOException e) {
+                                                                    toReply.append("(皮肤图片下载失败)");
+                                                                }
+                                                                toReply.append("\n");
                                                             }
-                                                            toReply.append("\n");
+                                                            toReply.append("\n距商店刷新还剩" + (remainingTime / 3600.0) + "小时");
+                                                            from.quoteReply(message, toReply);
                                                         }
-                                                        toReply.append("\n距商店刷新还剩" + (remainingTime / 3600.0) + "小时");
-                                                        from.quoteReply(message, toReply);
                                                     } catch (Exception e) {
                                                         sender1.handleException(message1, e);
                                                         e.printStackTrace();

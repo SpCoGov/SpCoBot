@@ -29,7 +29,7 @@ import top.spco.user.UserOperationException;
  * @version 2.0.0
  * @since 0.1.0
  */
-public final class SignCommand extends AbstractCommand {
+public class SignCommand extends AbstractCommand {
     @Override
     public String[] getLabels() {
         return new String[]{"sign"};

@@ -15,6 +15,7 @@
  */
 package top.spco.service.command;
 
+import org.checkerframework.checker.index.qual.PolyUpperBound;
 import top.spco.SpCoBot;
 import top.spco.api.Bot;
 import top.spco.api.Interactive;
@@ -27,7 +28,6 @@ import top.spco.service.command.commands.valorant.ValorantCommand;
 import top.spco.user.BotUser;
 import top.spco.user.BotUsers;
 import top.spco.user.UserFetchException;
-import top.spco.util.ArrayUtils;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -183,7 +183,7 @@ public class CommandDispatcher {
                                     case TEXT -> meta.argument(index);
                                     case SELECTION -> {
                                         String userSend = meta.argument(index);
-                                        if (!ArrayUtils.contains(param.options, userSend)) {
+                                        if (!contains(param.options, userSend)) {
                                             throw CommandSyntaxException.error("未知的" + param.name, usage.getLabel(), args, index);
                                         }
                                     }
@@ -217,6 +217,37 @@ public class CommandDispatcher {
                 from.handleException(message, e);
             }
         }
+    }
+
+    public static boolean contains(final Object[] array, final Object objectToFind) {
+        return indexOf(array, objectToFind) != -1;
+    }
+
+    public static int indexOf(final Object[] array, final Object objectToFind) {
+        return indexOf(array, objectToFind, 0);
+    }
+
+    public static int indexOf(final Object[] array, final Object objectToFind, int startIndex) {
+        if (array == null) {
+            return -1;
+        }
+        if (startIndex < 0) {
+            startIndex = 0;
+        }
+        if (objectToFind == null) {
+            for (int i = startIndex; i < array.length; i++) {
+                if (array[i] == null) {
+                    return i;
+                }
+            }
+        } else {
+            for (int i = startIndex; i < array.length; i++) {
+                if (objectToFind.equals(array[i])) {
+                    return i;
+                }
+            }
+        }
+        return -1;
     }
 
     /**
