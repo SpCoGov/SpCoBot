@@ -112,14 +112,11 @@ public interface Command {
      * @param user    命令的发送用户
      * @param message 原始消息
      * @param time    命令发送的时间
-     * @param command 命令的原始文本
-     * @param label   触发命令的标签
-     * @param args    触发命令提交的参数
      * @param meta    命令的元数据
      * @throws CommandSyntaxException 用户调用命令发生语法错误时抛出
      * @see CommandEvents
      */
-    void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) throws CommandSyntaxException;
+    void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, CommandMeta meta, String usageName);
 
     /**
      * 在帮助列表是否可见

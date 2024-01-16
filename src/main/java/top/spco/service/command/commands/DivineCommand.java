@@ -56,14 +56,14 @@ public class DivineCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
+    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, CommandMeta meta, String usageName) {
         if (usageName.equals("占卜")) {
             LocalDate today = DateUtils.today();
             try {
                 BigDecimal hundred = new BigDecimal("100.00");
                 StringBuilder sb = new StringBuilder();
                 sb.append("你好，").append(user.getId()).append("\n");
-                if (args.length == 0) {
+                if (meta.getArgs().length == 0) {
                     BigDecimal probability = getProbability(user.getId() + "在" + today);
                     String fortune = getFortune(probability.doubleValue());
                     sb.append("汝的今日运势：").append(fortune).append("\n");
@@ -73,7 +73,7 @@ public class DivineCommand extends AbstractCommand {
                         sb.append("汝今天行大运概率是 ").append(hundred.subtract(probability)).append("%");
                     }
                 } else {
-                    String event = args[0];
+                    String event = meta.argument(0);
                     sb.append("所求事项：").append(event).append("\n");
                     if (isHentai(event)) {
                         if (randomBoolean(user.getId() + "在" + today + "做" + event)) {

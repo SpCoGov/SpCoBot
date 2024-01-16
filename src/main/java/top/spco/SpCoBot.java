@@ -159,8 +159,8 @@ public class SpCoBot {
                 try {
                     CommandMeta meta = new CommandMeta(context, message);
                     if (meta.getArgs() != null) {
-                        CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs(), meta);
-                        CommandEvents.FRIEND_COMMAND.invoker().onFriendCommand(bot, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs(), meta);
+                        CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, meta);
+                        CommandEvents.FRIEND_COMMAND.invoker().onFriendCommand(bot, sender, message, time, meta);
                     }
                 } catch (CommandSyntaxException e) {
                     sender.handleException(message, e.getMessage());
@@ -178,8 +178,8 @@ public class SpCoBot {
                 try {
                     CommandMeta meta = new CommandMeta(context, message);
                     if (meta.getArgs() != null) {
-                        CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs(), meta);
-                        CommandEvents.GROUP_COMMAND.invoker().onGroupCommand(bot, source, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs(), meta);
+                        CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, meta);
+                        CommandEvents.GROUP_COMMAND.invoker().onGroupCommand(bot, source, sender, message, time, meta);
                     }
                 } catch (CommandSyntaxException e) {
                     source.handleException(message, e.getMessage());
@@ -191,7 +191,7 @@ public class SpCoBot {
                 try {
                     BotUser botUser = BotUsers.getOrCreate(sender.getId());
                     if (command.hasPermission(botUser)) {
-                        command.onCommand(bot, source, sender, botUser, message, time, context, "sign", new String[]{}, new CommandMeta(context, message), command.getUsages().get(0).name);
+                        command.onCommand(bot, source, sender, botUser, message, time, new CommandMeta(context, message), command.getUsages().get(0).name);
                     }
                 } catch (Exception e) {
                     source.quoteReply(message, "SpCoBot获取用户时失败: \n" + ExceptionUtils.getStackTraceAsString(e));
@@ -203,7 +203,7 @@ public class SpCoBot {
                 try {
                     BotUser botUser = BotUsers.getOrCreate(sender.getId());
                     if (command.hasPermission(botUser)) {
-                        command.onCommand(bot, source, sender, botUser, message, time, context, "getme", new String[]{}, new CommandMeta(context, message), command.getUsages().get(0).name);
+                        command.onCommand(bot, source, sender, botUser, message, time, new CommandMeta(context, message), command.getUsages().get(0).name);
                     }
                 } catch (Exception e) {
                     source.quoteReply(message, "SpCoBot获取用户时失败: \n" + ExceptionUtils.getStackTraceAsString(e));
@@ -222,8 +222,8 @@ public class SpCoBot {
                 try {
                     CommandMeta meta = new CommandMeta(context, message);
                     if (meta.getArgs() != null) {
-                        CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs(), meta);
-                        CommandEvents.GROUP_TEMP_COMMAND.invoker().onGroupTempCommand(bot, source, message, time, meta.getCommand(), meta.getLabel(), meta.getArgs(), meta);
+                        CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, meta);
+                        CommandEvents.GROUP_TEMP_COMMAND.invoker().onGroupTempCommand(bot, source, message, time, meta);
                     }
                 } catch (CommandSyntaxException e) {
                     source.handleException(message, e.getMessage());
@@ -272,7 +272,7 @@ public class SpCoBot {
         return settings;
     }
 
-    public static SpCoBot getInstance() {
+    public synchronized static SpCoBot getInstance() {
         if (instance == null) {
             instance = new SpCoBot();
         }
@@ -286,7 +286,7 @@ public class SpCoBot {
         var cv = getVersionNumber(currentVersion);
         var rv = getVersionNumber(SpCoBot.OLDEST_SUPPORTED_CONFIG_VERSION);
         for (int i = 0; i < 3; i++) {
-            if (cv[i] > rv[i]){
+            if (cv[i] > rv[i]) {
                 return false;
             }
         }

@@ -49,7 +49,7 @@ public class BalancetopCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
+    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, CommandMeta meta, String usageName) {
         if (usageName.equals("查看海绵山币排行榜")) {
             try {
                 List<Map.Entry<Long, Integer>> topRecords = new ArrayList<>(getRecords().entrySet());

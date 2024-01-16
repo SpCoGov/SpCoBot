@@ -15,7 +15,6 @@
  */
 package top.spco.service.command;
 
-import org.checkerframework.checker.index.qual.PolyUpperBound;
 import top.spco.SpCoBot;
 import top.spco.api.Bot;
 import top.spco.api.Interactive;
@@ -52,7 +51,7 @@ public class CommandDispatcher {
     public static final char USAGE_OR = '|';
     private static CommandDispatcher instance;
     private static boolean registered = false;
-    private final List<Command> allCommands = new ArrayList<>();
+    private final Set<Command> allCommands = new HashSet<>();
     private final Map<String, Command> friendCommands = new HashMap<>();
     private final Map<String, Command> groupTempCommands = new HashMap<>();
     private final Map<String, Command> groupCommands = new HashMap<>();
@@ -104,39 +103,36 @@ public class CommandDispatcher {
      * 获取所有已注册的群组命令
      */
     public Command getGroupCommand(String label) {
-        if (groupCommands.containsKey(label)) {
-            return groupCommands.get(label);
-        }
-        return null;
+        return groupCommands.get(label);
     }
 
     private void init() {
-        CommandEvents.FRIEND_COMMAND.register((bot, interactor, message, time, command, label, args, meta) -> {
+        CommandEvents.FRIEND_COMMAND.register((bot, interactor, message, time, meta) -> {
             if (SpCoBot.getInstance().chatDispatcher.isInChat(interactor, ChatType.FRIEND)) {
                 return;
             }
-            callCommand(friendCommands, label, interactor, interactor, message, bot, time, command, args, meta);
+            callCommand(friendCommands, interactor, interactor, message, bot, time, meta);
         });
-        CommandEvents.GROUP_COMMAND.register((bot, from, sender, message, time, command, label, args, meta) -> {
+        CommandEvents.GROUP_COMMAND.register((bot, from, sender, message, time, meta) -> {
             if (SpCoBot.getInstance().chatDispatcher.isInChat(from, ChatType.GROUP)) {
                 return;
             }
-            callCommand(groupCommands, label, from, sender, message, bot, time, command, args, meta);
+            callCommand(groupCommands, from, sender, message, bot, time, meta);
         });
-        CommandEvents.GROUP_TEMP_COMMAND.register((bot, interactor, message, time, command, label, args, meta) -> {
+        CommandEvents.GROUP_TEMP_COMMAND.register((bot, interactor, message, time, meta) -> {
             if (SpCoBot.getInstance().chatDispatcher.isInChat(interactor, ChatType.GROUP_TEMP)) {
                 return;
             }
-            callCommand(groupTempCommands, label, interactor, interactor, message, bot, time, command, args, meta);
+            callCommand(groupTempCommands, interactor, interactor, message, bot, time, meta);
         });
     }
 
-    private void callCommand(Map<String, Command> targetCommands, String label, Interactive<?> from, User<?> sender, Message<?> message, Bot<?> bot, int time, String command, String[] args, CommandMeta meta) {
+    private void callCommand(Map<String, Command> targetCommands, Interactive<?> from, User<?> sender, Message<?> message, Bot<?> bot, int time, CommandMeta meta) {
         // 先检测用户提交的命令是否被注册
-        if (targetCommands.containsKey(label)) {
+        if (targetCommands.containsKey(meta.getLabel())) {
             try {
                 // 获取命令实例和发送者和发送者的用户实例
-                Command object = targetCommands.get(label);
+                Command object = targetCommands.get(meta.getLabel());
                 BotUser user = BotUsers.getOrCreate(sender.getId());
                 // 先检测发送者是否有权限
                 try {
@@ -164,11 +160,11 @@ public class CommandDispatcher {
                         minParamSize -= 1;
                     }
                     // 若实际提交的参数数量小于最少参数数量或大于用法的要求参数数量，跳过这个参数
-                    if (args.length < minParamSize) {
-                        lastException = CommandSyntaxException.unknownArgument(usage.getLabel(), args, args.length - 1);
+                    if (meta.getArgs().length < minParamSize) {
+                        lastException = CommandSyntaxException.unknownArgument(usage.getLabel(), meta.getArgs(), meta.getArgs().length - 1);
                         continue;
-                    } else if (args.length > usage.params.size()) {
-                        lastException = CommandSyntaxException.expectedSeparator(usage.getLabel(), args, args.length - 1);
+                    } else if (meta.getArgs().length > usage.params.size()) {
+                        lastException = CommandSyntaxException.expectedSeparator(usage.getLabel(), meta.getArgs(), meta.getArgs().length - 1);
                         continue;
                     }
                     // 判断用法的每个参数是否与用户提交的匹配
@@ -184,7 +180,7 @@ public class CommandDispatcher {
                                     case SELECTION -> {
                                         String userSend = meta.argument(index);
                                         if (!contains(param.options, userSend)) {
-                                            throw CommandSyntaxException.error("未知的" + param.name, usage.getLabel(), args, index);
+                                            throw CommandSyntaxException.error("未知的" + param.name, usage.getLabel(), meta.getArgs(), index);
                                         }
                                     }
                                     case TARGET_USER_ID -> {
@@ -192,7 +188,7 @@ public class CommandDispatcher {
                                             meta.userIdArgument(index);
                                         } catch (Exception e) {
                                             if (SpCoBot.getInstance().getMessageService().getQuote(message) == null) {
-                                                throw CommandSyntaxException.error("需要用户ID或@一位用户或在回复时发送这条命令", usage.getLabel(), args, index);
+                                                throw CommandSyntaxException.error("需要用户ID或@一位用户或在回复时发送这条命令", usage.getLabel(), meta.getArgs(), index);
                                             }
                                         }
                                     }
@@ -205,7 +201,7 @@ public class CommandDispatcher {
                         continue;
                     }
                     // 如用户的提交参数符合用法需求，退出循环并交由命令对象处理
-                    object.onCommand(bot, from, sender, user, message, time, command, label, args, meta, usage.name);
+                    object.onCommand(bot, from, sender, user, message, time, meta, usage.name);
                     return;
                 }
                 // 用户提交的参数不符合命令的任何用法
@@ -253,7 +249,7 @@ public class CommandDispatcher {
     /**
      * 获取{@link CommandDispatcher}单例
      */
-    public static CommandDispatcher getInstance() {
+    public synchronized static CommandDispatcher getInstance() {
         if (instance == null) {
             instance = new CommandDispatcher();
         }

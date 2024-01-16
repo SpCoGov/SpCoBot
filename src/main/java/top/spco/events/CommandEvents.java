@@ -32,9 +32,9 @@ public class CommandEvents {
     /**
      * Called when a command is received.
      */
-    public static final Event<Command> COMMAND = EventFactory.createArrayBacked(Command.class, callbacks -> (bot, from, sender, message, time, command, label, args, meta) -> {
+    public static final Event<Command> COMMAND = EventFactory.createArrayBacked(Command.class, callbacks -> (bot, from, sender, message, time, meta) -> {
         for (Command event : callbacks) {
-            event.onCommand(bot, from, sender, message, time, command, label, args, meta);
+            event.onCommand(bot, from, sender, message, time, meta);
         }
     });
 
@@ -48,20 +48,17 @@ public class CommandEvents {
          * @param sender  命令的发送者
          * @param message 原始消息
          * @param time    命令发送的时间
-         * @param command 命令的原始文本 (如 {@code "/command a b c"} )
-         * @param label   命令的类型 (如 {@code "command"} )
-         * @param args    命令的参数 (如 {@code ["a", "b", "c"]) }
          * @param meta    命令的元数据
          */
-        void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, Message<?> message, int time, String command, String label, String[] args, CommandMeta meta);
+        void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, Message<?> message, int time, CommandMeta meta);
     }
 
     /**
      * Called when a friend command is received.
      */
-    public static final Event<FriendCommand> FRIEND_COMMAND = EventFactory.createArrayBacked(FriendCommand.class, callbacks -> (bot, interactor, message, time, command, label, args, meta) -> {
+    public static final Event<FriendCommand> FRIEND_COMMAND = EventFactory.createArrayBacked(FriendCommand.class, callbacks -> (bot, interactor, message, time, meta) -> {
         for (FriendCommand event : callbacks) {
-            event.onFriendCommand(bot, interactor, message, time, command, label, args, meta);
+            event.onFriendCommand(bot, interactor, message, time, meta);
         }
     });
 
@@ -74,20 +71,17 @@ public class CommandEvents {
          * @param interactor 命令的发送者
          * @param message    原始消息
          * @param time       命令发送的时间
-         * @param command    命令的原始文本 (如 {@code "/command a b c"} )
-         * @param label      命令的类型 (如 {@code "command"} )
-         * @param args       命令的参数 (如 {@code ["a", "b", "c"]) }
          * @param meta       命令的元数据
          */
-        void onFriendCommand(Bot<?> bot, Friend<?> interactor, Message<?> message, int time, String command, String label, String[] args, CommandMeta meta);
+        void onFriendCommand(Bot<?> bot, Friend<?> interactor, Message<?> message, int time, CommandMeta meta);
     }
 
     /**
      * Called when a group command is received.
      */
-    public static final Event<GroupCommand> GROUP_COMMAND = EventFactory.createArrayBacked(GroupCommand.class, callbacks -> (bot, from, sender, message, time, command, label, args, meta) -> {
+    public static final Event<GroupCommand> GROUP_COMMAND = EventFactory.createArrayBacked(GroupCommand.class, callbacks -> (bot, from, sender, message, time, meta) -> {
         for (GroupCommand event : callbacks) {
-            event.onGroupCommand(bot, from, sender, message, time, command, label, args, meta);
+            event.onGroupCommand(bot, from, sender, message, time, meta);
         }
     });
 
@@ -101,20 +95,17 @@ public class CommandEvents {
          * @param sender  命令的发送者
          * @param time    命令发送的时间
          * @param message 原始消息
-         * @param command 命令的原始文本 (如 {@code "/command a b c"} )
-         * @param label   命令的类型 (如 {@code "command"} )
-         * @param args    命令的参数 (如 {@code ["a", "b", "c"]) }
          * @param meta    命令的元数据
          */
-        void onGroupCommand(Bot<?> bot, Group<?> from, Member<?> sender, Message<?> message, int time, String command, String label, String[] args, CommandMeta meta);
+        void onGroupCommand(Bot<?> bot, Group<?> from, Member<?> sender, Message<?> message, int time, CommandMeta meta);
     }
 
     /**
      * Called when a group-temp command is received.
      */
-    public static final Event<GroupTempCommand> GROUP_TEMP_COMMAND = EventFactory.createArrayBacked(GroupTempCommand.class, callbacks -> (bot, interactor, message, time, command, label, args, meta) -> {
+    public static final Event<GroupTempCommand> GROUP_TEMP_COMMAND = EventFactory.createArrayBacked(GroupTempCommand.class, callbacks -> (bot, interactor, message, time, meta) -> {
         for (GroupTempCommand event : callbacks) {
-            event.onGroupTempCommand(bot, interactor, message, time, command, label, args, meta);
+            event.onGroupTempCommand(bot, interactor, message, time, meta);
         }
     });
 
@@ -127,11 +118,8 @@ public class CommandEvents {
          * @param interactor 命令的发送者
          * @param time       命令发送的时间
          * @param message    原始消息
-         * @param command    命令的原始文本 (如 {@code "/command a b c"} )
-         * @param label      命令的类型 (如 {@code "command"} )
-         * @param args       命令的参数 (如 {@code ["a", "b", "c"]) }
          * @param meta       命令的元数据
          */
-        void onGroupTempCommand(Bot<?> bot, Member<?> interactor, Message<?> message, int time, String command, String label, String[] args, CommandMeta meta);
+        void onGroupTempCommand(Bot<?> bot, Member<?> interactor, Message<?> message, int time, CommandMeta meta);
     }
 }

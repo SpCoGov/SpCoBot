@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
  * CAATP
  *
  * @author SpCo
- * @version 1.2.3
+ * @version 2.0.0
  * @since 0.1.0
  */
 public class CAATP {
@@ -141,7 +141,7 @@ public class CAATP {
         }
     }
 
-    public static CAATP getInstance() {
+    public synchronized static CAATP getInstance() {
         if (instance == null) {
             instance = new CAATP();
         }

@@ -42,7 +42,7 @@ public class DashScopeDispatcher {
         registered = true;
     }
 
-    public static DashScopeDispatcher getInstance() {
+    public synchronized static DashScopeDispatcher getInstance() {
         if (instance == null) {
             instance = new DashScopeDispatcher();
         }

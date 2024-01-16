@@ -194,18 +194,14 @@ public class CommandMeta {
     /**
      * 读取光标位置的字符
      */
-    public char peek() {
+    private char peek() {
         return command.charAt(cursor);
-    }
-
-    public char read() {
-        return command.charAt(cursor++);
     }
 
     /**
      * 将光标后移一位
      */
-    public void skip() {
+    private void skip() {
         cursor++;
     }
 

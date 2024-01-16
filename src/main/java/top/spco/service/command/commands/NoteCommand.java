@@ -56,7 +56,7 @@ public class NoteCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
+    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, CommandMeta meta, String usageName) {
         try {
             String context = Objects.requireNonNull(SpCoBot.getInstance().getMessageService().getQuote(message)).getRight().toMessageContext();
             if (!context.endsWith("，不打")) {

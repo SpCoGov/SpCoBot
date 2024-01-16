@@ -57,7 +57,7 @@ public class StatisticsDispatcher {
         return null;
     }
 
-    public static StatisticsDispatcher getInstance() {
+    public synchronized static StatisticsDispatcher getInstance() {
         if (instance == null) {
             instance = new StatisticsDispatcher();
         }

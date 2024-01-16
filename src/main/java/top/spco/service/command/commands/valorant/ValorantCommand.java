@@ -28,7 +28,10 @@ import top.spco.service.chat.Chat;
 import top.spco.service.chat.ChatBuilder;
 import top.spco.service.chat.ChatType;
 import top.spco.service.chat.Stage;
-import top.spco.service.command.*;
+import top.spco.service.command.AbstractCommand;
+import top.spco.service.command.CommandMeta;
+import top.spco.service.command.CommandParam;
+import top.spco.service.command.CommandUsage;
 import top.spco.service.command.util.PermissionsValidator;
 import top.spco.user.BotUser;
 
@@ -80,7 +83,7 @@ public class ValorantCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) throws CommandSyntaxException {
+    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, CommandMeta meta, String usageName) {
         switch (usageName) {
             case "登录拳头账户" -> {
                 if (from instanceof Group) {
@@ -221,7 +224,7 @@ public class ValorantCommand extends AbstractCommand {
                                                                 }
                                                                 toReply.append("\n");
                                                             }
-                                                            toReply.append("\n距商店刷新还剩" + (remainingTime / 3600.0) + "小时");
+                                                            toReply.append("\n距商店刷新还剩" + convertSecondsToDuration(remainingTime));
                                                             from.quoteReply(message, toReply);
                                                         }
                                                     } catch (Exception e) {
@@ -268,7 +271,7 @@ public class ValorantCommand extends AbstractCommand {
                             }
                             toReply.append("\n");
                         }
-                        toReply.append("\n距商店刷新还剩" + (remainingTime / 3600.0) + "小时");
+                        toReply.append("\n距商店刷新还剩" + convertSecondsToDuration(remainingTime));
                         from.quoteReply(message, toReply);
                         return;
                     }
@@ -346,5 +349,25 @@ public class ValorantCommand extends AbstractCommand {
     private boolean checkFileExists(String filePath) {
         File file = new File(filePath);
         return file.exists() && file.isFile();
+    }
+
+    private static String convertSecondsToDuration(int seconds) {
+        int hours = seconds / 3600;
+        seconds %= 3600;
+        int minutes = seconds / 60;
+        seconds %= 60;
+
+        StringBuilder duration = new StringBuilder();
+        if (hours > 0) {
+            duration.append(hours).append("小时");
+        }
+        if (minutes > 0) {
+            duration.append(minutes).append("分钟");
+        }
+        if (seconds > 0) {
+            duration.append(seconds).append("秒");
+        }
+
+        return duration.toString();
     }
 }

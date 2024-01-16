@@ -43,7 +43,7 @@ public class ChatDispatcher {
         }
     }
 
-    public static ChatDispatcher getInstance() {
+    public synchronized static ChatDispatcher getInstance() {
         if (instance == null) {
             instance = new ChatDispatcher();
         }
@@ -87,24 +87,11 @@ public class ChatDispatcher {
      * @return 对话对象，失败时返回null
      */
     public Chat getChat(Identifiable where, ChatType chatType) {
-        switch (chatType) {
-            case GROUP -> {
-                if (this.groupChats.containsKey(where.getId()) && this.groupChats.get(where.getId()) != null) {
-                    return this.groupChats.get(where.getId());
-                }
-            }
-            case FRIEND -> {
-                if (this.friendChats.containsKey(where.getId()) && this.friendChats.get(where.getId()) != null) {
-                    return this.friendChats.get(where.getId());
-                }
-            }
-            case GROUP_TEMP -> {
-                if (this.groupTempChats.containsKey(where.getId()) && this.groupTempChats.get(where.getId()) != null) {
-                    return this.groupTempChats.get(where.getId());
-                }
-            }
-        }
-        return null;
+        return switch (chatType) {
+            case GROUP -> groupChats.get(where.getId());
+            case FRIEND -> friendChats.get(where.getId());
+            case GROUP_TEMP -> groupTempChats.get(where.getId());
+        };
     }
 
     /**
@@ -130,21 +117,9 @@ public class ChatDispatcher {
      */
     public void stopChat(Identifiable where, ChatType chatType) {
         switch (chatType) {
-            case GROUP -> {
-                if (this.groupChats.containsKey(where.getId()) && this.groupChats.get(where.getId()) != null) {
-                    this.groupChats.put(where.getId(), null);
-                }
-            }
-            case FRIEND -> {
-                if (this.friendChats.containsKey(where.getId()) && this.friendChats.get(where.getId()) != null) {
-                    this.friendChats.put(where.getId(), null);
-                }
-            }
-            case GROUP_TEMP -> {
-                if (this.groupTempChats.containsKey(where.getId()) && this.groupTempChats.get(where.getId()) != null) {
-                    this.groupTempChats.put(where.getId(), null);
-                }
-            }
+            case GROUP -> this.groupChats.remove(where.getId());
+            case FRIEND -> this.friendChats.remove(where.getId());
+            case GROUP_TEMP -> this.groupTempChats.remove(where.getId());
         }
     }
 }

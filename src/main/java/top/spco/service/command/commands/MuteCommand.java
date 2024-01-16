@@ -46,7 +46,7 @@ public class MuteCommand extends GroupAbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
+    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, CommandMeta meta, String usageName) {
         try {
             long id = meta.targetUserIdArgument(0);
             NormalMember<?> target = PermissionsValidator.verifyMemberPermissions(from, user, message, id);

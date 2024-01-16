@@ -77,13 +77,13 @@ public class DataCommand extends AbstractCommand {
      * </pre>
      */
     @Override
-    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
+    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, CommandMeta meta, String usageName) {
         switch (usageName) {
             case "查询记录" -> {
-                String table = args[1];
-                String columns = args[4];
-                String whereClause = args[2];
-                String whereValues = args[3];
+                String table = meta.argument(1);
+                String columns = meta.argument(4);
+                String whereClause = meta.argument(2);
+                String whereValues = meta.argument(3);
                 try {
                     String value = SpCoBot.getInstance().getDataBase().selectString(table, columns, whereClause, whereValues);
                     from.quoteReply(message, "[告知] 您查询的数据为: " + value);
@@ -92,11 +92,11 @@ public class DataCommand extends AbstractCommand {
                 }
             }
             case "编辑记录" -> {
-                String table = args[1];
-                String columns = args[4];
-                String whereClause = args[2];
-                String whereValues = args[3];
-                String toChange = args[5];
+                String table = meta.argument(1);
+                String columns = meta.argument(4);
+                String whereClause = meta.argument(2);
+                String whereValues = meta.argument(3);
+                String toChange = meta.argument(5);
                 try {
                     String value = SpCoBot.getInstance().getDataBase().selectString(table, columns, whereClause, whereValues);
                     SpCoBot.getInstance().getDataBase().update("update " + table + " set " + columns + "=? where " + whereClause + "=?", toChange, whereValues);

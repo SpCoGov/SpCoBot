@@ -48,7 +48,7 @@ public final class UsageCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) throws CommandSyntaxException {
+    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, CommandMeta meta, String usageName) {
         var usages = SpCoBot.getInstance().getCommandDispatcher().getUsages(meta.argument(0), from);
         if (usages == null) {
             from.quoteReply(message, "命令不存在或定义域错误");

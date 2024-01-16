@@ -41,7 +41,7 @@ public final class HelpCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
+    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, CommandMeta meta, String usageName) {
         StringBuilder sb = new StringBuilder();
         for (String help : SpCoBot.getInstance().getCommandDispatcher().getHelpList()) {
             sb.append(help).append("\n");

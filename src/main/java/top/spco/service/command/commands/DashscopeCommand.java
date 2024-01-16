@@ -59,7 +59,7 @@ public class DashscopeCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
+    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, CommandMeta meta, String usageName) {
         if (usageName.equals(getDescriptions())) {
             if (!user.isPremium()) {
                 from.quoteReply(message, "仅Premium会员可使用此命令。");
@@ -67,7 +67,7 @@ public class DashscopeCommand extends AbstractCommand {
             }
             try {
                 DashScope dashScope = SpCoBot.getInstance().dashScopeDispatcher.getDashScopeOrCreate(user, from, message);
-                String request = args[0];
+                String request = meta.argument(0);
                 String result = dashScope.callWithMessage(request, 10000).getOutput().getChoices().get(0).getMessage().getContent();
                 dashScope.setLastMessage(from, message);
                 from.quoteReply(message, result);

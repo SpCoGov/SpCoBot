@@ -21,10 +21,13 @@ import java.util.Arrays;
  * 用于处理用户使用命令时的语法错误
  *
  * @author SpCo
- * @version 0.3.0
+ * @version 2.0.0
  * @since 0.3.0
  */
-public class CommandSyntaxException extends Exception {
+public class CommandSyntaxException extends RuntimeException {
+    /**
+     * 错误信息显示的上下文长度。默认 {@value}
+     */
     public static final int CONTEXT_AMOUNT = 10;
 
     private CommandSyntaxException(String message) {

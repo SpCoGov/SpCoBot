@@ -41,9 +41,10 @@ public final class AboutCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, String command, String label, String[] args, CommandMeta meta, String usageName) {
+    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, CommandMeta meta, String usageName) {
         if (usageName.equals("获取机器人信息")) {
-            String sb = "你好，这里是SpCoBot。" + "\n" + "Github: " + "https://github.com/SpCoGov/SpCoBot" + "\n" + "Version: " + SpCoBot.VERSION + "\n" + "Updated: " + SpCoBot.UPDATED_TIME + "\n";
+            String sb = "你好，这里是SpCoBot。" + "\n" + "Github: " + "https://github.com/SpCoGov/SpCoBot" + "\n" +
+                    "Version: " + SpCoBot.VERSION + "\n" + "Updated: " + SpCoBot.UPDATED_TIME + "\n";
             from.quoteReply(message, sb);
         }
 
