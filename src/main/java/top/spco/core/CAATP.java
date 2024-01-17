@@ -49,15 +49,16 @@ public class CAATP {
         }
         registered = true;
         CAATPEvents.RECEIVE.register(message -> {
-            SpCoBot.logger.info("收到CAATP发送的消息: " + message);
             if (message.equals("hello")) {
                 this.sendMessage("register qqspcobot");
+                return;
             }
+            SpCoBot.LOGGER.info("收到CAATP发送的消息: {}" ,message);
             if (message.equals("connected")) {
                 this.isConnected = true;
             }
         });
-        ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(2, new NamedThreadFactory("CAATP Reconnector"));
         executor.execute(this::autoReconnect);
         executor.scheduleAtFixedRate(this::sendHeartbeat, 0, nextOperationInterval(), TimeUnit.SECONDS);
     }
@@ -70,12 +71,13 @@ public class CAATP {
         isConnected = false;
         while (true)
             try {
-                SpCoBot.logger.info("开始尝试连接CAATP.");
+                SpCoBot.LOGGER.info("开始尝试连接CAATP。");
                 this.socket = new Socket("192.168.50.2", 8900);
                 this.out = new PrintWriter(new OutputStreamWriter(this.socket.getOutputStream(), StandardCharsets.UTF_8), true);
                 isConnected = true;
                 reconnectionAttempts = 0;
                 CAATPEvents.CONNECT.invoker().onConnect();
+                SpCoBot.LOGGER.info("已连接到CAATP。");
                 new Thread(() -> {
                     while (true) {
                         try {
@@ -87,7 +89,7 @@ public class CAATP {
                             String message = new String(buffer, 0, bytesRead, StandardCharsets.UTF_8);
                             CAATPEvents.RECEIVE.invoker().onReceive(message);
                         } catch (IOException e) {
-                            SpCoBot.logger.info("无法连接至CAATP: " + e.getMessage() + ", 将在" + nextOperationInterval() + "秒后重连.");
+                            SpCoBot.LOGGER.info("无法连接至CAATP: {}, 将在{}秒后重连。", e.getMessage(), nextOperationInterval());
                             this.isConnected = false;
                             reconnectionAttempts++;
                             try {
@@ -98,12 +100,12 @@ public class CAATP {
                             autoReconnect();
                         }
                     }
-                }).start();
+                }, "CAATP").start();
                 break;
             } catch (IOException e) {
                 isConnected = false;
                 reconnectionAttempts++;
-                SpCoBot.logger.info("无法连接至CAATP: " + e.getMessage() + ", 将在" + nextOperationInterval() + "秒后重连.");
+                SpCoBot.LOGGER.info("无法连接至CAATP: {}, 将在{}秒后重连。", e.getMessage(), nextOperationInterval());
                 try {
                     TimeUnit.SECONDS.sleep(nextOperationInterval()); // 等待一段时间后重试连接
                 } catch (InterruptedException ex) {

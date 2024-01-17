@@ -28,6 +28,7 @@ import java.security.SecureRandom;
  * @version 2.0.0
  * @since 0.1.0
  */
+@CommandMarker
 public class BanmeCommand extends GroupAbstractCommand {
     @Override
     public String[] getLabels() {

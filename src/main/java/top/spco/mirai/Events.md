@@ -34,9 +34,9 @@
     - 陌生人消息：StrangerMessagePostSendEvent
     - 其他客户端消息：OtherClientMessagePostSendEvent
 - 消息撤回: MessageRecallEvent
-    - 好友撤回: FriendRecall
-    - 群撤回: GroupRecall
-    - 群临时会话撤回: TempRecall
+    - [x] 好友撤回: FriendRecall
+    - [x] 群撤回: GroupRecall
+    - 群临时会话撤回: TempRecall ???
 - 图片上传前: BeforeImageUploadEvent
 - 图片上传完成: ImageUploadEvent
     - 图片上传成功: Succeed

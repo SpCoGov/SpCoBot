@@ -30,6 +30,7 @@ import java.util.List;
  * @version 2.0.0
  * @since 1.2.2
  */
+@CommandMarker
 public final class UsageCommand extends AbstractCommand {
 
     @Override

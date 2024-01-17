@@ -15,8 +15,12 @@
  */
 package top.spco;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import top.spco.api.Bot;
-import top.spco.api.Logger;
+import top.spco.api.Friend;
+import top.spco.api.Group;
+import top.spco.api.NormalMember;
 import top.spco.api.message.service.MessageService;
 import top.spco.core.CAATP;
 import top.spco.core.config.BotSettings;
@@ -40,9 +44,6 @@ import top.spco.user.BotUsers;
 import top.spco.util.ExceptionUtils;
 
 import java.io.File;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  * <pre>
@@ -73,9 +74,10 @@ import java.util.concurrent.TimeUnit;
  */
 public class SpCoBot {
     private static SpCoBot instance;
-    public static Logger logger;
+    public static final Logger LOGGER = LogManager.getLogger("SpCoBot");
     public static File dataFolder;
     public static File configFolder;
+    public static File pluginFile;
     public long botId;
     public long botOwnerId;
     public long testGroupId;
@@ -99,8 +101,8 @@ public class SpCoBot {
      * <b>更新版本号(仅限核心的 Feature)时请不要忘记在 build.gradle 中同步修改版本号</b>
      */
     public static final String MAIN_VERSION = "2.0.0";
-    public static final String VERSION = "v" + MAIN_VERSION + "-1";
-    public static final String UPDATED_TIME = "2023-01-14 09:37";
+    public static final String VERSION = "v" + MAIN_VERSION + "-5";
+    public static final String UPDATED_TIME = "2023-01-18 00:34";
     public static final String OLDEST_SUPPORTED_CONFIG_VERSION = "0.3.2";
 
     private SpCoBot() {
@@ -115,7 +117,7 @@ public class SpCoBot {
         new AutoAgreeValorant();
         this.settings = new Settings(configFolder.getAbsolutePath() + File.separator + "config.yaml");
         if (expired(settings.getStringProperty(SettingsVersion.CONFIG_VERSION))) {
-            logger.error("配置版本过时，请备份配置后删除配置重新启动机器人以生成新配置。");
+            LOGGER.error("配置版本过时，请备份配置后删除配置重新启动机器人以生成新配置。");
             System.exit(-2);
         }
         botId = settings.getLongProperty(BotSettings.BOT_ID);
@@ -129,28 +131,44 @@ public class SpCoBot {
             return;
         }
         registered = true;
-        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-        // 每秒钟调用一次
-        scheduler.scheduleAtFixedRate(() -> PeriodicSchedulerEvents.SECOND_TICK.invoker().onSecondTick(), 0, 1, TimeUnit.SECONDS);
-        // 每分钟调用一次
-        scheduler.scheduleAtFixedRate(() -> PeriodicSchedulerEvents.MINUTE_TICK.invoker().onMinuteTick(), 0, 1, TimeUnit.MINUTES);
-        // 插件启用时
-        PluginEvents.ENABLE_PLUGIN_TICK.register(this::onEnable);
-        // 插件禁用时
-        PluginEvents.DISABLE_PLUGIN_TICK.register(this::onDisable);
+        MessageEvents.FRIEND_MESSAGE_RECALL.register((bot1, sender, operator, recalledMessage) -> LOGGER.info("{}({})撤回了一条自己的消息: {}", operator.getRemark(), operator.getId(), recalledMessage.getOriginalMessage().toMessageContext()));
+        MessageEvents.GROUP_MESSAGE_RECALL.register((bot1, source, sender, operator, recalledMessage) -> LOGGER.info("{}({})在{}({})撤回了一条{}({})的消息: {}", operator.getRemark(),operator.getId(), source.getName(), source.getId(), sender.getNick(), sender.getId(), recalledMessage.getOriginalMessage().toMessageContext()));
+        BotEvents.ONLINE_TICK.register(bot1 -> {
+            long id = bot1.getId();
+            LOGGER.info("机器人({})上线。", id);
+            if (id != botId) {
+                LOGGER.error("登录的账号与配置项不匹配。登录的账号: {}, 配置的账号: {}", id, botId);
+                System.exit(-2);
+            }
+        });
+        BotEvents.OFFLINE_TICK.register(bot1 -> LOGGER.info("机器人({})下线。", bot1.getId()));
         // 机器人被拍一拍时的提示
-        BotEvents.NUDGED_TICK.register((from, target, subject, action, suffix) -> {
+        UserEvents.NUDGED_TICK.register((bot, from, target, interactive, action, suffix) -> {
+            if (interactive instanceof Friend<?>) {
+                LOGGER.info("好友{}({}){}{}({}){}", (from instanceof Bot<?> ? "机器人" : ((Friend<?>) from).getNick()), from.getId(), action, (target instanceof Bot<?> ? "机器人" : ((Friend<?>) target).getNick()), target.getId(), suffix);
+            } else if (interactive instanceof Group<?> group) {
+                LOGGER.info("{}({})在{}({}){}{}({}){}", (from instanceof Bot<?> ? "机器人" : ((NormalMember<?>) from).getNick()), from.getId(), group.getName(), group.getId(), action, (target instanceof Bot<?> ? "机器人" : ((NormalMember<?>) target).getNick()), target.getId(), suffix);
+            } else if (interactive instanceof NormalMember<?>) {
+                LOGGER.info("{}({}){}{}({}){}", (from instanceof Bot<?> ? "机器人" : ((NormalMember<?>) from).getNick()), from.getId(), action, (target instanceof Bot<?> ? "机器人" : ((NormalMember<?>) target).getNick()), target.getId(), suffix);
+            }
             if (target.getId() == this.botId) {
-                subject.sendMessage("机器人正常运行中");
+                interactive.sendMessage("机器人正常运行中。");
             }
         });
         // 自动接受好友请求
-        FriendEvents.REQUESTED_AS_FRIEND.register((eventId, message, fromId, fromGroupId, fromGroup, behavior) -> behavior.accept());
+        FriendEvents.REQUESTED_AS_FRIEND.register((eventId, message, fromId, fromGroupId, fromGroup, behavior) -> {
+            LOGGER.info("收到了{}的好友请求。", fromId);
+            behavior.accept();
+        });
         // 自动接受群邀请
-        GroupEvents.INVITED_JOIN_GROUP.register((eventId, invitorId, groupId, invitor, behavior) -> behavior.accept());
-        // 处理好友命令
+        GroupEvents.INVITED_JOIN_GROUP.register((eventId, invitorId, groupId, invitor, behavior) -> {
+            LOGGER.info("收到了{}({})的加入群{}的请求。", invitor.getNick(), invitorId, groupId);
+            behavior.accept();
+        });
+        // 处理好友消息
         MessageEvents.FRIEND_MESSAGE.register((bot, sender, message, time) -> {
             String context = message.toMessageContext();
+            LOGGER.info("收到了{}({})的好友消息: {}", sender.getNick(), sender.getId(), context);
             if (this.chatDispatcher.isInChat(sender, ChatType.FRIEND)) {
                 this.chatDispatcher.onMessage(ChatType.FRIEND, bot, sender, sender, message, time);
                 return;
@@ -167,9 +185,10 @@ public class SpCoBot {
                 }
             }
         });
-        // 处理群聊命令
+        // 处理群聊消息
         MessageEvents.GROUP_MESSAGE.register((bot, source, sender, message, time) -> {
             String context = message.toMessageContext();
+            LOGGER.info("在{}({})收到了{}({})的消息: {}", source.getName(), source.getId(), sender.getNick(), sender.getId(), context);
             if (this.chatDispatcher.isInChat(source, ChatType.GROUP)) {
                 this.chatDispatcher.onMessage(ChatType.GROUP, bot, source, sender, message, time);
                 return;
@@ -211,9 +230,10 @@ public class SpCoBot {
                 return;
             }
         });
-        // 处理群临时消息命令
+        // 处理群临时消息消息
         MessageEvents.GROUP_TEMP_MESSAGE.register((bot, source, sender, message, time) -> {
             String context = message.toMessageContext();
+            LOGGER.info("收到了{}({})的{}({})的群临时消息: {}", sender.getNick(), sender.getId(), sender.getGroup().getName(), sender.getGroup().getId(), context);
             if (this.chatDispatcher.isInChat(source, ChatType.GROUP_TEMP)) {
                 this.chatDispatcher.onMessage(ChatType.GROUP_TEMP, bot, source, sender, message, time);
                 return;
@@ -246,14 +266,6 @@ public class SpCoBot {
 
     public DataBase getDataBase() {
         return dataBase;
-    }
-
-    private void onEnable() {
-        logger.info("SpCoBot已上线");
-    }
-
-    private void onDisable() {
-        logger.info("SpCoBot已下线");
     }
 
     public void setMessageService(MessageService messageService) {

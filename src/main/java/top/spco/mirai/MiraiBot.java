@@ -34,6 +34,16 @@ class MiraiBot extends Bot<net.mamoe.mirai.Bot> {
     }
 
     @Override
+    public String getNick() {
+        return asFriend().getNick();
+    }
+
+    @Override
+    public Friend<net.mamoe.mirai.contact.Friend> asFriend() {
+        return new MiraiFriend(wrapped().getAsFriend());
+    }
+
+    @Override
     public FriendGroups<net.mamoe.mirai.contact.friendgroup.FriendGroups> getFriendGroups() {
         return new MiraiFriendGroups(this.wrapped().getFriendGroups());
     }

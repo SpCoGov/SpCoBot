@@ -32,6 +32,7 @@ import java.util.List;
  * @version 2.0.0
  * @since 0.3.0
  */
+@CommandMarker
 public class GetotherCommand extends AbstractCommand {
     @Override
     public String[] getLabels() {

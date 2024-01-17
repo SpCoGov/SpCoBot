@@ -23,19 +23,17 @@ import com.alibaba.dashscope.common.Role;
 import com.alibaba.dashscope.exception.ApiException;
 import com.alibaba.dashscope.exception.InputRequiredException;
 import com.alibaba.dashscope.exception.NoApiKeyException;
-import org.jetbrains.annotations.NotNull;
 import top.spco.SpCoBot;
 import top.spco.api.Interactive;
 import top.spco.api.message.Message;
+import top.spco.core.NamedThreadFactory;
 import top.spco.user.BotUser;
 import top.spco.util.tuple.MutablePair;
 
 import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 用户个人的DashScope
@@ -54,16 +52,7 @@ public class DashScope {
     public DashScope(BotUser user, Interactive<?> from, Message<?> message) {
         this.userId = user.getId();
         setLastMessage(from, message);
-        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1, new ThreadFactory() {
-            private final AtomicInteger threadNumber = new AtomicInteger(1);
-
-            @Override
-            public Thread newThread(@NotNull Runnable r) {
-                Thread thread = new Thread(r);
-                thread.setName("DashScopeTimer-" + threadNumber.getAndIncrement());
-                return thread;
-            }
-        });
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1, new NamedThreadFactory("DashScope Destroyer"));
         // 创建一个定时任务，每隔1秒执行一次
         scheduler.scheduleAtFixedRate(() -> {
             if (timer > 0) {

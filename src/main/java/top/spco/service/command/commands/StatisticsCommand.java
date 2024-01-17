@@ -18,9 +18,11 @@ package top.spco.service.command.commands;
 import top.spco.SpCoBot;
 import top.spco.api.*;
 import top.spco.api.message.Message;
+import top.spco.core.NamedThreadFactory;
 import top.spco.service.RegistrationException;
 import top.spco.service.chat.*;
 import top.spco.service.command.AbstractCommand;
+import top.spco.service.command.CommandMarker;
 import top.spco.service.command.CommandMeta;
 import top.spco.service.command.CommandScope;
 import top.spco.service.statistics.Statistics;
@@ -37,6 +39,7 @@ import java.util.concurrent.TimeUnit;
  * @version 2.0.0
  * @since 0.1.1
  */
+@CommandMarker
 public class StatisticsCommand extends AbstractCommand {
     @Override
     public String[] getLabels() {
@@ -249,7 +252,7 @@ public class StatisticsCommand extends AbstractCommand {
                                     SpCoBot.getInstance().statisticsDispatcher.register(group, statistics[0]);
                                     statistics[0] = null;
                                     Statistics statisticsFromManager = SpCoBot.getInstance().statisticsDispatcher.getStatistics(bot.getGroup(groupId[0]));
-                                    ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+                                    ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1, new NamedThreadFactory("Statistics Timer"));
                                     Runnable delayedTask = () -> {
                                         try {
                                             StringBuilder sb2 = new StringBuilder("报名结束，以下为本次报名的统计信息：").append("\n");

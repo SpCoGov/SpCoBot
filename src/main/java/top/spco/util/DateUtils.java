@@ -23,6 +23,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * 用于处理日期和时间的工具类。
@@ -105,5 +107,14 @@ public class DateUtils {
         LocalDateTime currentDateTime = DateUtils.nowAtMinutePrecision();
         Duration duration = Duration.between(startDateTime, currentDateTime);
         return duration.toMinutes();
+    }
+
+    public static Date getTodayStart() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTime();
     }
 }

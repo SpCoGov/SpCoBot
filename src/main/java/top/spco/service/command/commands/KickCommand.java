@@ -28,6 +28,7 @@ import java.util.List;
  * @version 2.0.0
  * @since 0.3.3
  */
+@CommandMarker
 public class KickCommand extends GroupAbstractCommand {
     @Override
     public String[] getLabels() {

@@ -38,4 +38,6 @@ protected MessageSource(T object) {
      * 消息发送目标用户或群号码
      */
     public abstract long getTargetId();
+
+    public abstract Message<?> getOriginalMessage();
 }

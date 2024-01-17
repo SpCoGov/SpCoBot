@@ -68,7 +68,7 @@ public class PermissionsValidator {
             if (from instanceof Group<?> group) {
                 if (!group.getMember(user.getId()).getPermission().isOperator()) {
                     if (user.getPermission().getLevel() < UserPermission.ADMINISTRATOR.getLevel()) {
-                        from.quoteReply(message, "[告知] 您无权使用此命令.");
+                        from.quoteReply(message, "[告知] 您无权使用此命令。");
                         return null;
                     }
                 }
@@ -79,7 +79,7 @@ public class PermissionsValidator {
                 return null;
             }
         } catch (NullPointerException e) {
-            from.quoteReply(message, "[告知] 该用户不存在");
+            from.quoteReply(message, "[告知] 该用户不存在。");
             return null;
         }
         return null;

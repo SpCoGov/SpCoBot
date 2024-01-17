@@ -17,14 +17,13 @@ package top.spco.mirai;
 
 import net.mamoe.mirai.contact.ContactOrBot;
 import top.spco.api.Identifiable;
-import top.spco.api.Wrapper;
 
 /**
  * @author SpCo
  * @version 2.0.0
  * @since 0.1.0
  */
-class MiraiIdentifiable extends Wrapper<ContactOrBot> implements Identifiable {
+class MiraiIdentifiable extends Identifiable<ContactOrBot> {
     protected MiraiIdentifiable(ContactOrBot contactOrBot) {
         super(contactOrBot);
     }

@@ -25,6 +25,10 @@ import java.util.Arrays;
  * @since 0.3.0
  */
 public class CommandSyntaxException extends RuntimeException {
+    public static final String UNKNOWN_COMMAND = "未知或不完整的命令";
+    public static final String UNKNOWN_ARGUMENT = "错误的命令参数";
+    public static final String FAILED = "尝试执行该命令时发生意外错误";
+    public static final String EXPECTED_SEPARATOR = "预期以空格结束一个参数，但发现了尾随数据";
     /**
      * 错误信息显示的上下文长度。默认 {@value}
      */
@@ -34,14 +38,14 @@ public class CommandSyntaxException extends RuntimeException {
         super(message, null, true, true);
     }
 
-    public static final CommandSyntaxException DISPATCHER_UNKNOWN_COMMAND = new CommandSyntaxException(CommandReturn.UNKNOWN_COMMAND);
+    public static final CommandSyntaxException DISPATCHER_UNKNOWN_COMMAND = new CommandSyntaxException(UNKNOWN_COMMAND);
 
     public static CommandSyntaxException unknownArgument(String label, String[] args, int unknownArgIndex) {
-        return error(CommandReturn.UNKNOWN_ARGUMENT, label, args, unknownArgIndex);
+        return error(UNKNOWN_ARGUMENT, label, args, unknownArgIndex);
     }
 
     public static CommandSyntaxException expectedSeparator(String label, String[] args, int unknownArgIndex) {
-        return error(CommandReturn.EXPECTED_SEPARATOR, label, args, unknownArgIndex);
+        return error(EXPECTED_SEPARATOR, label, args, unknownArgIndex);
     }
 
     public static CommandSyntaxException error(String message, String label, String[] args, int unknownArgIndex) {

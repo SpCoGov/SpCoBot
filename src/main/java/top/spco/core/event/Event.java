@@ -46,6 +46,7 @@ public abstract class Event<T> {
      * @return The invoker instance.
      */
     public final T invoker() {
+        EventFactory.ensureEventThreadName();
         return invoker;
     }
 

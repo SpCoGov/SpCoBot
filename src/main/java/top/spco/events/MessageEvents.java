@@ -15,11 +15,9 @@
  */
 package top.spco.events;
 
-import top.spco.api.Bot;
-import top.spco.api.Friend;
-import top.spco.api.Group;
-import top.spco.api.Member;
+import top.spco.api.*;
 import top.spco.api.message.Message;
+import top.spco.api.message.MessageSource;
 import top.spco.core.event.Event;
 import top.spco.core.event.EventFactory;
 
@@ -88,5 +86,33 @@ public class MessageEvents {
     @FunctionalInterface
     public interface GroupMessagePostSend {
         void onGroupMessagePostSend(Bot<?> bot, Group<?> group, Message<?> message);
+    }
+
+    /**
+     * Called when a group message is recalled.
+     */
+    public static final Event<GroupMessageRecall> GROUP_MESSAGE_RECALL = EventFactory.createArrayBacked(GroupMessageRecall.class, callbacks -> (bot, source, sender, operator, message) -> {
+        for (GroupMessageRecall event : callbacks) {
+            event.onGroupMessageRecall(bot, source, sender, operator, message);
+        }
+    });
+
+    @FunctionalInterface
+    public interface GroupMessageRecall {
+        void onGroupMessageRecall(Bot<?> bot, Group<?> source, NormalMember<?> sender, NormalMember<?> operator, MessageSource<?> recalledMessage);
+    }
+
+    /**
+     * Called when a friend message is recalled.
+     */
+    public static final Event<FriendMessageRecall> FRIEND_MESSAGE_RECALL = EventFactory.createArrayBacked(FriendMessageRecall.class, callbacks -> (bot, sender, operator, message) -> {
+        for (FriendMessageRecall event : callbacks) {
+            event.onFriendMessageRecall(bot, sender, operator, message);
+        }
+    });
+
+    @FunctionalInterface
+    public interface FriendMessageRecall {
+        void onFriendMessageRecall(Bot<?> bot, Friend<?> sender, Friend<?> operator, MessageSource<?> recalledMessage);
     }
 }

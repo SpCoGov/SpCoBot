@@ -13,37 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco.api;
+package top.spco.service.command;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * 定义了记录日志的方法，提供了不同级别的日志记录能力
+ * {@code CommandMarker} 注解用于标记一个类作为命令。
+ * 使用此注解的类将被 {@code CommandDispatcher} 自动注册。
  *
+ * @apiNote 这个注解是为了简化命令类的标记和注册过程。
  * @author SpCo
- * @version 0.1.0
- * @since 0.1.0
+ * @version 2.0.0
+ * @since 2.0.0
  */
-public interface Logger {
-    void debug(String message);
-
-    void debug(Throwable e);
-
-    void debug(String message, Throwable e);
-
-    void info(String message);
-
-    void info(Throwable e);
-
-    void info(String message, Throwable e);
-
-    void warn(String message);
-
-    void warn(Throwable e);
-
-    void warn(String message, Throwable e);
-
-    void error(String message);
-
-    void error(Throwable e);
-
-    void error(String message, Throwable e);
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+public @interface CommandMarker {
 }

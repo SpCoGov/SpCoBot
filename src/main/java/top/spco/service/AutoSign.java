@@ -17,13 +17,13 @@ package top.spco.service;
 
 import top.spco.SpCoBot;
 import top.spco.api.Friend;
-import top.spco.events.PeriodicSchedulerEvents;
 import top.spco.user.BotUsers;
 import top.spco.util.DateUtils;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.time.format.DateTimeFormatter;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * 自动签到
@@ -41,31 +41,29 @@ public class AutoSign {
             return;
         }
         registered = true;
-        PeriodicSchedulerEvents.MINUTE_TICK.register(() -> {
-            try {
-                if (DateUtils.now().format(DateTimeFormatter.ofPattern("HH:mm")).equals("00:00")) {
-                    try {
-                        // 创建查询语句
-                        String sql = "SELECT id FROM user WHERE sign != ? AND premium = 1";
-                        try (PreparedStatement pstmt = SpCoBot.getInstance().getDataBase().getConn().prepareStatement(sql)) {
-                            pstmt.setString(1, DateUtils.today().toString());
-                            SpCoBot.getInstance().getDataBase().setParameters(pstmt);
-                            try (ResultSet rs = pstmt.executeQuery()) {
-                                while (rs.next()) {
-                                    long id = rs.getLong("id");
-                                    BotUsers.get(id).sign();
-                                }
+        Timer autoSign = new Timer("AutoSign", true);
+        autoSign.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    // 创建查询语句
+                    String sql = "SELECT id FROM user WHERE sign != ? AND premium = 1";
+                    try (PreparedStatement pstmt = SpCoBot.getInstance().getDataBase().getConn().prepareStatement(sql)) {
+                        pstmt.setString(1, DateUtils.today().toString());
+                        SpCoBot.getInstance().getDataBase().setParameters(pstmt);
+                        try (ResultSet rs = pstmt.executeQuery()) {
+                            while (rs.next()) {
+                                long id = rs.getLong("id");
+                                BotUsers.get(id).sign();
                             }
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        Friend friend = SpCoBot.getInstance().getBot().getFriend(SpCoBot.getInstance().botOwnerId);
-                        friend.handleException("自动签到时抛出了意料之外的异常", e);
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Friend friend = SpCoBot.getInstance().getBot().getFriend(SpCoBot.getInstance().botOwnerId);
+                    friend.handleException("自动签到时抛出了意料之外的异常", e);
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
-        });
+        }, DateUtils.getTodayStart(), 864000000L);
     }
 }

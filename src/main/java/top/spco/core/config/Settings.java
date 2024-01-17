@@ -57,24 +57,24 @@ public class Settings {
      * 加载配置项。如果配置文件不存在或为空，将创建一个带有默认值的配置文件。
      */
     public void loadSettings() {
-        SpCoBot.logger.info("正在加载配置项");
+        SpCoBot.LOGGER.info("正在加载配置项。");
         try (InputStream input = new FileInputStream(filePath)) {
             Yaml yaml = new Yaml();
             settings = yaml.load(input);
             if (settings == null) {
-                SpCoBot.logger.info("正在创建默认配置");
+                SpCoBot.LOGGER.info("正在创建默认配置。");
                 // 如果配置文件为空，创建一个带有默认值的配置文件
                 settings = getDefaultSettings();
                 saveSettings();
-                SpCoBot.logger.info("默认配置创建完成，请前往" + filePath + "修改配置文件。");
+                SpCoBot.LOGGER.info("默认配置创建完成，请前往{}修改配置文件。", filePath);
                 System.exit(-2);
             }
         } catch (IOException e) {
-            SpCoBot.logger.info("正在创建默认配置");
+            SpCoBot.LOGGER.info("正在创建默认配置。");
             // 如果文件不存在，创建一个带有默认值的配置文件
             settings = getDefaultSettings();
             saveSettings();
-            SpCoBot.logger.info("默认配置创建完成，请前往" + filePath + "修改配置文件。");
+            SpCoBot.LOGGER.info("默认配置创建完成，请前往{}修改配置文件。", filePath);
             System.exit(-2);
         }
     }

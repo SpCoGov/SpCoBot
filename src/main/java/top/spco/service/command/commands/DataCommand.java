@@ -20,10 +20,7 @@ import top.spco.api.Bot;
 import top.spco.api.Interactive;
 import top.spco.api.User;
 import top.spco.api.message.Message;
-import top.spco.service.command.AbstractCommand;
-import top.spco.service.command.CommandMeta;
-import top.spco.service.command.CommandParam;
-import top.spco.service.command.CommandUsage;
+import top.spco.service.command.*;
 import top.spco.user.BotUser;
 import top.spco.user.UserPermission;
 
@@ -35,6 +32,7 @@ import java.util.List;
  * @version 2.0.0
  * @since 0.1.0
  */
+@CommandMarker
 public class DataCommand extends AbstractCommand {
     @Override
     public String[] getLabels() {

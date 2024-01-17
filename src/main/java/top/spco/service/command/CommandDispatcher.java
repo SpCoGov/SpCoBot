@@ -15,6 +15,10 @@
  */
 package top.spco.service.command;
 
+import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
+import org.reflections.scanners.TypeAnnotationsScanner;
+import org.reflections.util.ConfigurationBuilder;
 import top.spco.SpCoBot;
 import top.spco.api.Bot;
 import top.spco.api.Interactive;
@@ -22,12 +26,14 @@ import top.spco.api.User;
 import top.spco.api.message.Message;
 import top.spco.events.CommandEvents;
 import top.spco.service.chat.ChatType;
-import top.spco.service.command.commands.*;
-import top.spco.service.command.commands.valorant.ValorantCommand;
+import top.spco.service.command.commands.HelpCommand;
 import top.spco.user.BotUser;
 import top.spco.user.BotUsers;
 import top.spco.user.UserFetchException;
 
+import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -51,6 +57,7 @@ public class CommandDispatcher {
     public static final char USAGE_OR = '|';
     private static CommandDispatcher instance;
     private static boolean registered = false;
+    private boolean frozen = false;
     private final Set<Command> allCommands = new HashSet<>();
     private final Map<String, Command> friendCommands = new HashMap<>();
     private final Map<String, Command> groupTempCommands = new HashMap<>();
@@ -67,28 +74,24 @@ public class CommandDispatcher {
     }
 
     private void registerCommands() {
-        List<Command> toBeRegistered = new ArrayList<>();
-        toBeRegistered.add(new InfoCommand());
-        toBeRegistered.add(new SignCommand());
-        toBeRegistered.add(new GetmeCommand());
-        toBeRegistered.add(new DataCommand());
-        toBeRegistered.add(new AboutCommand());
-        toBeRegistered.add(new DivineCommand());
-        toBeRegistered.add(new HelpCommand());
-        toBeRegistered.add(new BalancetopCommand());
-        toBeRegistered.add(new StatisticsCommand());
-        toBeRegistered.add(new BanmeCommand());
-        toBeRegistered.add(new DashscopeCommand());
-        toBeRegistered.add(new MuteCommand());
-        toBeRegistered.add(new UnmuteCommand());
-        toBeRegistered.add(new GetotherCommand());
-        toBeRegistered.add(new NoteCommand());
-        toBeRegistered.add(new KickCommand());
-        toBeRegistered.add(new MemoryCommand());
-        toBeRegistered.add(new UsageCommand());
-        toBeRegistered.add(new ValorantCommand());
+        long startTime = System.nanoTime();
+        Set<Command> toBeRegistered = new HashSet<>();
 
-        toBeRegistered.add(new TestCommand());
+        try {
+            URL url = SpCoBot.pluginFile.toURI().toURL();
+            Reflections reflections = new Reflections(new ConfigurationBuilder()
+                    .setScanners(new SubTypesScanner(false), new TypeAnnotationsScanner())
+                    .setUrls(url));
+            Set<Class<?>> annotatedClasses = reflections.getTypesAnnotatedWith(CommandMarker.class);
+            for (Class<?> cls : annotatedClasses) {
+                Command command = (Command) cls.getDeclaredConstructor().newInstance();
+                toBeRegistered.add(command);
+            }
+
+        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException |
+                 InvocationTargetException | MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
 
         for (var command : toBeRegistered) {
             try {
@@ -97,6 +100,9 @@ public class CommandDispatcher {
                 e.printStackTrace();
             }
         }
+        freeze();
+        long endTime = System.nanoTime();
+        SpCoBot.LOGGER.info("{}个命令注册完毕({}ms)!", toBeRegistered.size(), (endTime - startTime) / 1_000_000);
     }
 
     /**
@@ -137,7 +143,7 @@ public class CommandDispatcher {
                 // 先检测发送者是否有权限
                 try {
                     if (!object.hasPermission(user)) {
-                        from.quoteReply(message, "[告知] 您无权使用此命令.");
+                        from.quoteReply(message, "[告知] 您无权使用此命令。");
                         return;
                     }
                 } catch (SQLException e) {
@@ -216,34 +222,23 @@ public class CommandDispatcher {
     }
 
     public static boolean contains(final Object[] array, final Object objectToFind) {
-        return indexOf(array, objectToFind) != -1;
-    }
-
-    public static int indexOf(final Object[] array, final Object objectToFind) {
-        return indexOf(array, objectToFind, 0);
-    }
-
-    public static int indexOf(final Object[] array, final Object objectToFind, int startIndex) {
         if (array == null) {
-            return -1;
-        }
-        if (startIndex < 0) {
-            startIndex = 0;
+            return false;
         }
         if (objectToFind == null) {
-            for (int i = startIndex; i < array.length; i++) {
-                if (array[i] == null) {
-                    return i;
+            for (Object o : array) {
+                if (o == null) {
+                    return true;
                 }
             }
         } else {
-            for (int i = startIndex; i < array.length; i++) {
-                if (objectToFind.equals(array[i])) {
-                    return i;
+            for (Object o : array) {
+                if (objectToFind.equals(o)) {
+                    return true;
                 }
             }
         }
-        return -1;
+        return false;
     }
 
     /**
@@ -262,6 +257,9 @@ public class CommandDispatcher {
      * @param command 待注册的命令
      */
     public void registerCommand(Command command) throws CommandRegistrationException {
+        if (frozen) {
+            throw new IllegalStateException("Cannot register command after the pre-initialization phase!");
+        }
         String[] labels = command.getLabels();
         for (String label : labels) {
             label = label.toLowerCase(Locale.ENGLISH);
@@ -430,5 +428,9 @@ public class CommandDispatcher {
             usages.add(ite.next().toString());
         }
         return usages;
+    }
+
+    private void freeze() {
+        this.frozen = true;
     }
 }

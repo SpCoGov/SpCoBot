@@ -16,7 +16,6 @@
 package top.spco.core.database;
 
 import top.spco.SpCoBot;
-import top.spco.api.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,7 +32,6 @@ import java.util.List;
  * @since 0.1.0
  */
 public class DataBase {
-    private static final Logger LOGGER = SpCoBot.logger;
     private Connection conn;
 
     public DataBase() {
@@ -41,14 +39,14 @@ public class DataBase {
             String dbFilePath = SpCoBot.dataFolder.getAbsolutePath() + File.separator + "spcobot.db";
             // 检查数据库文件是否存在
             if (!checkFileExists(dbFilePath)) {
-                LOGGER.info("正在初始化数据库");
+                SpCoBot.LOGGER.info("正在初始化数据库。");
                 try {
                     // 尝试创建数据库文件
                     File file = new File(dbFilePath);
                     if (!file.createNewFile()) {
                         throw new IOException("无法创建数据库文件");
                     }
-                    LOGGER.info("已成功创建数据库文件");
+                    SpCoBot.LOGGER.info("已成功创建数据库文件。");
                 } catch (IOException e) {
                     throw new RuntimeException("试图于 " + dbFilePath + " 创建数据库文件时发生错误: " + e.getMessage());
                 }

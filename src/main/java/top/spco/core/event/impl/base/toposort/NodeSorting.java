@@ -17,7 +17,6 @@ package top.spco.core.event.impl.base.toposort;
 
 import org.jetbrains.annotations.VisibleForTesting;
 import top.spco.SpCoBot;
-import top.spco.api.Logger;
 
 import java.util.*;
 
@@ -39,8 +38,6 @@ import java.util.*;
  * @since 0.1.0
  */
 public class NodeSorting {
-    private static final Logger LOGGER = SpCoBot.logger;
-
     @VisibleForTesting
     public static boolean ENABLE_CYCLE_WARNING = true;
 
@@ -129,7 +126,7 @@ public class NodeSorting {
                         builder.append("\t").append(node.getDescription()).append("\n");
                     }
 
-                    LOGGER.warn(builder.toString());
+                    SpCoBot.LOGGER.warn(builder.toString());
                 }
             }
 

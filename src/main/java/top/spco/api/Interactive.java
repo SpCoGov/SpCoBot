@@ -27,7 +27,7 @@ import java.io.File;
  * @version 2.0.0
  * @since 0.1.0
  */
-public abstract class Interactive<T> extends Wrapper<T> implements Identifiable {
+public abstract class Interactive<T> extends Identifiable<T> {
     protected Interactive(T interactive) {
         super(interactive);
     }

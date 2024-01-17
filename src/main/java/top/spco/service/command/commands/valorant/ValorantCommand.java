@@ -28,10 +28,7 @@ import top.spco.service.chat.Chat;
 import top.spco.service.chat.ChatBuilder;
 import top.spco.service.chat.ChatType;
 import top.spco.service.chat.Stage;
-import top.spco.service.command.AbstractCommand;
-import top.spco.service.command.CommandMeta;
-import top.spco.service.command.CommandParam;
-import top.spco.service.command.CommandUsage;
+import top.spco.service.command.*;
 import top.spco.service.command.util.PermissionsValidator;
 import top.spco.user.BotUser;
 
@@ -54,6 +51,7 @@ import java.util.List;
  * @version 2.0.0
  * @since 1.3.0
  */
+@CommandMarker
 public class ValorantCommand extends AbstractCommand {
     {
         List<CommandParam> loginParams = new ArrayList<>();

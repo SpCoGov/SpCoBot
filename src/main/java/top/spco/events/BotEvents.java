@@ -16,8 +16,6 @@
 package top.spco.events;
 
 import top.spco.api.Bot;
-import top.spco.api.Identifiable;
-import top.spco.api.Interactive;
 import top.spco.core.event.Event;
 import top.spco.core.event.EventFactory;
 
@@ -33,20 +31,6 @@ public class BotEvents {
     }
 
     /**
-     * Called at the nudged tick.
-     */
-    public static final Event<NudgedTick> NUDGED_TICK = EventFactory.createArrayBacked(NudgedTick.class, callbacks -> (from, target, subject, action, suffix) -> {
-        for (NudgedTick event : callbacks) {
-            event.onNudgedTick(from, target, subject, action, suffix);
-        }
-    });
-
-    @FunctionalInterface
-    public interface NudgedTick {
-        void onNudgedTick(Identifiable from, Identifiable target, Interactive<?> subject, String action, String suffix);
-    }
-
-    /**
      * Called at the bot online tick.
      */
     public static final Event<OnlineTick> ONLINE_TICK = EventFactory.createArrayBacked(OnlineTick.class, callbacks -> (bot) -> {
@@ -58,6 +42,20 @@ public class BotEvents {
     @FunctionalInterface
     public interface OnlineTick {
         void onOnlineTick(Bot<?> bot);
+    }
+
+    /**
+     * Called at the bot offline tick.
+     */
+    public static final Event<OfflineTick> OFFLINE_TICK = EventFactory.createArrayBacked(OfflineTick.class, callbacks -> (bot) -> {
+        for (OfflineTick event : callbacks) {
+            event.onOfflineTick(bot);
+        }
+    });
+
+    @FunctionalInterface
+    public interface OfflineTick {
+        void onOfflineTick(Bot<?> bot);
     }
 
     /**

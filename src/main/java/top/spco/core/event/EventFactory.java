@@ -44,8 +44,14 @@ public final class EventFactory {
      * @return The Event instance.
      */
     public static <T> Event<T> createArrayBacked(Class<? super T> type, Function<T[], T> invokerFactory) {
-
         return EventFactoryImpl.createArrayBacked(type, invokerFactory);
+    }
+
+    public static void ensureEventThreadName() {
+        Thread currentThread = Thread.currentThread();
+        if (!"Event Thread".equals(currentThread.getName())) {
+            currentThread.setName("Event Thread");
+        }
     }
 
     /**

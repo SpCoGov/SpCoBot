@@ -15,45 +15,35 @@
  */
 package top.spco.events;
 
+import top.spco.api.Bot;
+import top.spco.api.Identifiable;
+import top.spco.api.Interactive;
 import top.spco.core.event.Event;
 import top.spco.core.event.EventFactory;
 
 /**
- * 定时事件
+ * 用户相关事件
  *
  * @author SpCo
- * @version 0.1.2
- * @since 0.1.2
+ * @version 2.0.0
+ * @since 2.0.0
  */
-public class PeriodicSchedulerEvents {
-    private PeriodicSchedulerEvents() {
+public class UserEvents {
+    private UserEvents() {
+
     }
 
     /**
-     * Called every second.
+     * Called at the nudged tick.
      */
-    public static final Event<SecondTick> SECOND_TICK = EventFactory.createArrayBacked(SecondTick.class, callbacks -> () -> {
-        for (SecondTick event : callbacks) {
-            event.onSecondTick();
+    public static final Event<NudgedTick> NUDGED_TICK = EventFactory.createArrayBacked(NudgedTick.class, callbacks -> (bot, from, target, interactive, action, suffix) -> {
+        for (NudgedTick event : callbacks) {
+            event.onNudgedTick(bot, from, target, interactive, action, suffix);
         }
     });
 
     @FunctionalInterface
-    public interface SecondTick {
-        void onSecondTick();
-    }
-
-    /**
-     * Called every minute.
-     */
-    public static final Event<MinuteTick> MINUTE_TICK = EventFactory.createArrayBacked(MinuteTick.class, callbacks -> () -> {
-        for (MinuteTick event : callbacks) {
-            event.onMinuteTick();
-        }
-    });
-
-    @FunctionalInterface
-    public interface MinuteTick {
-        void onMinuteTick();
+    public interface NudgedTick {
+        void onNudgedTick(Bot<?> bot, Identifiable<?> from, Identifiable<?> target, Interactive<?> subject, String action, String suffix);
     }
 }

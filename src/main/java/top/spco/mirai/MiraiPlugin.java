@@ -12,30 +12,56 @@ import net.mamoe.mirai.event.EventChannel;
 import net.mamoe.mirai.event.GlobalEventChannel;
 import net.mamoe.mirai.event.events.*;
 import net.mamoe.mirai.message.data.MessageChain;
+import net.mamoe.mirai.message.data.MessageSourceBuilder;
+import net.mamoe.mirai.message.data.MessageSourceKind;
 import org.jetbrains.annotations.NotNull;
 import top.spco.SpCoBot;
 import top.spco.api.Behavior;
 import top.spco.api.Bot;
+import top.spco.api.Friend;
+import top.spco.api.message.MessageSource;
 import top.spco.events.*;
 
 public final class MiraiPlugin extends JavaPlugin {
     public static SpCoBot BOT = SpCoBot.getInstance();
     @Deprecated
     public static final MiraiPlugin INSTANCE = new MiraiPlugin();
+    private final long startTime;
+
+    {
+        startTime = System.nanoTime();
+    }
 
     private MiraiPlugin() {
         super(new JvmPluginDescriptionBuilder("top.spco.spcobot", SpCoBot.MAIN_VERSION).name("SpCoBot").author("SpCo").build());
         SpCoBot.dataFolder = getDataFolder();
         SpCoBot.configFolder = getConfigFolder();
-        SpCoBot.logger = new MiraiLogger(getLogger());
+        SpCoBot.pluginFile = getJvmPluginClasspath().getPluginFile();
         BOT.initOthers();
         BOT.setMessageService(new MiraiMessageServiceImpl());
+        long endTime = System.nanoTime();
+        SpCoBot.LOGGER.info("SpCoBot 初始化完毕({}ms)!", (endTime - startTime) / 1_000_000);
     }
 
     @Override
     public void onEnable() {
         PluginEvents.ENABLE_PLUGIN_TICK.invoker().onEnableTick();
         EventChannel<Event> e = GlobalEventChannel.INSTANCE.parentScope(this);
+        e.subscribeAlways(MessageRecallEvent.GroupRecall.class, groupRecall -> {
+            top.spco.api.NormalMember<?> sender = new MiraiNormalMember(groupRecall.getAuthor());
+            top.spco.api.Group<?> group = new MiraiGroup(groupRecall.getGroup());
+            top.spco.api.NormalMember<?> operator = new MiraiNormalMember((NormalMember) groupRecall.getOperator());
+            Bot<?> bot = new MiraiBot(groupRecall.getBot());
+            MessageSource<?> recalledMessage = new MiraiMessageSource(new MessageSourceBuilder().id(groupRecall.getMessageIds()).build(bot.getId(), MessageSourceKind.GROUP));
+            MessageEvents.GROUP_MESSAGE_RECALL.invoker().onGroupMessageRecall(bot, group, sender, operator, recalledMessage);
+        });
+        e.subscribeAlways(MessageRecallEvent.FriendRecall.class, friendRecall -> {
+            Friend<?> sender = new MiraiFriend(friendRecall.getAuthor());
+            Bot<?> bot = new MiraiBot(friendRecall.getBot());
+            Friend<?> operator = new MiraiFriend(friendRecall.getOperator());
+            MessageSource<?> recalledMessage = new MiraiMessageSource(new MessageSourceBuilder().id(friendRecall.getMessageIds()).build(bot.getId(), MessageSourceKind.FRIEND));
+            MessageEvents.FRIEND_MESSAGE_RECALL.invoker().onFriendMessageRecall(bot, sender, operator, recalledMessage);
+        });
         e.subscribeAlways(GroupMessageEvent.class, g -> {
             MiraiBot bot = new MiraiBot(g.getBot());
             Group group = g.getGroup();
@@ -52,12 +78,36 @@ public final class MiraiPlugin extends JavaPlugin {
             MessageChain messages = gt.getMessage();
             MessageEvents.GROUP_TEMP_MESSAGE.invoker().onGroupTempMessage(new MiraiBot(gt.getBot()), new MiraiNormalMember(member), new MiraiNormalMember(member), new MiraiMessage(messages), gt.getTime());
         });
-        e.subscribeAlways(NudgeEvent.class, n -> BotEvents.NUDGED_TICK.invoker().onNudgedTick(new MiraiIdentifiable(n.getFrom()), new MiraiIdentifiable(n.getTarget()), new MiraiInteractive(n.getSubject()), n.getAction(), n.getSuffix()));
+        e.subscribeAlways(NudgeEvent.class, n -> {
+            String action = n.getAction();
+            String suffix = n.getSuffix();
+
+            if (n.getSubject() instanceof Group group) {
+                UserEvents.NUDGED_TICK.invoker().onNudgedTick(
+                        new MiraiBot(n.getBot()),
+                        n.getFrom() instanceof net.mamoe.mirai.Bot ? new MiraiBot((net.mamoe.mirai.Bot) n.getFrom()) : new MiraiNormalMember((NormalMember) n.getFrom()),
+                        n.getTarget() instanceof net.mamoe.mirai.Bot ? new MiraiBot((net.mamoe.mirai.Bot) n.getTarget()) : new MiraiNormalMember((NormalMember) n.getTarget()),
+                        new MiraiGroup(group), action, suffix);
+            } else if (n.getSubject() instanceof net.mamoe.mirai.contact.Friend friend) {
+                UserEvents.NUDGED_TICK.invoker().onNudgedTick(
+                        new MiraiBot(n.getBot()),
+                        n.getFrom() instanceof net.mamoe.mirai.Bot ? new MiraiBot((net.mamoe.mirai.Bot) n.getFrom()) : new MiraiFriend((net.mamoe.mirai.contact.Friend) n.getFrom()),
+                        n.getTarget() instanceof net.mamoe.mirai.Bot ? new MiraiBot((net.mamoe.mirai.Bot) n.getTarget()) : new MiraiFriend((net.mamoe.mirai.contact.Friend) n.getTarget()),
+                        new MiraiFriend(friend), action, suffix);
+            } else if (n.getSubject() instanceof NormalMember member) {
+                UserEvents.NUDGED_TICK.invoker().onNudgedTick(
+                        new MiraiBot(n.getBot()),
+                        n.getFrom() instanceof net.mamoe.mirai.Bot ? new MiraiBot((net.mamoe.mirai.Bot) n.getFrom()) : new MiraiNormalMember((net.mamoe.mirai.contact.NormalMember) n.getFrom()),
+                        n.getTarget() instanceof net.mamoe.mirai.Bot ? new MiraiBot((net.mamoe.mirai.Bot) n.getTarget()) : new MiraiNormalMember((net.mamoe.mirai.contact.NormalMember) n.getTarget()),
+                        new MiraiNormalMember(member), action, suffix);
+            }
+        });
         e.subscribeAlways(BotOnlineEvent.class, bo -> {
             Bot<?> bot = new MiraiBot(bo.getBot());
             SpCoBot.getInstance().setBot(bot);
             BotEvents.ONLINE_TICK.invoker().onOnlineTick(bot);
         });
+        e.subscribeAlways(BotOfflineEvent.class, boe -> BotEvents.OFFLINE_TICK.invoker().onOfflineTick(new MiraiBot(boe.getBot())));
         e.subscribeAlways(BotOfflineEvent.Active.class, bofa -> {
             SpCoBot.getInstance().setBot(null);
             BotEvents.ACTIVE_OFFLINE_TICK.invoker().onActiveOfflineTick(new MiraiBot(bofa.getBot()));

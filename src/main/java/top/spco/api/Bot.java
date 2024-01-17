@@ -16,7 +16,6 @@
 package top.spco.api;
 
 import top.spco.util.InteractiveList;
-import top.spco.user.UserFetchException;
 
 /**
  * 机器人
@@ -25,7 +24,7 @@ import top.spco.user.UserFetchException;
  * @version 2.0.0
  * @since 0.1.0
  */
-public abstract class Bot<T> extends Wrapper<T> implements Identifiable {
+public abstract class Bot<T> extends Identifiable<T> {
     protected Bot(T bot) {
         super(bot);
     }
@@ -34,6 +33,20 @@ public abstract class Bot<T> extends Wrapper<T> implements Identifiable {
      * 当 BotSettings 在线 (可正常收发消息) 时返回 {@code true}.
      */
     public abstract boolean isOnline();
+
+    /**
+     * 获取机器人的昵称
+     *
+     * @return 机器人的昵称
+     */
+    public abstract String getNick();
+
+    /**
+     * 获取机器人作为好友的实例
+     *
+     * @return 机器人作为好友的实例
+     */
+    public abstract Friend<?> asFriend();
 
     /**
      * 全部的好友分组
@@ -71,7 +84,7 @@ public abstract class Bot<T> extends Wrapper<T> implements Identifiable {
      */
     public abstract boolean hasGroup(long id);
 
-    public abstract User<?> getUser(long id) throws UserFetchException;
+    public abstract User<?> getUser(long id);
 
     public abstract Group<?> getGroup(long id);
 }

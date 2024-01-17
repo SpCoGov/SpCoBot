@@ -19,9 +19,13 @@ package top.spco.api;
  * 表示具有标识号的对象的接口
  *
  * @author SpCo
- * @version 0.1.0
+ * @version 2.0.0
  * @since 0.1.0
  */
-public interface Identifiable {
-    long getId();
+public abstract class Identifiable<T> extends Wrapper<T> {
+    protected Identifiable(T object) {
+        super(object);
+    }
+
+    public abstract long getId();
 }
