@@ -19,7 +19,6 @@ import top.spco.SpCoBot;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -227,48 +226,6 @@ public class DataBase {
                 pstmt.setObject(i + 1, params[i]);
             }
         }
-    }
-
-    /**
-     * 获取实体类所有属性进行过滤
-     *
-     * @param clazz     clazz
-     * @param fieldName propertyName
-     */
-    public Field getFieldByName(Class<?> clazz, String fieldName) {
-        Field[] fields = clazz.getDeclaredFields();
-        for (Field field : fields) {
-            if (field.getName().equals(fieldName)) {
-                return field;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * 将下划线命名的字符串转换为驼峰式命名的字符串
-     *
-     * @param str 下划线命名的字符串
-     * @return 驼峰式命名的字符串
-     */
-    @Deprecated
-    private String underlineToCamel(String str) {
-        StringBuilder sb = new StringBuilder();
-        boolean upperCase = false;
-        for (int i = 0; i < str.length(); i++) {
-            char ch = str.charAt(i);
-            if (ch == '_') {
-                upperCase = true;
-            } else {
-                if (upperCase) {
-                    sb.append(Character.toUpperCase(ch));
-                    upperCase = false;
-                } else {
-                    sb.append(ch);
-                }
-            }
-        }
-        return sb.toString();
     }
 
     /**

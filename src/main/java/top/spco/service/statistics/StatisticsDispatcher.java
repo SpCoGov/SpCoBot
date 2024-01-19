@@ -15,6 +15,8 @@
  */
 package top.spco.service.statistics;
 
+import org.apache.logging.log4j.Logger;
+import top.spco.SpCoBot;
 import top.spco.api.Group;
 import top.spco.api.NormalMember;
 import top.spco.events.MessageEvents;
@@ -42,7 +44,9 @@ public class StatisticsDispatcher {
         registered = true;
         MessageEvents.GROUP_MESSAGE.register((bot, source, sender, message, time) -> {
             Statistics s = getInstance().getStatistics(source);
+            SpCoBot.LOGGER.debug("收到消息：" + message);
             if (s != null) {
+                SpCoBot.LOGGER.debug("传入：" + message);
                 s.receive(source, (NormalMember<?>) sender, message);
             }
         });
@@ -70,10 +74,12 @@ public class StatisticsDispatcher {
                 throw new RegistrationException("Group " + group.getId() + " already has a Statistics instance");
             }
         }
+        SpCoBot.LOGGER.debug("register: " + group.getId());
         this.statistics.put(group.getId(), statistics);
     }
 
     public void remove(Group<?> group) {
+        SpCoBot.LOGGER.debug("remove: " + group.getId());
         this.statistics.remove(group.getId());
     }
 }

@@ -30,7 +30,6 @@ import java.util.Map;
  * @since 0.1.2
  */
 public class HttpUtils {
-
     public static String get(URL url, Map<String, String> headers) throws IOException {
         HttpURLConnection conn = null;
         try {

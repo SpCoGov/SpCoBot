@@ -15,7 +15,6 @@
  */
 package top.spco.core.event.impl.base.event;
 
-import top.spco.core.resource.ResourceIdentifier;
 import top.spco.core.event.Event;
 import top.spco.core.event.impl.base.toposort.NodeSorting;
 
@@ -27,7 +26,7 @@ import java.util.function.Function;
  * 用于管理事件及其阶段的类，可以注册和处理事件监听器
  *
  * @author Fabric
- * @version 0.1.0
+ * @version 2.0.0
  * @since 0.1.0
  */
 class ArrayBackedEvent<T> extends Event<T> {
@@ -37,7 +36,7 @@ class ArrayBackedEvent<T> extends Event<T> {
     /**
      * Registered event phases.
      */
-    private final Map<ResourceIdentifier, EventPhaseData<T>> phases = new LinkedHashMap<>();
+    private final Map<String, EventPhaseData<T>> phases = new LinkedHashMap<>();
     /**
      * Phases sorted in the correct dependency order.
      */
@@ -60,17 +59,17 @@ class ArrayBackedEvent<T> extends Event<T> {
     }
 
     @Override
-    public void register(ResourceIdentifier phaseIdentifier, T listener) {
+    public void register(String phaseIdentifier, T listener) {
         Objects.requireNonNull(phaseIdentifier, "Tried to register a listener for a null phase!");
         Objects.requireNonNull(listener, "Tried to register a null listener!");
 
         synchronized (lock) {
-            getOrCreatePhase(phaseIdentifier, true).addListener(listener);
+            getOrCreatePhase(phaseIdentifier).addListener(listener);
             rebuildInvoker(handlers.length + 1);
         }
     }
 
-    private EventPhaseData<T> getOrCreatePhase(ResourceIdentifier id, boolean sortIfCreate) {
+    private EventPhaseData<T> getOrCreatePhase(String id) {
         EventPhaseData<T> phase = phases.get(id);
 
         if (phase == null) {
@@ -78,9 +77,7 @@ class ArrayBackedEvent<T> extends Event<T> {
             phases.put(id, phase);
             sortedPhases.add(phase);
 
-            if (sortIfCreate) {
-                NodeSorting.sort(sortedPhases, "event phases", Comparator.comparing(data -> data.id));
-            }
+            NodeSorting.sort(sortedPhases, "event phases", Comparator.comparing(data -> data.id));
         }
 
         return phase;
@@ -107,20 +104,5 @@ class ArrayBackedEvent<T> extends Event<T> {
 
         // Rebuild invoker.
         update();
-    }
-
-    @Override
-    public void addPhaseOrdering(ResourceIdentifier firstPhase, ResourceIdentifier secondPhase) {
-        Objects.requireNonNull(firstPhase, "Tried to add an ordering for a null phase.");
-        Objects.requireNonNull(secondPhase, "Tried to add an ordering for a null phase.");
-        if (firstPhase.equals(secondPhase)) throw new IllegalArgumentException("Tried to add a phase that depends on itself.");
-
-        synchronized (lock) {
-            EventPhaseData<T> first = getOrCreatePhase(firstPhase, false);
-            EventPhaseData<T> second = getOrCreatePhase(secondPhase, false);
-            EventPhaseData.link(first, second);
-            NodeSorting.sort(this.sortedPhases, "event phases", Comparator.comparing(data -> data.id));
-            rebuildInvoker(handlers.length);
-        }
     }
 }

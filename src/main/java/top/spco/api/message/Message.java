@@ -18,7 +18,7 @@ package top.spco.api.message;
 import top.spco.api.Image;
 import top.spco.api.Interactive;
 import top.spco.api.Member;
-import top.spco.api.Wrapper;
+import top.spco.core.Wrapper;
 import top.spco.api.message.service.MessageService;
 
 import java.io.File;

@@ -34,7 +34,7 @@ import java.util.*;
  * </ol>
  *
  * @author Fabric
- * @version 0.1.0
+ * @version 2.0.0
  * @since 0.1.0
  */
 public class NodeSorting {
@@ -54,7 +54,7 @@ public class NodeSorting {
         List<N> toposort = new ArrayList<>(sortedNodes.size());
 
         for (N node : sortedNodes) {
-            forwardVisit(node, null, toposort);
+            forwardVisit(node, toposort);
         }
 
         clearStatus(toposort);
@@ -142,13 +142,13 @@ public class NodeSorting {
         return noCycle;
     }
 
-    private static <N extends SortableNode<N>> void forwardVisit(N node, N parent, List<N> toposort) {
+    private static <N extends SortableNode<N>> void forwardVisit(N node, List<N> toposort) {
         if (!node.visited) {
             // Not yet visited.
             node.visited = true;
 
             for (N data : node.subsequentNodes) {
-                forwardVisit(data, node, toposort);
+                forwardVisit(data, toposort);
             }
 
             toposort.add(node);

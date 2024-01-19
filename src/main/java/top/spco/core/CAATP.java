@@ -17,6 +17,7 @@ package top.spco.core;
 
 import top.spco.SpCoBot;
 import top.spco.events.CAATPEvents;
+import top.spco.util.NamedThreadFactory;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;

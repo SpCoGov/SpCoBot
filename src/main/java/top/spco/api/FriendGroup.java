@@ -15,6 +15,8 @@
  */
 package top.spco.api;
 
+import top.spco.core.Wrapper;
+
 import java.util.Collection;
 
 /**

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco.api;
+package top.spco.core;
 
 /**
  * 这个抽象类提供了一个泛型封装器，用于封装任意类型的对象。它不仅允许在构造时封装一个对象，

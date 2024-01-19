@@ -17,7 +17,6 @@ package top.spco.core.event.impl.base.event;
 
 import com.google.common.collect.MapMaker;
 import top.spco.core.event.Event;
-import top.spco.core.resource.ResourceIdentifier;
 
 import java.util.Collections;
 import java.util.Set;
@@ -27,7 +26,7 @@ import java.util.function.Function;
  * 事件工厂的实现类，用于创建和管理各种类型的事件
  *
  * @author Fabric
- * @version 0.1.2
+ * @version 2.0.0
  * @since 0.1.0
  */
 public final class EventFactoryImpl {
@@ -41,25 +40,5 @@ public final class EventFactoryImpl {
         ArrayBackedEvent<T> event = new ArrayBackedEvent<>(type, invokerFactory);
         ARRAY_BACKED_EVENTS.add(event);
         return event;
-    }
-
-    public static void ensureContainsDefault(ResourceIdentifier[] defaultPhases) {
-        for (ResourceIdentifier id : defaultPhases) {
-            if (id.equals(Event.DEFAULT_PHASE)) {
-                return;
-            }
-        }
-
-        throw new IllegalArgumentException("The event phases must contain Event.DEFAULT_PHASE.");
-    }
-
-    public static void ensureNoDuplicates(ResourceIdentifier[] defaultPhases) {
-        for (int i = 0; i < defaultPhases.length; ++i) {
-            for (int j = i + 1; j < defaultPhases.length; ++j) {
-                if (defaultPhases[i].equals(defaultPhases[j])) {
-                    throw new IllegalArgumentException("Duplicate event phase: " + defaultPhases[i]);
-                }
-            }
-        }
     }
 }

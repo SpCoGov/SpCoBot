@@ -31,7 +31,6 @@ import top.spco.user.UserPermission;
  * @version 2.0.0
  * @since 0.1.1
  */
-@CommandMarker
 public final class TestCommand extends AbstractCommand {
     @Override
     public String[] getLabels() {

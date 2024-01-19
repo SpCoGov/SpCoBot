@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco.service;
+package top.spco.modules;
 
+import top.spco.core.module.AbstractModule;
 import top.spco.events.MessageEvents;
 
 import java.util.HashMap;
@@ -22,25 +23,38 @@ import java.util.Map;
 import java.util.Random;
 
 /**
- * 如果用户在某个群发送的消息与机器人在此群发送的最后一条消息匹配，禁言他
+ * 当一个用户在群聊中重复发送相同的消息时，他们将被随机禁言一段时间（60到100秒之间），并收到一条回复消息。
  *
  * @author SpCo
- * @version 0.3.2
- * @since 0.1.0
+ * @version 2.0.0
+ * @since 2.0.0
  */
-public class GroupMessageRecorder {
-    private static boolean registered = false;
+public class EchoMute extends AbstractModule {
     /**
      * 记录机器人在每个群发送的最后一条消息
      */
     private static final Map<Long, String> lastMessage = new HashMap<>();
 
-    public GroupMessageRecorder() {
-        if (registered) {
-            return;
-        }
-        registered = true;
+    public EchoMute() {
+        super("EchoMute");
+    }
+
+    @Override
+    public void onActivate() {
+
+    }
+
+    @Override
+    public void onDeactivate() {
+
+    }
+
+    @Override
+    public void init() {
         MessageEvents.GROUP_MESSAGE.register((bot, source, sender, message, time) -> {
+            if (!isActive()) {
+                return;
+            }
             if (source.botPermission().isOperator() && !sender.getPermission().isOperator()) {
                 if (isRepeating(source.getId(), message.toMessageContext())) {
                     int i = new Random().nextInt(60, 100);

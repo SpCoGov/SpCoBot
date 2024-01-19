@@ -15,10 +15,10 @@
  */
 package top.spco.core.config;
 
-import top.spco.service.AutoAgreeValorant;
+import top.spco.modules.ValorantResponder;
 
 /**
- * 本配置组包含了 {@link AutoAgreeValorant} 的相关配置，包含以下配置项：
+ * 本配置组包含了 {@link ValorantResponder} 的相关配置，包含以下配置项：
  * <table border="1">
  *   <tr>
  *     <th>配置项名</th>
@@ -31,7 +31,7 @@ import top.spco.service.AutoAgreeValorant;
  * </table>
  *
  * @author SpCo
- * @see AutoAgreeValorant
+ * @see ValorantResponder
  * @version 0.3.2
  * @since 0.3.2
  */

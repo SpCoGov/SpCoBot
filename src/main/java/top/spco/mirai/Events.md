@@ -1,6 +1,6 @@
 ### Bot
 - [x] Bot 登录完成: BotOnlineEvent
-- Bot 离线: BotOfflineEvent
+- [x] Bot 离线: BotOfflineEvent
     - [x] 主动: Active
     - [x] 被挤下线: Force
     - [x] 被服务器断开或因网络问题而掉线: Dropped

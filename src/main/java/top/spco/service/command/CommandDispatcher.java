@@ -30,6 +30,7 @@ import top.spco.service.command.commands.HelpCommand;
 import top.spco.user.BotUser;
 import top.spco.user.BotUsers;
 import top.spco.user.UserFetchException;
+import top.spco.util.LoggedTimer;
 
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
@@ -69,8 +70,11 @@ public class CommandDispatcher {
             return;
         }
         registered = true;
+        LoggedTimer time = new LoggedTimer();
+        time.start("初始化命令系统");
         init();
         registerCommands();
+        time.stop();
     }
 
     private void registerCommands() {
@@ -102,7 +106,7 @@ public class CommandDispatcher {
         }
         freeze();
         long endTime = System.nanoTime();
-        SpCoBot.LOGGER.info("{}个命令注册完毕({}ms)!", toBeRegistered.size(), (endTime - startTime) / 1_000_000);
+        SpCoBot.LOGGER.info("已注册{}个命令。", toBeRegistered.size());
     }
 
     /**

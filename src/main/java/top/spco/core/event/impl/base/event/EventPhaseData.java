@@ -16,7 +16,6 @@
 package top.spco.core.event.impl.base.event;
 
 import top.spco.core.event.impl.base.toposort.SortableNode;
-import top.spco.core.resource.ResourceIdentifier;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
@@ -25,15 +24,15 @@ import java.util.Arrays;
  * Data of an {@link ArrayBackedEvent} phase.
  *
  * @author Fabric
- * @version 0.1.0
+ * @version 2.0.0
  * @since 0.1.0
  */
 class EventPhaseData<T> extends SortableNode<EventPhaseData<T>> {
-    final ResourceIdentifier id;
+    final String id;
     T[] listeners;
 
     @SuppressWarnings("unchecked")
-    EventPhaseData(ResourceIdentifier id, Class<?> listenerClass) {
+    EventPhaseData(String id, Class<?> listenerClass) {
         this.id = id;
         this.listeners = (T[]) Array.newInstance(listenerClass, 0);
     }
@@ -46,6 +45,6 @@ class EventPhaseData<T> extends SortableNode<EventPhaseData<T>> {
 
     @Override
     protected String getDescription() {
-        return id.toString();
+        return id;
     }
 }

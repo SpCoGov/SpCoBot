@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco.service;
+package top.spco.modules;
 
 import top.spco.SpCoBot;
 import top.spco.core.config.ValorantGroupSettings;
+import top.spco.core.module.AbstractModule;
 import top.spco.events.MessageEvents;
+import top.spco.util.FileManipulation;
 
 import java.io.File;
 import java.util.Random;
@@ -26,18 +28,30 @@ import java.util.Random;
  * 自动“同意”打瓦
  *
  * @author SpCo
- * @version 0.3.4
- * @since 0.3.2
+ * @version 2.0.0
+ * @since 2.0.0
  */
-public class AutoAgreeValorant {
-    private static boolean registered = false;
+public class ValorantResponder extends AbstractModule {
+    public ValorantResponder() {
+        super("ValorantResponder");
+    }
 
-    public AutoAgreeValorant() {
-        if (registered) {
-            return;
-        }
-        registered = true;
+    @Override
+    public void onActivate() {
+
+    }
+
+    @Override
+    public void onDeactivate() {
+
+    }
+
+    @Override
+    public void init() {
         MessageEvents.GROUP_MESSAGE.register((bot, source, sender, message, time) -> {
+            if (!isActive()) {
+                return;
+            }
             if (source.getId() == SpCoBot.getInstance().getSettings().getLongProperty(ValorantGroupSettings.VALORANT_GROUP) || source.getId() == SpCoBot.getInstance().testGroupId) {
                 if (message.toMessageContext().equals("瓦") || message.toMessageContext().endsWith("瓦吗") || message.toMessageContext().endsWith("打不打瓦")
                         || message.toMessageContext().endsWith(" 瓦") || message.toMessageContext().equals("有无瓦") || message.toMessageContext().equals("有没有瓦")

@@ -21,15 +21,18 @@ import top.spco.api.Bot;
 import top.spco.api.Friend;
 import top.spco.api.message.MessageSource;
 import top.spco.events.*;
+import top.spco.util.LoggedTimer;
 
+@SuppressWarnings("ClassInitializerMayBeStatic")
 public final class MiraiPlugin extends JavaPlugin {
     public static SpCoBot BOT = SpCoBot.getInstance();
     @Deprecated
     public static final MiraiPlugin INSTANCE = new MiraiPlugin();
-    private final long startTime;
+    private static LoggedTimer totalTime;
 
     {
-        startTime = System.nanoTime();
+        totalTime = new LoggedTimer();
+        totalTime.start("初始化SpCoBot");
     }
 
     private MiraiPlugin() {
@@ -39,8 +42,7 @@ public final class MiraiPlugin extends JavaPlugin {
         SpCoBot.pluginFile = getJvmPluginClasspath().getPluginFile();
         BOT.initOthers();
         BOT.setMessageService(new MiraiMessageServiceImpl());
-        long endTime = System.nanoTime();
-        SpCoBot.LOGGER.info("SpCoBot 初始化完毕({}ms)!", (endTime - startTime) / 1_000_000);
+        totalTime.stop();
     }
 
     @Override

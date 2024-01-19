@@ -27,10 +27,11 @@ import top.spco.core.config.BotSettings;
 import top.spco.core.config.Settings;
 import top.spco.core.config.SettingsVersion;
 import top.spco.core.database.DataBase;
+import top.spco.core.module.ModuleManager;
 import top.spco.events.*;
-import top.spco.service.AutoAgreeValorant;
-import top.spco.service.AutoSign;
-import top.spco.service.GroupMessageRecorder;
+import top.spco.modules.AutoSign;
+import top.spco.modules.EchoMute;
+import top.spco.modules.ValorantResponder;
 import top.spco.service.chat.ChatDispatcher;
 import top.spco.service.chat.ChatType;
 import top.spco.service.command.Command;
@@ -85,6 +86,7 @@ public class SpCoBot {
     public final ChatDispatcher chatDispatcher = ChatDispatcher.getInstance();
     public final StatisticsDispatcher statisticsDispatcher = StatisticsDispatcher.getInstance();
     public final DashScopeDispatcher dashScopeDispatcher = DashScopeDispatcher.getInstance();
+    public final ModuleManager moduleManager = ModuleManager.getInstance();
     private Settings settings;
     private MessageService messageService;
     private DataBase dataBase;
@@ -112,9 +114,7 @@ public class SpCoBot {
     public void initOthers() {
         this.dataBase = new DataBase();
         this.caatp = CAATP.getInstance();
-        new GroupMessageRecorder();
-        new AutoSign();
-        new AutoAgreeValorant();
+        initModules();
         this.settings = new Settings(configFolder.getAbsolutePath() + File.separator + "config.yaml");
         if (expired(settings.getStringProperty(SettingsVersion.CONFIG_VERSION))) {
             LOGGER.error("配置版本过时，请备份配置后删除配置重新启动机器人以生成新配置。");
@@ -126,13 +126,22 @@ public class SpCoBot {
         this.commandDispatcher = CommandDispatcher.getInstance();
     }
 
+    private void initModules() {
+        moduleManager.add(new AutoSign());
+        moduleManager.get(AutoSign.class).toggle();
+        moduleManager.add(new EchoMute());
+        moduleManager.get(EchoMute.class).toggle();
+        moduleManager.add(new ValorantResponder());
+        moduleManager.get(ValorantResponder.class).toggle();
+    }
+
     private void initEvents() {
         if (registered) {
             return;
         }
         registered = true;
-        MessageEvents.FRIEND_MESSAGE_RECALL.register((bot1, sender, operator, recalledMessage) -> LOGGER.info("{}({})撤回了一条自己的消息: {}", operator.getRemark(), operator.getId(), recalledMessage.getOriginalMessage().toMessageContext()));
-        MessageEvents.GROUP_MESSAGE_RECALL.register((bot1, source, sender, operator, recalledMessage) -> LOGGER.info("{}({})在{}({})撤回了一条{}({})的消息: {}", operator.getRemark(),operator.getId(), source.getName(), source.getId(), sender.getNick(), sender.getId(), recalledMessage.getOriginalMessage().toMessageContext()));
+        MessageEvents.FRIEND_MESSAGE_RECALL.register((bot1, sender, operator, recalledMessage) -> LOGGER.info("{}({})撤回了一条自己的消息", operator.getRemark(), operator.getId()));
+        MessageEvents.GROUP_MESSAGE_RECALL.register((bot1, source, sender, operator, recalledMessage) -> LOGGER.info("{}({})在{}({})撤回了一条{}({})的消息", operator.getRemark(),operator.getId(), source.getName(), source.getId(), sender.getNick(), sender.getId()));
         BotEvents.ONLINE_TICK.register(bot1 -> {
             long id = bot1.getId();
             LOGGER.info("机器人({})上线。", id);

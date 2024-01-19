@@ -26,7 +26,7 @@ import com.alibaba.dashscope.exception.NoApiKeyException;
 import top.spco.SpCoBot;
 import top.spco.api.Interactive;
 import top.spco.api.message.Message;
-import top.spco.core.NamedThreadFactory;
+import top.spco.util.NamedThreadFactory;
 import top.spco.user.BotUser;
 import top.spco.util.tuple.MutablePair;
 

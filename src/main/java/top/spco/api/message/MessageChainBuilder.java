@@ -15,7 +15,7 @@
  */
 package top.spco.api.message;
 
-import top.spco.api.Wrapper;
+import top.spco.core.Wrapper;
 import top.spco.core.Builder;
 
 /**

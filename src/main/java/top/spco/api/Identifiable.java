@@ -15,6 +15,8 @@
  */
 package top.spco.api;
 
+import top.spco.core.Wrapper;
+
 /**
  * 表示具有标识号的对象的接口
  *

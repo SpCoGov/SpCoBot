@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco.service;
+package top.spco.modules;
 
 import top.spco.SpCoBot;
 import top.spco.api.Friend;
+import top.spco.core.module.AbstractModule;
 import top.spco.user.BotUsers;
 import top.spco.util.DateUtils;
 
@@ -26,25 +27,36 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * 自动签到
+ * 每日零点自动签到
  *
  * @author SpCo
- * @version 1.3.0
- * @since 0.1.2
+ * @version 2.0.0
+ * @since 2.0.0
  */
-public class AutoSign {
-    private static boolean registered = false;
-
-    @SuppressWarnings("all")
+public class AutoSign extends AbstractModule {
     public AutoSign() {
-        if (registered) {
-            return;
-        }
-        registered = true;
+        super("AutoSign");
+    }
+
+    @Override
+    public void onActivate() {
+
+    }
+
+    @Override
+    public void onDeactivate() {
+
+    }
+
+    @Override
+    public void init() {
         Timer autoSign = new Timer("AutoSign", true);
         autoSign.schedule(new TimerTask() {
             @Override
             public void run() {
+                if (!isActive()) {
+                    return;
+                }
                 try {
                     // 创建查询语句
                     String sql = "SELECT id FROM user WHERE sign != ? AND premium = 1";
@@ -60,7 +72,7 @@ public class AutoSign {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Friend friend = SpCoBot.getInstance().getBot().getFriend(SpCoBot.getInstance().botOwnerId);
+                    Friend<?> friend = SpCoBot.getInstance().getBot().getFriend(SpCoBot.getInstance().botOwnerId);
                     friend.handleException("自动签到时抛出了意料之外的异常", e);
                 }
             }

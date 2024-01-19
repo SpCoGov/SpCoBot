@@ -18,7 +18,7 @@ package top.spco.service.command.commands;
 import top.spco.SpCoBot;
 import top.spco.api.*;
 import top.spco.api.message.Message;
-import top.spco.core.NamedThreadFactory;
+import top.spco.util.NamedThreadFactory;
 import top.spco.service.RegistrationException;
 import top.spco.service.chat.*;
 import top.spco.service.command.AbstractCommand;
@@ -247,7 +247,7 @@ public class StatisticsCommand extends AbstractCommand {
                                     }
                                     group.sendMessage(sb.toString());
                                     source.sendMessage("消息已发送至目标群");
-                                    Friend<?> friend = SpCoBot.getInstance().getBot().getFriend(SpCoBot.getInstance().testGroupId);
+                                    Friend<?> friend = SpCoBot.getInstance().getBot().getFriend(SpCoBot.getInstance().botOwnerId);
                                     friend.sendMessage("有用户在群" + groupId[0] + "中发起了一场报名统计，如果需要重启机器人，请注意这场报名统计的结束情况。");
                                     SpCoBot.getInstance().statisticsDispatcher.register(group, statistics[0]);
                                     statistics[0] = null;

@@ -131,3 +131,5 @@ src/test
 
 # Local Test Launch Point working directory
 /debug-sandbox
+
+/logs
