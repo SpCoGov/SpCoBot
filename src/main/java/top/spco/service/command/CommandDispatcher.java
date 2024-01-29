@@ -78,7 +78,6 @@ public class CommandDispatcher {
     }
 
     private void registerCommands() {
-        long startTime = System.nanoTime();
         Set<Command> toBeRegistered = new HashSet<>();
 
         try {
@@ -105,7 +104,6 @@ public class CommandDispatcher {
             }
         }
         freeze();
-        long endTime = System.nanoTime();
         SpCoBot.LOGGER.info("已注册{}个命令。", toBeRegistered.size());
     }
 

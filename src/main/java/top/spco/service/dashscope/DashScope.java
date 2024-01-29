@@ -92,7 +92,7 @@ public class DashScope {
         }
         com.alibaba.dashscope.common.Message userMsg = com.alibaba.dashscope.common.Message.builder().role(Role.USER.getValue()).content(content).build();
         msgManager.add(userMsg);
-        QwenParam param = QwenParam.builder().model(Generation.Models.QWEN_PLUS).messages(msgManager.get()).resultFormat(QwenParam.ResultFormat.MESSAGE).topP(0.8).enableSearch(true).build();
+        QwenParam param = QwenParam.builder().model(Generation.Models.QWEN_MAX).messages(msgManager.get()).resultFormat(QwenParam.ResultFormat.MESSAGE).topP(0.8).enableSearch(true).build();
         GenerationResult result = generation.call(param);
         msgManager.add(result);
 
