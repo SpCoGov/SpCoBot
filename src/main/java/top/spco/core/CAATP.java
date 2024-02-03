@@ -42,6 +42,7 @@ public class CAATP {
     private Socket socket;
     private PrintWriter out;
     private volatile boolean isConnected = false;
+    private volatile boolean inConnecting = false;
     private static boolean registered = false;
 
     private CAATP() {
@@ -69,21 +70,26 @@ public class CAATP {
     }
 
     private synchronized void autoReconnect() {
+        if (inConnecting) {
+            return;
+        }
+        inConnecting = true;
         isConnected = false;
         while (true)
             try {
                 SpCoBot.LOGGER.info("开始尝试连接CAATP。");
-                this.socket = new Socket("192.168.50.2", 8900);
-                this.out = new PrintWriter(new OutputStreamWriter(this.socket.getOutputStream(), StandardCharsets.UTF_8), true);
+                getInstance().socket = new Socket("192.168.50.2", 8900);
+                this.out = new PrintWriter(new OutputStreamWriter(getInstance().socket.getOutputStream(), StandardCharsets.UTF_8), true);
                 isConnected = true;
                 reconnectionAttempts = 0;
                 CAATPEvents.CONNECT.invoker().onConnect();
                 SpCoBot.LOGGER.info("已连接到CAATP。");
+                inConnecting = false;
                 new Thread(() -> {
                     while (true) {
                         try {
                             byte[] buffer = new byte[1024];
-                            int bytesRead = socket.getInputStream().read(buffer);
+                            int bytesRead = getInstance().socket.getInputStream().read(buffer);
                             if (bytesRead == -1) {
                                 continue;
                             }
