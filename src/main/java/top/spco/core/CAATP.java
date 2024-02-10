@@ -17,7 +17,6 @@ package top.spco.core;
 
 import top.spco.SpCoBot;
 import top.spco.events.CAATPEvents;
-import top.spco.util.NamedThreadFactory;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -32,17 +31,17 @@ import java.util.concurrent.TimeUnit;
  * CAATP
  *
  * @author SpCo
- * @version 2.0.0
+ * @version 2.0.1
  * @since 0.1.0
  */
 public class CAATP {
     private static final int OPERATION_INTERVAL = 5;
     private static CAATP instance;
     private int reconnectionAttempts = 0;
+    private ScheduledExecutorService heartbeat;
     private Socket socket;
     private PrintWriter out;
     private volatile boolean isConnected = false;
-    private volatile boolean inConnecting = false;
     private static boolean registered = false;
 
     private CAATP() {
@@ -53,72 +52,50 @@ public class CAATP {
         CAATPEvents.RECEIVE.register(message -> {
             if (message.equals("hello")) {
                 this.sendMessage("register qqspcobot");
+                startHeartbeat();
                 return;
             }
-            SpCoBot.LOGGER.info("收到CAATP发送的消息: {}" ,message);
+            SpCoBot.LOGGER.info("收到CAATP发送的消息: {}", message);
             if (message.equals("connected")) {
                 this.isConnected = true;
             }
         });
-        ScheduledExecutorService executor = Executors.newScheduledThreadPool(2, new NamedThreadFactory("CAATP Reconnector"));
-        executor.execute(this::autoReconnect);
-        executor.scheduleAtFixedRate(this::sendHeartbeat, 0, nextOperationInterval(), TimeUnit.SECONDS);
+        new Thread(() -> {
+            while (true) {
+                try {
+                    socket = new Socket("192.168.50.2", 8900);
+                    isConnected = true;
+                    reconnectionAttempts = 0;
+                    CAATPEvents.CONNECT.invoker().onConnect();
+                    SpCoBot.LOGGER.info("已连接到CAATP。");
+                    this.out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true);
+                    while (true) {
+                        byte[] buffer = new byte[1024];
+                        int bytesRead = getInstance().socket.getInputStream().read(buffer);
+                        if (bytesRead == -1) {
+                            continue;
+                        }
+                        String message = new String(buffer, 0, bytesRead, StandardCharsets.UTF_8);
+                        CAATPEvents.RECEIVE.invoker().onReceive(message);
+                    }
+                } catch (IOException e) {
+                    CAATPEvents.DISCONNECT.invoker().onDisconnect();
+                    stopHeartBeat();
+                    SpCoBot.LOGGER.info("无法连接至CAATP: {}, 将在{}秒后重连。", e.getMessage(), nextOperationInterval());
+                    isConnected = false;
+                    reconnectionAttempts++;
+                    try {
+                        TimeUnit.SECONDS.sleep(nextOperationInterval()); // 等待一段时间后重试连接
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        }, "CAATP").start();
     }
 
     public boolean isConnected() {
         return isConnected;
-    }
-
-    private synchronized void autoReconnect() {
-        if (inConnecting) {
-            return;
-        }
-        inConnecting = true;
-        isConnected = false;
-        while (true)
-            try {
-                SpCoBot.LOGGER.info("开始尝试连接CAATP。");
-                getInstance().socket = new Socket("192.168.50.2", 8900);
-                this.out = new PrintWriter(new OutputStreamWriter(getInstance().socket.getOutputStream(), StandardCharsets.UTF_8), true);
-                isConnected = true;
-                reconnectionAttempts = 0;
-                CAATPEvents.CONNECT.invoker().onConnect();
-                SpCoBot.LOGGER.info("已连接到CAATP。");
-                inConnecting = false;
-                new Thread(() -> {
-                    while (true) {
-                        try {
-                            byte[] buffer = new byte[1024];
-                            int bytesRead = getInstance().socket.getInputStream().read(buffer);
-                            if (bytesRead == -1) {
-                                continue;
-                            }
-                            String message = new String(buffer, 0, bytesRead, StandardCharsets.UTF_8);
-                            CAATPEvents.RECEIVE.invoker().onReceive(message);
-                        } catch (IOException e) {
-                            SpCoBot.LOGGER.info("无法连接至CAATP: {}, 将在{}秒后重连。", e.getMessage(), nextOperationInterval());
-                            this.isConnected = false;
-                            reconnectionAttempts++;
-                            try {
-                                TimeUnit.SECONDS.sleep(nextOperationInterval());
-                            } catch (InterruptedException ex) {
-                                ex.printStackTrace();
-                            }
-                            autoReconnect();
-                        }
-                    }
-                }, "CAATP").start();
-                break;
-            } catch (IOException e) {
-                isConnected = false;
-                reconnectionAttempts++;
-                SpCoBot.LOGGER.info("无法连接至CAATP: {}, 将在{}秒后重连。", e.getMessage(), nextOperationInterval());
-                try {
-                    TimeUnit.SECONDS.sleep(nextOperationInterval()); // 等待一段时间后重试连接
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
-            }
     }
 
     private int nextOperationInterval() {
@@ -142,6 +119,23 @@ public class CAATP {
             e.printStackTrace();
         }
 
+    }
+
+    /**
+     * 开始心跳线程
+     */
+    private void startHeartbeat() {
+        heartbeat = Executors.newScheduledThreadPool(1);
+        heartbeat.scheduleAtFixedRate(this::sendHeartbeat, 0, 5000L, TimeUnit.MICROSECONDS);
+    }
+
+    /**
+     * 停止心跳线程
+     */
+    private void stopHeartBeat() {
+        if (heartbeat != null && !heartbeat.isShutdown()) {
+            heartbeat.shutdown();
+        }
     }
 
     private void sendHeartbeat() {
