@@ -32,7 +32,11 @@ SpCoBot 可以用作所有所支持SDK的插件。所以 SpCoBot 具体的部署
 
 # 鸣谢
 
-本项目部分代码源自 [Fabric](https://github.com/FabricMC/fabric) , 版权归 [Fabric所有贡献者](https://github.com/FabricMC/fabric/graphs/contributors) 所有。
+- 本项目部分代码源自 [Fabric](https://github.com/FabricMC/fabric) , 版权归 [Fabric所有贡献者](https://github.com/FabricMC/fabric/graphs/contributors) 所有。
+
+## 赞助商
+
+[<img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" width="200"/>](https://www.jetbrains.com/)
 
 # 许可证
 
