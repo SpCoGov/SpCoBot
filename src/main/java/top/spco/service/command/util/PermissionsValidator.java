@@ -51,6 +51,29 @@ import top.spco.user.UserPermission;
  * @since 1.2.0
  */
 public class PermissionsValidator {
+
+    /**
+     * 验证发起命令的用户是否具有管理员权限
+     *
+     * @param from 命令来源
+     * @param user 命令发送者
+     * @param message 命令源消息
+     * @return 如果发送者有管理员权限返回 {@code true} ，否则返回 {@code false}
+     */
+    public static boolean isMemberAdmin(Interactive<?> from, BotUser user, Message<?> message) {
+        if (from instanceof Group<?> group) {
+            if (!group.getMember(user.getId()).getPermission().isOperator()) {
+                if (user.getPermission().getLevel() < UserPermission.ADMINISTRATOR.getLevel()) {
+                    from.quoteReply(message, "[告知] 您无权使用此命令。");
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     /**
      * 验证发起命令的用户是否具有管理员权限，并检查机器人是否有权操作目标用户。<p>
      * 此方法首先检查发起命令的用户在群组中是否具有管理员权限。

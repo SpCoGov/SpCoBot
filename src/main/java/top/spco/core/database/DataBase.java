@@ -101,10 +101,17 @@ public class DataBase {
                         "create_data TEXT DEFAULT 'null', " +
                         "ban_type TEXT DEFAULT 'null', " +
                         "region TEXT DEFAULT 'null')";
+        String mcsTableSql =
+                "CREATE TABLE IF NOT EXISTS mcs " +
+                        "(group_id INTEGER NOT NULL PRIMARY KEY, " +
+                        "host TEXT DEFAULT 'null', " +
+                        "port INTEGER DEFAULT 58964)";
         try (PreparedStatement stmt = getConn().prepareStatement(createUserTableSql);
-             PreparedStatement stmt2 = getConn().prepareStatement(createValorantUserTableSql)) {
+             PreparedStatement stmt2 = getConn().prepareStatement(createValorantUserTableSql);
+             PreparedStatement stmt3 = getConn().prepareStatement(mcsTableSql)) {
             stmt.execute();
             stmt2.execute();
+            stmt3.execute();
         }
     }
 

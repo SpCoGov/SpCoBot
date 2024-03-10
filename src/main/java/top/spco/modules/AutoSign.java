@@ -32,7 +32,7 @@ import java.util.TimerTask;
  * 每日零点自动签到
  *
  * @author SpCo
- * @version 2.0.0
+ * @version 2.0.3
  * @since 2.0.0
  */
 public class AutoSign extends AbstractModule {
@@ -53,7 +53,7 @@ public class AutoSign extends AbstractModule {
 
     @Override
     public void init() {
-        Timer autoSign = new Timer("AutoSign", true);
+        Timer autoSign = new Timer("AutoSign");
         autoSign.schedule(new TimerTask() {
             @Override
             public void run() {

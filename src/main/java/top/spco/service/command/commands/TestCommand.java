@@ -21,7 +21,6 @@ import top.spco.api.User;
 import top.spco.api.message.Message;
 import top.spco.service.chat.*;
 import top.spco.service.command.AbstractCommand;
-import top.spco.service.command.CommandMarker;
 import top.spco.service.command.CommandMeta;
 import top.spco.user.BotUser;
 import top.spco.user.UserPermission;

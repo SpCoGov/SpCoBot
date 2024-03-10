@@ -126,7 +126,7 @@ public class CAATP {
      */
     private void startHeartbeat() {
         heartbeat = Executors.newScheduledThreadPool(1);
-        heartbeat.scheduleAtFixedRate(this::sendHeartbeat, 0, 5000L, TimeUnit.MICROSECONDS);
+        heartbeat.scheduleAtFixedRate(this::sendHeartbeat, 0, 5000L, TimeUnit.MILLISECONDS);
     }
 
     /**
