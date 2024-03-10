@@ -15,8 +15,6 @@
  */
 package top.spco.modules;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import top.spco.SpCoBot;
 import top.spco.api.Friend;
 import top.spco.core.module.AbstractModule;
@@ -36,7 +34,6 @@ import java.util.TimerTask;
  * @since 2.0.0
  */
 public class AutoSign extends AbstractModule {
-    private static final Logger LOGGER = LogManager.getLogger("AutoSign");
     public AutoSign() {
         super("AutoSign");
     }
@@ -64,14 +61,14 @@ public class AutoSign extends AbstractModule {
                     // 创建查询语句
                     String sql = "SELECT id FROM user WHERE sign != ? AND premium = 1";
                     try (PreparedStatement pstmt = SpCoBot.getInstance().getDataBase().getConn().prepareStatement(sql)) {
-                        LOGGER.info("现在开始自动签到");
+                        SpCoBot.LOGGER.info("现在开始自动签到");
                         pstmt.setString(1, DateUtils.today().toString());
                         SpCoBot.getInstance().getDataBase().setParameters(pstmt);
                         try (ResultSet rs = pstmt.executeQuery()) {
                             while (rs.next()) {
                                 long id = rs.getLong("id");
                                 BotUsers.get(id).sign();
-                                LOGGER.info("已为用户 {} 自动签到", id);
+                                SpCoBot.LOGGER.info("已为用户 {} 自动签到", id);
                             }
                         }
                     }

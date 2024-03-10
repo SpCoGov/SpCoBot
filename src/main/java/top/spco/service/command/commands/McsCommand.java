@@ -43,6 +43,7 @@ public class McsCommand extends GroupAbstractCommand {
     @Override
     public void init() {
         manager = McSManager.getInstance();
+
     }
 
     @Override
@@ -129,6 +130,7 @@ public class McsCommand extends GroupAbstractCommand {
                 if (manager.isBound(group)) {
                     try {
                         manager.connect(group);
+                        from.quoteReply(message, "连接成功");
                     } catch (IOException e) {
                         from.handleException(message, "连接时发生异常", e);
                     }

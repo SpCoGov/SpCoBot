@@ -100,7 +100,7 @@ public class CommandDispatcher {
             try {
                 registerCommand(command);
             } catch (Exception e) {
-                e.printStackTrace();
+                SpCoBot.LOGGER.error(e);
             }
         }
         freeze();
@@ -262,10 +262,9 @@ public class CommandDispatcher {
         if (frozen) {
             throw new IllegalStateException("Cannot register command after the pre-initialization phase!");
         }
-        String[] labels = command.getLabels();
-        for (String label : labels) {
+        for (String label : command.getLabels()) {
             label = label.toLowerCase(Locale.ENGLISH);
-            if (label.equals("") || label == null) {
+            if (label.isEmpty() || label == null) {
                 throw new CommandRegistrationException("The command label is not valid.");
             }
             switch (command.getScope()) {
@@ -357,14 +356,18 @@ public class CommandDispatcher {
             // 存储处理过的参数， 用于创建处理过的命令用法
             List<CommandParam> processedParams = new ArrayList<>();
             // 遍历当前用法的所有参数
-            for (var params : usage.params) {
+            for (var param : usage.params) {
                 // 判断该参数是否为可省略的（可选参数、目标用户ID参数）参数
-                if (params.type == CommandParam.ParamType.OPTIONAL || params.content == CommandParam.ParamContent.TARGET_USER_ID) {
+                if (param.type == CommandParam.ParamType.OPTIONAL || param.content == CommandParam.ParamContent.TARGET_USER_ID) {
                     continue;
                 }
                 // 如果不是，则将其记录到“处理过的参数”里
                 // 为了消除参数名的影响，将所有参数的参数名转换为“参数”
-                processedParams.add(new CommandParam("Param", params.type, params.content, "参数"));
+                if (param.content == CommandParam.ParamContent.SELECTION && param.options.length == 1) {
+                    processedParams.add(new CommandParam("Param", param.type, param.content, param.options));
+                } else {
+                    processedParams.add(new CommandParam("Param", param.type, param.content, "参数"));
+                }
             }
             // 用处理过的参数创建一个命令用法
             CommandUsage processedUsage = new CommandUsage("Usage", "Usage", processedParams);

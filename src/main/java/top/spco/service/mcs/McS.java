@@ -17,8 +17,6 @@ package top.spco.service.mcs;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import top.spco.SpCoBot;
 import top.spco.api.Group;
 import top.spco.api.message.Message;
@@ -51,18 +49,18 @@ public class McS {
     private int heartbeatInterval;
     private String name;
     private final Group<?> group;
-    private Logger LOGGER;
     private final Map<Integer, Message<?>> commandCaller = new HashMap<>();
 
     public McS(String host, int port, Group<?> group) throws IOException {
         this.host = host;
         this.port = port;
         this.group = group;
+        this.group.sendMessage("开始尝试连接到Minecraft服务器：" + host + ":" + port);
         socket = new Socket(host, port);
         this.out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true);
         new Thread(() -> {
-            while (true) {
-                try {
+            try {
+                while (true) {
                     byte[] buffer = new byte[1024];
                     int bytesRead = this.socket.getInputStream().read(buffer);
                     if (bytesRead == -1) {
@@ -77,8 +75,7 @@ public class McS {
                             heartbeatInterval = data.get("heartbeat_interval").getAsInt();
                             name = data.get("name").getAsString();
                             startHeartbeat();
-                            Thread.currentThread().setName(name);
-                            LOGGER = LogManager.getLogger("MsC-" + name);
+                            Thread.currentThread().setName("MsC-" + name);
                         }
                         case 2 -> {
                             switch (pl.getType()) {
@@ -90,17 +87,17 @@ public class McS {
                                             String playerName = data.get("sender_name").getAsString();
                                             String chatMessage = data.get("message").getAsString();
                                             this.group.sendMessage(playerName + ": " + chatMessage);
-                                            LOGGER.info("玩家{}发送了一条消息：{}。", playerName, chatMessage);
+                                            SpCoBot.LOGGER.info("玩家{}发送了一条消息：{}。", playerName, chatMessage);
                                         }
                                         case "PLAYER_LOGGED_IN" -> {
                                             String playerName = data.get("player_name").getAsString();
                                             this.group.sendMessage(playerName + "加入了服务器。");
-                                            LOGGER.info("玩家{}加入了服务器。", playerName);
+                                            SpCoBot.LOGGER.info("玩家{}加入了服务器。", playerName);
                                         }
                                         case "PLAYER_LOGGED_OUT" -> {
                                             String playerName = data.get("player_name").getAsString();
                                             this.group.sendMessage(playerName + "退出了服务器。");
-                                            LOGGER.info("玩家{}退出了服务器。", playerName);
+                                            SpCoBot.LOGGER.info("玩家{}退出了服务器。", playerName);
                                         }
                                     }
                                 }
@@ -114,12 +111,14 @@ public class McS {
 
                         }
                     }
-                } catch (IOException e) {
-                    stopHeartBeat();
-                    close();
-                    this.group.sendMessage("绑定的Minecraft服务器已离线");
+
                 }
+            } catch (IOException e) {
+                stopHeartBeat();
+                close();
+                this.group.sendMessage("绑定的Minecraft服务器已离线");
             }
+
         }).start();
     }
 

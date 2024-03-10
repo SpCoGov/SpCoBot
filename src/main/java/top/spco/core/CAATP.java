@@ -87,7 +87,7 @@ public class CAATP {
                     try {
                         TimeUnit.SECONDS.sleep(nextOperationInterval()); // 等待一段时间后重试连接
                     } catch (InterruptedException ex) {
-                        ex.printStackTrace();
+                        SpCoBot.LOGGER.error(ex);
                     }
                 }
             }
