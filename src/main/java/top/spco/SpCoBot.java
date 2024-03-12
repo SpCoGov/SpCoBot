@@ -70,7 +70,7 @@ import java.io.File;
  * </pre>
  *
  * @author SpCo
- * @version 2.0.3
+ * @version 2.0.4
  * @since 0.1.0
  */
 public class SpCoBot {
@@ -102,9 +102,9 @@ public class SpCoBot {
      * </ul>
      * <b>更新版本号(仅限核心的 Feature)时请不要忘记在 build.gradle 中同步修改版本号</b>
      */
-    public static final String MAIN_VERSION = "2.0.3";
-    public static final String VERSION = "v" + MAIN_VERSION + "-2";
-    public static final String UPDATED_TIME = "2023-03-10 13:49";
+    public static final String MAIN_VERSION = "2.0.4";
+    public static final String VERSION = "v" + MAIN_VERSION + "-1";
+    public static final String UPDATED_TIME = "2023-03-12 12:13";
     public static final String OLDEST_SUPPORTED_CONFIG_VERSION = "0.3.2";
 
     private SpCoBot() {
@@ -238,6 +238,7 @@ public class SpCoBot {
                 }
                 return;
             }
+
         });
         // 处理群临时消息消息
         MessageEvents.GROUP_TEMP_MESSAGE.register((bot, source, sender, message, time) -> {

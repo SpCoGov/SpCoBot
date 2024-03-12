@@ -29,7 +29,7 @@ import java.util.List;
 
 /**
  * @author SpCo
- * @version 2.0.0
+ * @version 2.0.4
  * @since 0.1.0
  */
 @CommandMarker
@@ -84,7 +84,7 @@ public class DataCommand extends AbstractCommand {
                 String whereValues = meta.argument(3);
                 try {
                     String value = SpCoBot.getInstance().getDataBase().selectString(table, columns, whereClause, whereValues);
-                    from.quoteReply(message, "[告知] 您查询的数据为: " + value);
+                    from.quoteReply(message, "您查询的数据为: " + value);
                 } catch (SQLException e) {
                     from.handleException(message, "数据查询失败", e);
                 }
@@ -98,7 +98,7 @@ public class DataCommand extends AbstractCommand {
                 try {
                     String value = SpCoBot.getInstance().getDataBase().selectString(table, columns, whereClause, whereValues);
                     SpCoBot.getInstance().getDataBase().update("update " + table + " set " + columns + "=? where " + whereClause + "=?", toChange, whereValues);
-                    from.quoteReply(message, "[告知] 已将数据从 " + value + " 修改为 " + toChange);
+                    from.quoteReply(message, "已将数据从 " + value + " 修改为 " + toChange);
                 } catch (SQLException e) {
                     from.handleException(message, "数据更新失败", e);
                 }

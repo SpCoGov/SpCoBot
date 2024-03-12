@@ -15,15 +15,18 @@
  */
 package top.spco.service.command.commands;
 
+import com.google.gson.JsonObject;
 import top.spco.api.Bot;
 import top.spco.api.Group;
 import top.spco.api.Interactive;
 import top.spco.api.User;
 import top.spco.api.message.Message;
+import top.spco.events.MessageEvents;
 import top.spco.service.command.*;
 import top.spco.service.command.util.PermissionsValidator;
 import top.spco.service.mcs.McS;
 import top.spco.service.mcs.McSManager;
+import top.spco.service.mcs.Payload;
 import top.spco.user.BotUser;
 import top.spco.util.tuple.Pair;
 
@@ -33,16 +36,29 @@ import java.util.List;
 
 /**
  * @author SpCo
- * @version 2.0.3
+ * @version 2.0.4
  * @since 2.0.3
  */
 @CommandMarker
-public class McsCommand extends GroupAbstractCommand {
+public class McSCommand extends GroupAbstractCommand {
     private static McSManager manager;
 
     @Override
     public void init() {
         manager = McSManager.getInstance();
+        MessageEvents.GROUP_MESSAGE.register((bot, source, sender, message, time) -> {
+            if (message.isCommandMessage()) {
+                return;
+            }
+            McS mcS = manager.getMcS(source);
+            if (mcS != null) {
+                JsonObject data = new JsonObject();
+                data.addProperty("type", "GROUP_MESSAGE");
+                data.addProperty("sender_name", sender.getNick());
+                data.addProperty("message", message.toMessageContext());
+                mcS.send(new Payload(5, data, "DISPATCH"));
+            }
+        });
 
     }
 

@@ -35,11 +35,11 @@ import java.util.Map;
 
 /**
  * @author SpCo
- * @version 2.0.0
+ * @version 2.0.4
  * @since 0.1.0
  */
 @CommandMarker
-public class BalancetopCommand extends AbstractCommand {
+public class BalanceTopCommand extends AbstractCommand {
     @Override
     public String[] getLabels() {
         return new String[]{"balancetop"};

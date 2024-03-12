@@ -101,13 +101,14 @@ import java.io.File;
  * }</pre>
  *
  * @author SpCo
- * @version 2.0.0
+ * @version 2.0.4
  * @see Image
  * @see MessageService
  * @see MessageSource
  * @since 0.1.0
  */
 public abstract class Message<T> extends Wrapper<T> implements Codable {
+    private boolean isCommandMessage = false;
     protected Message(T message) {
         super(message);
     }
@@ -146,4 +147,12 @@ public abstract class Message<T> extends Wrapper<T> implements Codable {
      * @return 转换的结果
      */
     public abstract Message<?> toMessage();
+
+    public boolean isCommandMessage() {
+        return isCommandMessage;
+    }
+
+    public void setCommandMessage() {
+        isCommandMessage = true;
+    }
 }

@@ -31,11 +31,11 @@ import java.util.List;
 
 /**
  * @author SpCo
- * @version 2.0.0
+ * @version 2.0.4
  * @since 0.2.1
  */
 @CommandMarker
-public class DashscopeCommand extends AbstractCommand {
+public class DashScopeCommand extends AbstractCommand {
     @Override
     public String[] getLabels() {
         return new String[]{"dashscope"};

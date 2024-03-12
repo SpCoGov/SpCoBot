@@ -15,10 +15,10 @@
  */
 package top.spco.core.config;
 
-import top.spco.service.command.commands.DashscopeCommand;
+import top.spco.service.command.commands.DashScopeCommand;
 
 /**
- * 本配置组包含了 {@link DashscopeCommand} 的相关配置，包含以下配置项：
+ * 本配置组包含了 {@link DashScopeCommand} 的相关配置，包含以下配置项：
  * <table border="1">
  *   <tr>
  *     <th>配置项名</th>
@@ -32,7 +32,7 @@ import top.spco.service.command.commands.DashscopeCommand;
  *
  * @author SpCo
  * @version 0.2.1
- * @see DashscopeCommand
+ * @see DashScopeCommand
  * @since 0.2.1
  */
 public enum DashScopeSettings implements SettingsGroup {

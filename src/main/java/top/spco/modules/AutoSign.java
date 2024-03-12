@@ -30,7 +30,7 @@ import java.util.TimerTask;
  * 每日零点自动签到
  *
  * @author SpCo
- * @version 2.0.3
+ * @version 2.0.4
  * @since 2.0.0
  */
 public class AutoSign extends AbstractModule {
@@ -51,6 +51,7 @@ public class AutoSign extends AbstractModule {
     @Override
     public void init() {
         Timer autoSign = new Timer("AutoSign");
+        SpCoBot.LOGGER.debug("自动签到任务已创建！开始时间：{}，执行间隔：{}", DateUtils.getTodayStart(), 86400000L);
         autoSign.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -73,7 +74,7 @@ public class AutoSign extends AbstractModule {
                         }
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    SpCoBot.LOGGER.error(e);
                     Friend<?> friend = SpCoBot.getInstance().getBot().getFriend(SpCoBot.getInstance().botOwnerId);
                     friend.handleException("自动签到时抛出了意料之外的异常", e);
                 }

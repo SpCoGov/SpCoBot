@@ -47,7 +47,7 @@ import top.spco.user.UserPermission;
  * 这些方法有助于在执行群管理命令之前确保权限和安全性。
  *
  * @author SpCo
- * @version 2.0.0
+ * @version 2.0.4
  * @since 1.2.0
  */
 public class PermissionsValidator {
@@ -64,7 +64,7 @@ public class PermissionsValidator {
         if (from instanceof Group<?> group) {
             if (!group.getMember(user.getId()).getPermission().isOperator()) {
                 if (user.getPermission().getLevel() < UserPermission.ADMINISTRATOR.getLevel()) {
-                    from.quoteReply(message, "[告知] 您无权使用此命令。");
+                    from.quoteReply(message, "您无权使用此命令。");
                     return false;
                 }
             }
@@ -91,7 +91,7 @@ public class PermissionsValidator {
             if (from instanceof Group<?> group) {
                 if (!group.getMember(user.getId()).getPermission().isOperator()) {
                     if (user.getPermission().getLevel() < UserPermission.ADMINISTRATOR.getLevel()) {
-                        from.quoteReply(message, "[告知] 您无权使用此命令。");
+                        from.quoteReply(message, "您无权使用此命令。");
                         return null;
                     }
                 }
@@ -102,7 +102,7 @@ public class PermissionsValidator {
                 return null;
             }
         } catch (NullPointerException e) {
-            from.quoteReply(message, "[告知] 该用户不存在。");
+            from.quoteReply(message, "该用户不存在。");
             return null;
         }
         return null;
@@ -142,11 +142,11 @@ public class PermissionsValidator {
     public static boolean verifyBotPermissions(Interactive<?> from, Message<?> message, NormalMember<?> target, boolean prompt) {
         if (from instanceof Group<?> group) {
             if (!group.botPermission().isOperator()) {
-                if (prompt) from.quoteReply(message, "[告知] 机器人权限不足");
+                if (prompt) from.quoteReply(message, "机器人权限不足");
                 return false;
             }
             if (target.getPermission().getLevel() >= group.botPermission().getLevel()) {
-                if (prompt) from.quoteReply(message, "[告知] 大佬，惹不起");
+                if (prompt) from.quoteReply(message, "大佬，惹不起");
                 return false;
             }
             return true;

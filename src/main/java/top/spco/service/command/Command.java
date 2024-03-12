@@ -90,7 +90,7 @@ public interface Command {
      * 注意：这里的最低权限指的是{@link BotUser 机器人用户}的{@link UserPermission 用户权限}，而不是群聊中{@link Member 群成员}的{@link MemberPermission 成员权限}
      *
      * @param user 命令发送用户
-     * @return 如果返回 {@code false} 则命令发送用户会被提示：{@code "[告知] 您无权使用此命令."}
+     * @return 如果返回 {@code false} 则命令发送用户会被提示：{@code "您无权使用此命令."}
      */
     boolean hasPermission(BotUser user) throws SQLException;
 

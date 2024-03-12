@@ -43,7 +43,7 @@ import java.util.*;
  * 它负责注册、执行和管理各种命令的权限
  *
  * @author SpCo
- * @version 2.0.0
+ * @version 2.0.4
  * @since 0.1.0
  */
 public class CommandDispatcher {
@@ -138,6 +138,7 @@ public class CommandDispatcher {
     private void callCommand(Map<String, Command> targetCommands, Interactive<?> from, User<?> sender, Message<?> message, Bot<?> bot, int time, CommandMeta meta) {
         // 先检测用户提交的命令是否被注册
         if (targetCommands.containsKey(meta.getLabel())) {
+            message.setCommandMessage();
             try {
                 // 获取命令实例和发送者和发送者的用户实例
                 Command object = targetCommands.get(meta.getLabel());
@@ -145,7 +146,7 @@ public class CommandDispatcher {
                 // 先检测发送者是否有权限
                 try {
                     if (!object.hasPermission(user)) {
-                        from.quoteReply(message, "[告知] 您无权使用此命令。");
+                        from.quoteReply(message, "您无权使用此命令。");
                         return;
                     }
                 } catch (SQLException e) {
@@ -160,7 +161,7 @@ public class CommandDispatcher {
                     // 先确定这个方法所需的最少参数数量
                     int minParamSize = usage.params.size();
                     // 若命令用法的最后一个参数是可选的，则将最少参数数量减一（因为只有最后一位可以是可选的）
-                    if (usage.params.size() != 0 && usage.params.get(usage.params.size() - 1).type == CommandParam.ParamType.OPTIONAL) {
+                    if (!usage.params.isEmpty() && usage.params.get(usage.params.size() - 1).type == CommandParam.ParamType.OPTIONAL) {
                         minParamSize -= 1;
                     }
                     // 若命令用法有目标用户ID参数，则将最少参数数量减一
@@ -217,7 +218,7 @@ public class CommandDispatcher {
             } catch (UserFetchException e) {
                 from.handleException(message, "SpCoBot获取用户时失败", e);
             } catch (Exception e) {
-                e.printStackTrace();
+                SpCoBot.LOGGER.error(e);
                 from.handleException(message, e);
             }
         }

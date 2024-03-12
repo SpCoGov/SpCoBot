@@ -15,39 +15,36 @@
  */
 package top.spco.service.command.commands;
 
-import top.spco.api.*;
+import top.spco.api.Bot;
+import top.spco.api.Interactive;
+import top.spco.api.User;
 import top.spco.api.message.Message;
-import top.spco.service.command.*;
-import top.spco.service.command.util.PermissionsValidator;
+import top.spco.service.command.AbstractCommand;
+import top.spco.service.command.CommandMarker;
+import top.spco.service.command.CommandMeta;
 import top.spco.user.BotUser;
-
-import java.security.SecureRandom;
 
 /**
  * @author SpCo
- * @version 2.0.0
+ * @version 2.0.4
  * @since 0.1.0
  */
 @CommandMarker
-public class BanmeCommand extends GroupAbstractCommand {
+public class GetMeCommand extends AbstractCommand {
     @Override
     public String[] getLabels() {
-        return new String[]{"banme"};
+        return new String[]{"getme"};
     }
 
     @Override
     public String getDescriptions() {
-        return "禁言我";
+        return "获取个人信息";
     }
 
     @Override
     public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, CommandMeta meta, String usageName) {
-        if (sender instanceof NormalMember<?> member) {
-            if (PermissionsValidator.verifyBotPermissions(from, message, member)) {
-                int d = new SecureRandom().nextInt(1, 61);
-                member.mute(d);
-                from.quoteReply(message, "恭喜，您已被禁言" + d + "秒");
-            }
+        if (usageName.equals("获取个人信息")) {
+            from.quoteReply(message, user.toString());
         }
     }
 }

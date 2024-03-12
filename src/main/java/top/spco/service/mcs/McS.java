@@ -36,7 +36,7 @@ import java.util.concurrent.TimeUnit;
  * 表示一个通过 MSSBB(<b>M</b>inecraft<b>S</b>ever<b>S</b>pCo<b>B</b>ot<b>B</b>ridge Minecraft服务器-SpCoBot桥接器) 连接的Minecraft服务器
  *
  * @author SpCo
- * @version 2.0.3
+ * @version 2.0.4
  * @since 2.0.3
  */
 public class McS {
@@ -87,25 +87,29 @@ public class McS {
                                             String playerName = data.get("sender_name").getAsString();
                                             String chatMessage = data.get("message").getAsString();
                                             this.group.sendMessage(playerName + ": " + chatMessage);
-                                            SpCoBot.LOGGER.info("玩家{}发送了一条消息：{}。", playerName, chatMessage);
+                                            SpCoBot.LOGGER.info("玩家{}发送了一条消息：{}", playerName, chatMessage);
                                         }
                                         case "PLAYER_LOGGED_IN" -> {
                                             String playerName = data.get("player_name").getAsString();
-                                            this.group.sendMessage(playerName + "加入了服务器。");
-                                            SpCoBot.LOGGER.info("玩家{}加入了服务器。", playerName);
+                                            this.group.sendMessage(playerName + "加入了服务器");
+                                            SpCoBot.LOGGER.info("玩家{}加入了服务器", playerName);
                                         }
                                         case "PLAYER_LOGGED_OUT" -> {
                                             String playerName = data.get("player_name").getAsString();
-                                            this.group.sendMessage(playerName + "退出了服务器。");
-                                            SpCoBot.LOGGER.info("玩家{}退出了服务器。", playerName);
+                                            this.group.sendMessage(playerName + "退出了服务器");
+                                            SpCoBot.LOGGER.info("玩家{}退出了服务器", playerName);
                                         }
                                     }
                                 }
                                 case "REPLY" -> {
                                     JsonObject data = (JsonObject) pl.getData();
                                     int ack = data.get("ack").getAsInt();
-                                    this.group.quoteReply(commandCaller.get(ack), data.get("result").getAsString());
-                                    commandCaller.remove(ack);
+                                    Message<?> caller = commandCaller.get(ack);
+                                    if (caller == null) {
+                                        this.group.sendMessage(data.get("result").getAsString() + "\n\n命令超时响应，原消息信息已被清理");
+                                    } else {
+                                        this.group.quoteReply(caller, data.get("result").getAsString());
+                                    }
                                 }
                             }
 
@@ -129,6 +133,11 @@ public class McS {
         data.addProperty("syn", syn++);
         send(new Payload(5, data, "REQUEST"));
         commandCaller.put(syn - 1, callerMessage);
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        scheduler.schedule(() -> {
+            this.commandCaller.remove(syn - 1);
+        },1, TimeUnit.MINUTES);
+        scheduler.shutdown();
         return syn - 1;
     }
 
