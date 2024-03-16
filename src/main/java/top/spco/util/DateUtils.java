@@ -15,22 +15,20 @@
  */
 package top.spco.util;
 
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 用于处理日期和时间的工具类。
  *
  * @author SpCo
- * @version 0.1.2
+ * @version 2.0.5
  * @since 0.1.2
  */
 public class DateUtils {
@@ -60,7 +58,7 @@ public class DateUtils {
      * @return 具有分钟精度的当前日期和时间。
      */
     public static LocalDateTime nowAtMinutePrecision() {
-        return DateUtils.now().withSecond(0).with(ChronoField.NANO_OF_SECOND, 0);
+        return DateUtils.now().withSecond(0).withNano(0);
     }
 
     /**
@@ -81,7 +79,7 @@ public class DateUtils {
      * @return 计算得到的未来日期和时间。
      */
     public static LocalDateTime calculateFutureTime(LocalDateTime dateTime, long minutes) {
-        return dateTime.plus(minutes, ChronoUnit.MINUTES);
+        return dateTime.plusMinutes(minutes);
     }
 
     /**
@@ -107,6 +105,15 @@ public class DateUtils {
         LocalDateTime currentDateTime = DateUtils.nowAtMinutePrecision();
         Duration duration = Duration.between(startDateTime, currentDateTime);
         return duration.toMinutes();
+    }
+
+    public static long calculateMillisecondToMidnight() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalTime midnight = LocalTime.MIDNIGHT;
+        LocalDateTime nextMidnight = LocalDateTime.of(now.toLocalDate().plusDays(1), midnight);
+
+        Duration duration = Duration.between(now, nextMidnight);
+        return duration.toMillis();
     }
 
     public static Date getTodayStart() {

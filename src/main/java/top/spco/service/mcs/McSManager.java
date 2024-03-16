@@ -28,11 +28,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created on 2024/03/09 22:59
+ * 用于管理{@link McS}的单例类
  *
  * @author SpCo
- * @version 1.0
- * @since 1.0
+ * @version 2.0.5
+ * @since 2.0.3
  */
 public class McSManager {
     private static McSManager instance;

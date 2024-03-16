@@ -36,7 +36,7 @@ import java.util.List;
 
 /**
  * @author SpCo
- * @version 2.0.4
+ * @version 2.0.5
  * @since 2.0.3
  */
 @CommandMarker
@@ -69,7 +69,7 @@ public class McSCommand extends GroupAbstractCommand {
 
     @Override
     public String getDescriptions() {
-        return "将Minecraft服务器绑定到某群";
+        return "Minecraft服务器绑定和操作";
     }
 
     @Override
@@ -86,17 +86,21 @@ public class McSCommand extends GroupAbstractCommand {
                         new CommandParam("操作类型", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.SELECTION, "execute"),
                         new CommandParam("命令", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.TEXT)),
                 new CommandUsage(getLabels()[0], "连接到该群已绑定的服务器",
-                        new CommandParam("操作类型", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.SELECTION, "connect")));
+                        new CommandParam("操作类型", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.SELECTION, "connect")),
+                new CommandUsage(getLabels()[0], "获取服务器在线玩家",
+                        new CommandParam("操作类型", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.SELECTION, "online"))
+        );
     }
 
     @Override
     public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, CommandMeta meta, String usageName) {
-        if (!PermissionsValidator.isMemberAdmin(from, user, message)) {
-            return;
-        }
+
         Group<?> group = (Group<?>) from;
         switch (usageName) {
             case "查看此群所绑定的服务器" -> {
+                if (PermissionsValidator.isMemberAdmin(from, user, message)) {
+                    return;
+                }
                 if (manager.isBound(group)) {
                     Pair<String, Integer> hP = manager.getServer(group);
                     from.quoteReply(message, "该群绑定的服务器为：" + hP.getKey() + ":" + hP.getValue());
@@ -105,6 +109,9 @@ public class McSCommand extends GroupAbstractCommand {
                 }
             }
             case "将某个服务器绑定到此群" -> {
+                if (PermissionsValidator.isMemberAdmin(from, user, message)) {
+                    return;
+                }
                 String host = meta.argument(1);
                 int port;
                 if (meta.getArgs().length == 3) {
@@ -120,6 +127,9 @@ public class McSCommand extends GroupAbstractCommand {
                 }
             }
             case "将某个服务器从此群解绑" -> {
+                if (PermissionsValidator.isMemberAdmin(from, user, message)) {
+                    return;
+                }
                 try {
                     if (manager.unbind(group) < 1) {
                         from.quoteReply(message, "该群尚未绑定服务器");
@@ -131,6 +141,9 @@ public class McSCommand extends GroupAbstractCommand {
                 }
             }
             case "向该群绑定的服务器发送命令" -> {
+                if (PermissionsValidator.isMemberAdmin(from, user, message)) {
+                    return;
+                }
                 if (!manager.isBound(group)) {
                     from.quoteReply(message, "该群尚未绑定服务器");
                     return;
@@ -143,6 +156,9 @@ public class McSCommand extends GroupAbstractCommand {
                 mcS.executeCommand(meta.argument(1), message);
             }
             case "连接到该群已绑定的服务器" -> {
+                if (PermissionsValidator.isMemberAdmin(from, user, message)) {
+                    return;
+                }
                 if (manager.isBound(group)) {
                     try {
                         manager.connect(group);
@@ -150,6 +166,18 @@ public class McSCommand extends GroupAbstractCommand {
                     } catch (IOException e) {
                         from.handleException(message, "连接时发生异常", e);
                     }
+                } else {
+                    from.quoteReply(message, "该群尚未绑定服务器");
+                }
+            }
+            case "获取服务器在线玩家" -> {
+                if (manager.isBound(group)) {
+                    McS mcS = manager.getMcS(group);
+                    if (mcS == null) {
+                        from.quoteReply(message, "尚未与服务器建立连接");
+                        return;
+                    }
+                    mcS.executeCommand("list", message);
                 } else {
                     from.quoteReply(message, "该群尚未绑定服务器");
                 }

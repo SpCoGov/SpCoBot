@@ -27,6 +27,8 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -36,12 +38,10 @@ import java.util.concurrent.TimeUnit;
  * 表示一个通过 MSSBB(<b>M</b>inecraft<b>S</b>ever<b>S</b>pCo<b>B</b>ot<b>B</b>ridge Minecraft服务器-SpCoBot桥接器) 连接的Minecraft服务器
  *
  * @author SpCo
- * @version 2.0.4
+ * @version 2.0.5
  * @since 2.0.3
  */
 public class McS {
-    private String host;
-    private int port;
     private Socket socket;
     private PrintWriter out;
     private ScheduledExecutorService heartbeat;
@@ -50,10 +50,11 @@ public class McS {
     private String name;
     private final Group<?> group;
     private final Map<Integer, Message<?>> commandCaller = new HashMap<>();
+    private final List<Integer> heartbeatList = new LinkedList<>();
+    private final List<Integer> timeoutHeartbeatList = new LinkedList<>();
+    private int timeoutCount;
 
     public McS(String host, int port, Group<?> group) throws IOException {
-        this.host = host;
-        this.port = port;
         this.group = group;
         this.group.sendMessage("开始尝试连接到Minecraft服务器：" + host + ":" + port);
         socket = new Socket(host, port);
@@ -112,10 +113,17 @@ public class McS {
                                     }
                                 }
                             }
-
+                        }
+                        case 6 -> {
+                            JsonObject data = (JsonObject) pl.getData();
+                            int ack = data.get("ack").getAsInt();
+                            heartbeatList.remove(ack);
+                            if (timeoutHeartbeatList.contains(ack)) {
+                                timeoutHeartbeatList.remove(ack);
+                                timeoutCount--;
+                            }
                         }
                     }
-
                 }
             } catch (IOException e) {
                 stopHeartBeat();
@@ -136,7 +144,7 @@ public class McS {
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         scheduler.schedule(() -> {
             this.commandCaller.remove(syn - 1);
-        },1, TimeUnit.MINUTES);
+        }, 1, TimeUnit.MINUTES);
         scheduler.shutdown();
         return syn - 1;
     }
@@ -149,7 +157,6 @@ public class McS {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     private void stopHeartBeat() {
@@ -166,7 +173,19 @@ public class McS {
     }
 
     private void sendHeartbeat() {
-        this.send(Payload.heartbeat());
+        this.send(Payload.heartbeat(syn++));
+        heartbeatList.add(syn - 1);
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        scheduler.schedule(() -> {
+            if (heartbeatList.contains(syn - 1)) {
+                timeoutHeartbeatList.add(syn - 1);
+                if (++timeoutCount > 5) {
+                    this.close();
+                    this.group.sendMessage("绑定的Minecraft服务器已离线");
+                }
+            }
+        }, 3, TimeUnit.SECONDS);
+        scheduler.shutdown();
     }
 
     public void send(Payload pl) {

@@ -17,6 +17,7 @@ package top.spco.service.mcs;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -69,8 +70,8 @@ import com.google.gson.annotations.SerializedName;
  * </table>
  *
  * @author SpCo
- * @version 0.1.0
- * @since 0.1.0
+ * @version 2.0.5
+ * @since 2.0.3
  */
 public class Payload {
     private static final Gson GSON = new Gson();
@@ -126,7 +127,9 @@ public class Payload {
         return new Gson().toJson(this);
     }
 
-    public static Payload heartbeat() {
-        return new Payload(1, null, "HEARTBEAT");
+    public static Payload heartbeat(int syn) {
+        JsonObject data = new JsonObject();
+        data.addProperty("syn", syn);
+        return new Payload(1,data, "HEARTBEAT");
     }
 }
