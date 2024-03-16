@@ -27,7 +27,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 命令的数据
+ * 解析命令
  *
  * @author SpCo
  * @version 2.0.0

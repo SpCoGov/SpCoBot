@@ -28,7 +28,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
- * {@link Command 命令}是一种用户与机器人交互的方式。与{@link Chat 对话}可能有以下不同：
+ * {@link Command 命令}是一种用户与机器人交互的方式。<p>
+ * 与{@link Chat 对话}可能有以下不同：
  * <ul>
  * <li>{@link Chat 对话}传递参数时可以有明确的引导</li>
  * <li>{@link Chat 对话}适合传递内容较大的参数</li>
@@ -37,7 +38,65 @@ import java.util.List;
  * </ul>
  * 这个接口代表一个命令的定义，用于处理用户输入的命令。每个命令都包括{@link #getLabels 标签}、{@link #getDescriptions 描述}、{@link #getScope 作用域}、{@link #needPermission 所需权限}等信息，
  * 并提供{@link #init 初始化}和{@link #onCommand 执行命令}的方法。<p>
- * <b>不建议命令实现此接口，而是继承 {@link AbstractCommand}类</b>
+ * <b>不建议命令实现此接口，而是继承 {@link AbstractCommand}类</b><p>
+ *
+ * <h1>命令创建</h1>
+ * 创建一个类，并继承 {@code AbstractCommand}
+ * <pre>{@code
+ * public class TestCommand extends AbstractCommand{
+ *     @Override
+ *     public String[] getLabels() {
+ *         return new String[]{};
+ *     }
+ *
+ *     @Override
+ *     public String getDescriptions() {
+ *         return null;
+ *     }
+ *
+ *     @Override
+ *     public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, CommandMeta meta, String usageName) {
+ *
+ *     }
+ * }
+ * }</pre>
+ * 一个命令最少实现以上三个方法
+ * <table border="1">
+ *     <tr>
+ *         <th>方法名</th>
+ *         <th>描述</th>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code getLabels}</td>
+ *         <td>定义命令的标签。数组的第一个元素为命令的主标签，其余为命令的别称。</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code getDescriptions}</td>
+ *         <td>定义该命令的描述。</td>
+ *     </tr>
+ *     <tr>
+ *         <td>{@code onCommand}</td>
+ *         <td>定义命令的执行过程。</td>
+ *     </tr>
+ * </table>
+ * <h2>用法</h2>
+ * 命令的默认用法是一个不包含任何参数的且描述为 {@link #getDescriptions() 命令描述} 的用法。可以使用 {@link #getUsages()} 方法重写该命令的用法。<p>
+ * <b>命令的用法不能直接或间接重复。</b>
+ * <h2>作用域</h2>
+ * 命令的作用域指命令的 {@link CommandScope 执行范围} 。每个命令在注册阶段会判断该命令所支持的作用域对应的所有已注册命令是否包含该命令的标签。
+ * 如果包含，会抛出 {@link CommandRegistrationException} 。<p>
+ * 可以使用 {@link #getScope()} 来定义命令的作用域。
+ * <h2>权限</h2>
+ * 可以使用 {@link #needPermission()} 来定义命令所需的权限。这里的权限只是 {@link BotUser 机器人用户} 的权限，并不指群管理员等。
+ * 需要判断群管理员之类的权限，请在 {@link #onCommand} 中进行判断。<p>
+ * 命令调用前 {@code CommandDispatcher} 会先使用 {@link #hasPermission(BotUser)} 方法判断该机器人用户是否拥有指定权限，如果该方法返回 {@code false} 则会直接通知用户缺少权限。
+ * <h2>可见性</h2>
+ * 使用 {@link #isVisible()} 命令可以设置该命令在命令帮助列表中是否可见。
+ * <h2>初始化</h2>
+ * 当一个命令注册完成后， {@code CommandDispatcher} 会调用该命令的 {@link #init() 初始化方法} 。
+ * 该方法会在除 {@link #getScope()}、{@link #getLabels()} 的其他方法之前被执行。
+ * <h1>命令注册</h1>
+ * 对命令使用 {@link CommandMarker} 注解即可在注册阶段自动注册该命令。
  *
  * @author SpCo
  * @version 2.0.0
@@ -106,13 +165,14 @@ public interface Command {
      * 命令的操作<p>
      * 会在命令被有效触发时被调用。
      *
-     * @param bot     收到命令的机器人对象
-     * @param from    收到命令的来源
-     * @param sender  命令的发送者
-     * @param user    命令的发送用户
-     * @param message 原始消息
-     * @param time    命令发送的时间
-     * @param meta    命令的元数据
+     * @param bot       收到命令的机器人对象
+     * @param from      收到命令的来源
+     * @param sender    命令的发送者
+     * @param user      命令的发送用户
+     * @param message   原始消息
+     * @param time      命令发送的时间
+     * @param meta      命令的元数据
+     * @param usageName 命令被触发的用法名
      * @throws CommandSyntaxException 用户调用命令发生语法错误时抛出
      * @see CommandEvents
      */

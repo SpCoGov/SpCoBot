@@ -42,8 +42,8 @@ import java.util.concurrent.TimeUnit;
  * @since 2.0.3
  */
 public class McS {
-    private Socket socket;
-    private PrintWriter out;
+    private final Socket socket;
+    private final PrintWriter out;
     private ScheduledExecutorService heartbeat;
     private int syn;
     private int heartbeatInterval;

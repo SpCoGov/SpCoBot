@@ -36,7 +36,7 @@ import java.util.List;
 
 /**
  * @author SpCo
- * @version 2.0.5
+ * @version 2.0.6
  * @since 2.0.3
  */
 @CommandMarker
@@ -94,11 +94,10 @@ public class McSCommand extends GroupAbstractCommand {
 
     @Override
     public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, CommandMeta meta, String usageName) {
-
         Group<?> group = (Group<?>) from;
         switch (usageName) {
             case "查看此群所绑定的服务器" -> {
-                if (PermissionsValidator.isMemberAdmin(from, user, message)) {
+                if (!PermissionsValidator.isMemberAdmin(from, user, message)) {
                     return;
                 }
                 if (manager.isBound(group)) {
@@ -109,7 +108,7 @@ public class McSCommand extends GroupAbstractCommand {
                 }
             }
             case "将某个服务器绑定到此群" -> {
-                if (PermissionsValidator.isMemberAdmin(from, user, message)) {
+                if (!PermissionsValidator.isMemberAdmin(from, user, message)) {
                     return;
                 }
                 String host = meta.argument(1);
@@ -127,7 +126,7 @@ public class McSCommand extends GroupAbstractCommand {
                 }
             }
             case "将某个服务器从此群解绑" -> {
-                if (PermissionsValidator.isMemberAdmin(from, user, message)) {
+                if (!PermissionsValidator.isMemberAdmin(from, user, message)) {
                     return;
                 }
                 try {
@@ -141,7 +140,7 @@ public class McSCommand extends GroupAbstractCommand {
                 }
             }
             case "向该群绑定的服务器发送命令" -> {
-                if (PermissionsValidator.isMemberAdmin(from, user, message)) {
+                if (!PermissionsValidator.isMemberAdmin(from, user, message)) {
                     return;
                 }
                 if (!manager.isBound(group)) {
@@ -156,7 +155,7 @@ public class McSCommand extends GroupAbstractCommand {
                 mcS.executeCommand(meta.argument(1), message);
             }
             case "连接到该群已绑定的服务器" -> {
-                if (PermissionsValidator.isMemberAdmin(from, user, message)) {
+                if (!PermissionsValidator.isMemberAdmin(from, user, message)) {
                     return;
                 }
                 if (manager.isBound(group)) {

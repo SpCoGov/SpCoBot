@@ -67,6 +67,12 @@ import com.google.gson.annotations.SerializedName;
  *         <td>Send</td>
  *         <td>Client sends request</td>
  *     </tr>
+ * <tr>
+ *         <td>6</td>
+ *         <td>Heartbeat ACK</td>
+ *         <td>Receive</td>
+ *         <td>When the heartbeat is sent successfully, the message will be received</td>
+ *     </tr>
  * </table>
  *
  * @author SpCo

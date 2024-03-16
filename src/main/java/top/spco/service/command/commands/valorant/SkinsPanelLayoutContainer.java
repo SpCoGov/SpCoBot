@@ -36,7 +36,7 @@ import java.util.*;
  * @version 1.3.0
  * @since 1.3.0
  */
-public class SkinsPanelLayoutContainer {
+public class  SkinsPanelLayoutContainer {
     private SkinsPanelLayout SkinsPanelLayout;
 
     public SkinsPanelLayout getSkinsPanelLayout() {
