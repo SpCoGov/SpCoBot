@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
  * CAATP
  *
  * @author SpCo
- * @version 2.0.1
+ * @version 2.0.6
  * @since 0.1.0
  */
 public class CAATP {
@@ -113,12 +113,10 @@ public class CAATP {
     public void sendMessage(String message) {
         try {
             out.println(message);
-            // 刷新输出流，确保消息被发送
             out.flush();
         } catch (Exception e) {
-            e.printStackTrace();
+            SpCoBot.LOGGER.error(e);
         }
-
     }
 
     /**

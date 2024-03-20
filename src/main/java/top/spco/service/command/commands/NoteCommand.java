@@ -20,6 +20,7 @@ import top.spco.api.Bot;
 import top.spco.api.Interactive;
 import top.spco.api.User;
 import top.spco.api.message.Message;
+import top.spco.service.command.GroupAbstractCommand;
 import top.spco.util.FileManipulation;
 import top.spco.service.command.AbstractCommand;
 import top.spco.service.command.CommandMarker;
@@ -36,7 +37,7 @@ import java.util.Objects;
  * @since 0.3.2
  */
 @CommandMarker
-public class NoteCommand extends AbstractCommand {
+public class NoteCommand extends GroupAbstractCommand {
     @Override
     public String[] getLabels() {
         return new String[]{"note", "n"};

@@ -20,16 +20,14 @@ import com.google.gson.JsonPrimitive;
 import top.spco.SpCoBot;
 import top.spco.api.Group;
 import top.spco.api.message.Message;
+import top.spco.util.ExceptionUtils;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -38,7 +36,7 @@ import java.util.concurrent.TimeUnit;
  * 表示一个通过 MSSBB(<b>M</b>inecraft<b>S</b>ever<b>S</b>pCo<b>B</b>ot<b>B</b>ridge Minecraft服务器-SpCoBot桥接器) 连接的Minecraft服务器
  *
  * @author SpCo
- * @version 2.0.5
+ * @version 2.0.6
  * @since 2.0.3
  */
 public class McS {
@@ -47,11 +45,11 @@ public class McS {
     private ScheduledExecutorService heartbeat;
     private int syn;
     private int heartbeatInterval;
-    private String name;
+    private String name = "undefined";
     private final Group<?> group;
     private final Map<Integer, Message<?>> commandCaller = new HashMap<>();
-    private final List<Integer> heartbeatList = new LinkedList<>();
-    private final List<Integer> timeoutHeartbeatList = new LinkedList<>();
+    private final Set<Integer> heartbeats = new HashSet<>();
+    private final Set<Integer> timeoutHeartbeats = new HashSet<>();
     private int timeoutCount;
 
     public McS(String host, int port, Group<?> group) throws IOException {
@@ -117,36 +115,39 @@ public class McS {
                         case 6 -> {
                             JsonObject data = (JsonObject) pl.getData();
                             int ack = data.get("ack").getAsInt();
-                            heartbeatList.remove(ack);
-                            if (timeoutHeartbeatList.contains(ack)) {
-                                timeoutHeartbeatList.remove(ack);
+                            heartbeats.remove(ack);
+
+                            if (timeoutHeartbeats.contains(ack)) {
+                                timeoutHeartbeats.remove(ack);
                                 timeoutCount--;
                             }
                         }
                     }
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
+                SpCoBot.LOGGER.error(ExceptionUtils.getStackTraceAsString(e));
                 stopHeartBeat();
                 close();
-                this.group.sendMessage("绑定的Minecraft服务器已离线");
+                this.group.sendMessage("绑定的Minecraft服务器已离线：" + e.getMessage());
             }
 
         }).start();
     }
 
     public int executeCommand(String command, Message<?> callerMessage) {
+        int payloadSyn = syn++;
         JsonObject data = new JsonObject();
         data.addProperty("type", "CALL_COMMAND");
         data.addProperty("command", command);
-        data.addProperty("syn", syn++);
+        data.addProperty("syn", payloadSyn);
         send(new Payload(5, data, "REQUEST"));
-        commandCaller.put(syn - 1, callerMessage);
+        commandCaller.put(payloadSyn, callerMessage);
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         scheduler.schedule(() -> {
-            this.commandCaller.remove(syn - 1);
+            this.commandCaller.remove(payloadSyn);
         }, 1, TimeUnit.MINUTES);
         scheduler.shutdown();
-        return syn - 1;
+        return payloadSyn;
     }
 
     public void close() {
@@ -173,12 +174,13 @@ public class McS {
     }
 
     private void sendHeartbeat() {
-        this.send(Payload.heartbeat(syn++));
-        heartbeatList.add(syn - 1);
+        int heartbeatSyn = syn++;
+        this.send(Payload.heartbeat(heartbeatSyn));
+        heartbeats.add(heartbeatSyn);
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         scheduler.schedule(() -> {
-            if (heartbeatList.contains(syn - 1)) {
-                timeoutHeartbeatList.add(syn - 1);
+            if (heartbeats.contains(heartbeatSyn)) {
+                timeoutHeartbeats.add(heartbeatSyn);
                 if (++timeoutCount > 5) {
                     this.close();
                     this.group.sendMessage("绑定的Minecraft服务器已离线");
