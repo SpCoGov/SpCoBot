@@ -15,10 +15,12 @@
  */
 package top.spco.service.mcs;
 
+import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
+import top.spco.SpCoBot;
 
 /**
  * {@code Payload} represents a message carrier
@@ -76,7 +78,7 @@ import com.google.gson.annotations.SerializedName;
  * </table>
  *
  * @author SpCo
- * @version 2.0.5
+ * @version 2.0.7
  * @since 2.0.3
  */
 public class Payload {
@@ -124,8 +126,32 @@ public class Payload {
      * @param jsonString 要解析的 JSON 字符串
      * @return 解析后的 Payload 实例
      */
-    public static Payload fromJson(String jsonString) {
-        return GSON.fromJson(jsonString, Payload.class);
+    public static ImmutableList<Payload> fromJson(String jsonString) {
+        try {
+            StringBuilder jsonBuilder = new StringBuilder();
+            int depth = 0;
+            ImmutableList.Builder<Payload> builder = new ImmutableList.Builder<>();
+            for (int i = 0; i < jsonString.length(); i++) {
+                char c = jsonString.charAt(i);
+                jsonBuilder.append(c);
+                if (i == 0 || jsonString.charAt(i - 1) != '/') {
+                    switch (c) {
+                        case '{' -> depth++;
+                        case '}' -> depth--;
+                    }
+                }
+
+                if (depth == 0) {
+                    String json = jsonBuilder.toString();
+                    builder.add(GSON.fromJson(json, Payload.class));
+                    jsonBuilder.setLength(0);
+                }
+            }
+            return builder.build();
+        } catch (Exception e) {
+            SpCoBot.LOGGER.error("解析Payload失败，被解析的文本：{}", jsonString);
+            throw e;
+        }
     }
 
     @Override

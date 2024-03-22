@@ -37,7 +37,7 @@ import static java.util.concurrent.TimeUnit.*;
  * }</pre>
  *
  * @author SpCo
- * @version 2.0.0
+ * @version 2.0.7
  * @since 2.0.0
  */
 public class Stopwatch {
@@ -122,43 +122,11 @@ public class Stopwatch {
     public String toString() {
         long nanos = elapsedNanos();
 
-        TimeUnit unit = chooseUnit(nanos);
+        TimeUnit unit = TimeUtils.chooseUnit(nanos);
         double value = (double) nanos / NANOSECONDS.convert(1, unit);
 
-        return String.format(Locale.ROOT, "%.4g", value) + " " + abbreviate(unit);
+        return String.format(Locale.ROOT, "%.4g", value) + " " + TimeUtils.abbreviate(unit);
     }
 
-    private static TimeUnit chooseUnit(long nanos) {
-        if (DAYS.convert(nanos, NANOSECONDS) > 0) {
-            return DAYS;
-        }
-        if (HOURS.convert(nanos, NANOSECONDS) > 0) {
-            return HOURS;
-        }
-        if (MINUTES.convert(nanos, NANOSECONDS) > 0) {
-            return MINUTES;
-        }
-        if (SECONDS.convert(nanos, NANOSECONDS) > 0) {
-            return SECONDS;
-        }
-        if (MILLISECONDS.convert(nanos, NANOSECONDS) > 0) {
-            return MILLISECONDS;
-        }
-        if (MICROSECONDS.convert(nanos, NANOSECONDS) > 0) {
-            return MICROSECONDS;
-        }
-        return NANOSECONDS;
-    }
 
-    private static String abbreviate(TimeUnit unit) {
-        return switch (unit) {
-            case NANOSECONDS -> "ns";
-            case MICROSECONDS -> "μs";
-            case MILLISECONDS -> "ms";
-            case SECONDS -> "s";
-            case MINUTES -> "min";
-            case HOURS -> "h";
-            case DAYS -> "d";
-        };
-    }
 }

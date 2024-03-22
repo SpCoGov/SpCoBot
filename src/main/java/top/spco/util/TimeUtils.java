@@ -18,20 +18,21 @@ package top.spco.util;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.time.temporal.ChronoField;
-import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+
+import static java.util.concurrent.TimeUnit.*;
+import static java.util.concurrent.TimeUnit.NANOSECONDS;
 
 /**
  * 用于处理日期和时间的工具类。
  *
  * @author SpCo
- * @version 2.0.5
+ * @version 2.0.7
  * @since 0.1.2
  */
-public class DateUtils {
+public class TimeUtils {
     public static final String DATE_TIME_MINUTE_FORMAT = "yyyy-MM-dd'T'HH:mm";
 
     /**
@@ -58,7 +59,7 @@ public class DateUtils {
      * @return 具有分钟精度的当前日期和时间。
      */
     public static LocalDateTime nowAtMinutePrecision() {
-        return DateUtils.now().withSecond(0).withNano(0);
+        return TimeUtils.now().withSecond(0).withNano(0);
     }
 
     /**
@@ -68,7 +69,7 @@ public class DateUtils {
      * @return 计算得到的未来日期和时间。
      */
     public static LocalDateTime calculateFutureTime(long minutes) {
-        return DateUtils.calculateFutureTime(DateUtils.now(), minutes);
+        return TimeUtils.calculateFutureTime(TimeUtils.now(), minutes);
     }
 
     /**
@@ -102,7 +103,7 @@ public class DateUtils {
      * @return 从起始日期时间到当前日期时间之间的分钟间隔
      */
     public static long calculateMinutesBetween(LocalDateTime startDateTime) {
-        LocalDateTime currentDateTime = DateUtils.nowAtMinutePrecision();
+        LocalDateTime currentDateTime = TimeUtils.nowAtMinutePrecision();
         Duration duration = Duration.between(startDateTime, currentDateTime);
         return duration.toMinutes();
     }
@@ -123,5 +124,39 @@ public class DateUtils {
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
         return calendar.getTime();
+    }
+
+    public static TimeUnit chooseUnit(long nanos) {
+        if (DAYS.convert(nanos, NANOSECONDS) > 0) {
+            return DAYS;
+        }
+        if (HOURS.convert(nanos, NANOSECONDS) > 0) {
+            return HOURS;
+        }
+        if (MINUTES.convert(nanos, NANOSECONDS) > 0) {
+            return MINUTES;
+        }
+        if (SECONDS.convert(nanos, NANOSECONDS) > 0) {
+            return SECONDS;
+        }
+        if (MILLISECONDS.convert(nanos, NANOSECONDS) > 0) {
+            return MILLISECONDS;
+        }
+        if (MICROSECONDS.convert(nanos, NANOSECONDS) > 0) {
+            return MICROSECONDS;
+        }
+        return NANOSECONDS;
+    }
+
+    public static String abbreviate(TimeUnit unit) {
+        return switch (unit) {
+            case NANOSECONDS -> "ns";
+            case MICROSECONDS -> "μs";
+            case MILLISECONDS -> "ms";
+            case SECONDS -> "s";
+            case MINUTES -> "min";
+            case HOURS -> "h";
+            case DAYS -> "d";
+        };
     }
 }

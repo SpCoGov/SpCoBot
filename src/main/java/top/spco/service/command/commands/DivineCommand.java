@@ -21,7 +21,7 @@ import top.spco.api.User;
 import top.spco.api.message.Message;
 import top.spco.service.command.*;
 import top.spco.user.BotUser;
-import top.spco.util.DateUtils;
+import top.spco.util.TimeUtils;
 import top.spco.util.HashUtils;
 
 import java.math.BigDecimal;
@@ -56,7 +56,7 @@ public class DivineCommand extends AbstractCommand {
     @Override
     public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, CommandMeta meta, String usageName) {
         if (usageName.equals("占卜")) {
-            LocalDate today = DateUtils.today();
+            LocalDate today = TimeUtils.today();
             try {
                 BigDecimal hundred = new BigDecimal("100.00");
                 StringBuilder sb = new StringBuilder();

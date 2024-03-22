@@ -16,7 +16,7 @@
 package top.spco.user;
 
 import top.spco.SpCoBot;
-import top.spco.util.DateUtils;
+import top.spco.util.TimeUtils;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -115,7 +115,7 @@ public class BotUser {
      */
     public int sign() throws UserOperationException {
         try {
-            LocalDate today = DateUtils.today();
+            LocalDate today = TimeUtils.today();
             String signDate = SpCoBot.getInstance().getDataBase().selectString("user", "sign", "id", id);
             if (signDate.equals(today.toString())) {
                 return -1;

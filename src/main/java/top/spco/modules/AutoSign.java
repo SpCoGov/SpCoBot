@@ -19,10 +19,11 @@ import top.spco.SpCoBot;
 import top.spco.api.Friend;
 import top.spco.core.module.AbstractModule;
 import top.spco.user.BotUsers;
-import top.spco.util.DateUtils;
+import top.spco.util.TimeUtils;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -51,7 +52,7 @@ public class AutoSign extends AbstractModule {
     @Override
     public void init() {
         Timer autoSign = new Timer("AutoSign");
-        SpCoBot.LOGGER.debug("自动签到任务已创建！首次任务将在{}毫秒后执行，每次执行间隔：{}", DateUtils.calculateMillisecondToMidnight(), 86400000L);
+        SpCoBot.LOGGER.debug("自动签到任务已创建！首次任务将在{}毫秒后执行，每次执行间隔：{}", TimeUtils.calculateMillisecondToMidnight(), 86400000L);
 
         autoSign.schedule(new TimerTask() {
             @Override
@@ -64,12 +65,12 @@ public class AutoSign extends AbstractModule {
                     String sql = "SELECT id FROM user WHERE sign != ? AND premium = 1";
                     try (PreparedStatement pstmt = SpCoBot.getInstance().getDataBase().getConn().prepareStatement(sql)) {
                         SpCoBot.LOGGER.info("现在开始自动签到");
-                        pstmt.setString(1, DateUtils.today().toString());
+                        pstmt.setString(1, TimeUtils.today().toString());
                         SpCoBot.getInstance().getDataBase().setParameters(pstmt);
                         try (ResultSet rs = pstmt.executeQuery()) {
                             while (rs.next()) {
                                 long id = rs.getLong("id");
-                                BotUsers.get(id).sign();
+                                Objects.requireNonNull(BotUsers.get(id)).sign();
                                 SpCoBot.LOGGER.info("已为用户 {} 自动签到", id);
                             }
                         }
@@ -80,6 +81,6 @@ public class AutoSign extends AbstractModule {
                     friend.handleException("自动签到时抛出了意料之外的异常", e);
                 }
             }
-        }, DateUtils.calculateMillisecondToMidnight(), 86400000L);
+        }, TimeUtils.calculateMillisecondToMidnight(), 86400000L);
     }
 }
