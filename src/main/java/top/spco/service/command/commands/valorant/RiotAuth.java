@@ -30,6 +30,7 @@ import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import top.spco.SpCoBot;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
@@ -116,7 +117,7 @@ public class RiotAuth implements Closeable {
             customSSLContext.init(null, trustAllCertificates, new SecureRandom());
             return customSSLContext;
         } catch (Exception e) {
-            e.printStackTrace();
+            SpCoBot.LOGGER.error(e);
             return null;
         }
     }
@@ -191,9 +192,6 @@ public class RiotAuth implements Closeable {
         data1.addProperty("remember", "true");
         data1.addProperty("type", "auth");
         data1.addProperty("username", this.username);
-        JsonObject authData = new JsonObject();
-        authData.addProperty("type", "multifactor");
-        authData.addProperty("code", verCode);
 
         // 发送多因素认证请求
         HttpPut authPut = new HttpPut(AUTH_URL);
@@ -202,6 +200,9 @@ public class RiotAuth implements Closeable {
         authPut.setHeader("User-Agent", "RiotClient/58.0.0.4640299.4552318 %s (Windows;10;;Professional, x64)");
         authPut.setHeader("Accept-Language", "en-US,en;q=0.9");
         authPut.setHeader("Accept", "application/json, text/plain, */*");
+        JsonObject authData = new JsonObject();
+        authData.addProperty("type", "multifactor");
+        authData.addProperty("code", verCode);
         authPut.setEntity(new StringEntity(authData.toString()));
 
         HttpResponse authResponse = session.execute(authPut, context);
@@ -431,7 +432,7 @@ public class RiotAuth implements Closeable {
             this.name = null;
             this.typeBan = null;
         } catch (IOException e) {
-            e.printStackTrace();
+            SpCoBot.LOGGER.error(e);
             throw new RuntimeException(e);
         }
     }

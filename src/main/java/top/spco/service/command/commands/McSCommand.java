@@ -36,7 +36,7 @@ import java.util.List;
 
 /**
  * @author SpCo
- * @version 2.0.6
+ * @version 2.0.8
  * @since 2.0.3
  */
 @CommandMarker
@@ -88,7 +88,11 @@ public class McSCommand extends GroupAbstractCommand {
                 new CommandUsage(getLabels()[0], "连接到该群已绑定的服务器",
                         new CommandParam("操作类型", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.SELECTION, "connect")),
                 new CommandUsage(getLabels()[0], "获取服务器在线玩家",
-                        new CommandParam("操作类型", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.SELECTION, "online"))
+                        new CommandParam("操作类型", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.SELECTION, "online")),
+                new CommandUsage(getLabels()[0], "断开与服务器的连接",
+                        new CommandParam("操作类型", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.SELECTION, "disconnect")),
+                new CommandUsage(getLabels()[0], "开关调试模式",
+                        new CommandParam("操作类型", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.SELECTION, "debug"))
         );
     }
 
@@ -160,8 +164,7 @@ public class McSCommand extends GroupAbstractCommand {
                 }
                 if (manager.isBound(group)) {
                     try {
-                        manager.connect(group);
-                        from.quoteReply(message, "连接成功");
+                        manager.connect(group, message);
                     } catch (IOException e) {
                         from.handleException(message, "连接时发生异常", e);
                     }
@@ -177,6 +180,37 @@ public class McSCommand extends GroupAbstractCommand {
                         return;
                     }
                     mcS.executeCommand("list", message);
+                } else {
+                    from.quoteReply(message, "该群尚未绑定服务器");
+                }
+            }
+            case "断开与服务器的连接" -> {
+                if (!PermissionsValidator.isMemberAdmin(from, user, message)) {
+                    return;
+                }
+                if (manager.isBound(group)) {
+                    McS mcS = manager.getMcS(group);
+                    if (mcS == null) {
+                        from.quoteReply(message, "尚未与服务器建立连接");
+                        return;
+                    }
+                    mcS.close(false);
+                } else {
+                    from.quoteReply(message, "该群尚未绑定服务器");
+                }
+            }
+            case "开关调试模式" -> {
+                if (!PermissionsValidator.isMemberAdmin(from, user, message)) {
+                    return;
+                }
+                if (manager.isBound(group)) {
+                    McS mcS = manager.getMcS(group);
+                    if (mcS == null) {
+                        from.quoteReply(message, "尚未与服务器建立连接");
+                        return;
+                    }
+                    boolean debug = mcS.toggleDebug();
+                    from.quoteReply(message, "调试模式：" + (debug ? "已开启" : "已关闭"));
                 } else {
                     from.quoteReply(message, "该群尚未绑定服务器");
                 }

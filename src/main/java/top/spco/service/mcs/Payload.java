@@ -121,7 +121,7 @@ public class Payload {
     }
 
     /**
-     * 从 JSON 字符串创建一个 Payload 实例。
+     * 从 JSON 字符串创建 Payload 实例。
      *
      * @param jsonString 要解析的 JSON 字符串
      * @return 解析后的 Payload 实例

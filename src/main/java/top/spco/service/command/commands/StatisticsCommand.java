@@ -95,7 +95,7 @@ public class StatisticsCommand extends AbstractCommand {
                             return;
                         }
                         if (message.toMessageContext().equals("结束")) {
-                            if (ranks.size() == 0) {
+                            if (ranks.isEmpty()) {
                                 source.quoteReply(message, "至少记录一个段位");
                                 chat.replay();
                             } else {

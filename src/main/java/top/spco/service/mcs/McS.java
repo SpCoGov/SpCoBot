@@ -25,6 +25,7 @@ import top.spco.util.TimeUtils;
 import top.spco.util.tuple.MutablePair;
 import top.spco.util.tuple.Pair;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -42,7 +43,7 @@ import static java.util.concurrent.TimeUnit.NANOSECONDS;
  * 表示一个通过 MSSBB(<b>M</b>inecraft<b>S</b>ever<b>S</b>pCo<b>B</b>ot<b>B</b>ridge Minecraft服务器-SpCoBot桥接器) 连接的Minecraft服务器
  *
  * @author SpCo
- * @version 2.0.7
+ * @version 2.0.8
  * @since 2.0.3
  */
 public class McS {
@@ -59,12 +60,21 @@ public class McS {
     private int timeoutCount;
     private final Map<Integer, String> commandResults = new ConcurrentHashMap<>();
     private final Map<Integer, Pair<Long, Long>> commandReceivingTime = new HashMap<>();
+    private boolean silence = false;
+    private boolean debug = false;
+    private boolean connected = false;
 
-    public McS(String host, int port, Group<?> group) throws IOException {
+    public McS(String host, int port, Group<?> group, @Nullable Message<?> callerMessage) throws IOException {
         this.group = group;
-        this.group.sendMessage("开始尝试连接到Minecraft服务器：" + host + ":" + port);
+        boolean hasCaller = callerMessage != null;
+        if (hasCaller) {
+            group.sendMessage(SpCoBot.getInstance().getMessageService().asMessage("开始尝试连接到Minecraft服务器：" + host + ":" + port).quoteReply(callerMessage));
+        } else {
+            group.sendMessage("开始尝试连接到Minecraft服务器：" + host + ":" + port);
+        }
         socket = new Socket(host, port);
         this.out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true);
+
         new Thread(() -> {
             try {
                 while (true) {
@@ -74,6 +84,9 @@ public class McS {
                         continue;
                     }
                     String message = new String(buffer, 0, bytesRead, StandardCharsets.UTF_8);
+                    if (debug) {
+                        group.sendMessage("收到来自McS的消息：" + message);
+                    }
                     Iterable<Payload> pls = Payload.fromJson(message);
                     for (Payload pl : pls) {
                         switch (pl.getOperationCode()) {
@@ -84,6 +97,13 @@ public class McS {
                                 name = data.get("name").getAsString();
                                 startHeartbeat();
                                 Thread.currentThread().setName("MsC-" + name);
+                                connected = true;
+                                McSManager.getInstance().mcSs.put(group.getId(), this);
+                                if (hasCaller) {
+                                    group.sendMessage(SpCoBot.getInstance().getMessageService().asMessage("连接成功").quoteReply(callerMessage));
+                                } else {
+                                    group.sendMessage("连接成功");
+                                }
                             }
                             case 2 -> {
                                 switch (pl.getType()) {
@@ -163,8 +183,7 @@ public class McS {
             } catch (Exception e) {
                 SpCoBot.LOGGER.error(ExceptionUtils.getStackTraceAsString(e));
                 stopHeartBeat();
-                close();
-                this.group.sendMessage("绑定的Minecraft服务器已离线：" + e.getMessage());
+                close(false);
             }
 
         }).start();
@@ -186,13 +205,18 @@ public class McS {
         return payloadSyn;
     }
 
-    public void close() {
+    public void close(boolean silence) {
+        connected = false;
         stopHeartBeat();
+        McSManager.getInstance().mcSs.remove(this.group.getId());
         try {
             this.socket.close();
             this.out.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+        if (!silence && !this.silence) {
+            this.group.sendMessage("绑定的Minecraft服务器已离线");
         }
     }
 
@@ -218,16 +242,31 @@ public class McS {
             if (heartbeats.contains(heartbeatSyn)) {
                 timeoutHeartbeats.add(heartbeatSyn);
                 if (++timeoutCount > 5) {
-                    this.close();
-                    this.group.sendMessage("绑定的Minecraft服务器已离线");
+                    this.close(false);
                 }
             }
         }, 3, TimeUnit.SECONDS);
         scheduler.shutdown();
     }
 
+    public void setSilence(boolean silence) {
+        this.silence = silence;
+    }
+
+    public boolean toggleDebug() {
+        debug = !debug;
+        return debug;
+    }
+
+    public boolean isConnected() {
+        return connected;
+    }
+
     public void send(Payload pl) {
         out.println(pl.toString());
         out.flush();
+        if (debug) {
+            group.sendMessage("向McS发送消息：" + pl);
+        }
     }
 }

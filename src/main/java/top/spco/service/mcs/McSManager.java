@@ -17,6 +17,7 @@ package top.spco.service.mcs;
 
 import top.spco.SpCoBot;
 import top.spco.api.Group;
+import top.spco.api.message.Message;
 import top.spco.util.tuple.ImmutablePair;
 import top.spco.util.tuple.Pair;
 
@@ -26,33 +27,43 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 用于管理{@link McS}的单例类
  *
  * @author SpCo
- * @version 2.0.5
+ * @version 2.0.8
  * @since 2.0.3
  */
 public class McSManager {
     private static McSManager instance;
-    private final Map<Long, McS> mcSs = new HashMap<>();
+    final Map<Long, McS> mcSs = new HashMap<>();
 
     private McSManager() {
 
     }
 
-    public McS connect(Group<?> group) throws IOException {
+    public McS connect(Group<?> group, Message<?> caller) throws IOException {
         if (!isBound(group)) {
             throw new IllegalStateException("This group is not bound to the Minecraft server");
         }
         Pair<String, Integer> hp = getServer(group);
-        McS mcS = new McS(hp.getKey(), hp.getValue(), group);
-        var old = mcSs.get(group.getId());
+        McS mcS = new McS(hp.getKey(), hp.getValue(), group, caller);
+        McS old = mcSs.get(group.getId());
         if (old != null) {
-            old.close();
+            old.setSilence(true);
+            old.close(true);
         }
-        mcSs.put(group.getId(), mcS);
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        scheduler.schedule(() -> {
+            if (!mcS.isConnected()) {
+                group.quoteReply(caller, "连接超时");
+            }
+        }, 1, TimeUnit.MINUTES);
+        scheduler.shutdown();
         return mcS;
     }
 
@@ -70,7 +81,7 @@ public class McSManager {
             if (rowsAffected > 0) {
                 var s = mcSs.get(group.getId());
                 if (s != null) {
-                    s.close();
+                    s.close(true);
                     mcSs.remove(group.getId());
                 }
             }
