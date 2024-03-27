@@ -62,7 +62,7 @@ public class McSManager {
             if (!mcS.isConnected()) {
                 group.quoteReply(caller, "连接超时");
             }
-        }, 1, TimeUnit.MINUTES);
+        }, 30, TimeUnit.SECONDS);
         scheduler.shutdown();
         return mcS;
     }
