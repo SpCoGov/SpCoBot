@@ -103,7 +103,7 @@ public class SpCoBot {
      * <b>更新版本号(仅限核心的 Feature)时请不要忘记在 build.gradle 中同步修改版本号</b>
      */
     public static final String MAIN_VERSION = "2.0.8";
-    public static final String VERSION = "v" + MAIN_VERSION + "-1";
+    public static final String VERSION = "v" + MAIN_VERSION + "-3";
     public static final String UPDATED_TIME = "2023-03-27 10:26";
     public static final String OLDEST_SUPPORTED_CONFIG_VERSION = "0.3.2";
 
@@ -141,7 +141,7 @@ public class SpCoBot {
         }
         registered = true;
         MessageEvents.FRIEND_MESSAGE_RECALL.register((bot1, sender, operator, recalledMessage) -> LOGGER.info("{}({})撤回了一条自己的消息", operator.getRemark(), operator.getId()));
-        MessageEvents.GROUP_MESSAGE_RECALL.register((bot1, source, sender, operator, recalledMessage) -> LOGGER.info("{}({})在{}({})撤回了一条{}({})的消息", operator.getRemark(),operator.getId(), source.getName(), source.getId(), sender.getNick(), sender.getId()));
+        MessageEvents.GROUP_MESSAGE_RECALL.register((bot1, source, sender, operator, recalledMessage) -> LOGGER.info("{}({})在{}({})撤回了一条{}({})的消息", operator.getNick(),operator.getId(), source.getName(), source.getId(), sender.getNick(), sender.getId()));
         BotEvents.ONLINE_TICK.register(bot1 -> {
             long id = bot1.getId();
             LOGGER.info("机器人({})上线。", id);
