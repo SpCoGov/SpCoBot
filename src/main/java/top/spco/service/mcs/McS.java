@@ -253,6 +253,10 @@ public class McS {
         this.silence = silence;
     }
 
+    public void setDebug(boolean debug) {
+        this.debug = debug;
+    }
+
     public boolean toggleDebug() {
         debug = !debug;
         return debug;

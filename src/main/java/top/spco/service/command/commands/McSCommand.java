@@ -44,7 +44,7 @@ import java.util.List;
 
 /**
  * @author SpCo
- * @version 3.0.0
+ * @version 3.0.1
  * @since 2.0.3
  */
 @CommandMarker
@@ -173,7 +173,8 @@ public class McSCommand extends GroupAbstractCommand {
                 }
                 if (manager.isBound(group)) {
                     try {
-                        manager.connect(group, message);
+                        boolean debug = (Boolean) meta.getParams().get("调试模式");
+                        manager.connect(group, message).setDebug(debug);
                     } catch (IOException e) {
                         from.handleException(message, "连接时发生异常", e);
                     }
