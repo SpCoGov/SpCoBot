@@ -23,7 +23,6 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import static java.util.concurrent.TimeUnit.*;
-import static java.util.concurrent.TimeUnit.NANOSECONDS;
 
 /**
  * 用于处理日期和时间的工具类。

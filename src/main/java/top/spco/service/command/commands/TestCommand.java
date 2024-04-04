@@ -19,12 +19,9 @@ import top.spco.api.Bot;
 import top.spco.api.Interactive;
 import top.spco.api.User;
 import top.spco.api.message.Message;
-import top.spco.service.chat.*;
 import top.spco.service.command.AbstractCommand;
-import top.spco.service.command.CommandMarker;
 import top.spco.service.command.CommandMeta;
 import top.spco.service.command.usage.Usage;
-import top.spco.service.command.usage.UsageBuilder;
 import top.spco.user.BotUser;
 import top.spco.user.UserPermission;
 

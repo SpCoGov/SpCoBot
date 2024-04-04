@@ -27,7 +27,7 @@ import java.util.List;
  * 数据库
  *
  * @author SpCo
- * @version 1.3.0
+ * @version 3.0.0
  * @since 0.1.0
  */
 public class DataBase {
@@ -293,7 +293,7 @@ public class DataBase {
             // 执行插入操作
             pstmt.executeUpdate();
         } catch (Exception e) {
-            e.printStackTrace();
+            SpCoBot.LOGGER.error(e);
         }
     }
 

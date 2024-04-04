@@ -123,7 +123,7 @@ public class Settings {
             Yaml yaml = new Yaml(options);
             yaml.dump(settings, writer);
         } catch (IOException e) {
-            e.printStackTrace();
+            SpCoBot.LOGGER.error(e);
         }
     }
 

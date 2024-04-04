@@ -22,7 +22,6 @@ import net.mamoe.mirai.message.data.MessageChain;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.QuoteReply;
 import net.mamoe.mirai.utils.ExternalResource;
-import org.checkerframework.checker.units.qual.C;
 import top.spco.SpCoBot;
 import top.spco.api.Image;
 import top.spco.api.Interactive;

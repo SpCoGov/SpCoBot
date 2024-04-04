@@ -15,6 +15,8 @@
  */
 package top.spco.util;
 
+import top.spco.SpCoBot;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
@@ -22,7 +24,7 @@ import java.nio.charset.StandardCharsets;
  * 文件操作
  *
  * @author SpCo
- * @version 0.3.2
+ * @version 3.0.0
  * @since 0.3.2
  */
 public class FileManipulation {
@@ -35,7 +37,7 @@ public class FileManipulation {
             try {
                 file.createNewFile();
             } catch (IOException e) {
-                e.printStackTrace();
+                SpCoBot.LOGGER.error(e);
             }
         }
     }
@@ -49,7 +51,7 @@ public class FileManipulation {
                 content.append(line).append("\n");
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            SpCoBot.LOGGER.error(e);
         }
         return content.toString();
     }
@@ -59,7 +61,7 @@ public class FileManipulation {
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePath, true), StandardCharsets.UTF_8))) {
             writer.write(content);
         } catch (IOException e) {
-            e.printStackTrace();
+            SpCoBot.LOGGER.error(e);
         }
     }
 

@@ -132,13 +132,13 @@ public class InteractiveList<C extends Interactive<?>> implements Collection<C> 
 
     @NotNull
     @Override
-    public Object[] toArray() {
+    public Object @NotNull [] toArray() {
         return this.delegate.toArray();
     }
 
     @NotNull
     @Override
-    public <T> T[] toArray(@NotNull T[] a) {
+    public <T> T @NotNull [] toArray(@NotNull T @NotNull [] a) {
         return this.delegate.toArray(a);
     }
 
