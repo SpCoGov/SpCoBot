@@ -27,7 +27,7 @@ import java.util.Map;
  * 用于管理{@link Chat}的单例类
  *
  * @author SpCo
- * @version 2.0.0
+ * @version 3.0.0
  * @since 0.1.1
  */
 public class ChatDispatcher {
@@ -58,7 +58,7 @@ public class ChatDispatcher {
         chat.handleMessage(bot, source, sender, message, time);
     }
 
-    public boolean isInChat(Identifiable where, ChatType chatType) {
+    public boolean isInChat(Identifiable<?> where, ChatType chatType) {
         switch (chatType) {
             case GROUP -> {
                 if (this.groupChats.containsKey(where.getId()) && this.groupChats.get(where.getId()) != null) {
@@ -86,7 +86,7 @@ public class ChatDispatcher {
      * @param chatType 对话的类型
      * @return 对话对象，失败时返回null
      */
-    public Chat getChat(Identifiable where, ChatType chatType) {
+    public Chat getChat(Identifiable<?> where, ChatType chatType) {
         return switch (chatType) {
             case GROUP -> groupChats.get(where.getId());
             case FRIEND -> friendChats.get(where.getId());
@@ -115,7 +115,7 @@ public class ChatDispatcher {
      * @param where    发生对话的场所
      * @param chatType 对话的类型
      */
-    public void stopChat(Identifiable where, ChatType chatType) {
+    public void stopChat(Identifiable<?> where, ChatType chatType) {
         switch (chatType) {
             case GROUP -> this.groupChats.remove(where.getId());
             case FRIEND -> this.friendChats.remove(where.getId());

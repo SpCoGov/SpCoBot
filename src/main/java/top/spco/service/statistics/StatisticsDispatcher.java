@@ -15,7 +15,6 @@
  */
 package top.spco.service.statistics;
 
-import top.spco.SpCoBot;
 import top.spco.api.Group;
 import top.spco.api.NormalMember;
 import top.spco.events.MessageEvents;

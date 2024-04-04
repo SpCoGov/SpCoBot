@@ -15,48 +15,48 @@
  */
 package top.spco.service.command.commands;
 
+import top.spco.SpCoBot;
 import top.spco.api.Bot;
 import top.spco.api.Interactive;
 import top.spco.api.User;
 import top.spco.api.message.Message;
-import top.spco.service.command.AbstractCommand;
 import top.spco.service.command.CommandMarker;
 import top.spco.service.command.CommandMeta;
+import top.spco.service.command.GroupAbstractCommand;
+import top.spco.service.command.exceptions.CommandSyntaxException;
+import top.spco.service.command.util.PermissionsValidator;
 import top.spco.user.BotUser;
-import top.spco.user.UserOperationException;
 
 /**
+ * 撤回一条消息
+ *
  * @author SpCo
  * @version 3.0.0
- * @since 0.1.0
+ * @since 3.0.0
  */
 @CommandMarker
-public class SignCommand extends AbstractCommand {
+public class RecallCommand extends GroupAbstractCommand {
     @Override
     public String[] getLabels() {
-        return new String[]{"sign"};
+        return new String[]{"recall", "c"};
     }
 
     @Override
     public String getDescriptions() {
-        return "签到";
+        return "撤回一条消息";
     }
 
     @Override
-    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, CommandMeta meta, String usageName) {
-        sign(from, user, message);
-    }
-
-    public static void sign(Interactive<?> from, BotUser user, Message<?> message) {
-        try {
-            int i = user.sign();
-            if (i == -1) {
-                from.quoteReply(message, "签到失败。您今天已经签到过了。");
-            } else {
-                from.quoteReply(message, String.format("签到成功。您今天签到获得了%d海绵山币，您现在拥有%d海绵山币。", i, user.getSMFCoin()));
-            }
-        } catch (UserOperationException e) {
-            from.handleException(message, "签到失败", e);
+    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, CommandMeta meta, String usageName) throws CommandSyntaxException {
+        var quote = SpCoBot.getInstance().getMessageService().getQuote(message);
+        if (quote == null) {
+            from.quoteReply(message, "请在回复消息时使用该命令");
+            return;
+        }
+        long id = quote.getLeft().getFromId();
+        if (PermissionsValidator.verifyBotPermissions(from, message, id)) {
+            SpCoBot.getInstance().getMessageService().recall(quote.getRight());
+            from.quoteReply(message, "已撤回");
         }
     }
 }

@@ -20,7 +20,14 @@ import top.spco.api.Bot;
 import top.spco.api.Interactive;
 import top.spco.api.User;
 import top.spco.api.message.Message;
-import top.spco.service.command.*;
+import top.spco.core.module.AbstractModule;
+import top.spco.service.command.AbstractCommand;
+import top.spco.service.command.CommandMarker;
+import top.spco.service.command.CommandMeta;
+import top.spco.service.command.usage.Usage;
+import top.spco.service.command.usage.UsageBuilder;
+import top.spco.service.command.usage.parameters.ModuleParameter;
+import top.spco.service.command.usage.parameters.SpecifiedParameter;
 import top.spco.user.BotUser;
 import top.spco.user.UserPermission;
 
@@ -30,7 +37,7 @@ import java.util.List;
  * 模块管理命令
  *
  * @author SpCo
- * @version 2.0.0
+ * @version 3.0.0
  * @since 2.0.0
  */
 @CommandMarker
@@ -46,12 +53,12 @@ public final class ModuleCommand extends AbstractCommand {
     }
 
     @Override
-    public List<CommandUsage> getUsages() {
+    public List<Usage> getUsages() {
         return List.of(
-                new CommandUsage(getLabels()[0], "获取所有已加载的模块"),
-                new CommandUsage(getLabels()[0], "切换模块状态",
-                        new CommandParam("操作类型", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.SELECTION, "toggle"),
-                        new CommandParam("模块名", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.TEXT)));
+                new UsageBuilder(getLabels()[0], "获取所有已加载的模块").build(),
+                new UsageBuilder(getLabels()[0], "切换模块状态")
+                        .add(new SpecifiedParameter("操作类型", false, "toggle", "toggle"))
+                        .add(new ModuleParameter("模块", false, null)).build());
     }
 
     @Override
@@ -66,19 +73,14 @@ public final class ModuleCommand extends AbstractCommand {
                 var modules = SpCoBot.getInstance().moduleManager.getAll();
                 StringBuilder sb = new StringBuilder("所有已加载的模块：\n");
                 for (var module : modules) {
-                    sb.append(module.name).append(" --> ").append(module.isActive() ? "已开启" : "已关闭").append("\n");
+                    sb.append(module.getName()).append(" --> ").append(module.isActive() ? "已开启" : "已关闭").append("\n");
                 }
                 from.quoteReply(message, sb.toString());
             }
             case "切换模块状态" -> {
-                String moduleName = meta.argument(1);
-                var module = SpCoBot.getInstance().moduleManager.get(moduleName);
-                if (module == null) {
-                    from.quoteReply(message, moduleName +  "未被加载");
-                    return;
-                }
+                AbstractModule module = (AbstractModule) meta.getParams().get("模块");
                 module.toggle();
-                from.quoteReply(message, moduleName + (module.isActive() ? "已开启" : "已关闭"));
+                from.quoteReply(message, module.getName() + (module.isActive() ? "已开启" : "已关闭"));
             }
         }
     }

@@ -183,7 +183,7 @@ public class McS {
             } catch (Exception e) {
                 SpCoBot.LOGGER.error(ExceptionUtils.getStackTraceAsString(e));
                 stopHeartBeat();
-                close(false);
+                close(false, "错误发生：" + e.getMessage());
             }
 
         }).start();
@@ -205,7 +205,7 @@ public class McS {
         return payloadSyn;
     }
 
-    public void close(boolean silence) {
+    public void close(boolean silence, String message) {
         connected = false;
         stopHeartBeat();
         McSManager.getInstance().mcSs.remove(this.group.getId());
@@ -216,7 +216,7 @@ public class McS {
             throw new RuntimeException(e);
         }
         if (!silence && !this.silence) {
-            this.group.sendMessage("绑定的Minecraft服务器已离线");
+            this.group.sendMessage("绑定的Minecraft服务器已离线 (" + message + ")");
         }
     }
 
@@ -242,7 +242,7 @@ public class McS {
             if (heartbeats.contains(heartbeatSyn)) {
                 timeoutHeartbeats.add(heartbeatSyn);
                 if (++timeoutCount > 5) {
-                    this.close(false);
+                    this.close(false, "心跳超时");
                 }
             }
         }, 3, TimeUnit.SECONDS);

@@ -36,7 +36,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * </p>
  *
  * @author SpCo
- * @version 2.0.0
+ * @version 3.0.0
  * @since 2.0.0
  */
 public class ModuleManager {
@@ -78,7 +78,7 @@ public class ModuleManager {
      */
     public AbstractModule get(String name) {
         for (AbstractModule module : moduleInstances.values()) {
-            if (module.name.equalsIgnoreCase(name)) return module;
+            if (module.getName().equalsIgnoreCase(name)) return module;
         }
         return null;
     }
@@ -163,9 +163,19 @@ public class ModuleManager {
      * @param module 要添加的模块。
      */
     public void add(AbstractModule module) {
+        add(module, false);
+    }
+
+    /**
+     * 向模块管理器中添加一个模块。
+     *
+     * @param module 要添加的模块。
+     * @param activate 是否添加完模块后直接激活
+     */
+    public void add(AbstractModule module, boolean activate) {
         AtomicReference<AbstractModule> removedModule = new AtomicReference<>();
         if (moduleInstances.values().removeIf(module1 -> {
-            if (module1.name.equals(module.name)) {
+            if (module1.getName().equals(module.getName())) {
                 removedModule.set(module1);
                 return true;
             }
@@ -176,6 +186,9 @@ public class ModuleManager {
         moduleInstances.put(module.getClass(), module);
         modules.add(module);
         module.init();
+        if (activate) {
+            module.toggle();
+        }
     }
 
     /**

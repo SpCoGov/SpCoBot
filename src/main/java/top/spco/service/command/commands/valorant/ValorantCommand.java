@@ -28,7 +28,14 @@ import top.spco.service.chat.Chat;
 import top.spco.service.chat.ChatBuilder;
 import top.spco.service.chat.ChatType;
 import top.spco.service.chat.Stage;
-import top.spco.service.command.*;
+import top.spco.service.command.AbstractCommand;
+import top.spco.service.command.CommandMarker;
+import top.spco.service.command.CommandMeta;
+import top.spco.service.command.usage.Usage;
+import top.spco.service.command.usage.UsageBuilder;
+import top.spco.service.command.usage.parameters.Parameter;
+import top.spco.service.command.usage.parameters.SpecifiedParameter;
+import top.spco.service.command.usage.parameters.StringParameter;
 import top.spco.service.command.util.PermissionsValidator;
 import top.spco.user.BotUser;
 
@@ -48,20 +55,20 @@ import java.util.List;
  * Valorant相关功能
  *
  * @author SpCo
- * @version 2.0.0
+ * @version 3.0.0
  * @since 1.3.0
  */
 @CommandMarker
 public class ValorantCommand extends AbstractCommand {
     {
-        List<CommandParam> loginParams = new ArrayList<>();
-        loginParams.add(new CommandParam("行为类型", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.SELECTION, "login"));
-        loginParams.add(new CommandParam("账号", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.TEXT));
-        loginParams.add(new CommandParam("密码", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.TEXT));
-        loginUsage = new CommandUsage(getLabels()[0], "登录拳头账户", loginParams);
+        List<Parameter<?>> loginParams = new ArrayList<>();
+        loginParams.add(new SpecifiedParameter("行为类型", false, "login", "login", "shop"));
+        loginParams.add(new StringParameter("账号", false, null, StringParameter.StringType.QUOTABLE_PHRASE));
+        loginParams.add(new StringParameter("密码", false, null, StringParameter.StringType.QUOTABLE_PHRASE));
+        loginUsage = new UsageBuilder(getLabels()[0], "登录拳头账户").addAll(loginParams).build();
     }
 
-    public static CommandUsage loginUsage;
+    public static Usage loginUsage;
 
     @Override
     public String[] getLabels() {
@@ -74,10 +81,8 @@ public class ValorantCommand extends AbstractCommand {
     }
 
     @Override
-    public List<CommandUsage> getUsages() {
-        List<CommandParam> shopParams = new ArrayList<>();
-        shopParams.add(new CommandParam("行为类型", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.SELECTION, "shop"));
-        return List.of(loginUsage, new CommandUsage(getLabels()[0], "获取每日商店皮肤", shopParams));
+    public List<Usage> getUsages() {
+        return List.of(loginUsage, new UsageBuilder(getLabels()[0], "获取每日商店皮肤").add(new SpecifiedParameter("行为类型", false, "login", "shop", "login")).build());
     }
 
     @Override
@@ -94,8 +99,8 @@ public class ValorantCommand extends AbstractCommand {
                     }
                     return;
                 }
-                String username = meta.argument(1);
-                String password = meta.argument(2);
+                String username = (String) meta.getParams().get("账号");
+                String password = (String) meta.getParams().get("密码");
 
                 try {
                     RiotAuth riot = new RiotAuth(username, password);
@@ -132,7 +137,7 @@ public class ValorantCommand extends AbstractCommand {
                     return;
                 } catch (Exception e) {
                     from.handleException(message, e);
-                    e.printStackTrace();
+                    SpCoBot.LOGGER.error(e);
                     return;
                 }
             }
@@ -227,7 +232,7 @@ public class ValorantCommand extends AbstractCommand {
                                                         }
                                                     } catch (Exception e) {
                                                         sender1.handleException(message1, e);
-                                                        e.printStackTrace();
+                                                        SpCoBot.LOGGER.error(e);
                                                     }
                                                     chat.stop();
                                                 })).build();
@@ -248,7 +253,7 @@ public class ValorantCommand extends AbstractCommand {
                                 riot.close();
                             } catch (Exception e) {
                                 from.quoteReply(message, "自动登录失败，请在 「私聊」 中使用 " + loginUsage.toString() + " 命令来登录。\n\n" + e.getMessage());
-                                e.printStackTrace();
+                                SpCoBot.LOGGER.error(e);
                                 return;
                             }
                         }
@@ -275,7 +280,7 @@ public class ValorantCommand extends AbstractCommand {
                     }
                 } catch (Exception e) {
                     from.handleException(message, e);
-                    e.printStackTrace();
+                    SpCoBot.LOGGER.error(e);
                 }
             }
         }
@@ -305,7 +310,7 @@ public class ValorantCommand extends AbstractCommand {
             from.quoteReply(message, "与拳头官网服务验证成功");
         } catch (Exception e) {
             from.handleException(message, e);
-            e.printStackTrace();
+            SpCoBot.LOGGER.error(e);
         }
     }
 

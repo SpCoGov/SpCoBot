@@ -20,7 +20,13 @@ import top.spco.api.Bot;
 import top.spco.api.Interactive;
 import top.spco.api.User;
 import top.spco.api.message.Message;
-import top.spco.service.command.*;
+import top.spco.service.command.AbstractCommand;
+import top.spco.service.command.CommandMarker;
+import top.spco.service.command.CommandMeta;
+import top.spco.service.command.usage.Usage;
+import top.spco.service.command.usage.UsageBuilder;
+import top.spco.service.command.usage.parameters.SpecifiedParameter;
+import top.spco.service.command.usage.parameters.StringParameter;
 import top.spco.user.BotUser;
 import top.spco.user.UserPermission;
 
@@ -29,7 +35,7 @@ import java.util.List;
 
 /**
  * @author SpCo
- * @version 2.0.4
+ * @version 3.0.0
  * @since 0.1.0
  */
 @CommandMarker
@@ -45,21 +51,22 @@ public class DataCommand extends AbstractCommand {
     }
 
     @Override
-    public List<CommandUsage> getUsages() {
+    public List<Usage> getUsages() {
         return List.of(
-                new CommandUsage("data", "查询记录",
-                        new CommandParam("操作类型", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.SELECTION, "get"),
-                        new CommandParam("表名", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.TEXT),
-                        new CommandParam("字段名", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.TEXT),
-                        new CommandParam("记录值", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.TEXT),
-                        new CommandParam("待查询的字段名", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.TEXT)),
-                new CommandUsage("data", "编辑记录",
-                        new CommandParam("操作类型", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.SELECTION, "set"),
-                        new CommandParam("表名", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.TEXT),
-                        new CommandParam("字段名", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.TEXT),
-                        new CommandParam("记录值", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.TEXT),
-                        new CommandParam("待修改的字段名", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.TEXT),
-                        new CommandParam("新值", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.TEXT)));
+                new UsageBuilder("data", "查询记录")
+                        .add(new SpecifiedParameter("操作类型", false, "get", "set", "get"))
+                        .add(new StringParameter("表名", false, null, StringParameter.StringType.SINGLE_WORD))
+                        .add(new StringParameter("字段名", false, null, StringParameter.StringType.SINGLE_WORD))
+                        .add(new StringParameter("记录值", false, null, StringParameter.StringType.QUOTABLE_PHRASE))
+                        .add(new StringParameter("待查询的字段名", false, null, StringParameter.StringType.SINGLE_WORD)).build()
+                ,
+                new UsageBuilder("data", "编辑记录")
+                        .add(new SpecifiedParameter("操作类型", false, "set", "set", "get"))
+                        .add(new StringParameter("表名", false, null, StringParameter.StringType.SINGLE_WORD))
+                        .add(new StringParameter("字段名", false, null, StringParameter.StringType.SINGLE_WORD))
+                        .add(new StringParameter("记录值", false, null, StringParameter.StringType.QUOTABLE_PHRASE))
+                        .add(new StringParameter("待修改的字段名", false, null, StringParameter.StringType.SINGLE_WORD))
+                        .add(new StringParameter("新值", false, null, StringParameter.StringType.QUOTABLE_PHRASE)).build());
     }
 
     @Override
@@ -78,10 +85,10 @@ public class DataCommand extends AbstractCommand {
     public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, CommandMeta meta, String usageName) {
         switch (usageName) {
             case "查询记录" -> {
-                String table = meta.argument(1);
-                String columns = meta.argument(4);
-                String whereClause = meta.argument(2);
-                String whereValues = meta.argument(3);
+                String table = (String) meta.getParams().get("表名");
+                String columns = (String) meta.getParams().get("待查询的字段名");
+                String whereClause = (String) meta.getParams().get("字段名");
+                String whereValues = (String) meta.getParams().get("记录值");
                 try {
                     String value = SpCoBot.getInstance().getDataBase().selectString(table, columns, whereClause, whereValues);
                     from.quoteReply(message, "您查询的数据为: " + value);
@@ -90,11 +97,11 @@ public class DataCommand extends AbstractCommand {
                 }
             }
             case "编辑记录" -> {
-                String table = meta.argument(1);
-                String columns = meta.argument(4);
-                String whereClause = meta.argument(2);
-                String whereValues = meta.argument(3);
-                String toChange = meta.argument(5);
+                String table = (String) meta.getParams().get("表名");
+                String columns = (String) meta.getParams().get("待查询的字段名");
+                String whereClause = (String) meta.getParams().get("字段名");
+                String whereValues = (String) meta.getParams().get("记录值");
+                String toChange = (String) meta.getParams().get("新值");
                 try {
                     String value = SpCoBot.getInstance().getDataBase().selectString(table, columns, whereClause, whereValues);
                     SpCoBot.getInstance().getDataBase().update("update " + table + " set " + columns + "=? where " + whereClause + "=?", toChange, whereValues);

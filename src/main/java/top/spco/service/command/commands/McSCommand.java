@@ -22,7 +22,15 @@ import top.spco.api.Interactive;
 import top.spco.api.User;
 import top.spco.api.message.Message;
 import top.spco.events.MessageEvents;
-import top.spco.service.command.*;
+import top.spco.service.command.CommandMarker;
+import top.spco.service.command.CommandMeta;
+import top.spco.service.command.GroupAbstractCommand;
+import top.spco.service.command.usage.Usage;
+import top.spco.service.command.usage.UsageBuilder;
+import top.spco.service.command.usage.parameters.BooleanParameter;
+import top.spco.service.command.usage.parameters.IntegerParameter;
+import top.spco.service.command.usage.parameters.SpecifiedParameter;
+import top.spco.service.command.usage.parameters.StringParameter;
 import top.spco.service.command.util.PermissionsValidator;
 import top.spco.service.mcs.McS;
 import top.spco.service.mcs.McSManager;
@@ -36,7 +44,7 @@ import java.util.List;
 
 /**
  * @author SpCo
- * @version 2.0.8
+ * @version 3.0.0
  * @since 2.0.3
  */
 @CommandMarker
@@ -73,26 +81,27 @@ public class McSCommand extends GroupAbstractCommand {
     }
 
     @Override
-    public List<CommandUsage> getUsages() {
+    public List<Usage> getUsages() {
         return List.of(
-                new CommandUsage(getLabels()[0], "查看此群所绑定的服务器"),
-                new CommandUsage(getLabels()[0], "将某个服务器绑定到此群",
-                        new CommandParam("操作类型", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.SELECTION, "bind"),
-                        new CommandParam("IP", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.TEXT),
-                        new CommandParam("端口", CommandParam.ParamType.OPTIONAL, CommandParam.ParamContent.INTEGER)),
-                new CommandUsage(getLabels()[0], "将某个服务器从此群解绑",
-                        new CommandParam("操作类型", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.SELECTION, "unbind")),
-                new CommandUsage(getLabels()[0], "向该群绑定的服务器发送命令",
-                        new CommandParam("操作类型", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.SELECTION, "execute"),
-                        new CommandParam("命令", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.TEXT)),
-                new CommandUsage(getLabels()[0], "连接到该群已绑定的服务器",
-                        new CommandParam("操作类型", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.SELECTION, "connect")),
-                new CommandUsage(getLabels()[0], "获取服务器在线玩家",
-                        new CommandParam("操作类型", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.SELECTION, "online")),
-                new CommandUsage(getLabels()[0], "断开与服务器的连接",
-                        new CommandParam("操作类型", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.SELECTION, "disconnect")),
-                new CommandUsage(getLabels()[0], "开关调试模式",
-                        new CommandParam("操作类型", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.SELECTION, "debug"))
+                new UsageBuilder(getLabels()[0], "查看此群所绑定的服务器").build(),
+                new UsageBuilder(getLabels()[0], "将某个服务器绑定到此群")
+                        .add(new SpecifiedParameter("操作类型", false, "bind", "bind", "unbind", "execute", "connect", "online", "disconnect", "debug"))
+                        .add(new StringParameter("IP", false, null, StringParameter.StringType.SINGLE_WORD))
+                        .add(new IntegerParameter("端口", true, 58964, 1024, 65535)).build(),
+                new UsageBuilder(getLabels()[0], "将某个服务器从此群解绑")
+                        .add(new SpecifiedParameter("操作类型", false, "unbind", "bind", "unbind", "execute", "connect", "online", "disconnect", "debug")).build(),
+                new UsageBuilder(getLabels()[0], "向该群绑定的服务器发送命令")
+                        .add(new SpecifiedParameter("操作类型", false, "execute", "bind", "unbind", "execute", "connect", "online", "disconnect", "debug"))
+                        .add(new StringParameter("命令", false, null, StringParameter.StringType.GREEDY_PHRASE)).build(),
+                new UsageBuilder(getLabels()[0], "连接到该群已绑定的服务器")
+                        .add(new SpecifiedParameter("操作类型", false, "connect", "bind", "unbind", "execute", "connect", "online", "disconnect", "debug"))
+                        .add(new BooleanParameter("调试模式", true, false)).build(),
+                new UsageBuilder(getLabels()[0], "获取服务器在线玩家")
+                        .add(new SpecifiedParameter("操作类型", false, "online", "bind", "unbind", "execute", "connect", "online", "disconnect", "debug")).build(),
+                new UsageBuilder(getLabels()[0], "断开与服务器的连接")
+                        .add(new SpecifiedParameter("操作类型", false, "disconnect", "bind", "unbind", "execute", "connect", "online", "disconnect", "debug")).build(),
+                new UsageBuilder(getLabels()[0], "开关调试模式")
+                        .add(new SpecifiedParameter("操作类型", false, "debug", "bind", "unbind", "execute", "connect", "online", "disconnect", "debug")).build()
         );
     }
 
@@ -115,13 +124,13 @@ public class McSCommand extends GroupAbstractCommand {
                 if (!PermissionsValidator.isMemberAdmin(from, user, message)) {
                     return;
                 }
-                String host = meta.argument(1);
-                int port;
-                if (meta.getArgs().length == 3) {
-                    port = meta.integerArgument(2);
-                } else {
-                    port = 58964;
+                if (manager.isBound(group)) {
+                    from.quoteReply(message, "该群已绑定服务器，请先解绑后再次尝试");
+                    return;
                 }
+                String host = (String) meta.getParams().get("IP");
+                int port = (Integer) meta.getParams().get("端口");
+
                 try {
                     manager.bind(group, host, port);
                     from.quoteReply(message, "绑定成功");
@@ -156,7 +165,7 @@ public class McSCommand extends GroupAbstractCommand {
                     from.quoteReply(message, "尚未与服务器建立连接");
                     return;
                 }
-                mcS.executeCommand(meta.argument(1), message);
+                mcS.executeCommand((String) meta.getParams().get("命令"), message);
             }
             case "连接到该群已绑定的服务器" -> {
                 if (!PermissionsValidator.isMemberAdmin(from, user, message)) {
@@ -194,7 +203,7 @@ public class McSCommand extends GroupAbstractCommand {
                         from.quoteReply(message, "尚未与服务器建立连接");
                         return;
                     }
-                    mcS.close(false);
+                    mcS.close(false, "手动关闭");
                 } else {
                     from.quoteReply(message, "该群尚未绑定服务器");
                 }

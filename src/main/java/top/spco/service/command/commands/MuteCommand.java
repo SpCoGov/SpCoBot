@@ -15,9 +15,18 @@
  */
 package top.spco.service.command.commands;
 
-import top.spco.api.*;
+import top.spco.api.Bot;
+import top.spco.api.Interactive;
+import top.spco.api.NormalMember;
+import top.spco.api.User;
 import top.spco.api.message.Message;
-import top.spco.service.command.*;
+import top.spco.service.command.CommandMarker;
+import top.spco.service.command.CommandMeta;
+import top.spco.service.command.GroupAbstractCommand;
+import top.spco.service.command.usage.Usage;
+import top.spco.service.command.usage.UsageBuilder;
+import top.spco.service.command.usage.parameters.IntegerParameter;
+import top.spco.service.command.usage.parameters.TargetUserIdParameter;
 import top.spco.service.command.util.PermissionsValidator;
 import top.spco.user.BotUser;
 
@@ -25,7 +34,7 @@ import java.util.List;
 
 /**
  * @author SpCo
- * @version 2.0.0
+ * @version 3.0.0
  * @since 0.3.0
  */
 @CommandMarker
@@ -41,23 +50,20 @@ public class MuteCommand extends GroupAbstractCommand {
     }
 
     @Override
-    public List<CommandUsage> getUsages() {
-        return List.of(new CommandUsage("mute", "禁言一位群员", new CommandParam("目标用户", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.TARGET_USER_ID),
-                new CommandParam("禁言时间", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.INTEGER)));
+    public List<Usage> getUsages() {
+        return List.of(new UsageBuilder("mute", "禁言一位群员")
+                .add(new TargetUserIdParameter("目标用户", false, null))
+                .add(new IntegerParameter("禁言时间", false, null, 1, 2592000)).build());
     }
 
     @Override
     public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, CommandMeta meta, String usageName) {
-        try {
-            long id = meta.targetUserIdArgument(0);
-            NormalMember<?> target = PermissionsValidator.verifyMemberPermissions(from, user, message, id);
-            if (target != null) {
-                int duration = meta.integerArgument(1);
-                target.mute(duration);
-                from.quoteReply(message, "已将 " + target.getNameCard() + "(" + target.getId() + ")" + " 禁言" + duration + "秒");
-            }
-        } catch (CommandSyntaxException e) {
-            from.handleException(message, e.getMessage());
+        long id = (Long) meta.getParams().get("目标用户");
+        NormalMember<?> target = PermissionsValidator.verifyMemberPermissions(from, user, message, id);
+        if (target != null) {
+            int duration = (Integer) meta.getParams().get("禁言时间");
+            target.mute(duration);
+            from.quoteReply(message, "已将 " + target.getNameCard() + "(" + target.getId() + ")" + " 禁言" + duration + "秒");
         }
     }
 }

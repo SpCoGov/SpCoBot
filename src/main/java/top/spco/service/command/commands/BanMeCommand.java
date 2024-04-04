@@ -25,14 +25,14 @@ import java.security.SecureRandom;
 
 /**
  * @author SpCo
- * @version 2.0.4
+ * @version 3.0.0
  * @since 0.1.0
  */
 @CommandMarker
 public class BanMeCommand extends GroupAbstractCommand {
     @Override
     public String[] getLabels() {
-        return new String[]{"banme"};
+        return new String[]{"banme", "fuckme"};
     }
 
     @Override

@@ -55,7 +55,7 @@ public class McSManager {
         McS old = mcSs.get(group.getId());
         if (old != null) {
             old.setSilence(true);
-            old.close(true);
+            old.close(true, null);
         }
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         scheduler.schedule(() -> {
@@ -81,7 +81,7 @@ public class McSManager {
             if (rowsAffected > 0) {
                 var s = mcSs.get(group.getId());
                 if (s != null) {
-                    s.close(true);
+                    s.close(true, null);
                     mcSs.remove(group.getId());
                 }
             }

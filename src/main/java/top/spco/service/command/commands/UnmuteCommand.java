@@ -20,7 +20,12 @@ import top.spco.api.Interactive;
 import top.spco.api.NormalMember;
 import top.spco.api.User;
 import top.spco.api.message.Message;
-import top.spco.service.command.*;
+import top.spco.service.command.CommandMarker;
+import top.spco.service.command.CommandMeta;
+import top.spco.service.command.GroupAbstractCommand;
+import top.spco.service.command.usage.Usage;
+import top.spco.service.command.usage.UsageBuilder;
+import top.spco.service.command.usage.parameters.TargetUserIdParameter;
 import top.spco.service.command.util.PermissionsValidator;
 import top.spco.user.BotUser;
 
@@ -28,7 +33,7 @@ import java.util.List;
 
 /**
  * @author SpCo
- * @version 2.0.0
+ * @version 3.0.0
  * @since 0.3.0
  */
 @CommandMarker
@@ -44,21 +49,17 @@ public class UnmuteCommand extends GroupAbstractCommand {
     }
 
     @Override
-    public List<CommandUsage> getUsages() {
-        return List.of(new CommandUsage("unmute", "解除禁言一位群员", new CommandParam("目标用户", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.TARGET_USER_ID)));
+    public List<Usage> getUsages() {
+        return List.of(new UsageBuilder("unmute", "解除禁言一位群员").add(new TargetUserIdParameter("目标用户", false, null)).build());
     }
 
     @Override
     public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, CommandMeta meta, String usageName) {
-        try {
-            long id = meta.targetUserIdArgument(0);
-            NormalMember<?> target = PermissionsValidator.verifyMemberPermissions(from, user, message, id);
-            if (target != null) {
-                target.unmute();
-                from.quoteReply(message, "已将 " + target.getNameCard() + "(" + target.getId() + ")" + " 解除禁言");
-            }
-        } catch (CommandSyntaxException e) {
-            from.handleException(message, e.getMessage());
+        long id = (Long) meta.getParams().get("目标用户");
+        NormalMember<?> target = PermissionsValidator.verifyMemberPermissions(from, user, message, id);
+        if (target != null) {
+            target.unmute();
+            from.quoteReply(message, "已将 " + target.getNameCard() + "(" + target.getId() + ")" + " 解除禁言");
         }
     }
 }

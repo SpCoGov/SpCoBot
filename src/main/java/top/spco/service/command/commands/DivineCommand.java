@@ -19,10 +19,15 @@ import top.spco.api.Bot;
 import top.spco.api.Interactive;
 import top.spco.api.User;
 import top.spco.api.message.Message;
-import top.spco.service.command.*;
+import top.spco.service.command.AbstractCommand;
+import top.spco.service.command.CommandMarker;
+import top.spco.service.command.CommandMeta;
+import top.spco.service.command.usage.Usage;
+import top.spco.service.command.usage.UsageBuilder;
+import top.spco.service.command.usage.parameters.StringParameter;
 import top.spco.user.BotUser;
-import top.spco.util.TimeUtils;
 import top.spco.util.HashUtils;
+import top.spco.util.TimeUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -33,7 +38,7 @@ import java.util.*;
 
 /**
  * @author SpCo
- * @version 2.0.0
+ * @version 3.0.0
  * @since 0.1.0
  */
 @CommandMarker
@@ -49,8 +54,8 @@ public class DivineCommand extends AbstractCommand {
     }
 
     @Override
-    public List<CommandUsage> getUsages() {
-        return List.of(new CommandUsage(getLabels()[0], getDescriptions(), new CommandParam("所求事件", CommandParam.ParamType.OPTIONAL, CommandParam.ParamContent.TEXT)));
+    public List<Usage> getUsages() {
+        return List.of(new UsageBuilder(getLabels()[0], getDescriptions()).add(new StringParameter("所求事件", true, null, StringParameter.StringType.GREEDY_PHRASE)).build());
     }
 
     @Override
@@ -61,7 +66,8 @@ public class DivineCommand extends AbstractCommand {
                 BigDecimal hundred = new BigDecimal("100.00");
                 StringBuilder sb = new StringBuilder();
                 sb.append("你好，").append(user.getId()).append("\n");
-                if (meta.getArgs().length == 0) {
+                String event = (String) meta.getParams().get("所求事件");
+                if (event == null) {
                     BigDecimal probability = getProbability(user.getId() + "在" + today);
                     String fortune = getFortune(probability.doubleValue());
                     sb.append("汝的今日运势：").append(fortune).append("\n");
@@ -71,7 +77,6 @@ public class DivineCommand extends AbstractCommand {
                         sb.append("汝今天行大运概率是 ").append(hundred.subtract(probability)).append("%");
                     }
                 } else {
-                    String event = meta.argument(0);
                     sb.append("所求事项：").append(event).append("\n");
                     if (isHentai(event)) {
                         if (randomBoolean(user.getId() + "在" + today + "做" + event)) {

@@ -23,15 +23,19 @@ import top.spco.api.Interactive;
 import top.spco.api.User;
 import top.spco.api.message.Message;
 import top.spco.core.config.DashScopeSettings;
-import top.spco.service.command.*;
+import top.spco.service.command.AbstractCommand;
+import top.spco.service.command.CommandMarker;
+import top.spco.service.command.CommandMeta;
+import top.spco.service.command.usage.Usage;
+import top.spco.service.command.usage.UsageBuilder;
+import top.spco.service.command.usage.parameters.StringParameter;
 import top.spco.service.dashscope.DashScope;
 import top.spco.user.BotUser;
 
 import java.util.List;
 
 /**
- * @author SpCo
- * @version 2.0.4
+ * @author 3.0.0
  * @since 0.2.1
  */
 @CommandMarker
@@ -47,8 +51,11 @@ public class DashScopeCommand extends AbstractCommand {
     }
 
     @Override
-    public List<CommandUsage> getUsages() {
-        return List.of(new CommandUsage(getLabels()[0], getDescriptions(), new CommandParam("内容", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.TEXT)));
+    public List<Usage> getUsages() {
+        return List.of(
+                new UsageBuilder(getLabels()[0], getDescriptions()).add(
+                        new StringParameter("内容", false, null,
+                                StringParameter.StringType.QUOTABLE_PHRASE)).build());
     }
 
     @Override
@@ -65,7 +72,7 @@ public class DashScopeCommand extends AbstractCommand {
 //            }
             try {
                 DashScope dashScope = SpCoBot.getInstance().dashScopeDispatcher.getDashScopeOrCreate(user, from, message);
-                String request = meta.argument(0);
+                String request = (String) meta.getParams().get("内容");
                 String result = dashScope.callWithMessage(request, 10000).getOutput().getChoices().get(0).getMessage().getContent();
                 dashScope.setLastMessage(from, message);
                 from.quoteReply(message, result);

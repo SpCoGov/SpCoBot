@@ -15,6 +15,8 @@
  */
 package top.spco.service.command;
 
+import top.spco.service.command.usage.Usage;
+import top.spco.service.command.usage.UsageBuilder;
 import top.spco.user.BotUser;
 import top.spco.user.UserPermission;
 
@@ -25,14 +27,14 @@ import java.util.List;
  * 提供了基本的命令信息和权限控制的默认实现。
  *
  * @author SpCo
- * @version 1.2.3
+ * @version 3.0.0
  * @see Command
  * @since 0.1.0
  */
 public abstract class AbstractCommand implements Command {
     @Override
-    public List<CommandUsage> getUsages() {
-        return List.of(new CommandUsage(getLabels()[0], getDescriptions()));
+    public List<Usage> getUsages() {
+        return List.of(new UsageBuilder(getLabels()[0], getDescriptions()).build());
     }
 
     @Override

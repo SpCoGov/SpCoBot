@@ -22,27 +22,42 @@ import top.spco.api.message.Message;
 import top.spco.service.command.AbstractCommand;
 import top.spco.service.command.CommandMarker;
 import top.spco.service.command.CommandMeta;
+import top.spco.service.command.exceptions.CommandSyntaxException;
 import top.spco.user.BotUser;
+import top.spco.user.UserPermission;
 
 /**
+ * 让机器人执行垃圾回收
+ *
  * @author SpCo
- * @version 2.0.4
- * @since 0.1.0
+ * @version 3.0.0
+ * @since 3.0.0
  */
 @CommandMarker
-public class GetMeCommand extends AbstractCommand {
+public class GCCommand extends AbstractCommand {
     @Override
     public String[] getLabels() {
-        return new String[]{"getme"};
+        return new String[]{"gc"};
     }
 
     @Override
     public String getDescriptions() {
-        return "获取个人信息";
+        return "执行垃圾回收";
     }
 
     @Override
-    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, CommandMeta meta, String usageName) {
-        from.quoteReply(message, user.toString());
+    public UserPermission needPermission() {
+        return UserPermission.ADMINISTRATOR;
+    }
+
+    @Override
+    public boolean isVisible() {
+        return false;
+    }
+
+    @Override
+    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, CommandMeta meta, String usageName) throws CommandSyntaxException {
+        System.gc();
+        from.quoteReply(message, "完成");
     }
 }

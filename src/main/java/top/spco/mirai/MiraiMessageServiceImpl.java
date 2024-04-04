@@ -16,11 +16,14 @@
 package top.spco.mirai;
 
 import net.mamoe.mirai.contact.Contact;
+import net.mamoe.mirai.contact.PermissionDeniedException;
 import net.mamoe.mirai.message.data.At;
 import net.mamoe.mirai.message.data.MessageChain;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.QuoteReply;
 import net.mamoe.mirai.utils.ExternalResource;
+import org.checkerframework.checker.units.qual.C;
+import top.spco.SpCoBot;
 import top.spco.api.Image;
 import top.spco.api.Interactive;
 import top.spco.api.message.Message;
@@ -80,14 +83,19 @@ class MiraiMessageServiceImpl implements MessageService {
             }
             return null;
         } catch (Exception e) {
-            e.printStackTrace();
+            SpCoBot.LOGGER.error(e);
         }
         return null;
     }
 
     @Override
     public void recall(Message<?> original) {
-        net.mamoe.mirai.message.data.MessageSource.recall((MessageChain) original.wrapped());
+        try {
+            net.mamoe.mirai.message.data.MessageSource.recall((MessageChain) original.wrapped());
+        } catch (PermissionDeniedException e) {
+            throw new top.spco.api.exception.PermissionDeniedException("权限不足");
+        }
+
     }
 
     @Override

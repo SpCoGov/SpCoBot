@@ -68,7 +68,7 @@ import java.util.Objects;
  * @since 2.0.0
  */
 public abstract class AbstractModule implements Comparable<AbstractModule> {
-    public final String name;
+    private final String name;
 
     /**
      * 构造一个新的模块。
@@ -120,6 +120,10 @@ public abstract class AbstractModule implements Comparable<AbstractModule> {
             active = false;
             ModuleManager.getInstance().removeActive(this);
         }
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override

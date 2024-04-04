@@ -21,6 +21,9 @@ import top.spco.events.CommandEvents;
 import top.spco.service.chat.Chat;
 import top.spco.service.chat.Stage;
 import top.spco.service.command.commands.HelpCommand;
+import top.spco.service.command.exceptions.CommandRegistrationException;
+import top.spco.service.command.exceptions.CommandSyntaxException;
+import top.spco.service.command.usage.Usage;
 import top.spco.user.BotUser;
 import top.spco.user.UserPermission;
 
@@ -99,7 +102,7 @@ import java.util.List;
  * 对命令使用 {@link CommandMarker} 注解即可在注册阶段自动注册该命令。
  *
  * @author SpCo
- * @version 2.0.0
+ * @version 3.0.0
  * @see AbstractCommand
  * @since 0.1.0
  */
@@ -117,7 +120,7 @@ public interface Command {
      */
     String[] getLabels();
 
-    List<CommandUsage> getUsages();
+    List<Usage> getUsages();
 
     /**
      * 命令的描述
@@ -176,7 +179,7 @@ public interface Command {
      * @throws CommandSyntaxException 用户调用命令发生语法错误时抛出
      * @see CommandEvents
      */
-    void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, CommandMeta meta, String usageName);
+    void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, CommandMeta meta, String usageName) throws CommandSyntaxException;
 
     /**
      * 在帮助列表是否可见

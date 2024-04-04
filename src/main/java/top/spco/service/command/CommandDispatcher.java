@@ -27,6 +27,13 @@ import top.spco.api.message.Message;
 import top.spco.events.CommandEvents;
 import top.spco.service.chat.ChatType;
 import top.spco.service.command.commands.HelpCommand;
+import top.spco.service.command.exceptions.BuiltInExceptions;
+import top.spco.service.command.exceptions.CommandRegistrationException;
+import top.spco.service.command.exceptions.CommandSyntaxException;
+import top.spco.service.command.usage.Usage;
+import top.spco.service.command.usage.parameters.Parameter;
+import top.spco.service.command.usage.parameters.SpecifiedParameter;
+import top.spco.service.command.usage.parameters.TargetUserIdParameter;
 import top.spco.user.BotUser;
 import top.spco.user.BotUsers;
 import top.spco.user.UserFetchException;
@@ -43,12 +50,12 @@ import java.util.*;
  * 它负责注册、执行和管理各种命令的权限
  *
  * @author SpCo
- * @version 2.0.4
+ * @version 3.0.0
  * @since 0.1.0
  */
 public class CommandDispatcher {
+    public static final char PARAMETER_SEPARATOR_CHAR = ' ';
     public static final String COMMAND_START_SYMBOL = "/";
-    public static final char ARGUMENT_SEPARATOR_CHAR = ' ';
     public static final char USAGE_OPTIONAL_OPEN = '[';
     public static final char USAGE_OPTIONAL_CLOSE = ']';
     public static final char USAGE_REQUIRED_OPEN = '<';
@@ -115,112 +122,109 @@ public class CommandDispatcher {
     }
 
     private void init() {
-        CommandEvents.FRIEND_COMMAND.register((bot, interactor, message, time, meta) -> {
+        CommandEvents.FRIEND_COMMAND.register((bot, interactor, message, time) -> {
             if (SpCoBot.getInstance().chatDispatcher.isInChat(interactor, ChatType.FRIEND)) {
                 return;
             }
-            callCommand(friendCommands, interactor, interactor, message, bot, time, meta);
+            callCommand(friendCommands, interactor, interactor, message, bot, time);
         });
-        CommandEvents.GROUP_COMMAND.register((bot, from, sender, message, time, meta) -> {
+        CommandEvents.GROUP_COMMAND.register((bot, from, sender, message, time) -> {
             if (SpCoBot.getInstance().chatDispatcher.isInChat(from, ChatType.GROUP)) {
                 return;
             }
-            callCommand(groupCommands, from, sender, message, bot, time, meta);
+            callCommand(groupCommands, from, sender, message, bot, time);
         });
-        CommandEvents.GROUP_TEMP_COMMAND.register((bot, interactor, message, time, meta) -> {
+        CommandEvents.GROUP_TEMP_COMMAND.register((bot, interactor, message, time) -> {
             if (SpCoBot.getInstance().chatDispatcher.isInChat(interactor, ChatType.GROUP_TEMP)) {
                 return;
             }
-            callCommand(groupTempCommands, interactor, interactor, message, bot, time, meta);
+            callCommand(groupTempCommands, interactor, interactor, message, bot, time);
         });
     }
 
-    private void callCommand(Map<String, Command> targetCommands, Interactive<?> from, User<?> sender, Message<?> message, Bot<?> bot, int time, CommandMeta meta) {
-        // 先检测用户提交的命令是否被注册
-        if (targetCommands.containsKey(meta.getLabel())) {
-            message.setCommandMessage();
+    private void callCommand(Map<String, Command> targetCommands, Interactive<?> from, User<?> sender, Message<?> message, Bot<?> bot, int time) {
+        Parser input = new Parser(message, message.toMessageContext().substring(1));
+        while (input.canRead() && input.peek() != ' ') {
+            input.skip();
+        }
+        String label = input.getString().substring(0, input.getCursor());
+        if (!targetCommands.containsKey(label)) {
+            return;
+        }
+        // 读完标签后光标位于标签后，光标之后还有一格空格，所以需要后移一位到达参数
+        if (input.canRead()) {
+            input.skip();
+        }
+        message.setCommandMessage();
+        callCommand(targetCommands, from, sender, message, bot, time, label, input);
+    }
+
+    private void callCommand(Map<String, Command> targetCommands, Interactive<?> from, User<?> sender, Message<?> message, Bot<?> bot, int time, String label, Parser parser) {
+        try {
+            // 获取命令实例和发送者和发送者的用户实例
+            Command object = targetCommands.get(label);
+            BotUser user = BotUsers.getOrCreate(sender.getId());
+            // 先检测发送者是否有权限
             try {
-                // 获取命令实例和发送者和发送者的用户实例
-                Command object = targetCommands.get(meta.getLabel());
-                BotUser user = BotUsers.getOrCreate(sender.getId());
-                // 先检测发送者是否有权限
-                try {
-                    if (!object.hasPermission(user)) {
-                        from.quoteReply(message, "您无权使用此命令。");
-                        return;
-                    }
-                } catch (SQLException e) {
-                    from.handleException(message, "获取用户权限失败", e);
+                if (!object.hasPermission(user)) {
+                    from.quoteReply(message, "您无权使用此命令。");
+                    return;
                 }
-                Exception lastException = CommandSyntaxException.DISPATCHER_UNKNOWN_COMMAND;
-                // 判断用户提交的参数是否符合命令的用法
-                for (CommandUsage usage : object.getUsages()) {
-                    meta.setUsage(usage);
-                    // 先判断用户提交的参数的数量是否符合此用法需提交的参数数量
-                    // 在一些情况下 用户正确提交的参数会比需要提交的参数数量少
-                    // 先确定这个方法所需的最少参数数量
-                    int minParamSize = usage.params.size();
-                    // 若命令用法的最后一个参数是可选的，则将最少参数数量减一（因为只有最后一位可以是可选的）
-                    if (!usage.params.isEmpty() && usage.params.get(usage.params.size() - 1).type == CommandParam.ParamType.OPTIONAL) {
-                        minParamSize -= 1;
-                    }
-                    // 若命令用法有目标用户ID参数，则将最少参数数量减一
-                    if (usage.hasTargetParam()) {
-                        minParamSize -= 1;
-                    }
-                    // 若实际提交的参数数量小于最少参数数量或大于用法的要求参数数量，跳过这个参数
-                    if (meta.getArgs().length < minParamSize) {
-                        lastException = CommandSyntaxException.unknownArgument(usage.getLabel(), meta.getArgs(), meta.getArgs().length - 1);
-                        continue;
-                    } else if (meta.getArgs().length > usage.params.size()) {
-                        lastException = CommandSyntaxException.expectedSeparator(usage.getLabel(), meta.getArgs(), meta.getArgs().length - 1);
-                        continue;
-                    }
-                    // 判断用法的每个参数是否与用户提交的匹配
-                    int index = 0;
-                    try {
-                        for (CommandParam param : usage.params) {
-                            if (param.type != CommandParam.ParamType.OPTIONAL) {
-                                switch (param.content) {
-                                    case INTEGER -> meta.integerArgument(index);
-                                    case LONG -> meta.longArgument(index);
-                                    case USER_ID -> meta.userIdArgument(index);
-                                    case TEXT -> meta.argument(index);
-                                    case SELECTION -> {
-                                        String userSend = meta.argument(index);
-                                        if (!contains(param.options, userSend)) {
-                                            throw CommandSyntaxException.error("未知的" + param.name, usage.getLabel(), meta.getArgs(), index);
-                                        }
-                                    }
-                                    case TARGET_USER_ID -> {
-                                        try {
-                                            meta.userIdArgument(index);
-                                        } catch (Exception e) {
-                                            if (SpCoBot.getInstance().getMessageService().getQuote(message) == null) {
-                                                throw CommandSyntaxException.error("需要用户ID或@一位用户或在回复时发送这条命令", usage.getLabel(), meta.getArgs(), index);
-                                            }
-                                        }
-                                    }
-                                }
+            } catch (SQLException e) {
+                from.handleException(message, "获取用户权限失败", e);
+            }
+            Potential potential = new Potential();
+            potential.setLast(BuiltInExceptions.dispatcherUnknownCommand(parser));
+            CommandMeta meta = new CommandMeta(parser.getMessage().toMessageContext(), parser.getMessage(), parser);
+            // 判断用户提交的参数是否符合命令的用法
+            final int start = parser.getCursor();
+            for (Usage usage : object.getUsages()) {
+                meta.setUsage(usage);
+                meta.getParams().clear();
+                parser.setCursor(start);
+                // 判断用法的每个参数是否与用户提交的匹配
+                try {
+                    for (Parameter<?> param : usage.getParams()) {
+                        if (!param.isOptional()) {
+                            meta.getParams().put(param.getName(), param.parse(parser));
+                            potential.further(usage);
+                        } else {
+                            if (parser.canRead()) {
+                                meta.getParams().put(param.getName(), param.parse(parser));
+                                potential.further(usage);
+                            } else {
+                                meta.getParams().put(param.getName(), param.getDefaultValue());
+                                potential.further(usage);
                             }
-                            index += 1;
                         }
-                    } catch (Exception e) {
-                        lastException = e;
-                        continue;
+                        if (parser.canRead()) {
+                            if (parser.peek() != PARAMETER_SEPARATOR_CHAR) {
+                                // 如果下一个字符不是参数分隔符
+                                throw BuiltInExceptions.dispatcherExpectedArgumentSeparator(parser);
+                            }
+                            // 跳过参数分隔符
+                            parser.skip();
+                        }
                     }
-                    // 如用户的提交参数符合用法需求，退出循环并交由命令对象处理
+                } catch (CommandSyntaxException e) {
+                    potential.add(usage, e);
+                    continue;
+                }
+                if (parser.canRead()) {
+                    potential.setLast(BuiltInExceptions.dispatcherExpectedArgumentSeparator(parser));
+                    potential.remove(usage);
+                } else {
                     object.onCommand(bot, from, sender, user, message, time, meta, usage.name);
                     return;
                 }
-                // 用户提交的参数不符合命令的任何用法
-                from.handleException(message, lastException.getMessage());
-            } catch (UserFetchException e) {
-                from.handleException(message, "SpCoBot获取用户时失败", e);
-            } catch (Exception e) {
-                SpCoBot.LOGGER.error(e);
-                from.handleException(message, e);
             }
+            // 用户提交的参数不符合命令的任何用法
+            from.handleException(message, potential.get().getMessage());
+        } catch (UserFetchException e) {
+            from.handleException(message, "SpCoBot获取用户时失败", e);
+        } catch (Exception e) {
+            SpCoBot.LOGGER.error(e);
+            from.handleException(message, e);
         }
     }
 
@@ -334,10 +338,12 @@ public class CommandDispatcher {
          *          A：/command <A> [B]
          *          B：/command <A>
          *      A、B这两个用法的参数间接重复。
+         *
          *      比如有两个命令用法
          *          A：/command <A>
          *          B：/command <A>
          *      A、B这两个用法的参数直接重复。
+         *
          *      比如有两个命令用法
          *          A：/command {A} <B>
          *          B：/command <A>
@@ -347,40 +353,45 @@ public class CommandDispatcher {
         // 用于储存命令的所有用法的用法名，便于判断是否重复
         List<String> usageNames = new ArrayList<>();
         // 用于储存命令的所有用法，便于判断是否重复
-        List<String> usages = new ArrayList<>();
+        Map<String, String> usages = new HashMap<>();
         // 遍历一个命令的所有用法
-        for (CommandUsage usage : command.getUsages()) {
+
+        for (Usage usage : command.getUsages()) {
             // 检测命令用法的用法名是否重复
             if (usageNames.contains(usage.name)) {
-                throw new CommandRegistrationException("Duplicate command parameter: " + usage);
+                throw new CommandRegistrationException("Duplicate command usage: " + usage);
             }
             // 存储处理过的参数， 用于创建处理过的命令用法
-            List<CommandParam> processedParams = new ArrayList<>();
+            List<Parameter<?>> processedParams = new ArrayList<>();
             // 遍历当前用法的所有参数
-            for (var param : usage.params) {
+            for (var param : usage.getParams()) {
                 // 判断该参数是否为可省略的（可选参数、目标用户ID参数）参数
-                if (param.type == CommandParam.ParamType.OPTIONAL || param.content == CommandParam.ParamContent.TARGET_USER_ID) {
+                if (param.isOptional() || param instanceof TargetUserIdParameter) {
                     continue;
                 }
                 // 如果不是，则将其记录到“处理过的参数”里
                 // 为了消除参数名的影响，将所有参数的参数名转换为“参数”
-                if (param.content == CommandParam.ParamContent.SELECTION && param.options.length == 1) {
-                    processedParams.add(new CommandParam("Param", param.type, param.content, param.options));
+                if (param instanceof SpecifiedParameter) {
+                    processedParams.add(new SpecifiedParameter("Param", param.isOptional(), ((SpecifiedParameter) param).getDefaultValue(), ((SpecifiedParameter) param).getDefaultValue()));
                 } else {
-                    processedParams.add(new CommandParam("Param", param.type, param.content, "参数"));
+                    processedParams.add(new Parameter<Object>("Param", param.isOptional(), "参数") {
+                        @Override
+                        public Object parse(Parser parser) {
+                            return null;
+                        }
+                    });
                 }
             }
             // 用处理过的参数创建一个命令用法
-            CommandUsage processedUsage = new CommandUsage("Usage", "Usage", processedParams);
+            Usage processedUsage = new Usage("Usage", "Usage", processedParams, null);
             // 检测命令用法的用法是否重复
-            if (usages.contains(processedUsage.toString())) {
-                throw new CommandRegistrationException("Duplicate command usage: " + usage);
+            if (usages.containsKey(processedUsage.toString())) {
+                throw new CommandRegistrationException("Duplicate command usage: " + usage + " and " + usages.get(processedUsage.toString()));
             }
-
             // 添加用法名
             usageNames.add(usage.name);
             // 添加用法
-            usages.add(processedUsage.toString());
+            usages.put(processedUsage.toString(), usage.toString());
         }
         return true;
     }

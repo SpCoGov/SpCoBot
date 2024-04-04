@@ -19,7 +19,12 @@ import top.spco.api.Bot;
 import top.spco.api.Interactive;
 import top.spco.api.User;
 import top.spco.api.message.Message;
-import top.spco.service.command.*;
+import top.spco.service.command.AbstractCommand;
+import top.spco.service.command.CommandMarker;
+import top.spco.service.command.CommandMeta;
+import top.spco.service.command.usage.Usage;
+import top.spco.service.command.usage.UsageBuilder;
+import top.spco.service.command.usage.parameters.TargetUserIdParameter;
 import top.spco.user.BotUser;
 import top.spco.user.BotUsers;
 import top.spco.user.UserFetchException;
@@ -29,7 +34,7 @@ import java.util.List;
 
 /**
  * @author SpCo
- * @version 2.0.4
+ * @version 3.0.0
  * @since 0.3.0
  */
 @CommandMarker
@@ -50,17 +55,15 @@ public class GetOtherCommand extends AbstractCommand {
     }
 
     @Override
-    public List<CommandUsage> getUsages() {
-        return List.of(new CommandUsage(getLabels()[0], getDescriptions(), new CommandParam("目标用户", CommandParam.ParamType.REQUIRED, CommandParam.ParamContent.TARGET_USER_ID)));
+    public List<Usage> getUsages() {
+        return List.of(new UsageBuilder(getLabels()[0], getDescriptions()).add(new TargetUserIdParameter("目标用户", false, null)).build());
     }
 
     @Override
     public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user1, Message<?> message, int time, CommandMeta meta, String usageName) {
         try {
-            BotUser user = BotUsers.getOrCreate(meta.targetUserIdArgument(0));
+            BotUser user = BotUsers.getOrCreate((Long) meta.getParams().get("目标用户"));
             from.quoteReply(message, user.toString());
-        } catch (CommandSyntaxException e) {
-            from.handleException(message, e.getMessage());
         } catch (UserFetchException e) {
             from.handleException(message, "获取机器人用户时发生异常", e);
         }

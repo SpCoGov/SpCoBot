@@ -13,7 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco.service.command;
+package top.spco.service.command.usage;
+
+import top.spco.service.command.usage.parameters.Parameter;
+import top.spco.service.command.usage.parameters.TargetUserIdParameter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,50 +26,55 @@ import java.util.Objects;
  * 表示命令的一个用法。
  *
  * @author SpCo
- * @version 1.0.0
+ * @version 3.0.0
  * @since 1.0.0
  */
-public class CommandUsage {
+public class Usage {
     public final String name;
-    public final List<CommandParam> params = new ArrayList<>();
+    private final List<Parameter<?>> params = new ArrayList<>();
     private final String label;
     private boolean hasTarget;
 
-    /**
-     * 注意: 此方法仅供内部使用, <b>不应该</b>被外部调用<p>
-     * 如需创建一个用法，请用{@link #CommandUsage(String, String, CommandParam...)}
-     */
-    public CommandUsage(String label, String name, List<CommandParam> params) {
-        this.name = name;
-        this.label = label;
-        this.params.addAll(params);
-    }
 
-    public CommandUsage(String label, String name, CommandParam... params) {
+    public Usage(String label, String name, List<Parameter<?>> params) {
         List<String> paramName = new ArrayList<>();
         int index = 0;
         this.hasTarget = false;
-        for (CommandParam param : params) {
-            if (paramName.contains(param.name)) {
-                throw new IllegalArgumentException("Duplicate command parameter");
+        for (Parameter<?> param : params) {
+            if (paramName.contains(param.getName())) {
+                throw new IllegalArgumentException("Duplicate command parameter: " + param.getName());
             }
-            if (param.type == CommandParam.ParamType.OPTIONAL) {
-                if (index + 1 != params.length) {
-                    throw new IllegalArgumentException("Optional parameters must be the last ones");
+            if (param.isOptional()) {
+                if (index + 1 != params.size()) {
+                    throw new IllegalArgumentException("Optional parameters must be the last ones: " + this);
                 }
             }
-            if (param.content == CommandParam.ParamContent.TARGET_USER_ID) {
+            if (param instanceof TargetUserIdParameter) {
                 if (this.hasTarget) {
-                    throw new IllegalArgumentException("Only one target_user_id parameter is allowed");
+                    throw new IllegalArgumentException("Only one target_user_id parameter is allowed: " + this);
                 }
                 this.hasTarget = true;
             }
-            paramName.add(param.name);
+            paramName.add(param.getName());
             this.params.add(param);
             index += 1;
         }
         this.label = label;
         this.name = name;
+    }
+
+    /**
+     * <b>请勿使用本方法构建命令用法。</b>
+     * 请使用 {@link UsageBuilder} 或 {@link #Usage(String, String, List)}}
+     */
+    public Usage(String label, String name, List<Parameter<?>> params, Dummy ignored) {
+        this.params.addAll(params);
+        this.label = label;
+        this.name = name;
+    }
+
+    public List<Parameter<?>> getParams() {
+        return params;
     }
 
     public boolean hasTargetParam() {
@@ -91,12 +99,15 @@ public class CommandUsage {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CommandUsage usage = (CommandUsage) o;
+        Usage usage = (Usage) o;
         return usage.toString().equals(toString());
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(toString());
+    }
+
+    public static class Dummy {
     }
 }

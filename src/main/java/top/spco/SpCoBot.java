@@ -30,14 +30,14 @@ import top.spco.core.database.DataBase;
 import top.spco.core.module.ModuleManager;
 import top.spco.events.*;
 import top.spco.modules.AutoSign;
+import top.spco.modules.CustomReply;
 import top.spco.modules.EchoMute;
 import top.spco.modules.ValorantResponder;
 import top.spco.service.chat.ChatDispatcher;
 import top.spco.service.chat.ChatType;
 import top.spco.service.command.Command;
 import top.spco.service.command.CommandDispatcher;
-import top.spco.service.command.CommandMeta;
-import top.spco.service.command.CommandSyntaxException;
+import top.spco.service.command.commands.SignCommand;
 import top.spco.service.dashscope.DashScopeDispatcher;
 import top.spco.service.statistics.StatisticsDispatcher;
 import top.spco.user.BotUser;
@@ -70,7 +70,7 @@ import java.io.File;
  * </pre>
  *
  * @author SpCo
- * @version 2.0.8
+ * @version 3.0.0
  * @since 0.1.0
  */
 public class SpCoBot {
@@ -102,9 +102,9 @@ public class SpCoBot {
      * </ul>
      * <b>更新版本号(仅限核心的 Feature)时请不要忘记在 build.gradle 中同步修改版本号</b>
      */
-    public static final String MAIN_VERSION = "2.0.8";
-    public static final String VERSION = "v" + MAIN_VERSION + "-3";
-    public static final String UPDATED_TIME = "2023-03-27 10:26";
+    public static final String MAIN_VERSION = "3.0.0";
+    public static final String VERSION = "v" + MAIN_VERSION + "-1";
+    public static final String UPDATED_TIME = "2023-03-29 13:43";
     public static final String OLDEST_SUPPORTED_CONFIG_VERSION = "0.3.2";
 
     private SpCoBot() {
@@ -127,12 +127,10 @@ public class SpCoBot {
     }
 
     private void initModules() {
-        moduleManager.add(new AutoSign());
-        moduleManager.get(AutoSign.class).toggle();
-        moduleManager.add(new EchoMute());
-        moduleManager.get(EchoMute.class).toggle();
-        moduleManager.add(new ValorantResponder());
-        moduleManager.get(ValorantResponder.class).toggle();
+        moduleManager.add(new AutoSign(), true);
+        moduleManager.add(new EchoMute(), true);
+        moduleManager.add(new ValorantResponder(), true);
+        moduleManager.add(new CustomReply(), true);
     }
 
     private void initEvents() {
@@ -141,7 +139,7 @@ public class SpCoBot {
         }
         registered = true;
         MessageEvents.FRIEND_MESSAGE_RECALL.register((bot1, sender, operator, recalledMessage) -> LOGGER.info("{}({})撤回了一条自己的消息", operator.getRemark(), operator.getId()));
-        MessageEvents.GROUP_MESSAGE_RECALL.register((bot1, source, sender, operator, recalledMessage) -> LOGGER.info("{}({})在{}({})撤回了一条{}({})的消息", operator.getNick(),operator.getId(), source.getName(), source.getId(), sender.getNick(), sender.getId()));
+        MessageEvents.GROUP_MESSAGE_RECALL.register((bot1, source, sender, operator, recalledMessage) -> LOGGER.info("{}({})在{}({})撤回了一条{}({})的消息", operator.getNick(), operator.getId(), source.getName(), source.getId(), sender.getNick(), sender.getId()));
         BotEvents.ONLINE_TICK.register(bot1 -> {
             long id = bot1.getId();
             LOGGER.info("机器人({})上线。", id);
@@ -183,15 +181,8 @@ public class SpCoBot {
                 return;
             }
             if (context.startsWith(CommandDispatcher.COMMAND_START_SYMBOL)) {
-                try {
-                    CommandMeta meta = new CommandMeta(context, message);
-                    if (meta.getArgs() != null) {
-                        CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, meta);
-                        CommandEvents.FRIEND_COMMAND.invoker().onFriendCommand(bot, sender, message, time, meta);
-                    }
-                } catch (CommandSyntaxException e) {
-                    sender.handleException(message, e.getMessage());
-                }
+                CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time);
+                CommandEvents.FRIEND_COMMAND.invoker().onFriendCommand(bot, sender, message, time);
             }
         });
         // 处理群聊消息
@@ -203,15 +194,8 @@ public class SpCoBot {
                 return;
             }
             if (context.startsWith(CommandDispatcher.COMMAND_START_SYMBOL)) {
-                try {
-                    CommandMeta meta = new CommandMeta(context, message);
-                    if (meta.getArgs() != null) {
-                        CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, meta);
-                        CommandEvents.GROUP_COMMAND.invoker().onGroupCommand(bot, source, sender, message, time, meta);
-                    }
-                } catch (CommandSyntaxException e) {
-                    source.handleException(message, e.getMessage());
-                }
+                CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time);
+                CommandEvents.GROUP_COMMAND.invoker().onGroupCommand(bot, source, sender, message, time);
 
             }
             if (context.equals("签到")) {
@@ -219,7 +203,7 @@ public class SpCoBot {
                 try {
                     BotUser botUser = BotUsers.getOrCreate(sender.getId());
                     if (command.hasPermission(botUser)) {
-                        command.onCommand(bot, source, sender, botUser, message, time, new CommandMeta(context, message), command.getUsages().get(0).name);
+                        SignCommand.sign(source, botUser, message);
                     }
                 } catch (Exception e) {
                     source.quoteReply(message, "SpCoBot获取用户时失败: \n" + ExceptionUtils.getStackTraceAsString(e));
@@ -231,7 +215,7 @@ public class SpCoBot {
                 try {
                     BotUser botUser = BotUsers.getOrCreate(sender.getId());
                     if (command.hasPermission(botUser)) {
-                        command.onCommand(bot, source, sender, botUser, message, time, new CommandMeta(context, message), command.getUsages().get(0).name);
+                        source.quoteReply(message, botUser.toString());
                     }
                 } catch (Exception e) {
                     source.quoteReply(message, "SpCoBot获取用户时失败: \n" + ExceptionUtils.getStackTraceAsString(e));
@@ -249,15 +233,8 @@ public class SpCoBot {
                 return;
             }
             if (context.startsWith(CommandDispatcher.COMMAND_START_SYMBOL)) {
-                try {
-                    CommandMeta meta = new CommandMeta(context, message);
-                    if (meta.getArgs() != null) {
-                        CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time, meta);
-                        CommandEvents.GROUP_TEMP_COMMAND.invoker().onGroupTempCommand(bot, source, message, time, meta);
-                    }
-                } catch (CommandSyntaxException e) {
-                    source.handleException(message, e.getMessage());
-                }
+                CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time);
+                CommandEvents.GROUP_TEMP_COMMAND.invoker().onGroupTempCommand(bot, source, message, time);
             }
         });
     }
