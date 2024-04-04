@@ -85,21 +85,6 @@ public class InteractiveList<C extends Interactive<?>> implements Collection<C> 
     }
 
     /**
-     * 根据给定的ID获取交互式元素，如果不存在则抛出 {@code NoSuchElementException}。
-     *
-     * @param id 要查找的元素的ID
-     * @return 具有给定ID的交互式元素
-     * @throws NoSuchElementException 如果找不到具有给定ID的元素
-     */
-    public C getOrFail(long id) {
-        C contact = get(id);
-        if (contact == null) {
-            throw new NoSuchElementException("Contact " + id + " not found.");
-        }
-        return contact;
-    }
-
-    /**
      * 检查列表中是否包含具有给定ID的交互式元素。
      *
      * @param id 要检查的元素的ID
