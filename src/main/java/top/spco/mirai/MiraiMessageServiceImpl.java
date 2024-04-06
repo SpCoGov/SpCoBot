@@ -18,7 +18,6 @@ package top.spco.mirai;
 import net.mamoe.mirai.contact.Contact;
 import net.mamoe.mirai.contact.PermissionDeniedException;
 import net.mamoe.mirai.message.data.At;
-import net.mamoe.mirai.message.data.MessageChain;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.QuoteReply;
 import net.mamoe.mirai.utils.ExternalResource;
@@ -34,7 +33,7 @@ import java.io.File;
 
 /**
  * @author SpCo
- * @version 2.0.0
+ * @version 3.0.2
  * @since 0.1.0
  */
 class MiraiMessageServiceImpl implements MessageService {
@@ -88,9 +87,9 @@ class MiraiMessageServiceImpl implements MessageService {
     }
 
     @Override
-    public void recall(Message<?> original) {
+    public void recall(MessageSource<?> original) {
         try {
-            net.mamoe.mirai.message.data.MessageSource.recall((MessageChain) original.wrapped());
+            net.mamoe.mirai.message.data.MessageSource.recall(((net.mamoe.mirai.message.data.MessageSource) original.wrapped()));
         } catch (PermissionDeniedException e) {
             throw new top.spco.api.exception.PermissionDeniedException("权限不足");
         }

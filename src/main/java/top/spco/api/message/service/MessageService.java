@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
  * 消息服务
  *
  * @author SpCo
- * @version 2.0.0
+ * @version 3.0.2
  * @since 0.1.1
  */
 public interface MessageService {
@@ -97,7 +97,7 @@ public interface MessageService {
      *
      * @param original 需要撤回的消息
      */
-    void recall(Message<?> original);
+    void recall(MessageSource<?> original);
 
     /**
      * 将字符串转换为 {@code Message} 对象

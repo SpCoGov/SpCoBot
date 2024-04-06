@@ -27,10 +27,7 @@ import top.spco.service.command.CommandMeta;
 import top.spco.service.command.GroupAbstractCommand;
 import top.spco.service.command.usage.Usage;
 import top.spco.service.command.usage.UsageBuilder;
-import top.spco.service.command.usage.parameters.BooleanParameter;
-import top.spco.service.command.usage.parameters.IntegerParameter;
-import top.spco.service.command.usage.parameters.SpecifiedParameter;
-import top.spco.service.command.usage.parameters.StringParameter;
+import top.spco.service.command.usage.parameters.*;
 import top.spco.service.command.util.PermissionsValidator;
 import top.spco.service.mcs.McS;
 import top.spco.service.mcs.McSManager;
@@ -44,7 +41,7 @@ import java.util.List;
 
 /**
  * @author SpCo
- * @version 3.0.1
+ * @version 3.0.2
  * @since 2.0.3
  */
 @CommandMarker
@@ -86,7 +83,7 @@ public class McSCommand extends GroupAbstractCommand {
                 new UsageBuilder(getLabels()[0], "查看此群所绑定的服务器").build(),
                 new UsageBuilder(getLabels()[0], "将某个服务器绑定到此群")
                         .add(new SpecifiedParameter("操作类型", false, "bind", "bind", "unbind", "execute", "connect", "online", "disconnect", "debug"))
-                        .add(new StringParameter("IP", false, null, StringParameter.StringType.SINGLE_WORD))
+                        .add(new HostParameter("主机地址", false, null))
                         .add(new IntegerParameter("端口", true, 58964, 1024, 65535)).build(),
                 new UsageBuilder(getLabels()[0], "将某个服务器从此群解绑")
                         .add(new SpecifiedParameter("操作类型", false, "unbind", "bind", "unbind", "execute", "connect", "online", "disconnect", "debug")).build(),
@@ -128,7 +125,7 @@ public class McSCommand extends GroupAbstractCommand {
                     from.quoteReply(message, "该群已绑定服务器，请先解绑后再次尝试");
                     return;
                 }
-                String host = (String) meta.getParams().get("IP");
+                String host = (String) meta.getParams().get("主机地址");
                 int port = (Integer) meta.getParams().get("端口");
 
                 try {

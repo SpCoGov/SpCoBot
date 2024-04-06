@@ -19,10 +19,13 @@ import net.mamoe.mirai.message.data.MessageChain;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.QuoteReply;
 import top.spco.api.message.Message;
+import top.spco.api.message.MessageSource;
+
+import java.util.NoSuchElementException;
 
 /**
  * @author SpCo
- * @version 2.0.0
+ * @version 3.0.2
  * @since 0.1.0
  */
 class MiraiMessage extends Message<net.mamoe.mirai.message.data.MessageChain> {
@@ -56,6 +59,15 @@ class MiraiMessage extends Message<net.mamoe.mirai.message.data.MessageChain> {
     @Override
     public Message<?> toMessage() {
         return this;
+    }
+
+    @Override
+    public MessageSource<?> getSource() {
+        try {
+            return new MiraiMessageSource(wrapped().get(net.mamoe.mirai.message.data.MessageSource.Key));
+        } catch (NoSuchElementException e) {
+            return null;
+        }
     }
 
     @Override

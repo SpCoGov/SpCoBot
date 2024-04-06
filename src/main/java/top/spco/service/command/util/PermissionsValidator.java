@@ -51,7 +51,6 @@ import top.spco.user.UserPermission;
  * @since 1.2.0
  */
 public class PermissionsValidator {
-
     /**
      * 验证发起命令的用户是否具有管理员权限
      *

@@ -70,7 +70,7 @@ import java.io.File;
  * }</pre>
  *
  * <h2>撤回消息</h2>
- * 除了用户自行创建的消息，都可以使用 {@link MessageService#recall(Message)} 来撤回。
+ * 除了用户自行创建的消息，都可以使用 {@link MessageService#recall(MessageSource)} 来撤回。
  *
  * <pre>{@code
  * Message<?> message = getMessage();
@@ -101,7 +101,7 @@ import java.io.File;
  * }</pre>
  *
  * @author SpCo
- * @version 2.0.4
+ * @version 3.0.2
  * @see Image
  * @see MessageService
  * @see MessageSource
@@ -155,4 +155,11 @@ public abstract class Message<T> extends Wrapper<T> implements Codable {
     public void setCommandMessage() {
         isCommandMessage = true;
     }
+
+    /**
+     * 获得消息的 {@link MessageSource} （如果有）
+     *
+     * @return 转换的结果
+     */
+    public abstract MessageSource<?> getSource();
 }

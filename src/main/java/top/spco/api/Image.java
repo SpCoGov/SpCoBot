@@ -16,12 +16,13 @@
 package top.spco.api;
 
 import top.spco.api.message.Message;
+import top.spco.api.message.MessageSource;
 
 /**
  * 图片
  *
  * @author SpCo
- * @version 2.0.0
+ * @version 3.0.2
  * @since 1.3.0
  */
 public abstract class Image<T> extends Message<T> {
@@ -60,5 +61,14 @@ public abstract class Image<T> extends Message<T> {
     @Deprecated
     public Message<T> quoteReply(Message<?> toQuote) {
         return this;
+    }
+
+    /**
+     * @deprecated {@code Image} 表示一张图片，没有该属性。
+     */
+    @Override
+    @Deprecated
+    public MessageSource<?> getSource() {
+        return null;
     }
 }

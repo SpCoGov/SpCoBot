@@ -55,7 +55,7 @@ import java.util.List;
  * Valorant相关功能
  *
  * @author SpCo
- * @version 3.0.0
+ * @version 3.0.2
  * @since 1.3.0
  */
 @CommandMarker
@@ -92,7 +92,7 @@ public class ValorantCommand extends AbstractCommand {
                 if (from instanceof Group) {
                     // 检测机器人是否有权限撤回用户发送的消息
                     if (PermissionsValidator.verifyBotPermissions(from, message, (NormalMember<?>) sender, false)) {
-                        SpCoBot.getInstance().getMessageService().recall(message);
+                        SpCoBot.getInstance().getMessageService().recall(message.getSource());
                         from.sendMessage("为防止您的密码泄露，请在私聊使用该命令。");
                     } else {
                         from.quoteReply(message, "为防止您的密码泄露，请撤回该消息并在私聊使用该命令。");
