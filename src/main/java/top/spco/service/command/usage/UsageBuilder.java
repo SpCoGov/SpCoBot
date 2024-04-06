@@ -30,7 +30,6 @@ import java.util.List;
  * @since 3.0.0
  */
 public class UsageBuilder implements Builder<Usage> {
-
     private final String label;
     private final String name;
     private final List<Parameter<?>> params = new ArrayList<>();

@@ -33,8 +33,8 @@ import top.spco.service.command.CommandMarker;
 import top.spco.service.command.CommandMeta;
 import top.spco.service.command.usage.Usage;
 import top.spco.service.command.usage.UsageBuilder;
-import top.spco.service.command.usage.parameters.Parameter;
-import top.spco.service.command.usage.parameters.SpecifiedParameter;
+import top.spco.service.command.util.SpecifiedParameterHelper;
+import top.spco.service.command.util.SpecifiedParameterSet;
 import top.spco.service.command.usage.parameters.StringParameter;
 import top.spco.service.command.util.PermissionsValidator;
 import top.spco.user.BotUser;
@@ -47,7 +47,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -55,19 +54,11 @@ import java.util.List;
  * Valorant相关功能
  *
  * @author SpCo
- * @version 3.0.2
+ * @version 3.0.3
  * @since 1.3.0
  */
 @CommandMarker
 public class ValorantCommand extends AbstractCommand {
-    {
-        List<Parameter<?>> loginParams = new ArrayList<>();
-        loginParams.add(new SpecifiedParameter("行为类型", false, "login", "login", "shop"));
-        loginParams.add(new StringParameter("账号", false, null, StringParameter.StringType.QUOTABLE_PHRASE));
-        loginParams.add(new StringParameter("密码", false, null, StringParameter.StringType.QUOTABLE_PHRASE));
-        loginUsage = new UsageBuilder(getLabels()[0], "登录拳头账户").addAll(loginParams).build();
-    }
-
     public static Usage loginUsage;
 
     @Override
@@ -82,7 +73,14 @@ public class ValorantCommand extends AbstractCommand {
 
     @Override
     public List<Usage> getUsages() {
-        return List.of(loginUsage, new UsageBuilder(getLabels()[0], "获取每日商店皮肤").add(new SpecifiedParameter("行为类型", false, "login", "shop", "login")).build());
+        SpecifiedParameterSet set = new SpecifiedParameterHelper("行为类型", false).add("login", "shop").build();
+        return List.of(
+                new UsageBuilder(getLabels()[0], "获取每日商店皮肤")
+                        .add(set.get("login"))
+                        .add(new StringParameter("账号", false, null, StringParameter.StringType.QUOTABLE_PHRASE))
+                        .add(new StringParameter("密码", false, null, StringParameter.StringType.QUOTABLE_PHRASE)).build(),
+                new UsageBuilder(getLabels()[0], "获取每日商店皮肤")
+                        .add(set.get("shop")).build());
     }
 
     @Override
