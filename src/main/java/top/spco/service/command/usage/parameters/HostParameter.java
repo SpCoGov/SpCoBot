@@ -23,7 +23,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 是主机地址的命令参数
+ * 是主机地址的命令参数<p>
+ * 如 {@code 8.8.8.8} 或 {@code google.com}
  *
  * @author SpCo
  * @version 3.0.2

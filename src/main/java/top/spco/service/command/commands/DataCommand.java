@@ -25,7 +25,8 @@ import top.spco.service.command.CommandMarker;
 import top.spco.service.command.CommandMeta;
 import top.spco.service.command.usage.Usage;
 import top.spco.service.command.usage.UsageBuilder;
-import top.spco.service.command.usage.parameters.SpecifiedParameter;
+import top.spco.service.command.util.SpecifiedParameterHelper;
+import top.spco.service.command.util.SpecifiedParameterSet;
 import top.spco.service.command.usage.parameters.StringParameter;
 import top.spco.user.BotUser;
 import top.spco.user.UserPermission;
@@ -35,7 +36,7 @@ import java.util.List;
 
 /**
  * @author SpCo
- * @version 3.0.0
+ * @version 3.0.3
  * @since 0.1.0
  */
 @CommandMarker
@@ -52,16 +53,17 @@ public class DataCommand extends AbstractCommand {
 
     @Override
     public List<Usage> getUsages() {
+        SpecifiedParameterSet set = new SpecifiedParameterHelper("操作类型", false).add("set", "get").build();
         return List.of(
                 new UsageBuilder("data", "查询记录")
-                        .add(new SpecifiedParameter("操作类型", false, "get", "set", "get"))
+                        .add(set.get("get"))
                         .add(new StringParameter("表名", false, null, StringParameter.StringType.SINGLE_WORD))
                         .add(new StringParameter("字段名", false, null, StringParameter.StringType.SINGLE_WORD))
                         .add(new StringParameter("记录值", false, null, StringParameter.StringType.QUOTABLE_PHRASE))
                         .add(new StringParameter("待查询的字段名", false, null, StringParameter.StringType.SINGLE_WORD)).build()
                 ,
                 new UsageBuilder("data", "编辑记录")
-                        .add(new SpecifiedParameter("操作类型", false, "set", "set", "get"))
+                        .add(set.get("set"))
                         .add(new StringParameter("表名", false, null, StringParameter.StringType.SINGLE_WORD))
                         .add(new StringParameter("字段名", false, null, StringParameter.StringType.SINGLE_WORD))
                         .add(new StringParameter("记录值", false, null, StringParameter.StringType.QUOTABLE_PHRASE))

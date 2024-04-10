@@ -39,26 +39,26 @@ import java.util.List;
  * <pre>{@code
  * StringBuilder sb = new StringBuilder();
  * Chat chat = new ChatBuilder(ChatType.FRIEND, from)
- *     .addStage(new Stage(() -> "请输入你好", (chat, bot, source, sender, message, time) -> {
+ *     .addStage(new Stage(() -> "请输入你好", (chat1, bot, source, sender, message, time) -> {
  *         if (message.toMessageContext().equals("你好")) {
  *             sb.append("你好，").append(sender.getId());
- *             chat.next();
+ *             chat1.next();
  *         } else {
- *             chat.replay();
+ *             chat1.replay();
  *         }
  *     }))
- *     .addStage(new Stage(() -> "请随意输入文本", (chat, bot, source, sender, message, time) -> {
+ *     .addStage(new Stage(() -> "请随意输入文本", (chat1, bot, source, sender, message, time) -> {
  *         sb.append("\n").append(message.toMessageContext());
- *         chat.next();
+ *         chat1.next();
  *     }))
- *     .addStage(new Stage(() -> "最终文本为\n" + sb + "\n输入确定即可发送，输入取消退出", (chat, bot, source, sender, message, time) -> {
+ *     .addStage(new Stage(() -> "最终文本为\n" + sb + "\n输入确定即可发送，输入取消退出", (chat1, bot, source, sender, message, time) -> {
  *         switch (message.toMessageContext()) {
- *             case "取消" -> chat.stop();
+ *             case "取消" -> chat1.stop();
  *             case "确定" -> {
  *                 source.sendMessage(sb.toString());
- *                 chat.next();
+ *                 chat1.next();
  *             }
- *             default -> chat.replay();
+ *             default -> chat1.replay();
  *         }
  *     }))
  *     .build();
