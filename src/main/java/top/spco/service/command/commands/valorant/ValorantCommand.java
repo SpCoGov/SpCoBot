@@ -33,10 +33,11 @@ import top.spco.service.command.CommandMarker;
 import top.spco.service.command.CommandMeta;
 import top.spco.service.command.usage.Usage;
 import top.spco.service.command.usage.UsageBuilder;
-import top.spco.service.command.util.SpecifiedParameterHelper;
-import top.spco.service.command.util.SpecifiedParameterSet;
+import top.spco.service.command.usage.parameters.SelectionParameter;
 import top.spco.service.command.usage.parameters.StringParameter;
 import top.spco.service.command.util.PermissionsValidator;
+import top.spco.service.command.util.SpecifiedParameterHelper;
+import top.spco.service.command.util.SpecifiedParameterSet;
 import top.spco.user.BotUser;
 
 import java.io.BufferedInputStream;
@@ -47,19 +48,20 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Valorant相关功能
  *
  * @author SpCo
- * @version 3.0.3
+ * @version 3.0.4
  * @since 1.3.0
  */
 @CommandMarker
 public class ValorantCommand extends AbstractCommand {
     public static Usage loginUsage;
+    private final Set<String> agents = new HashSet<>();
+    private final Set<String> weapons = new HashSet<>();
 
     @Override
     public String[] getLabels() {
@@ -73,14 +75,27 @@ public class ValorantCommand extends AbstractCommand {
 
     @Override
     public List<Usage> getUsages() {
-        SpecifiedParameterSet set = new SpecifiedParameterHelper("行为类型", false).add("login", "shop").build();
+        SpecifiedParameterSet set = new SpecifiedParameterHelper("行为类型", false).add("login", "shop", "roll").build();
         return List.of(
-                new UsageBuilder(getLabels()[0], "获取每日商店皮肤")
+                new UsageBuilder(getLabels()[0], "登录Valorant账号")
                         .add(set.get("login"))
                         .add(new StringParameter("账号", false, null, StringParameter.StringType.QUOTABLE_PHRASE))
                         .add(new StringParameter("密码", false, null, StringParameter.StringType.QUOTABLE_PHRASE)).build(),
                 new UsageBuilder(getLabels()[0], "获取每日商店皮肤")
-                        .add(set.get("shop")).build());
+                        .add(set.get("shop")).build(),
+                new UsageBuilder(getLabels()[0], "掷骰子")
+                        .add(set.get("roll"))
+                        .add(new SelectionParameter("骰子类型", false, null, "agent", "weapon"))
+                        .build()
+        );
+    }
+
+    @Override
+    public void init() {
+        agents.addAll(List.of("KAY/O", "アイソ", "アストラ", "ヴァイパー", "オーメン", "キルジョイ", "クローヴ", "ゲッコー", "サイファー",
+                "ジェット", "スカイ", "セージ", "ソーヴァ", "チェンバー", "デッドロック", "ネオン", "ハーバー", "フェイド", "フィニックス", "ブリーチ", "ブリムストーン", "ヨル", "レイズ", "レイナ"));
+        weapons.addAll(List.of("クラシック", "ショーティー", "フレンジー", "ゴースト", "シェリフ", "スティンガー", "スペクター", "バッキー", "ジャッジ", "ブルドック", "ガーディアン", "ファントム", "ヴァンダル", "ムーシャル", "アウトロー"
+                , "オペレーター", "アレス", "オーディン", "ナイフ"));
     }
 
     @Override
@@ -281,6 +296,19 @@ public class ValorantCommand extends AbstractCommand {
                     SpCoBot.LOGGER.error(e);
                 }
             }
+            case "掷骰子" -> {
+                String type = (String) meta.getParams().get("骰子类型");
+                switch (type) {
+                    case "agent" -> {
+                        String agent = getRandomElement(agents);
+                        from.quoteReply(message, "随机的特务是：" + agent);
+                    }
+                    case "weapon" -> {
+                        String weapon = getRandomElement(weapons);
+                        from.quoteReply(message, "随机的武器是：" + weapon);
+                    }
+                }
+            }
         }
     }
 
@@ -368,7 +396,20 @@ public class ValorantCommand extends AbstractCommand {
         if (seconds > 0) {
             duration.append(seconds).append("秒");
         }
-
         return duration.toString();
+    }
+
+    private <T> T getRandomElement(Set<T> hashSet) {
+        if (hashSet.isEmpty()) {
+            return null;
+        }
+
+        Object[] array = hashSet.toArray();
+        Random random = new Random();
+        int randomIndex = random.nextInt(array.length);
+
+        @SuppressWarnings("unchecked")
+        T randomElement = (T) array[randomIndex];
+        return randomElement;
     }
 }

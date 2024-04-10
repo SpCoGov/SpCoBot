@@ -41,9 +41,9 @@ import java.util.concurrent.ThreadLocalRandom;
  * <p>需要创建或获取用户，可以通过 {@link BotUsers} 类中的方法 {@link BotUsers#get(long)} 或 {@link BotUsers#getOrCreate(long)}
  *
  * @author SpCo
- * @version 1.2.4
- * @since 0.1.0
+ * @version 3.0.4
  * @see BotUsers
+ * @since 0.1.0
  */
 public class BotUser {
     private final long id;
@@ -84,14 +84,6 @@ public class BotUser {
 
     public int getSMFCoin() {
         return smfCoin;
-    }
-
-    public void setSign(String sign) {
-        this.sign = sign;
-    }
-
-    public String getSign() {
-        return sign;
     }
 
     @Override

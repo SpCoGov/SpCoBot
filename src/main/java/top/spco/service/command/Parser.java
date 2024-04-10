@@ -23,7 +23,7 @@ import top.spco.service.command.exceptions.CommandSyntaxException;
  * 命令文本解析器。用于解析命令的标签和参数。
  *
  * @author SpCo
- * @version 3.0.0
+ * @version 3.0.4
  * @since 3.0.0
  */
 public class Parser {
@@ -117,7 +117,7 @@ public class Parser {
         while (canRead() && isAllowedNumber(peek())) {
             skip();
         }
-        
+
         final String number = string.substring(start, cursor);
         if (number.isEmpty()) {
             throw BuiltInExceptions.readerExpectedInt(this);
@@ -135,7 +135,7 @@ public class Parser {
         while (canRead() && isAllowedNumber(peek())) {
             skip();
         }
-        
+
         final String number = string.substring(start, cursor);
         if (number.isEmpty()) {
             throw BuiltInExceptions.readerExpectedLong(this);
@@ -153,7 +153,7 @@ public class Parser {
         while (canRead() && isAllowedNumber(peek())) {
             skip();
         }
-        
+
         final String number = string.substring(start, cursor);
         if (number.isEmpty()) {
             throw BuiltInExceptions.readerExpectedDouble(this);
@@ -171,7 +171,7 @@ public class Parser {
         while (canRead() && isAllowedNumber(peek())) {
             skip();
         }
-        
+
         final String number = string.substring(start, cursor);
         if (number.isEmpty()) {
             throw BuiltInExceptions.readerExpectedFloat(this);
@@ -195,12 +195,12 @@ public class Parser {
     public String readUnquotedString() throws CommandSyntaxException {
         final int start = cursor;
         if (!canRead()) {
+            setCursor(start);
             throw BuiltInExceptions.createWithContext("需要字符串", this);
         }
         while (canRead() && isAllowedInUnquotedString(peek())) {
             skip();
         }
-        
         return string.substring(start, cursor);
     }
 
@@ -208,12 +208,13 @@ public class Parser {
         if (!canRead()) {
             return "";
         }
+        final int start = cursor;
         final char next = peek();
         if (!isQuotedStringStart(next)) {
+            setCursor(start);
             throw BuiltInExceptions.readerExpectedStartOfQuote(this);
         }
         skip();
-        
         return readStringUntil(next);
     }
 

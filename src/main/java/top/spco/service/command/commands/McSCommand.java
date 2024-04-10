@@ -27,7 +27,10 @@ import top.spco.service.command.CommandMeta;
 import top.spco.service.command.GroupAbstractCommand;
 import top.spco.service.command.usage.Usage;
 import top.spco.service.command.usage.UsageBuilder;
-import top.spco.service.command.usage.parameters.*;
+import top.spco.service.command.usage.parameters.BooleanParameter;
+import top.spco.service.command.usage.parameters.HostParameter;
+import top.spco.service.command.usage.parameters.IntegerParameter;
+import top.spco.service.command.usage.parameters.StringParameter;
 import top.spco.service.command.util.PermissionsValidator;
 import top.spco.service.command.util.SpecifiedParameterHelper;
 import top.spco.service.command.util.SpecifiedParameterSet;
@@ -43,7 +46,7 @@ import java.util.List;
 
 /**
  * @author SpCo
- * @version 3.0.3
+ * @version 3.0.4
  * @since 2.0.3
  */
 @CommandMarker
@@ -85,7 +88,7 @@ public class McSCommand extends GroupAbstractCommand {
         return List.of(
                 new UsageBuilder(getLabels()[0], "查看此群所绑定的服务器").build(),
                 new UsageBuilder(getLabels()[0], "将某个服务器绑定到此群")
-                        .add(specifiedParameters.get("build"))
+                        .add(specifiedParameters.get("bind"))
                         .add(new HostParameter("主机地址", false, null))
                         .add(new IntegerParameter("端口", true, 58964, 1024, 65535)).build(),
                 new UsageBuilder(getLabels()[0], "将某个服务器从此群解绑")

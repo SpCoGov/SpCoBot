@@ -70,7 +70,7 @@ import java.io.File;
  * </pre>
  *
  * @author SpCo
- * @version 3.0.3
+ * @version 3.0.4
  * @since 0.1.0
  */
 public class SpCoBot {
@@ -102,9 +102,9 @@ public class SpCoBot {
      * </ul>
      * <b>更新版本号(仅限核心的 Feature)时请不要忘记在 build.gradle 中同步修改版本号</b>
      */
-    public static final String MAIN_VERSION = "3.0.3";
-    public static final String VERSION = "v" + MAIN_VERSION + "-1";
-    public static final String UPDATED_TIME = "2023-04-06 15:11";
+    public static final String MAIN_VERSION = "3.0.4";
+    public static final String VERSION = "v" + MAIN_VERSION + "-3";
+    public static final String UPDATED_TIME = "2023-04-08 16:11";
     public static final String OLDEST_SUPPORTED_CONFIG_VERSION = "0.3.2";
 
     private SpCoBot() {
@@ -114,7 +114,6 @@ public class SpCoBot {
     public void initOthers() {
         this.dataBase = new DataBase();
         this.caatp = CAATP.getInstance();
-        initModules();
         this.settings = new Settings(configFolder.getAbsolutePath() + File.separator + "config.yaml");
         if (expired(settings.getStringProperty(SettingsVersion.CONFIG_VERSION))) {
             LOGGER.error("配置版本过时，请备份配置后删除配置重新启动机器人以生成新配置。");
@@ -124,6 +123,7 @@ public class SpCoBot {
         botOwnerId = settings.getLongProperty(BotSettings.OWNER_ID);
         testGroupId = settings.getLongProperty(BotSettings.TEST_GROUP);
         this.commandDispatcher = CommandDispatcher.getInstance();
+        initModules();
     }
 
     private void initModules() {

@@ -24,7 +24,7 @@ import java.util.*;
  * 创建 {@link SpecifiedParameter} 的工具，
  *
  * @author SpCo
- * @version 3.0.3
+ * @version 3.0.4
  * @see SpecifiedParameter
  * @since 3.0.3
  */
@@ -44,7 +44,7 @@ public class SpecifiedParameterHelper implements Builder<SpecifiedParameterSet> 
     }
 
     public SpecifiedParameterHelper add(String... texts) {
-        this.texts.addAll(Arrays.asList(texts));
+        this.texts.addAll(List.of(texts));
         return this;
     }
 
