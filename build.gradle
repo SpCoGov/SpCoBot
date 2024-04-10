@@ -8,6 +8,7 @@ plugins {
 group = 'top.spco'
 version = '3.0.4'
 
+
 javadoc {
     failOnError = false
     options.encoding = 'UTF-8'
