@@ -19,17 +19,13 @@ import top.spco.api.message.Message;
 import top.spco.service.command.exceptions.CommandSyntaxException;
 import top.spco.service.command.usage.Usage;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
-import java.util.List;
 
 /**
  * 命令的元数据。包含调用命令的消息，命令的原始文本，负责解析该命令的解析器，命令参数等
  *
  * @author SpCo
- * @version 3.0.0
+ * @version 3.0.4
  * @since 0.1.1
  */
 public class CommandMeta {
@@ -72,6 +68,10 @@ public class CommandMeta {
         this.parser = parser;
     }
 
+    public Parser getParser() {
+        return parser;
+    }
+
     public Message<?> getSourceMessage() {
         return sourceMessage;
     }
@@ -84,22 +84,6 @@ public class CommandMeta {
         return usage;
     }
 
-    /**
-     * 在数组中插入一个元素并返回新数组。
-     *
-     * @param originalArray   原始数组。
-     * @param elementToInsert 要插入的元素。
-     * @param insertIndex     插入的索引位置。
-     * @return 包含了新元素的新数组。
-     */
-    public static <T> T[] insertIntoArray(T[] originalArray, T elementToInsert, int insertIndex) {
-        List<T> list = new ArrayList<>(Arrays.asList(originalArray));
-        list.add(insertIndex, elementToInsert);
-        @SuppressWarnings("unchecked")
-        T[] newArray = (T[]) Array.newInstance(originalArray.getClass().getComponentType(), list.size());
-        return list.toArray(newArray);
-    }
-
     @Override
     public String toString() {
         return "CommandMeta{" +
@@ -107,19 +91,5 @@ public class CommandMeta {
                 ", label='" + label + '\'' +
                 ", args=" + params +
                 '}';
-    }
-
-    public static String[] removeEmptyStrings(String[] array) {
-        List<String> resultList = new ArrayList<>();
-
-        for (String str : array) {
-            if (str != null && !str.trim().isEmpty()) {
-                // 如果字符串不为空且不只包含空格，则将其添加到结果列表中
-                resultList.add(str);
-            }
-        }
-
-        // 将结果列表转换为字符串数组
-        return resultList.toArray(new String[0]);
     }
 }

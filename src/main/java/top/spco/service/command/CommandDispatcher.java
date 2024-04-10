@@ -37,6 +37,7 @@ import top.spco.service.command.usage.parameters.TargetUserIdParameter;
 import top.spco.user.BotUser;
 import top.spco.user.BotUsers;
 import top.spco.user.UserFetchException;
+import top.spco.util.ExceptionUtils;
 import top.spco.util.LoggedTimer;
 
 import java.lang.reflect.InvocationTargetException;
@@ -50,7 +51,7 @@ import java.util.*;
  * 它负责注册、执行和管理各种命令的权限
  *
  * @author SpCo
- * @version 3.0.0
+ * @version 3.0.4
  * @since 0.1.0
  */
 public class CommandDispatcher {
@@ -223,7 +224,7 @@ public class CommandDispatcher {
         } catch (UserFetchException e) {
             from.handleException(message, "SpCoBot获取用户时失败", e);
         } catch (Exception e) {
-            SpCoBot.LOGGER.error(e);
+            SpCoBot.LOGGER.error(ExceptionUtils.getStackTraceAsString(e));
             from.handleException(message, e);
         }
     }
@@ -359,7 +360,7 @@ public class CommandDispatcher {
         for (Usage usage : command.getUsages()) {
             // 检测命令用法的用法名是否重复
             if (usageNames.contains(usage.name)) {
-                throw new CommandRegistrationException("Duplicate command usage: " + usage);
+                throw new CommandRegistrationException("Duplicate command usage name: " + usage);
             }
             // 存储处理过的参数， 用于创建处理过的命令用法
             List<Parameter<?>> processedParams = new ArrayList<>();
@@ -386,7 +387,7 @@ public class CommandDispatcher {
             Usage processedUsage = new Usage("Usage", "Usage", processedParams, null);
             // 检测命令用法的用法是否重复
             if (usages.containsKey(processedUsage.toString())) {
-                throw new CommandRegistrationException("Duplicate command usage: " + usage + " and " + usages.get(processedUsage.toString()));
+                throw new CommandRegistrationException("Duplicate command usage: " + usage + " with " + usages.get(processedUsage.toString()));
             }
             // 添加用法名
             usageNames.add(usage.name);

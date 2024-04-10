@@ -24,7 +24,7 @@ import java.io.File;
  * 表示具有消息发送和异常处理功能
  *
  * @author SpCo
- * @version 2.0.0
+ * @version 3.0.4
  * @since 0.1.0
  */
 public abstract class Interactive<T> extends Identifiable<T> {

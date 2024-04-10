@@ -35,7 +35,6 @@ public class Usage {
     private final String label;
     private boolean hasTarget;
 
-
     public Usage(String label, String name, List<Parameter<?>> params) {
         List<String> paramName = new ArrayList<>();
         int index = 0;
