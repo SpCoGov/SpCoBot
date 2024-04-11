@@ -18,8 +18,8 @@ package top.spco.api.message;
 import top.spco.api.Image;
 import top.spco.api.Interactive;
 import top.spco.api.Member;
-import top.spco.core.Wrapper;
 import top.spco.api.message.service.MessageService;
+import top.spco.core.Wrapper;
 
 import java.io.File;
 
@@ -109,6 +109,7 @@ import java.io.File;
  */
 public abstract class Message<T> extends Wrapper<T> implements Codable {
     private boolean isCommandMessage = false;
+
     protected Message(T message) {
         super(message);
     }

@@ -16,6 +16,7 @@
 package top.spco.mirai;
 
 import top.spco.api.Group;
+import top.spco.api.InteractiveList;
 import top.spco.api.MemberPermission;
 import top.spco.api.NormalMember;
 import top.spco.api.message.Message;
@@ -24,7 +25,7 @@ import java.io.File;
 
 /**
  * @author SpCo
- * @version 2.0.0
+ * @version 3.1.0
  * @since 0.1.0
  */
 class MiraiGroup extends Group<net.mamoe.mirai.contact.Group> {
@@ -75,6 +76,18 @@ class MiraiGroup extends Group<net.mamoe.mirai.contact.Group> {
     @Override
     public NormalMember<net.mamoe.mirai.contact.NormalMember> getMember(long id) {
         return new MiraiNormalMember(wrapped().get(id));
+    }
+
+    @Override
+    public InteractiveList<NormalMember<?>> getMembers() {
+        InteractiveList<NormalMember<?>> n = new InteractiveList<>();
+        for (var group : this.wrapped().getMembers().delegate) {
+            n.add(new MiraiNormalMember(group));
+        }
+        // mirai返回的群成员列表不包含机器人自己
+        // 再添加机器人自己
+        n.add(botAsMember());
+        return n;
     }
 
     @Override

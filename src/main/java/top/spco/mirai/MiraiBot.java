@@ -16,7 +16,7 @@
 package top.spco.mirai;
 
 import top.spco.api.*;
-import top.spco.util.InteractiveList;
+import top.spco.api.InteractiveList;
 
 /**
  * @author SpCo

@@ -19,7 +19,7 @@ package top.spco.api;
  * 代表一个群
  *
  * @author SpCo
- * @version 2.0.0
+ * @version 3.1.0
  * @since 0.1.0
  */
 public abstract class Group<T> extends Interactive<T> {
@@ -57,7 +57,6 @@ public abstract class Group<T> extends Interactive<T> {
      */
     public abstract NormalMember<?> botAsMember();
 
-
     /**
      * 查询群成员对象
      *
@@ -65,4 +64,11 @@ public abstract class Group<T> extends Interactive<T> {
      * @return 查询结果. 不存在时返回 {@code null}
      */
     public abstract NormalMember<?> getMember(long id);
+
+    /**
+     * 获取该群的所有群成员
+     *
+     * @return 查询结果
+     */
+    public abstract InteractiveList<NormalMember<?>> getMembers();
 }

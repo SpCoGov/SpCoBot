@@ -15,8 +15,6 @@
  */
 package top.spco.api;
 
-import top.spco.util.InteractiveList;
-
 /**
  * 机器人
  *
