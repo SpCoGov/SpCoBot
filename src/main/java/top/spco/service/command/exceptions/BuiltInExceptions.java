@@ -21,7 +21,7 @@ import top.spco.service.command.Parser;
  * 预设的命令语法错误
  *
  * @author SpCo
- * @version 3.0.0
+ * @version 3.1.1
  * @since 3.0.0
  */
 public class BuiltInExceptions {
@@ -61,60 +61,64 @@ public class BuiltInExceptions {
         return createWithContext("需要字面量" + excepted, parser);
     }
 
-    public static CommandSyntaxException readerExpectedStartOfQuote(Parser parser) {
+    public static CommandSyntaxException parserExpectedStartOfQuote(Parser parser) {
         return createWithContext("字符串的开头需要双引号", parser);
     }
 
-    public static CommandSyntaxException readerExpectedEndOfQuote(Parser parser) {
+    public static CommandSyntaxException parserExpectedEndOfQuote(Parser parser) {
         return createWithContext("字符串的双引号不成对", parser);
     }
 
-    public static CommandSyntaxException readerInvalidEscape(Parser parser, String found) {
+    public static CommandSyntaxException parserInvalidEscape(Parser parser, String found) {
         return createWithContext("双引号内的字符串包含无效的转义序列“\\" + found + "”", parser);
     }
 
-    public static CommandSyntaxException readerInvalidBool(Parser parser, String found) {
+    public static CommandSyntaxException parserInvalidBool(Parser parser, String found) {
         return createWithContext("无效的布尔型数据，需要“true”或“false”却出现了“" + found + "”", parser);
     }
 
-    public static CommandSyntaxException readerInvalidInt(Parser parser, String found) {
+    public static CommandSyntaxException parserInvalidInt(Parser parser, String found) {
         return createWithContext("无效的整型数据“" + found + "”", parser);
     }
 
-    public static CommandSyntaxException readerExpectedInt(Parser parser) {
+    public static CommandSyntaxException parserExpectedInt(Parser parser) {
         return createWithContext("需要整型", parser);
     }
 
-    public static CommandSyntaxException readerInvalidLong(Parser parser, String found) {
+    public static CommandSyntaxException parserInvalidLong(Parser parser, String found) {
         return createWithContext("无效的长整型数据“" + found + "”", parser);
     }
 
-    public static CommandSyntaxException readerExpectedLong(Parser parser) {
+    public static CommandSyntaxException parserExpectedLong(Parser parser) {
         return createWithContext("需要长整型", parser);
     }
 
-    public static CommandSyntaxException readerInvalidDouble(Parser parser, String found) {
+    public static CommandSyntaxException parserInvalidDouble(Parser parser, String found) {
         return createWithContext("无效的双精度浮点型数据“" + found + "”", parser);
     }
 
-    public static CommandSyntaxException readerExpectedDouble(Parser parser) {
+    public static CommandSyntaxException parserExpectedDouble(Parser parser) {
         return createWithContext("需要双精度浮点型", parser);
     }
 
-    public static CommandSyntaxException readerInvalidFloat(Parser parser, String found) {
+    public static CommandSyntaxException parserInvalidFloat(Parser parser, String found) {
         return createWithContext("无效的浮点型数据“" + found + "”", parser);
     }
 
-    public static CommandSyntaxException readerExpectedFloat(Parser parser) {
+    public static CommandSyntaxException parserExpectedFloat(Parser parser) {
         return createWithContext("需要浮点型", parser);
     }
 
-    public static CommandSyntaxException readerExpectedBool(Parser parser) {
+    public static CommandSyntaxException parserExpectedBool(Parser parser) {
         return createWithContext("需要布尔型", parser);
     }
 
-    public static CommandSyntaxException readerExpectedSymbol(Parser parser, String symbol) {
+    public static CommandSyntaxException parserExpectedSymbol(Parser parser, String symbol) {
         return createWithContext("需要“" + symbol + "”", parser);
+    }
+
+    public static CommandSyntaxException parserExpectedString(Parser parser) {
+        return createWithContext("需要字符串", parser);
     }
 
     public static CommandSyntaxException dispatcherUnknownCommand(Parser parser) {
@@ -135,7 +139,6 @@ public class BuiltInExceptions {
 
     public static CommandSyntaxException createWithContext(String context, Parser parser) {
         return new CommandSyntaxException(context, parser.getString(), parser.getCursor());
-
     }
 
 }

@@ -6,8 +6,7 @@ plugins {
 }
 
 group = 'top.spco'
-version = '3.1.0'
-
+version = '3.1.1'
 
 javadoc {
     failOnError = false
@@ -26,7 +25,8 @@ dependencies {
     implementation 'org.apache.httpcomponents:httpcore:4.4.14'
     implementation 'org.reflections:reflections:0.9.12'
 
-
+    implementation group: 'com.alipay.sdk', name: 'alipay-sdk-java', version: '4.39.40.ALL'
+    implementation 'com.github.wechatpay-apiv3:wechatpay-java:0.2.12'
     implementation('com.alibaba:dashscope-sdk-java:2.8.2')
 
     implementation group: 'org.yaml', name: 'snakeyaml', version: '2.2'
