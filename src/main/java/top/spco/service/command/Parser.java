@@ -23,7 +23,7 @@ import top.spco.service.command.exceptions.CommandSyntaxException;
  * 命令文本解析器。用于解析命令的标签和参数。
  *
  * @author SpCo
- * @version 3.0.4
+ * @version 3.1.1
  * @since 3.0.0
  */
 public class Parser {
@@ -69,7 +69,7 @@ public class Parser {
 
     public String getRemaining() throws CommandSyntaxException {
         if (!canRead()) {
-            throw BuiltInExceptions.createWithContext("需要字符串", this);
+            throw BuiltInExceptions.parserExpectedString(this);
         }
         return string.substring(cursor);
     }
@@ -120,13 +120,13 @@ public class Parser {
 
         final String number = string.substring(start, cursor);
         if (number.isEmpty()) {
-            throw BuiltInExceptions.readerExpectedInt(this);
+            throw BuiltInExceptions.parserExpectedInt(this);
         }
         try {
             return Integer.parseInt(number);
         } catch (final NumberFormatException ex) {
             cursor = start;
-            throw BuiltInExceptions.readerInvalidInt(this, number);
+            throw BuiltInExceptions.parserInvalidInt(this, number);
         }
     }
 
@@ -138,13 +138,13 @@ public class Parser {
 
         final String number = string.substring(start, cursor);
         if (number.isEmpty()) {
-            throw BuiltInExceptions.readerExpectedLong(this);
+            throw BuiltInExceptions.parserExpectedLong(this);
         }
         try {
             return Long.parseLong(number);
         } catch (final NumberFormatException ex) {
             cursor = start;
-            throw BuiltInExceptions.readerInvalidLong(this, number);
+            throw BuiltInExceptions.parserInvalidLong(this, number);
         }
     }
 
@@ -156,13 +156,13 @@ public class Parser {
 
         final String number = string.substring(start, cursor);
         if (number.isEmpty()) {
-            throw BuiltInExceptions.readerExpectedDouble(this);
+            throw BuiltInExceptions.parserExpectedDouble(this);
         }
         try {
             return Double.parseDouble(number);
         } catch (final NumberFormatException ex) {
             cursor = start;
-            throw BuiltInExceptions.readerInvalidDouble(this, number);
+            throw BuiltInExceptions.parserInvalidDouble(this, number);
         }
     }
 
@@ -174,13 +174,13 @@ public class Parser {
 
         final String number = string.substring(start, cursor);
         if (number.isEmpty()) {
-            throw BuiltInExceptions.readerExpectedFloat(this);
+            throw BuiltInExceptions.parserExpectedFloat(this);
         }
         try {
             return Float.parseFloat(number);
         } catch (final NumberFormatException ex) {
             cursor = start;
-            throw BuiltInExceptions.readerInvalidFloat(this, number);
+            throw BuiltInExceptions.parserInvalidFloat(this, number);
         }
     }
 
@@ -196,7 +196,7 @@ public class Parser {
         final int start = cursor;
         if (!canRead()) {
             setCursor(start);
-            throw BuiltInExceptions.createWithContext("需要字符串", this);
+            throw BuiltInExceptions.parserExpectedString(this);
         }
         while (canRead() && isAllowedInUnquotedString(peek())) {
             skip();
@@ -212,7 +212,7 @@ public class Parser {
         final char next = peek();
         if (!isQuotedStringStart(next)) {
             setCursor(start);
-            throw BuiltInExceptions.readerExpectedStartOfQuote(this);
+            throw BuiltInExceptions.parserExpectedStartOfQuote(this);
         }
         skip();
         return readStringUntil(next);
@@ -229,7 +229,7 @@ public class Parser {
                     escaped = false;
                 } else {
                     setCursor(getCursor() - 1);
-                    throw BuiltInExceptions.readerInvalidEscape(this, String.valueOf(c));
+                    throw BuiltInExceptions.parserInvalidEscape(this, String.valueOf(c));
                 }
             } else if (c == SYNTAX_ESCAPE) {
                 escaped = true;
@@ -240,12 +240,12 @@ public class Parser {
             }
         }
 
-        throw BuiltInExceptions.readerExpectedEndOfQuote(this);
+        throw BuiltInExceptions.parserExpectedEndOfQuote(this);
     }
 
     public String readString() throws CommandSyntaxException {
         if (!canRead()) {
-            throw BuiltInExceptions.createWithContext("需要字符串", this);
+            throw BuiltInExceptions.parserExpectedString(this);
         }
         final char next = peek();
         if (isQuotedStringStart(next)) {
@@ -259,7 +259,7 @@ public class Parser {
         final int start = cursor;
         final String value = readString();
         if (value.isEmpty()) {
-            throw BuiltInExceptions.readerExpectedBool(this);
+            throw BuiltInExceptions.parserExpectedBool(this);
         }
 
         if (value.equals("true")) {
@@ -268,13 +268,13 @@ public class Parser {
             return false;
         } else {
             cursor = start;
-            throw BuiltInExceptions.readerInvalidBool(this, value);
+            throw BuiltInExceptions.parserInvalidBool(this, value);
         }
     }
 
     public void expect(final char c) throws CommandSyntaxException {
         if (!canRead() || peek() != c) {
-            throw BuiltInExceptions.readerExpectedSymbol(this, String.valueOf(c));
+            throw BuiltInExceptions.parserExpectedSymbol(this, String.valueOf(c));
         }
         skip();
     }
