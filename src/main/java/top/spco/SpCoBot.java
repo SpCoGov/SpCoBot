@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 SpCo
+ * Copyright 2024 SpCo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import top.spco.core.database.DataBase;
 import top.spco.core.module.ModuleManager;
 import top.spco.events.*;
 import top.spco.modules.AutoSign;
-import top.spco.modules.CustomReply;
+import top.spco.modules.reply.CustomReplyModule;
 import top.spco.modules.EchoMute;
 import top.spco.modules.ValorantResponder;
 import top.spco.service.chat.ChatDispatcher;
@@ -70,7 +70,7 @@ import java.io.File;
  * </pre>
  *
  * @author SpCo
- * @version 3.1.1
+ * @version 3.2.0
  * @since 0.1.0
  */
 public class SpCoBot {
@@ -102,9 +102,9 @@ public class SpCoBot {
      * </ul>
      * <b>更新版本号(仅限核心的 Feature)时请不要忘记在 build.gradle 中同步修改版本号</b>
      */
-    public static final String MAIN_VERSION = "3.1.1";
+    public static final String MAIN_VERSION = "3.2.0";
     public static final String VERSION = "v" + MAIN_VERSION + "-1";
-    public static final String UPDATED_TIME = "2023-04-17 14:42";
+    public static final String UPDATED_TIME = "2023-04-18 21:45";
     public static final String OLDEST_SUPPORTED_CONFIG_VERSION = "0.3.2";
 
     private SpCoBot() {
@@ -130,7 +130,7 @@ public class SpCoBot {
         moduleManager.add(new AutoSign(), true);
         moduleManager.add(new EchoMute(), true);
         moduleManager.add(new ValorantResponder(), true);
-        moduleManager.add(new CustomReply(), true);
+        moduleManager.add(new CustomReplyModule(), true);
     }
 
     private void initEvents() {
