@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 SpCo
+ * Copyright 2024 SpCo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,23 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco.modules;
+package top.spco.modules.reply;
 
 import top.spco.core.module.AbstractModule;
 import top.spco.events.MessageEvents;
+import top.spco.modules.reply.rules.BarkRule;
+import top.spco.modules.reply.rules.BotRule;
+import top.spco.modules.reply.rules.CallFatherRule;
+import top.spco.modules.reply.rules.ScoldedRule;
 
 /**
  * 三种不同场合的自定义回复
  *
  * @author SpCo
- * @version 3.0.0
+ * @version 3.2.0
  * @since 3.0.0
  */
-public class CustomReply extends AbstractModule {
+public class CustomReplyModule extends AbstractModule {
+    private final Replier replier = new Replier();
+
     /**
      * 构造一个新的模块。
      */
-    public CustomReply() {
+    public CustomReplyModule() {
         super("CustomReply");
     }
 
@@ -45,29 +51,34 @@ public class CustomReply extends AbstractModule {
 
     @Override
     public void init() {
+        replier.add(new ScoldedRule());
+        replier.add(new BotRule());
+        replier.add(new CallFatherRule());
+        replier.add(new BarkRule());
         MessageEvents.FRIEND_MESSAGE.register((bot, sender, message, time) -> {
             if (isActive()) {
-                switch (message.toMessageContext()) {
-                    case "叫爸爸" -> sender.quoteReply(message, "爸爸");
-                    case "叫爷爷" -> sender.quoteReply(message, "爷爷");
+                String result = replier.reply(message.toMessageContext());
+                if (result != null) {
+                    sender.quoteReply(message, result);
                 }
             }
         });
         MessageEvents.GROUP_MESSAGE.register((bot, source, sender, message, time) -> {
             if (isActive()) {
-                switch (message.toMessageContext()) {
-                    case "叫爸爸" -> source.quoteReply(message, "爸爸");
-                    case "叫爷爷" -> source.quoteReply(message, "爷爷");
+                String result = replier.reply(message.toMessageContext());
+                if (result != null) {
+                    source.quoteReply(message, result);
                 }
             }
         });
         MessageEvents.GROUP_TEMP_MESSAGE.register((bot, source, sender, message, time) -> {
             if (isActive()) {
-                switch (message.toMessageContext()) {
-                    case "叫爸爸" -> sender.quoteReply(message, "爸爸");
-                    case "叫爷爷" -> sender.quoteReply(message, "爷爷");
+                String result = replier.reply(message.toMessageContext());
+                if (result != null) {
+                    sender.quoteReply(message, result);
                 }
             }
         });
     }
+
 }
