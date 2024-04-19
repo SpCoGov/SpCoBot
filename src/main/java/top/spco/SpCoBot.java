@@ -30,9 +30,9 @@ import top.spco.core.database.DataBase;
 import top.spco.core.module.ModuleManager;
 import top.spco.events.*;
 import top.spco.modules.AutoSign;
-import top.spco.modules.reply.CustomReplyModule;
 import top.spco.modules.EchoMute;
 import top.spco.modules.ValorantResponder;
+import top.spco.modules.reply.CustomReplyModule;
 import top.spco.service.chat.ChatDispatcher;
 import top.spco.service.chat.ChatType;
 import top.spco.service.command.Command;
@@ -40,6 +40,8 @@ import top.spco.service.command.CommandDispatcher;
 import top.spco.service.command.commands.SignCommand;
 import top.spco.service.dashscope.DashScopeDispatcher;
 import top.spco.service.statistics.StatisticsDispatcher;
+import top.spco.statistics.GroupStatistics;
+import top.spco.statistics.Statistic;
 import top.spco.user.BotUser;
 import top.spco.user.BotUsers;
 import top.spco.util.ExceptionUtils;
@@ -70,7 +72,7 @@ import java.io.File;
  * </pre>
  *
  * @author SpCo
- * @version 3.2.0
+ * @version 3.2.1
  * @since 0.1.0
  */
 public class SpCoBot {
@@ -92,6 +94,7 @@ public class SpCoBot {
     private DataBase dataBase;
     private Bot<?> bot;
     private CAATP caatp;
+    private final Statistic runtimeStatistic = new Statistic();
     private static boolean registered = false;
     /**
      * 版本号格式采用语义版本号(X.Y.Z)
@@ -102,12 +105,22 @@ public class SpCoBot {
      * </ul>
      * <b>更新版本号(仅限核心的 Feature)时请不要忘记在 build.gradle 中同步修改版本号</b>
      */
-    public static final String MAIN_VERSION = "3.2.0";
+    public static final String MAIN_VERSION = "3.2.1";
     public static final String VERSION = "v" + MAIN_VERSION + "-1";
-    public static final String UPDATED_TIME = "2023-04-18 21:45";
+    public static final String UPDATED_TIME = "2023-04-19 12:43";
     public static final String OLDEST_SUPPORTED_CONFIG_VERSION = "0.3.2";
 
     private SpCoBot() {
+        GroupStatistics receiveMessageGroup = new GroupStatistics("收到消息");
+        receiveMessageGroup.start("群消息", "条");
+        receiveMessageGroup.start("好友消息", "条");
+        receiveMessageGroup.start("群临时消息", "条");
+        runtimeStatistic.add(receiveMessageGroup);
+        GroupStatistics sendMessageGroup = new GroupStatistics("发出消息");
+        sendMessageGroup.start("群消息", "条");
+        sendMessageGroup.start("好友消息", "条");
+        sendMessageGroup.start("群临时消息", "条");
+        runtimeStatistic.add(sendMessageGroup);
         initEvents();
     }
 
@@ -237,6 +250,10 @@ public class SpCoBot {
                 CommandEvents.GROUP_TEMP_COMMAND.invoker().onGroupTempCommand(bot, source, message, time);
             }
         });
+    }
+
+    public Statistic getRuntimeStatistic() {
+        return runtimeStatistic;
     }
 
     public CAATP getCAATP() {

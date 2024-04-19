@@ -13,24 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco.modules.reply.rules;
-
-import top.spco.modules.reply.CustomReply;
-import top.spco.modules.reply.ExactCustomReply;
+package top.spco.statistics;
 
 /**
+ * 表示一个统计项目
+ *
+ * @see ItemStatistics
+ * @see GroupStatistics
  * @author SpCo
- * @version 3.2.0
- * @since 3.2.0
+ * @version 3.2.1
+ * @since 3.2.1
  */
-public class CallFatherRule extends ExactCustomReply {
-    public CallFatherRule() {
-        super("叫爸爸", "叫我爸爸");
-    }
+public interface StatisticsItem {
+    String getName();
 
-    @Override
-    public String reply(String text) {
-        String[] strings = {"给我个叫的理由", "爸爸","叫你网友就可以了","我习惯直呼名字，网友","不叫","凭什么叫啊","为什么","好的，爸爸","","",""};
-        return CustomReply.randomString(strings);
-    }
+    String toString();
 }

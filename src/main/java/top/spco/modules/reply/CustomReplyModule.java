@@ -15,18 +15,20 @@
  */
 package top.spco.modules.reply;
 
+import top.spco.SpCoBot;
 import top.spco.core.module.AbstractModule;
 import top.spco.events.MessageEvents;
 import top.spco.modules.reply.rules.BarkRule;
 import top.spco.modules.reply.rules.BotRule;
 import top.spco.modules.reply.rules.CallFatherRule;
 import top.spco.modules.reply.rules.ScoldedRule;
+import top.spco.statistics.ItemStatistics;
 
 /**
  * 三种不同场合的自定义回复
  *
  * @author SpCo
- * @version 3.2.0
+ * @version 3.2.1
  * @since 3.0.0
  */
 public class CustomReplyModule extends AbstractModule {
@@ -51,6 +53,7 @@ public class CustomReplyModule extends AbstractModule {
 
     @Override
     public void init() {
+        SpCoBot.getInstance().getRuntimeStatistic().add(new ItemStatistics("触发自定义回复", "次"));
         replier.add(new ScoldedRule());
         replier.add(new BotRule());
         replier.add(new CallFatherRule());
@@ -59,6 +62,7 @@ public class CustomReplyModule extends AbstractModule {
             if (isActive()) {
                 String result = replier.reply(message.toMessageContext());
                 if (result != null) {
+                    SpCoBot.getInstance().getRuntimeStatistic().item("触发自定义回复").add();
                     sender.quoteReply(message, result);
                 }
             }
@@ -67,6 +71,7 @@ public class CustomReplyModule extends AbstractModule {
             if (isActive()) {
                 String result = replier.reply(message.toMessageContext());
                 if (result != null) {
+                    SpCoBot.getInstance().getRuntimeStatistic().item("触发自定义回复").add();
                     source.quoteReply(message, result);
                 }
             }
@@ -75,6 +80,7 @@ public class CustomReplyModule extends AbstractModule {
             if (isActive()) {
                 String result = replier.reply(message.toMessageContext());
                 if (result != null) {
+                    SpCoBot.getInstance().getRuntimeStatistic().item("触发自定义回复").add();
                     sender.quoteReply(message, result);
                 }
             }
