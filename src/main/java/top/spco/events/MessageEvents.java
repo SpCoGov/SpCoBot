@@ -15,6 +15,7 @@
  */
 package top.spco.events;
 
+import top.spco.SpCoBot;
 import top.spco.api.*;
 import top.spco.api.message.Message;
 import top.spco.api.message.MessageSource;
@@ -25,7 +26,7 @@ import top.spco.core.event.EventFactory;
  * 消息相关事件
  *
  * @author SpCo
- * @version 2.0.0
+ * @version 3.2.1
  * @since 0.1.0
  */
 public class MessageEvents {
@@ -37,6 +38,7 @@ public class MessageEvents {
      */
     public static final Event<GroupMessage> GROUP_MESSAGE = EventFactory.createArrayBacked(GroupMessage.class, callbacks -> (bot, source, sender, message, time) -> {
         for (GroupMessage event : callbacks) {
+            SpCoBot.getInstance().getRuntimeStatistic().group("收到消息").add("群消息");
             event.onGroupMessage(bot, source, sender, message, time);
         }
     });
@@ -51,6 +53,7 @@ public class MessageEvents {
      */
     public static final Event<GroupTempMessage> GROUP_TEMP_MESSAGE = EventFactory.createArrayBacked(GroupTempMessage.class, callbacks -> (bot, source, sender, message, time) -> {
         for (GroupTempMessage event : callbacks) {
+            SpCoBot.getInstance().getRuntimeStatistic().group("收到消息").add("群临时消息");
             event.onGroupTempMessage(bot, source, sender, message, time);
         }
     });
@@ -65,6 +68,7 @@ public class MessageEvents {
      */
     public static final Event<FriendMessage> FRIEND_MESSAGE = EventFactory.createArrayBacked(FriendMessage.class, callbacks -> (bot, sender, message, time) -> {
         for (FriendMessage event : callbacks) {
+            SpCoBot.getInstance().getRuntimeStatistic().group("收到消息").add("好友消息");
             event.onFriendMessage(bot, sender, message, time);
         }
     });
@@ -79,13 +83,44 @@ public class MessageEvents {
      */
     public static final Event<GroupMessagePostSend> GROUP_MESSAGE_POST_SEND = EventFactory.createArrayBacked(GroupMessagePostSend.class, callbacks -> (bot, group, message) -> {
         for (GroupMessagePostSend event : callbacks) {
+            SpCoBot.getInstance().getRuntimeStatistic().group("发出消息").add("群消息");
             event.onGroupMessagePostSend(bot, group, message);
         }
     });
 
+    /**
+     * Called after actively sending a friend message.
+     */
+    public static final Event<FriendMessagePostSend> FRIEND_MESSAGE_POST_SEND = EventFactory.createArrayBacked(FriendMessagePostSend.class, callbacks -> (bot, friend, message) -> {
+        for (FriendMessagePostSend event : callbacks) {
+            SpCoBot.getInstance().getRuntimeStatistic().group("发出消息").add("好友消息");
+            event.onFriendMessagePostSend(bot, friend, message);
+        }
+    });
+
+    /**
+     * Called after actively sending a group temp message.
+     */
+    public static final Event<GroupTempMessagePostSend> GROUP_TEMP_MESSAGE_POST_SEND = EventFactory.createArrayBacked(GroupTempMessagePostSend.class, callbacks -> (bot, member, message) -> {
+        for (GroupTempMessagePostSend event : callbacks) {
+            SpCoBot.getInstance().getRuntimeStatistic().group("发出消息").add("群临时消息");
+            event.onGroupTempMessagePostSend(bot, member, message);
+        }
+    });
+
+    @FunctionalInterface
+    public interface GroupTempMessagePostSend {
+        void onGroupTempMessagePostSend(Bot<?> bot, NormalMember<?> member, Message<?> message);
+    }
+
     @FunctionalInterface
     public interface GroupMessagePostSend {
         void onGroupMessagePostSend(Bot<?> bot, Group<?> group, Message<?> message);
+    }
+
+    @FunctionalInterface
+    public interface FriendMessagePostSend {
+        void onFriendMessagePostSend(Bot<?> bot, Friend<?> friend, Message<?> message);
     }
 
     /**

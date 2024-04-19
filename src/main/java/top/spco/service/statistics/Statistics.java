@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 统计
+ * 报名统计
  *
  * @author SpCo
  * @version 2.0.0

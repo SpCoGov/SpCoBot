@@ -186,7 +186,9 @@ public final class MiraiPlugin extends JavaPlugin {
             }
         }));
         e.subscribeAlways(FriendMessageEvent.class, fm -> MessageEvents.FRIEND_MESSAGE.invoker().onFriendMessage(new MiraiBot(fm.getBot()), new MiraiFriend(fm.getSender()), new MiraiMessage(fm.getMessage()), fm.getTime()));
+        e.subscribeAlways(FriendMessagePostSendEvent.class, fmp -> MessageEvents.FRIEND_MESSAGE_POST_SEND.invoker().onFriendMessagePostSend(new MiraiBot(fmp.getBot()), new MiraiFriend(fmp.getTarget()), new MiraiMessage(fmp.getMessage())));
         e.subscribeAlways(GroupMessagePostSendEvent.class, gmp -> MessageEvents.GROUP_MESSAGE_POST_SEND.invoker().onGroupMessagePostSend(new MiraiBot(gmp.getBot()), new MiraiGroup(gmp.getTarget()), new MiraiMessage(gmp.getMessage())));
+        e.subscribeAlways(GroupTempMessagePostSendEvent.class, gtmp -> MessageEvents.GROUP_TEMP_MESSAGE_POST_SEND.invoker().onGroupTempMessagePostSend(new MiraiBot(gtmp.getBot()), new MiraiNormalMember(gtmp.getTarget()), new MiraiMessage(gtmp.getMessage())));
     }
 
     @Override

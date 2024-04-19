@@ -29,8 +29,8 @@
     - 陌生人消息: StrangerMessageSyncEvent
 - 主动发送消息后: MessagePostSendEvent
     - [x] 群消息: GroupMessagePostSendEvent
-    - 好友消息: FriendMessagePostSendEvent
-    - 群临时会话消息: GroupTempMessagePostSendEvent
+    - [x] 好友消息: FriendMessagePostSendEvent
+    - [x] 群临时会话消息: GroupTempMessagePostSendEvent
     - 陌生人消息：StrangerMessagePostSendEvent
     - 其他客户端消息：OtherClientMessagePostSendEvent
 - 消息撤回: MessageRecallEvent

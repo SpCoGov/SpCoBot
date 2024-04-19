@@ -34,6 +34,7 @@ import top.spco.service.command.usage.Usage;
 import top.spco.service.command.usage.parameters.Parameter;
 import top.spco.service.command.usage.parameters.SpecifiedParameter;
 import top.spco.service.command.usage.parameters.TargetUserIdParameter;
+import top.spco.statistics.GroupStatistics;
 import top.spco.user.BotUser;
 import top.spco.user.BotUsers;
 import top.spco.user.UserFetchException;
@@ -51,7 +52,7 @@ import java.util.*;
  * 它负责注册、执行和管理各种命令的权限
  *
  * @author SpCo
- * @version 3.0.4
+ * @version 3.2.1
  * @since 0.1.0
  */
 public class CommandDispatcher {
@@ -80,6 +81,10 @@ public class CommandDispatcher {
         registered = true;
         LoggedTimer time = new LoggedTimer();
         time.start("初始化命令系统");
+        GroupStatistics commandStatisticGroup = new GroupStatistics("命令");
+        commandStatisticGroup.start("命令注册", "次");
+        commandStatisticGroup.start("命令调用", "次");
+        SpCoBot.getInstance().getRuntimeStatistic().add(commandStatisticGroup);
         init();
         registerCommands();
         time.stop();
@@ -215,6 +220,7 @@ public class CommandDispatcher {
                     potential.setLast(BuiltInExceptions.dispatcherExpectedArgumentSeparator(parser));
                     potential.remove(usage);
                 } else {
+                    SpCoBot.getInstance().getRuntimeStatistic().group("命令").add("命令调用");
                     object.onCommand(bot, from, sender, user, message, time, meta, usage.name);
                     return;
                 }
@@ -327,6 +333,7 @@ public class CommandDispatcher {
         }
         commandCount++;
         allCommands.add(command);
+        SpCoBot.getInstance().getRuntimeStatistic().group("命令").add("命令注册");
         command.init();
     }
 
