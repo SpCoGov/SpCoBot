@@ -21,7 +21,7 @@ import top.spco.api.message.MessageSource;
 
 /**
  * @author SpCo
- * @version 2.0.0
+ * @version 3.2.2
  * @since 0.3.0
  */
 class MiraiMessageSource extends MessageSource<net.mamoe.mirai.message.data.MessageSource> {
@@ -30,12 +30,12 @@ class MiraiMessageSource extends MessageSource<net.mamoe.mirai.message.data.Mess
     }
 
     @Override
-    public long getFromId() {
+    public long getSenderId() {
         return wrapped().getFromId();
     }
 
     @Override
-    public long getTargetId() {
+    public long getFromId() {
         return wrapped().getTargetId();
     }
 

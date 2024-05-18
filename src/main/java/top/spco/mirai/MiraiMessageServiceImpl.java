@@ -21,6 +21,7 @@ import net.mamoe.mirai.message.data.At;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.QuoteReply;
 import net.mamoe.mirai.utils.ExternalResource;
+import org.jetbrains.annotations.NotNull;
 import top.spco.SpCoBot;
 import top.spco.api.Image;
 import top.spco.api.Interactive;
@@ -33,7 +34,7 @@ import java.io.File;
 
 /**
  * @author SpCo
- * @version 3.0.2
+ * @version 3.2.2
  * @since 0.1.0
  */
 class MiraiMessageServiceImpl implements MessageService {
@@ -71,7 +72,7 @@ class MiraiMessageServiceImpl implements MessageService {
     }
 
     @Override
-    public ImmutablePair<MessageSource<?>, Message<?>> getQuote(Message<?> message) {
+    public ImmutablePair<@NotNull MessageSource<?>, @NotNull Message<?>> getQuote(Message<?> message) {
         try {
             MiraiMessage miraiMessage = ((MiraiMessage) message);
             for (var singleMessage : miraiMessage.wrapped()) {

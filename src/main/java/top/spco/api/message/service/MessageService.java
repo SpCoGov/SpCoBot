@@ -15,6 +15,7 @@
  */
 package top.spco.api.message.service;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import top.spco.api.Image;
 import top.spco.api.Interactive;
@@ -30,7 +31,7 @@ import java.util.regex.Pattern;
  * 消息服务
  *
  * @author SpCo
- * @version 3.0.2
+ * @version 3.2.2
  * @since 0.1.1
  */
 public interface MessageService {
@@ -89,7 +90,7 @@ public interface MessageService {
      * @return 如果有引用时返回被引用的消息，如果没有时返回null
      */
     @Nullable
-    ImmutablePair<MessageSource<?>, Message<?>> getQuote(Message<?> message);
+    ImmutablePair<@NotNull MessageSource<?>, @NotNull Message<?>> getQuote(Message<?> message);
 
     /**
      * 撤回一条消息<p>

@@ -16,11 +16,13 @@
 package top.spco.service.command.commands;
 
 import com.google.gson.JsonObject;
+import top.spco.SpCoBot;
 import top.spco.api.Bot;
 import top.spco.api.Group;
 import top.spco.api.Interactive;
 import top.spco.api.User;
 import top.spco.api.message.Message;
+import top.spco.events.BotEvents;
 import top.spco.events.MessageEvents;
 import top.spco.service.command.CommandMarker;
 import top.spco.service.command.CommandMeta;
@@ -46,7 +48,7 @@ import java.util.List;
 
 /**
  * @author SpCo
- * @version 3.0.4
+ * @version 3.2.2
  * @since 2.0.3
  */
 @CommandMarker
@@ -60,16 +62,30 @@ public class McSCommand extends GroupAbstractCommand {
             if (message.isCommandMessage()) {
                 return;
             }
-            McS mcS = manager.getMcS(source);
+            McS mcS = manager.getMcS(source.getId());
             if (mcS != null) {
                 JsonObject data = new JsonObject();
                 data.addProperty("type", "GROUP_MESSAGE");
-                data.addProperty("sender_name", sender.getNick());
+                data.addProperty("sender_name", sender.getNameCard());
                 data.addProperty("message", message.toMessageContext());
                 mcS.send(new Payload(5, data, "DISPATCH"));
             }
         });
-
+        BotEvents.ONLINE_TICK.register(bot -> {
+            try {
+                for (Long groupId : SpCoBot.getInstance().getDataBase().getLongFieldValues("group_id", "mcs")) {
+                    if (!manager.isConnected(groupId)) {
+                        try {
+                            manager.connect(bot.getGroup(groupId), null);
+                        } catch (IOException e) {
+                            bot.getGroup(groupId).handleException("自动连接McS", e);
+                        }
+                    }
+                }
+            } catch (SQLException e) {
+                bot.getFriend(SpCoBot.getInstance().botOwnerId).handleException("获取McS列表绑定", e);
+            }
+        });
     }
 
     @Override
@@ -116,8 +132,8 @@ public class McSCommand extends GroupAbstractCommand {
                 if (!PermissionsValidator.isMemberAdmin(from, user, message)) {
                     return;
                 }
-                if (manager.isBound(group)) {
-                    Pair<String, Integer> hP = manager.getServer(group);
+                if (manager.isBound(group.getId())) {
+                    Pair<String, Integer> hP = manager.getServer(group.getId());
                     from.quoteReply(message, "该群绑定的服务器为：" + hP.getKey() + ":" + hP.getValue());
                 } else {
                     from.quoteReply(message, "该群尚未绑定服务器");
@@ -127,7 +143,7 @@ public class McSCommand extends GroupAbstractCommand {
                 if (!PermissionsValidator.isMemberAdmin(from, user, message)) {
                     return;
                 }
-                if (manager.isBound(group)) {
+                if (manager.isBound(group.getId())) {
                     from.quoteReply(message, "该群已绑定服务器，请先解绑后再次尝试");
                     return;
                 }
@@ -135,7 +151,7 @@ public class McSCommand extends GroupAbstractCommand {
                 int port = (Integer) meta.getParams().get("端口");
 
                 try {
-                    manager.bind(group, host, port);
+                    manager.bind(group.getId(), host, port);
                     from.quoteReply(message, "绑定成功");
                 } catch (SQLException e) {
                     from.handleException(message, e);
@@ -146,7 +162,7 @@ public class McSCommand extends GroupAbstractCommand {
                     return;
                 }
                 try {
-                    if (manager.unbind(group) < 1) {
+                    if (manager.unbind(group.getId()) < 1) {
                         from.quoteReply(message, "该群尚未绑定服务器");
                     } else {
                         from.quoteReply(message, "解绑成功");
@@ -159,11 +175,11 @@ public class McSCommand extends GroupAbstractCommand {
                 if (!PermissionsValidator.isMemberAdmin(from, user, message)) {
                     return;
                 }
-                if (!manager.isBound(group)) {
+                if (!manager.isBound(group.getId())) {
                     from.quoteReply(message, "该群尚未绑定服务器");
                     return;
                 }
-                McS mcS = manager.getMcS(group);
+                McS mcS = manager.getMcS(group.getId());
                 if (mcS == null) {
                     from.quoteReply(message, "尚未与服务器建立连接");
                     return;
@@ -174,7 +190,7 @@ public class McSCommand extends GroupAbstractCommand {
                 if (!PermissionsValidator.isMemberAdmin(from, user, message)) {
                     return;
                 }
-                if (manager.isBound(group)) {
+                if (manager.isBound(group.getId())) {
                     try {
                         boolean debug = (Boolean) meta.getParams().get("调试模式");
                         manager.connect(group, message).setDebug(debug);
@@ -186,8 +202,8 @@ public class McSCommand extends GroupAbstractCommand {
                 }
             }
             case "获取服务器在线玩家" -> {
-                if (manager.isBound(group)) {
-                    McS mcS = manager.getMcS(group);
+                if (manager.isBound(group.getId())) {
+                    McS mcS = manager.getMcS(group.getId());
                     if (mcS == null) {
                         from.quoteReply(message, "尚未与服务器建立连接");
                         return;
@@ -201,8 +217,8 @@ public class McSCommand extends GroupAbstractCommand {
                 if (!PermissionsValidator.isMemberAdmin(from, user, message)) {
                     return;
                 }
-                if (manager.isBound(group)) {
-                    McS mcS = manager.getMcS(group);
+                if (manager.isBound(group.getId())) {
+                    McS mcS = manager.getMcS(group.getId());
                     if (mcS == null) {
                         from.quoteReply(message, "尚未与服务器建立连接");
                         return;
@@ -216,8 +232,8 @@ public class McSCommand extends GroupAbstractCommand {
                 if (!PermissionsValidator.isMemberAdmin(from, user, message)) {
                     return;
                 }
-                if (manager.isBound(group)) {
-                    McS mcS = manager.getMcS(group);
+                if (manager.isBound(group.getId())) {
+                    McS mcS = manager.getMcS(group.getId());
                     if (mcS == null) {
                         from.quoteReply(message, "尚未与服务器建立连接");
                         return;

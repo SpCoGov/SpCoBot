@@ -24,7 +24,7 @@ import java.util.*;
  * 用于收集并给出命令检测阶段最合理的报错
  *
  * @author SpCo
- * @version 3.0.0
+ * @version 3.2.2
  * @since 3.0.0
  */
 public class Potential {
@@ -52,9 +52,15 @@ public class Potential {
     }
 
     public CommandSyntaxException get() {
+        // 定义一个比较器，用于根据用法的深度进行排序
         Comparator<Map.Entry<Usage, Integer>> comparator = Map.Entry.comparingByValue();
+        // 创建一个包含 detectionDepth 中所有条目的列表
         List<Map.Entry<Usage, Integer>> entryList = new ArrayList<>(detectionDepth.entrySet());
+        // 使用比较器对列表进行排序，并倒序排列（从大到小）
         entryList.sort(comparator.reversed());
-        return entryList.isEmpty() ? lastException : potentials.get(entryList.get(0).getKey());
+        // 如果 entryList 为空，返回 lastException；否则，返回与最大值对应的用法关联的 CommandSyntaxException
+        CommandSyntaxException exception = entryList.isEmpty() ? lastException : potentials.get(entryList.get(0).getKey());
+        // 如果关联的对象也为空，则返回 lastException
+        return exception == null ? lastException : exception;
     }
 }

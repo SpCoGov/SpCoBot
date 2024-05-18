@@ -36,6 +36,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
 
@@ -43,7 +44,7 @@ import static java.util.concurrent.TimeUnit.NANOSECONDS;
  * 表示一个通过 MSSBB(<b>M</b>inecraft<b>S</b>ever<b>S</b>pCo<b>B</b>ot<b>B</b>ridge Minecraft服务器-SpCoBot桥接器) 连接的Minecraft服务器
  *
  * @author SpCo
- * @version 2.0.8
+ * @version 3.2.2
  * @since 2.0.3
  */
 public class McS {
@@ -59,18 +60,21 @@ public class McS {
     private final Set<Integer> timeoutHeartbeats = new HashSet<>();
     private int timeoutCount;
     private final Map<Integer, String> commandResults = new ConcurrentHashMap<>();
+    /*
+     * Pair L : 第一条消息返回的时间
+     * Pair R : 最后一条消息返回的时间
+     */
     private final Map<Integer, Pair<Long, Long>> commandReceivingTime = new HashMap<>();
-    private boolean silence = false;
+    private final AtomicBoolean silence = new AtomicBoolean(false);
+    private final boolean hasCaller;
     private boolean debug = false;
     private boolean connected = false;
 
     public McS(String host, int port, Group<?> group, @Nullable Message<?> callerMessage) throws IOException {
         this.group = group;
-        boolean hasCaller = callerMessage != null;
+        hasCaller = callerMessage != null;
         if (hasCaller) {
             group.sendMessage(SpCoBot.getInstance().getMessageService().asMessage("开始尝试连接到Minecraft服务器：" + host + ":" + port).quoteReply(callerMessage));
-        } else {
-            group.sendMessage("开始尝试连接到Minecraft服务器：" + host + ":" + port);
         }
         socket = new Socket(host, port);
         this.out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true);
@@ -101,8 +105,6 @@ public class McS {
                                 McSManager.getInstance().mcSs.put(group.getId(), this);
                                 if (hasCaller) {
                                     group.sendMessage(SpCoBot.getInstance().getMessageService().asMessage("连接成功").quoteReply(callerMessage));
-                                } else {
-                                    group.sendMessage("连接成功");
                                 }
                             }
                             case 2 -> {
@@ -140,11 +142,19 @@ public class McS {
                                         results += data.get("result").getAsString();
                                         // 更新缓存
                                         commandResults.put(ack, results);
+                                        // 设置定时器用于清理消息
                                         if (firstResult) {
+                                            // 如果是第一条消息
                                             commandReceivingTime.put(ack, new MutablePair<>(System.nanoTime(), System.nanoTime()));
                                             ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
                                             Message<?> caller = commandCaller.get(ack);
+                                            // 指定毫秒后发送命令返回值
+                                            int delay = 100;
                                             scheduler.schedule(() -> {
+                                                if (debug) {
+                                                    group.sendMessage(ack + "的销毁任务开始");
+                                                }
+                                                // 获取50ms后的时间信息
                                                 var time = commandReceivingTime.get(ack);
                                                 long nanos = time.getValue() - time.getKey();
                                                 TimeUnit unit = TimeUtils.chooseUnit(nanos);
@@ -160,10 +170,13 @@ public class McS {
                                                     this.group.quoteReply(caller, finalMessage);
                                                 }
                                                 commandResults.remove(ack);
-                                            }, 50, TimeUnit.MILLISECONDS);
+                                            }, delay, TimeUnit.MILLISECONDS);
                                             scheduler.shutdown();
                                         } else {
-                                            commandReceivingTime.put(ack, new MutablePair<>(commandReceivingTime.get(ack).getKey(), System.nanoTime()));
+                                            // 如果不是第一条消息，更新收到消息的最后时间
+                                            if (commandReceivingTime.get(ack) != null) {
+                                                commandReceivingTime.get(ack).setValue(System.nanoTime());
+                                            }
                                         }
                                     }
                                 }
@@ -215,9 +228,10 @@ public class McS {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        if (!silence && !this.silence) {
-            this.group.sendMessage("绑定的Minecraft服务器已离线 (" + message + ")");
+        if (!silence && !this.silence.get()) {
             setSilence(toSilence);
+            this.group.sendMessage("绑定的Minecraft服务器已离线 (" + message + ")");
+
         }
     }
 
@@ -231,7 +245,7 @@ public class McS {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        if (!silence && !this.silence) {
+        if (!silence && !this.silence.get()) {
             this.group.sendMessage("绑定的Minecraft服务器已离线 (" + message + ")");
         }
     }
@@ -266,7 +280,7 @@ public class McS {
     }
 
     public void setSilence(boolean silence) {
-        this.silence = silence;
+        this.silence.set(silence);
     }
 
     public void setDebug(boolean debug) {

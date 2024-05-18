@@ -27,7 +27,7 @@ import java.util.List;
  * 数据库
  *
  * @author SpCo
- * @version 3.0.0
+ * @version 3.2.2
  * @since 0.1.0
  */
 public class DataBase {
@@ -260,22 +260,21 @@ public class DataBase {
      *
      * @param fieldName 要获取的字段名称
      * @param tableName 数据表名称
-     * @param condition 查询条件，可以为 SQL WHERE 子句的一部分
      * @return 包含字段值的列表
      */
-    public List<String> getFieldValues(String fieldName, String tableName, String condition) throws SQLException {
+    public List<Long> getLongFieldValues(String fieldName, String tableName) throws SQLException {
         if (conn == null || conn.isClosed()) {
             openConn();
         }
-        List<String> fieldValues = new ArrayList<>();
+        List<Long> fieldValues = new ArrayList<>();
         // 创建查询语句
-        String sql = "SELECT " + fieldValues + " FROM " + tableName + " WHERE " + condition;
+        String sql = "SELECT " + fieldName + " FROM " + tableName;
         // 执行查询
         Statement statement = this.conn.createStatement();
         ResultSet resultSet = statement.executeQuery(sql);
         // 处理结果
         while (resultSet.next()) {
-            String fieldValue = resultSet.getString(fieldName);
+            Long fieldValue = resultSet.getLong(fieldName);
             fieldValues.add(fieldValue);
         }
         resultSet.close();

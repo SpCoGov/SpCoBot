@@ -18,17 +18,14 @@ package top.spco.modules.reply;
 import top.spco.SpCoBot;
 import top.spco.core.module.AbstractModule;
 import top.spco.events.MessageEvents;
-import top.spco.modules.reply.rules.BarkRule;
-import top.spco.modules.reply.rules.BotRule;
-import top.spco.modules.reply.rules.CallFatherRule;
-import top.spco.modules.reply.rules.ScoldedRule;
+import top.spco.modules.reply.rules.*;
 import top.spco.statistics.ItemStatistics;
 
 /**
  * 三种不同场合的自定义回复
  *
  * @author SpCo
- * @version 3.2.1
+ * @version 3.2.2
  * @since 3.0.0
  */
 public class CustomReplyModule extends AbstractModule {
@@ -58,6 +55,7 @@ public class CustomReplyModule extends AbstractModule {
         replier.add(new BotRule());
         replier.add(new CallFatherRule());
         replier.add(new BarkRule());
+        replier.add(new AskRule());
         MessageEvents.FRIEND_MESSAGE.register((bot, sender, message, time) -> {
             if (isActive()) {
                 String result = replier.reply(message.toMessageContext());

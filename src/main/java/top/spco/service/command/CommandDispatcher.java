@@ -52,7 +52,7 @@ import java.util.*;
  * 它负责注册、执行和管理各种命令的权限
  *
  * @author SpCo
- * @version 3.2.1
+ * @version 3.2.2
  * @since 0.1.0
  */
 public class CommandDispatcher {
@@ -227,6 +227,7 @@ public class CommandDispatcher {
             }
             // 用户提交的参数不符合命令的任何用法
             from.handleException(message, potential.get().getMessage());
+            SpCoBot.LOGGER.debug(ExceptionUtils.getStackTraceAsString(potential.get()));
         } catch (UserFetchException e) {
             from.handleException(message, "SpCoBot获取用户时失败", e);
         } catch (Exception e) {

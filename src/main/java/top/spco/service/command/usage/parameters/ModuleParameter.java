@@ -42,6 +42,6 @@ public class ModuleParameter extends Parameter<AbstractModule> {
             return module;
         }
         parser.setCursor(start);
-        throw BuiltInExceptions.createWithContext("无效的结构名“" + moduleName + "”", parser);
+        throw BuiltInExceptions.createWithContext("无效的模块名“" + moduleName + "”", parser);
     }
 }

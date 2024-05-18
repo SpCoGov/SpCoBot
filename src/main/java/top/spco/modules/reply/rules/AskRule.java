@@ -16,17 +16,16 @@
 package top.spco.modules.reply.rules;
 
 import top.spco.SpCoBot;
-import top.spco.modules.reply.CustomReply;
-import top.spco.modules.reply.ExactCustomReply;
+import top.spco.modules.reply.KeywordsCustomReply;
 
 /**
  * @author SpCo
  * @version 3.2.2
- * @since 3.2.0
+ * @since 3.2.2
  */
-public class CallFatherRule extends ExactCustomReply {
-    public CallFatherRule() {
-        super("叫爸爸", "叫我爸爸");
+public class AskRule extends KeywordsCustomReply {
+    public AskRule() {
+        super("请问");
     }
 
     @Override
@@ -34,8 +33,6 @@ public class CallFatherRule extends ExactCustomReply {
         if (text.contains("@") && !text.contains("@" + SpCoBot.getInstance().botId)) {
             return null;
         }
-        String[] strings = {"给我个叫的理由", "爸爸","叫你网友就可以了","我习惯直呼名字，网友","不叫","凭什么叫啊","为什么","好的，爸爸",
-                "臭表子瞧你那黑逼臭成什么几把样子了也就你家楼下的老黄狗愿意舔你那留绿汁的逼啊，还“叫爸爸”？"};
-        return CustomReply.randomString(strings);
+        return "问吧，听着呢";
     }
 }

@@ -18,54 +18,46 @@ package top.spco.service.command.commands;
 import top.spco.SpCoBot;
 import top.spco.api.Bot;
 import top.spco.api.Interactive;
-import top.spco.api.NormalMember;
 import top.spco.api.User;
 import top.spco.api.message.Message;
-import top.spco.api.message.MessageSource;
+import top.spco.service.command.AbstractCommand;
 import top.spco.service.command.CommandMarker;
 import top.spco.service.command.CommandMeta;
-import top.spco.service.command.GroupAbstractCommand;
 import top.spco.service.command.exceptions.CommandSyntaxException;
-import top.spco.service.command.util.PermissionsValidator;
 import top.spco.user.BotUser;
-import top.spco.util.tuple.ImmutablePair;
 
 /**
- * 撤回一条消息
- *
  * @author SpCo
  * @version 3.2.2
- * @since 3.0.0
+ * @since 3.2.2
  */
 @CommandMarker
-public class RecallCommand extends GroupAbstractCommand {
+public class QuoteCommand extends AbstractCommand {
     @Override
     public String[] getLabels() {
-        return new String[]{"recall", "c"};
+        return new String[]{"quote"};
     }
 
     @Override
     public String getDescriptions() {
-        return "撤回一条消息";
+        return "获取消息的引用信息";
+    }
+
+    @Override
+    public boolean isVisible() {
+        return false;
     }
 
     @Override
     public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, CommandMeta meta, String usageName) throws CommandSyntaxException {
-        if (PermissionsValidator.isMemberAdmin(from, user, message)) {
-            ImmutablePair<MessageSource<?>, Message<?>> quote = SpCoBot.getInstance().getMessageService().getQuote(message);
-            if (quote == null) {
-                from.quoteReply(message, "请在回复消息时使用该命令");
-                return;
-            }
-            if (PermissionsValidator.verifyBotPermissions(from, message, (NormalMember<?>) sender, false)) {
-                SpCoBot.getInstance().getMessageService().recall(quote.getLeft());
-                from.quoteReply(message, "已撤回");
-            } else if (quote.getLeft().getSenderId() == SpCoBot.getInstance().botId) {
-                SpCoBot.getInstance().getMessageService().recall(quote.getLeft());
-                from.quoteReply(message, "已撤回");
-            } else {
-                from.quoteReply(message, "机器人权限不足");
-            }
+        var quote = SpCoBot.getInstance().getMessageService().getQuote(message);
+        if (quote == null) {
+            from.quoteReply(message, "该消息没有引用一条消息");
+        } else {
+            from.quoteReply(message,
+                    "引用消息的发送者: " + quote.getKey().getSenderId() +
+                            "\n引用消息的来源: " + quote.getKey().getFromId() +
+                            "\n引用消息的内容: " + quote.getRight().toMessageContext());
         }
     }
 }

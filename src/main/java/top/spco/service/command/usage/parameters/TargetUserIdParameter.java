@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
  * 指向一位用户的命令参数。通常用于表示命令执行的对象。
  *
  * @author SpCo
- * @version 3.0.0
+ * @version 3.2.2
  * @since 3.0.0
  */
 public class TargetUserIdParameter extends UserIdParameter {
@@ -41,8 +41,8 @@ public class TargetUserIdParameter extends UserIdParameter {
         var quote = SpCoBot.getInstance().getMessageService().getQuote(parser.getMessage());
         if (quote == null) {
             final int start = parser.getCursor();
-            String value = parser.readString();
-            Matcher atMatcher = Pattern.compile("@(\\w+)").matcher(value);
+            String value = parser.readUnquotedString();
+            Matcher atMatcher = Pattern.compile("^@(\\d+)$").matcher(value);
             try {
                 if (SpCoBot.getInstance().getMessageService().isAtFormat(value)) {
                     Pattern pattern = Pattern.compile(SpCoBot.getInstance().getMessageService().getAtRegex());
@@ -67,7 +67,9 @@ public class TargetUserIdParameter extends UserIdParameter {
                 throw BuiltInExceptions.createWithContext("需要用户ID或@一位用户或在回复一条消息时发送该命令", parser);
             }
         } else {
-            return quote.getLeft().getFromId();
+            long senderId = quote.getLeft().getSenderId();
+            parser.setCursor(parser.getCursor() - 1);
+            return senderId;
         }
     }
 

@@ -23,7 +23,7 @@ import top.spco.service.command.exceptions.CommandSyntaxException;
  * 命令文本解析器。用于解析命令的标签和参数。
  *
  * @author SpCo
- * @version 3.1.1
+ * @version 3.2.2
  * @since 3.0.0
  */
 public class Parser {
@@ -189,7 +189,8 @@ public class Parser {
                 || c >= 'A' && c <= 'Z'
                 || c >= 'a' && c <= 'z'
                 || c == '_' || c == '-'
-                || c == '.' || c == '+';
+                || c == '.' || c == '+'
+                || c == '@';
     }
 
     public String readUnquotedString() throws CommandSyntaxException {

@@ -27,7 +27,7 @@ import java.util.regex.Pattern;
  * 指向一位用户的命令参数
  *
  * @author SpCo
- * @version 3.0.0
+ * @version 3.2.2
  * @since 3.0.0
  */
 public class UserIdParameter extends Parameter<Long> {
@@ -38,8 +38,8 @@ public class UserIdParameter extends Parameter<Long> {
     @Override
     public Long parse(Parser parser) throws CommandSyntaxException {
         final int start = parser.getCursor();
-        String value = parser.readString();
-        Matcher atMatcher = Pattern.compile("@(\\w+)").matcher(value);
+        String value = parser.readUnquotedString();
+        Matcher atMatcher = Pattern.compile("^@(\\d+)$").matcher(value);
         if (SpCoBot.getInstance().getMessageService().isAtFormat(value)) {
             Pattern pattern = Pattern.compile(SpCoBot.getInstance().getMessageService().getAtRegex());
             Matcher matcher = pattern.matcher(value);

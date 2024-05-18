@@ -21,7 +21,7 @@ import top.spco.core.Wrapper;
  * 消息的来源信息
  *
  * @author SpCo
- * @version 2.0.0
+ * @version 3.2.2
  * @since 0.3.0
  */
 public abstract class MessageSource<T> extends Wrapper<T> {
@@ -32,12 +32,12 @@ protected MessageSource(T object) {
     /**
      * 发送人用户 ID
      */
-    public abstract long getFromId();
+    public abstract long getSenderId();
 
     /**
      * 消息发送目标用户或群号码
      */
-    public abstract long getTargetId();
+    public abstract long getFromId();
 
     public abstract Message<?> getOriginalMessage();
 }

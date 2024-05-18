@@ -35,7 +35,7 @@ import java.util.concurrent.TimeUnit;
  * 用于管理{@link McS}的单例类
  *
  * @author SpCo
- * @version 2.0.8
+ * @version 3.2.2
  * @since 2.0.3
  */
 public class McSManager {
@@ -47,10 +47,10 @@ public class McSManager {
     }
 
     public McS connect(Group<?> group, Message<?> caller) throws IOException {
-        if (!isBound(group)) {
+        if (!isBound(group.getId())) {
             throw new IllegalStateException("This group is not bound to the Minecraft server");
         }
-        Pair<String, Integer> hp = getServer(group);
+        Pair<String, Integer> hp = getServer(group.getId());
         McS mcS = new McS(hp.getKey(), hp.getValue(), group, caller);
         McS old = mcSs.get(group.getId());
         if (old != null) {
@@ -59,45 +59,51 @@ public class McSManager {
         }
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         scheduler.schedule(() -> {
-            if (!mcS.isConnected()) {
-                group.quoteReply(caller, "连接超时");
+            if (caller != null) {
+                if (!mcS.isConnected()) {
+                    group.quoteReply(caller, "连接超时");
+                }
             }
         }, 30, TimeUnit.SECONDS);
         scheduler.shutdown();
         return mcS;
     }
 
-    public McS getMcS(Group<?> group) {
-        return mcSs.get(group.getId());
+    public boolean isConnected(long groupId) {
+        return mcSs.containsKey(groupId);
     }
 
-    public int unbind(Group<?> group) throws SQLException {
+    public McS getMcS(long groupId) {
+        return mcSs.get(groupId);
+    }
+
+    public int unbind(long groupId) throws SQLException {
         String sql = "DELETE FROM mcs WHERE group_id = ?";
 
         try (PreparedStatement preparedStatement = SpCoBot.getInstance().getDataBase().getConn().prepareStatement(sql)) {
-            preparedStatement.setLong(1, group.getId());
+            preparedStatement.setLong(1, groupId);
 
             int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected > 0) {
-                var s = mcSs.get(group.getId());
+                var s = mcSs.get(groupId);
                 if (s != null) {
                     s.close(true, null);
-                    mcSs.remove(group.getId());
+                    mcSs.remove(groupId);
                 }
             }
             return rowsAffected;
         }
     }
 
-    public void bind(Group<?> group, String host, int port) throws SQLException {
-        SpCoBot.getInstance().getDataBase().insertData("insert into mcs(group_id,host,port) values (?,?,?)", group.getId(), host, port);
+    public void bind(long groupId, String host, int port) throws SQLException {
+        SpCoBot.getInstance().getDataBase().insertData("insert into mcs(group_id,host,port) values (?,?,?)", groupId, host, port);
     }
 
-    public Pair<String, Integer> getServer(Group<?> group) {
+    public Pair<String, Integer> getServer(long groupId) {
         String sql = "SELECT host, port FROM mcs WHERE group_id = ?";
 
         try (PreparedStatement preparedStatement = SpCoBot.getInstance().getDataBase().getConn().prepareStatement(sql)) {
-            preparedStatement.setLong(1, group.getId());
+            preparedStatement.setLong(1, groupId);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
@@ -114,10 +120,10 @@ public class McSManager {
         return null;
     }
 
-    public boolean isBound(Group<?> group) {
+    public boolean isBound(long groupId) {
         String sql = "SELECT COUNT(*) FROM mcs WHERE group_id = ?";
         try (PreparedStatement preparedStatement = SpCoBot.getInstance().getDataBase().getConn().prepareStatement(sql)) {
-            preparedStatement.setLong(1, group.getId());
+            preparedStatement.setLong(1, groupId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     int count = resultSet.getInt(1);

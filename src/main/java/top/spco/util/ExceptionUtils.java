@@ -22,17 +22,17 @@ import java.io.StringWriter;
  * 异常工具类。
  *
  * @author SpCo
- * @version 0.1.2
+ * @version 3.2.2
  * @since 0.1.2
  */
 public class ExceptionUtils {
     /**
      * 将异常的堆栈追踪转换为字符串。
      *
-     * @param e 异常对象
+     * @param e 可抛出对象
      * @return 包含异常堆栈追踪的字符串
      */
-    public static String getStackTraceAsString(Exception e) {
+    public static String getStackTraceAsString(Throwable e) {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         e.printStackTrace(pw);
