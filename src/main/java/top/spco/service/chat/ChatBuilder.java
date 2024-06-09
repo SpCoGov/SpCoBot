@@ -74,7 +74,6 @@ public class ChatBuilder implements Builder<Chat> {
                 }
             }
             case GROUP_TEMP -> {
-
                 if (!(target instanceof NormalMember)) {
                     throw new ChatTypeMismatchException(chatType, target);
                 }

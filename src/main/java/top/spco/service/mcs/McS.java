@@ -44,7 +44,7 @@ import static java.util.concurrent.TimeUnit.NANOSECONDS;
  * 表示一个通过 MSSBB(<b>M</b>inecraft<b>S</b>ever<b>S</b>pCo<b>B</b>ot<b>B</b>ridge Minecraft服务器-SpCoBot桥接器) 连接的Minecraft服务器
  *
  * @author SpCo
- * @version 3.2.2
+ * @version 3.2.3
  * @since 2.0.3
  */
 public class McS {
@@ -69,11 +69,13 @@ public class McS {
     private final boolean hasCaller;
     private boolean debug = false;
     private boolean connected = false;
+    private final Message<?> callerMessage;
 
-    public McS(String host, int port, Group<?> group, @Nullable Message<?> callerMessage) throws IOException {
+    public McS(String host, int port, Group<?> group, @Nullable Message<?> callerMessage, boolean afterHeartbeatTimeout) throws IOException {
         this.group = group;
         hasCaller = callerMessage != null;
-        if (hasCaller) {
+        this.callerMessage = callerMessage;
+        if (hasCaller && !afterHeartbeatTimeout) {
             group.sendMessage(SpCoBot.getInstance().getMessageService().asMessage("开始尝试连接到Minecraft服务器：" + host + ":" + port).quoteReply(callerMessage));
         }
         socket = new Socket(host, port);
@@ -271,8 +273,17 @@ public class McS {
         scheduler.schedule(() -> {
             if (heartbeats.contains(heartbeatSyn)) {
                 timeoutHeartbeats.add(heartbeatSyn);
-                if (++timeoutCount > 5) {
-                    this.close(false, "心跳超时", true);
+                if (++timeoutCount >5) {
+                    this.close(true, "心跳超时", true);
+                    try {
+                        McSManager.getInstance().connect(group, null, true);
+                    } catch (IOException e) {
+                        if (hasCaller) {
+                            group.quoteReply(callerMessage, "绑定的Minecraft服务器已离线 (心跳超时)，且重连失败。");
+                        } else {
+                            group.sendMessage("绑定的Minecraft服务器已离线 (心跳超时)，且重连失败。");
+                        }
+                    }
                 }
             }
         }, 3, TimeUnit.SECONDS);

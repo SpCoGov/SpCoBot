@@ -24,6 +24,7 @@ import top.spco.api.message.MessageSource;
 import top.spco.util.tuple.ImmutablePair;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,7 +32,7 @@ import java.util.regex.Pattern;
  * 消息服务
  *
  * @author SpCo
- * @version 3.2.2
+ * @version 3.2.3
  * @since 0.1.1
  */
 public interface MessageService {
@@ -114,4 +115,12 @@ public interface MessageService {
      * @param interactive 发送的对象
      */
     Image<?> toImage(File image, Interactive<?> interactive);
+
+    /**
+     * 将输入流转换为 {@code Image} 对象
+     *
+     * @param image       需要转换的图片
+     * @param interactive 发送的对象
+     */
+    Image<?> toImage(InputStream image, Interactive<?> interactive);
 }

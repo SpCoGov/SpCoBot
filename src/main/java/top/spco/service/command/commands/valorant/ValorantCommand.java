@@ -54,7 +54,7 @@ import java.util.*;
  * Valorant相关功能
  *
  * @author SpCo
- * @version 3.0.4
+ * @version 3.2.3
  * @since 1.3.0
  */
 @CommandMarker
@@ -77,7 +77,7 @@ public class ValorantCommand extends AbstractCommand {
     public List<Usage> getUsages() {
         SpecifiedParameterSet set = new SpecifiedParameterHelper("行为类型", false).add("login", "shop", "roll").build();
         return List.of(
-                new UsageBuilder(getLabels()[0], "登录Valorant账号")
+                new UsageBuilder(getLabels()[0], "登录拳头账户")
                         .add(set.get("login"))
                         .add(new StringParameter("账号", false, null, StringParameter.StringType.QUOTABLE_PHRASE))
                         .add(new StringParameter("密码", false, null, StringParameter.StringType.QUOTABLE_PHRASE)).build(),
@@ -116,6 +116,7 @@ public class ValorantCommand extends AbstractCommand {
                 String password = (String) meta.getParams().get("密码");
 
                 try {
+                    from.quoteReply(message, "开始与拳头官方服务验证");
                     RiotAuth riot = new RiotAuth(username, password);
                     String[] tokens = riot.authorize();
                     if (tokens[0].equals("x")) {
@@ -124,6 +125,10 @@ public class ValorantCommand extends AbstractCommand {
                             Chat authChat = new ChatBuilder(ct, from)
                                     .addStage(new Stage(() -> "需要验证，请发送您收到的6位验证码。", (chat, bot1, source, sender1, message1, time1) -> {
                                         String varCode = message1.toMessageContext();
+                                        if (varCode.equals("退出")) {
+                                            chat.stop();
+                                            return;
+                                        }
                                         try {
                                             String[] authCode = riot.tfaAuth(varCode);
                                             tokens[0] = authCode[0];
@@ -183,6 +188,8 @@ public class ValorantCommand extends AbstractCommand {
                         request.setHeader("Content-Type", "application/json");
                         request.setHeader("Authorization", "Bearer " + accessToken);
                         request.setHeader("X-Riot-Entitlements-JWT", entitlements);
+                        request.setHeader("X-Riot-ClientPlatform", "ew0KCSJwbGF0Zm9ybVR5cGUiOiAiUEMiLA0KCSJwbGF0Zm9ybU9TIjogIldpbmRvd3MiLA0KCSJwbGF0Zm9ybU9TVmVyc2lvbiI6ICIxMC4wLjE5MDQyLjEuMjU2LjY0Yml0IiwNCgkicGxhdGZvcm1DaGlwc2V0IjogIlVua25vd24iDQp9");
+                        request.setHeader("X-Riot-ClientVersion","release-02.01-shipping-6-511946");
                         String response = EntityUtils.toString(session.execute(request).getEntity());
                         JsonObject json = JsonParser.parseString(response).getAsJsonObject();
 
@@ -203,7 +210,10 @@ public class ValorantCommand extends AbstractCommand {
                                         Chat authChat = new ChatBuilder(ct, sender)
                                                 .addStage(new Stage(() -> "需要验证，请发送您收到的6位验证码。", (chat, bot1, source, sender1, message1, time1) -> {
                                                     String varCode = message1.toMessageContext();
-                                                    System.out.println("收到验证码：" + varCode);
+                                                    if (varCode.equals("退出")) {
+                                                        chat.stop();
+                                                        return;
+                                                    }
                                                     try {
                                                         String[] authCode = riot.tfaAuth(varCode);
                                                         tokens[0] = authCode[0];
@@ -221,7 +231,10 @@ public class ValorantCommand extends AbstractCommand {
                                                             newRequest.setHeader("Content-Type", "application/json");
                                                             newRequest.setHeader("Authorization", "Bearer " + riot.getAccessToken());
                                                             newRequest.setHeader("X-Riot-Entitlements-JWT", riot.getEntitlement());
+                                                            newRequest.setHeader("X-Riot-ClientPlatform", "ew0KCSJwbGF0Zm9ybVR5cGUiOiAiUEMiLA0KCSJwbGF0Zm9ybU9TIjogIldpbmRvd3MiLA0KCSJwbGF0Zm9ybU9TVmVyc2lvbiI6ICIxMC4wLjE5MDQyLjEuMjU2LjY0Yml0IiwNCgkicGxhdGZvcm1DaGlwc2V0IjogIlVua25vd24iDQp9");
+                                                            newRequest.setHeader("X-Riot-ClientVersion","release-02.01-shipping-6-511946");
                                                             var newResponse = EntityUtils.toString(conn.execute(newRequest).getEntity());
+                                                            SpCoBot.LOGGER.debug("ValorantShop: {}",newResponse);
                                                             riot.close();
 
                                                             SkinsPanelLayoutContainer.SkinsPanelLayout store = SkinsPanelLayoutContainer.parseStore(newResponse).getSkinsPanelLayout();
@@ -262,7 +275,10 @@ public class ValorantCommand extends AbstractCommand {
                                 newRequest.setHeader("Content-Type", "application/json");
                                 newRequest.setHeader("Authorization", "Bearer " + riot.getAccessToken());
                                 newRequest.setHeader("X-Riot-Entitlements-JWT", riot.getEntitlement());
+                                newRequest.setHeader("X-Riot-ClientPlatform", "ew0KCSJwbGF0Zm9ybVR5cGUiOiAiUEMiLA0KCSJwbGF0Zm9ybU9TIjogIldpbmRvd3MiLA0KCSJwbGF0Zm9ybU9TVmVyc2lvbiI6ICIxMC4wLjE5MDQyLjEuMjU2LjY0Yml0IiwNCgkicGxhdGZvcm1DaGlwc2V0IjogIlVua25vd24iDQp9");
+                                newRequest.setHeader("X-Riot-ClientVersion","release-02.01-shipping-6-511946");
                                 response = EntityUtils.toString(session.execute(newRequest).getEntity());
+                                SpCoBot.LOGGER.debug("ValorantShop: {}",response);
                                 riot.close();
                             } catch (Exception e) {
                                 from.quoteReply(message, "自动登录失败，请在 「私聊」 中使用 " + loginUsage.toString() + " 命令来登录。\n\n" + e.getMessage());

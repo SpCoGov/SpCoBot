@@ -16,16 +16,15 @@
 package top.spco.service.chat;
 
 import top.spco.api.Interactive;
-import top.spco.service.RegistrationException;
 
 /**
  * 当创建{@link Chat}对象时提交的聊天类型和聊天目标不匹配时会抛出此异常
  *
  * @author SpCo
- * @version 2.0.0
+ * @version 3.2.3
  * @since 0.1.1
  */
-public class ChatTypeMismatchException extends RegistrationException {
+public class ChatTypeMismatchException extends RuntimeException {
     /**
      * 带有详细消息的构造函数。
      *

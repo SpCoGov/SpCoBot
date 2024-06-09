@@ -58,6 +58,9 @@ public class DataBase {
             if (!columnExistsInTable("user", "premium")) {
                 addColumn("user", "premium", "INTEGER DEFAULT 0");
             }
+            if (!columnExistsInTable("user", "star_coin")) {
+                addColumn("user", "star_coin", "INTEGER DEFAULT 0");
+            }
         } catch (Exception e) {
             throw new RuntimeException("无法连接至数据库或数据库初始化失败: " + e.getMessage());
         }
@@ -106,12 +109,32 @@ public class DataBase {
                         "(group_id INTEGER NOT NULL PRIMARY KEY, " +
                         "host TEXT DEFAULT 'null', " +
                         "port INTEGER DEFAULT 58964)";
+        String tradeTableSql =
+                "CREATE TABLE IF NOT EXISTS trade " +
+                        "(id TEXT NOT NULL PRIMARY KEY, " +
+                        "user INTEGER NOT NULL, " +
+                        "date TEXT NOT NULL, " +
+                        "time TEXT NOT NULL, " +
+                        "amount INTEGER NOT NULL DEFAULT 0, " +
+                        "state TEXT NOT NULL DEFAULT 'unpaid')";
+        String expensesTableSql =
+                "CREATE TABLE IF NOT EXISTS expenses " +
+                        "(user INTEGER NOT NULL, " +
+                        "date TEXT NOT NULL, " +
+                        "time TEXT NOT NULL, " +
+                        "amount INTEGER NOT NULL, " +
+                        "balance INTEGER NOT NULL, " +
+                        "desc TEXT NOT NULL DEFAULT 'null')";
         try (PreparedStatement stmt = getConn().prepareStatement(createUserTableSql);
              PreparedStatement stmt2 = getConn().prepareStatement(createValorantUserTableSql);
-             PreparedStatement stmt3 = getConn().prepareStatement(mcsTableSql)) {
+             PreparedStatement stmt3 = getConn().prepareStatement(mcsTableSql);
+             PreparedStatement stmt4 = getConn().prepareStatement(tradeTableSql);
+             PreparedStatement stmt5 = getConn().prepareStatement(expensesTableSql)) {
             stmt.execute();
             stmt2.execute();
             stmt3.execute();
+            stmt4.execute();
+            stmt5.execute();
         }
     }
 
@@ -159,6 +182,32 @@ public class DataBase {
 
             if (rs.next()) {
                 return rs.getInt(columnName);
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error executing SQL query: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 从数据库表中查询符合指定条件的数据，并返回结果中的某个字段的值。
+     *
+     * @param tableName            表名
+     * @param columnName           要获取值的字段名
+     * @param primaryKeyColumnName 作为查询条件的主键字段名，字段必须为 {@code PRIMARY KEY}
+     * @param primaryKeyValue      主键字段的值
+     * @return 符合条件的记录中指定字段的值，如果未找到记录则返回 null
+     * @throws SQLException 如果执行 SQL 查询时发生错误
+     */
+    public Long selectLong(String tableName, String columnName, String primaryKeyColumnName, Object primaryKeyValue) throws SQLException {
+        String sql = "SELECT " + columnName + " FROM " + tableName + " WHERE " + primaryKeyColumnName + " = ?";
+        try (PreparedStatement pstmt = getConn().prepareStatement(sql)) {
+            pstmt.setObject(1, primaryKeyValue);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getLong(columnName);
             } else {
                 return null;
             }

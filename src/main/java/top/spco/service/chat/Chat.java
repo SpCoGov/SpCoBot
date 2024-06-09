@@ -103,7 +103,7 @@ public class Chat {
      * @param type   对话的类型
      * @param target 对话的目标交互对象
      */
-    public Chat(ChatType type, Interactive<?> target) {
+    Chat(ChatType type, Interactive<?> target) {
         this.type = type;
         this.target = target;
     }

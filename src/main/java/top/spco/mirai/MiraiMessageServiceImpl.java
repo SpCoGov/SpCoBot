@@ -31,6 +31,7 @@ import top.spco.api.message.service.MessageService;
 import top.spco.util.tuple.ImmutablePair;
 
 import java.io.File;
+import java.io.InputStream;
 
 /**
  * @author SpCo
@@ -104,6 +105,11 @@ class MiraiMessageServiceImpl implements MessageService {
 
     @Override
     public Image<?> toImage(File image, Interactive<?> interactive) {
+        return new MiraiImage(ExternalResource.uploadAsImage(image, (Contact) interactive.wrapped()));
+    }
+
+    @Override
+    public Image<?> toImage(InputStream image, Interactive<?> interactive) {
         return new MiraiImage(ExternalResource.uploadAsImage(image, (Contact) interactive.wrapped()));
     }
 }

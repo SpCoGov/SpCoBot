@@ -35,7 +35,7 @@ import java.util.concurrent.TimeUnit;
  * 用于管理{@link McS}的单例类
  *
  * @author SpCo
- * @version 3.2.2
+ * @version 3.2.3
  * @since 2.0.3
  */
 public class McSManager {
@@ -47,11 +47,15 @@ public class McSManager {
     }
 
     public McS connect(Group<?> group, Message<?> caller) throws IOException {
+        return connect(group, caller, false);
+    }
+
+    public McS connect(Group<?> group, Message<?> caller, boolean afterHeartbeatTimeout) throws IOException {
         if (!isBound(group.getId())) {
             throw new IllegalStateException("This group is not bound to the Minecraft server");
         }
         Pair<String, Integer> hp = getServer(group.getId());
-        McS mcS = new McS(hp.getKey(), hp.getValue(), group, caller);
+        McS mcS = new McS(hp.getKey(), hp.getValue(), group, caller, afterHeartbeatTimeout);
         McS old = mcSs.get(group.getId());
         if (old != null) {
             old.setSilence(true);

@@ -75,7 +75,8 @@ public class BotUsers {
                 UserPermission permission = UserPermission.byLevel(rs.getInt(3));
                 String signDate = rs.getString(4);
                 int premium = rs.getInt(5);
-                return new BotUser(id, permission, smfCoin, signDate, premium);
+                int starCoin = rs.getInt(6);
+                return new BotUser(id, permission, smfCoin, starCoin, signDate, premium);
             }
         } catch (SQLException e) {
             throw new UserFetchException("An exception occurred while reading data from the database: " + e.getMessage(), e);

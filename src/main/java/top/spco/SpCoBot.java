@@ -42,11 +42,13 @@ import top.spco.service.dashscope.DashScopeDispatcher;
 import top.spco.service.statistics.StatisticsDispatcher;
 import top.spco.statistics.GroupStatistics;
 import top.spco.statistics.Statistic;
+import top.spco.trade.RechargeSystem;
 import top.spco.user.BotUser;
 import top.spco.user.BotUsers;
 import top.spco.util.ExceptionUtils;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * <pre>
@@ -72,7 +74,7 @@ import java.io.File;
  * </pre>
  *
  * @author SpCo
- * @version 3.2.2
+ * @version 3.2.3
  * @since 0.1.0
  */
 public class SpCoBot {
@@ -89,6 +91,7 @@ public class SpCoBot {
     public final StatisticsDispatcher statisticsDispatcher = StatisticsDispatcher.getInstance();
     public final DashScopeDispatcher dashScopeDispatcher = DashScopeDispatcher.getInstance();
     public final ModuleManager moduleManager = ModuleManager.getInstance();
+    private RechargeSystem rechargeSystem;
     private Settings settings;
     private MessageService messageService;
     private DataBase dataBase;
@@ -105,10 +108,10 @@ public class SpCoBot {
      * </ul>
      * <b>更新版本号(仅限核心的 Feature)时请不要忘记在 build.gradle 中同步修改版本号</b>
      */
-    public static final String MAIN_VERSION = "3.2.2";
-    public static final String VERSION = "v" + MAIN_VERSION + "-3";
-    public static final String UPDATED_TIME = "2023-05-16 11:06";
-    public static final String OLDEST_SUPPORTED_CONFIG_VERSION = "0.3.2";
+    public static final String MAIN_VERSION = "3.2.3";
+    public static final String VERSION = "v" + MAIN_VERSION + "-4";
+    public static final String UPDATED_TIME = "2023-05-20 19:09";
+    public static final String OLDEST_SUPPORTED_CONFIG_VERSION = "3.2.3";
 
     private SpCoBot() {
         GroupStatistics receiveMessageGroup = new GroupStatistics("收到消息");
@@ -128,6 +131,11 @@ public class SpCoBot {
         this.dataBase = new DataBase();
         this.caatp = CAATP.getInstance();
         this.settings = new Settings(configFolder.getAbsolutePath() + File.separator + "config.yaml");
+        try {
+            rechargeSystem = RechargeSystem.getInstance();
+        } catch (IOException e) {
+            LOGGER.error("创建充值系统失败。", e);
+        }
         if (expired(settings.getStringProperty(SettingsVersion.CONFIG_VERSION))) {
             LOGGER.error("配置版本过时，请备份配置后删除配置重新启动机器人以生成新配置。");
             System.exit(-2);
@@ -183,6 +191,11 @@ public class SpCoBot {
         // 自动接受群邀请
         GroupEvents.INVITED_JOIN_GROUP.register((eventId, invitorId, groupId, invitor, behavior) -> {
             LOGGER.info("收到了{}({})的加入群{}的请求。", invitor.getNick(), invitorId, groupId);
+            behavior.accept();
+        });
+        // 自动接收入群邀请
+        GroupEvents.REQUEST_JOIN_GROUP.register((eventId, fromId, group, behavior) -> {
+            LOGGER.info("{}申请加入群{}({})。", fromId, group.getName(), group.getId());
             behavior.accept();
         });
         // 处理好友消息
@@ -293,6 +306,10 @@ public class SpCoBot {
             instance = new SpCoBot();
         }
         return instance;
+    }
+
+    public RechargeSystem getRechargeSystem() {
+        return rechargeSystem;
     }
 
     private static boolean expired(String currentVersion) {

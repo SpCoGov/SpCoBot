@@ -35,7 +35,7 @@ import java.util.Map;
  * 每个键值对的键为枚举常量的名称，值为该枚举常量的默认值。
  *
  * @author SpCo
- * @version 1.2.6
+ * @version 3.2.3
  * @since 0.2.1
  */
 public class Settings {
@@ -91,6 +91,7 @@ public class Settings {
         setDefaultProperty(BotSettings.class);
         setDefaultProperty(DashScopeSettings.class);
         setDefaultProperty(ValorantGroupSettings.class);
+        setDefaultProperty(PayApiSettings.class);
         return defaultSettings;
     }
 
@@ -173,6 +174,27 @@ public class Settings {
             return (Long) value;
         } else {
             throw new IllegalArgumentException("Property " + key + " is not a long");
+        }
+    }
+
+    /**
+     * 获取配置项的值，并将其转换为 {@code integer} 类型。
+     *
+     * @param key 配置项的枚举常量
+     * @param <T> 实现了{@link SettingsGroup}接口的枚举类型
+     * @return 配置项的 {@code integer} 值
+     * @throws IllegalArgumentException 如果配置项的值不是 {@code integer} 类型
+     */
+    public <T extends Enum<T> & SettingsGroup> int getIntegerProperty(T key) {
+        Object value = getProperty(key);
+        if (value instanceof Integer) {
+            return (Integer) value;
+        } else {
+            try {
+                return Integer.parseInt(value.toString());
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("Property " + key + " is not a integer");
+            }
         }
     }
 

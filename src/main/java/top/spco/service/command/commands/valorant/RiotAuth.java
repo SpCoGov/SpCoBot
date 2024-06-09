@@ -43,6 +43,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -137,7 +138,11 @@ public class RiotAuth implements Closeable {
         post.setHeader("User-Agent", "RiotClient/58.0.0.4640299.4552318 %s (Windows;10;;Professional, x64)");
         post.setHeader("Accept-Language", "en-US,en;q=0.9");
         post.setHeader("Accept", "application/json, text/plain, */*");
-        session.execute(post, context);
+        HttpResponse postResponse = session.execute(post, context);
+
+        // 提取cookie
+        String setCookieHeader = postResponse.getFirstHeader("Set-Cookie").getValue();
+        String cookie = setCookieHeader.split(";")[0];
 
         JsonObject data1 = new JsonObject();
         data1.addProperty("language", "en_US");
@@ -151,10 +156,12 @@ public class RiotAuth implements Closeable {
         put.setHeader("User-Agent", "RiotClient/58.0.0.4640299.4552318 %s (Windows;10;;Professional, x64)");
         put.setHeader("Accept-Language", "en-US,en;q=0.9");
         put.setHeader("Accept", "application/json, text/plain, */*");
+        put.setHeader("Cookie", cookie);
 
         HttpResponse response = session.execute(put, context);
-
         String responseBody = EntityUtils.toString(response.getEntity());
+        SpCoBot.LOGGER.debug("RiotAuthHeaders: {}", Arrays.toString(response.getAllHeaders()));
+        SpCoBot.LOGGER.debug("RiotAuthBody: {}", responseBody);
 
         if (responseBody.contains("access_token")) {
             // 提取多因素认证后的令牌
@@ -208,7 +215,7 @@ public class RiotAuth implements Closeable {
         HttpResponse authResponse = session.execute(authPut, context);
 
         String authResponseBody = EntityUtils.toString(authResponse.getEntity());
-
+        SpCoBot.LOGGER.debug("RiotTfaAuthBody: {}", authResponseBody);
         if (authResponseBody.contains("access_token")) {
             // 提取多因素认证后的令牌
             JsonObject authResponseData = JsonParser.parseString(authResponseBody).getAsJsonObject();
