@@ -196,7 +196,9 @@ public class SpCoBot {
         // 自动接收入群邀请
         GroupEvents.REQUEST_JOIN_GROUP.register((eventId, fromId, group, behavior) -> {
             LOGGER.info("{}申请加入群{}({})。", fromId, group.getName(), group.getId());
-            behavior.accept();
+            if (group.getId() != 490656871L) {
+                behavior.accept();
+            }
         });
         // 处理好友消息
         MessageEvents.FRIEND_MESSAGE.register((bot, sender, message, time) -> {
