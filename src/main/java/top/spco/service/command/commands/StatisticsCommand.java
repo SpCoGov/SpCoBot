@@ -249,9 +249,9 @@ public class StatisticsCommand extends AbstractCommand {
                                     source.sendMessage("消息已发送至目标群");
                                     Friend<?> friend = SpCoBot.getInstance().getBot().getFriend(SpCoBot.getInstance().botOwnerId);
                                     friend.sendMessage("有用户在群" + groupId[0] + "中发起了一场报名统计，如果需要重启机器人，请注意这场报名统计的结束情况。");
-                                    SpCoBot.getInstance().statisticsDispatcher.register(group, statistics[0]);
+                                    SpCoBot.getInstance().statisticsDispatcher.register(group.getId(), statistics[0]);
                                     statistics[0] = null;
-                                    Statistics statisticsFromManager = SpCoBot.getInstance().statisticsDispatcher.getStatistics(bot.getGroup(groupId[0]));
+                                    Statistics statisticsFromManager = SpCoBot.getInstance().statisticsDispatcher.get(bot.getGroup(groupId[0]).getId());
                                     ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1, new NamedThreadFactory("Statistics Timer"));
                                     Runnable delayedTask = () -> {
                                         try {

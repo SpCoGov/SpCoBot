@@ -27,11 +27,11 @@ import java.util.List;
  * 提供了基本的命令信息和权限控制的默认实现。
  *
  * @author SpCo
- * @version 3.0.0
+ * @version 4.0.0
  * @see Command
  * @since 0.1.0
  */
-public abstract class AbstractCommand implements Command {
+public abstract class AbstractCommand extends Command {
     @Override
     public List<Usage> getUsages() {
         return List.of(new UsageBuilder(getLabels()[0], getDescriptions()).build());
@@ -50,11 +50,6 @@ public abstract class AbstractCommand implements Command {
     @Override
     public boolean hasPermission(BotUser user) {
         return user.getPermission().getLevel() >= needPermission().getLevel();
-    }
-
-    @Override
-    public void init() {
-
     }
 
     @Override

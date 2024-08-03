@@ -15,14 +15,16 @@
  */
 package top.spco.service.command.exceptions;
 
+import top.spco.service.RegistrationException;
+
 /**
  * 用于处理机器人注册命令时出现的问题
  *
  * @author SpCo
- * @version 0.1.0
+ * @version 4.0.0
  * @since 0.1.0
  */
-public class CommandRegistrationException extends Exception {
+public class CommandRegistrationException extends RegistrationException {
     /**
      * 带有详细消息的构造函数。
      *

@@ -104,7 +104,7 @@ public class McS {
                                 startHeartbeat();
                                 Thread.currentThread().setName("MsC-" + name);
                                 connected = true;
-                                McSManager.getInstance().mcSs.put(group.getId(), this);
+                                McSManager.getInstance().getAllRegistered().put(group.getId(), this);
                                 if (hasCaller) {
                                     group.sendMessage(SpCoBot.getInstance().getMessageService().asMessage("连接成功").quoteReply(callerMessage));
                                 }
@@ -223,7 +223,7 @@ public class McS {
     public void close(boolean silence, String message, boolean toSilence) {
         connected = false;
         stopHeartBeat();
-        McSManager.getInstance().mcSs.remove(this.group.getId());
+        McSManager.getInstance().getAllRegistered().remove(this.group.getId());
         try {
             this.socket.close();
             this.out.close();
@@ -240,7 +240,7 @@ public class McS {
     public void close(boolean silence, String message) {
         connected = false;
         stopHeartBeat();
-        McSManager.getInstance().mcSs.remove(this.group.getId());
+        McSManager.getInstance().getAllRegistered().remove(this.group.getId());
         try {
             this.socket.close();
             this.out.close();

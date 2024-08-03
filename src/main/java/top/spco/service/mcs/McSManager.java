@@ -18,6 +18,8 @@ package top.spco.service.mcs;
 import top.spco.SpCoBot;
 import top.spco.api.Group;
 import top.spco.api.message.Message;
+import top.spco.core.Manager;
+import top.spco.service.RegistrationException;
 import top.spco.util.tuple.ImmutablePair;
 import top.spco.util.tuple.Pair;
 
@@ -25,24 +27,27 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 用于管理{@link McS}的单例类
+ * 用于管理 {@link McS} 的单例类。
  *
  * @author SpCo
- * @version 3.2.3
+ * @version 4.0.0
  * @since 2.0.3
  */
-public class McSManager {
+public class McSManager extends Manager<Long, McS> {
     private static McSManager instance;
-    final Map<Long, McS> mcSs = new HashMap<>();
 
     private McSManager() {
+
+    }
+
+    @Deprecated
+    @Override
+    public void register(Long value, McS object) throws RegistrationException {
 
     }
 
@@ -56,7 +61,7 @@ public class McSManager {
         }
         Pair<String, Integer> hp = getServer(group.getId());
         McS mcS = new McS(hp.getKey(), hp.getValue(), group, caller, afterHeartbeatTimeout);
-        McS old = mcSs.get(group.getId());
+        McS old = getAllRegistered().get(group.getId());
         if (old != null) {
             old.setSilence(true);
             old.close(true, null);
@@ -74,11 +79,11 @@ public class McSManager {
     }
 
     public boolean isConnected(long groupId) {
-        return mcSs.containsKey(groupId);
+        return getAllRegistered().containsKey(groupId);
     }
 
     public McS getMcS(long groupId) {
-        return mcSs.get(groupId);
+        return getAllRegistered().get(groupId);
     }
 
     public int unbind(long groupId) throws SQLException {
@@ -89,10 +94,10 @@ public class McSManager {
 
             int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected > 0) {
-                var s = mcSs.get(groupId);
+                var s = getAllRegistered().get(groupId);
                 if (s != null) {
                     s.close(true, null);
-                    mcSs.remove(groupId);
+                    getAllRegistered().remove(groupId);
                 }
             }
             return rowsAffected;

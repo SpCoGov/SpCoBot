@@ -21,7 +21,7 @@ import top.spco.api.message.Message;
 import java.io.File;
 
 /**
- * 表示具有消息发送和异常处理功能
+ * 表示具有消息发送和异常处理功能的对象
  *
  * @author SpCo
  * @version 3.2.2

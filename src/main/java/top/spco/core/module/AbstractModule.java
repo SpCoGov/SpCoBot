@@ -16,8 +16,12 @@
 package top.spco.core.module;
 
 import org.jetbrains.annotations.NotNull;
+import top.spco.api.Interactive;
+import top.spco.core.feature.Feature;
+import top.spco.core.feature.FeatureManager;
 
 import java.util.Objects;
+import java.util.function.Supplier;
 
 /**
  * {@code Module} 类是所有模块的抽象基类。
@@ -64,10 +68,10 @@ import java.util.Objects;
  * }</pre>
  *
  * @author SpCo
- * @version 2.0.0
+ * @version 4.0.0
  * @since 2.0.0
  */
-public abstract class AbstractModule implements Comparable<AbstractModule> {
+public abstract class AbstractModule extends Feature implements Comparable<AbstractModule> {
     private final String name;
 
     /**
@@ -99,11 +103,6 @@ public abstract class AbstractModule implements Comparable<AbstractModule> {
      * 当模块被停用时调用。子类应该覆盖此方法以实现特定的停用行为。
      */
     public abstract void onDeactivate();
-
-    /**
-     * 当模块被添加时调用。子类应该覆盖此方法以实现特定的停用行为。
-     */
-    public abstract void init();
 
     /**
      * 切换模块的激活状态。
@@ -142,5 +141,15 @@ public abstract class AbstractModule implements Comparable<AbstractModule> {
     @Override
     public int compareTo(@NotNull AbstractModule o) {
         return name.compareTo(o.name);
+    }
+
+    @Override
+    public boolean isAvailable(Interactive<?> where) {
+        return ModuleManager.getInstance().isActive(getClass());
+    }
+
+    @Override
+    public Supplier<FeatureManager<?, ? extends Feature>> manager() {
+        return ModuleManager::getInstance;
     }
 }

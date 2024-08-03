@@ -19,18 +19,20 @@ import top.spco.api.Bot;
 import top.spco.api.Identifiable;
 import top.spco.api.Interactive;
 import top.spco.api.message.Message;
+import top.spco.core.Manager;
+import top.spco.service.RegistrationException;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 用于管理{@link Chat}的单例类
+ * 用于管理 {@link Chat} 的单例类。
  *
  * @author SpCo
- * @version 3.0.0
+ * @version 4.0.0
  * @since 0.1.1
  */
-public class ChatDispatcher {
+public class ChatDispatcher extends Manager<Long, Chat> {
     private static ChatDispatcher instance;
     private static boolean registered = false;
     private final Map<Long, Chat> friendChats = new HashMap<>();
@@ -80,7 +82,25 @@ public class ChatDispatcher {
     }
 
     /**
-     * 获取对话对象
+     * @deprecated 使用此方法会始终返回 {@code null} ，请用 {@link #getChat(Identifiable, ChatType)} 替代。
+     */
+    @Deprecated
+    @Override
+    public Map<Long, Chat> getAllRegistered() {
+        return null;
+    }
+
+    /**
+     * @deprecated 请使用 {@link #getChat(Identifiable, ChatType)} 。
+     */
+    @Deprecated
+    @Override
+    public Chat get(Long id) {
+        return groupChats.get(id);
+    }
+
+    /**
+     * 获取对话对象。
      *
      * @param where    发生对话的场所
      * @param chatType 对话的类型
@@ -94,8 +114,13 @@ public class ChatDispatcher {
         };
     }
 
+    @Override
+    public void register(Long value, Chat chat) throws RegistrationException {
+        register(chat);
+    }
+
     /**
-     * 注册一个对话
+     * 注册一个对话。
      *
      * @param chat 对话
      */
@@ -110,7 +135,7 @@ public class ChatDispatcher {
     }
 
     /**
-     * 结束对话
+     * 结束对话。
      *
      * @param where    发生对话的场所
      * @param chatType 对话的类型

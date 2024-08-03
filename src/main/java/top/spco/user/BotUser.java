@@ -39,7 +39,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * </ul>
  *
  * <p>可以创建具有指定属性或未指定属性的此类实例。
- * 用户可以检索和修改其属性，执行签到等操作，检查Premium会员资格，并将权限级别转换为{@link UserPermission}。
+ * 用户可以检索和修改其属性，执行签到等操作，检查Premium会员资格，并将权限级别转换为 {@link UserPermission} 。
  *
  * <p>需要创建或获取用户，可以通过 {@link BotUsers} 类中的方法 {@link BotUsers#get(long)} 或 {@link BotUsers#getOrCreate(long)}
  *
@@ -74,7 +74,7 @@ public class BotUser {
     }
 
     /**
-     * 设置用户权限
+     * 设置用户权限。
      *
      * @throws UserOperationException 解封用户失败时抛出此异常
      */
@@ -105,9 +105,9 @@ public class BotUser {
     }
 
     /**
-     * 签到
+     * 签到。
      *
-     * @return 成功时返回签到获得的海绵山币数量, 已签到返回-1
+     * @return 成功时返回签到获得的海绵山币数量, 已签到返回 {@code -1}
      * @throws UserOperationException 签到失败时抛出此异常
      */
     public int sign() throws UserOperationException {
@@ -168,7 +168,7 @@ public class BotUser {
     }
 
     /**
-     * 解封此用户
+     * 解封此用户。
      *
      * @throws UserOperationException 解封用户失败时抛出此异常
      */
@@ -181,7 +181,7 @@ public class BotUser {
     }
 
     /**
-     * 封禁此用户
+     * 封禁此用户。
      *
      * @throws UserOperationException 封禁用户失败时抛出此异常
      */
@@ -194,7 +194,7 @@ public class BotUser {
     }
 
     /**
-     * 将此用户设置为管理员
+     * 将此用户设置为管理员。
      *
      * @throws UserOperationException 提权失败时抛出此异常
      */
@@ -209,7 +209,7 @@ public class BotUser {
     }
 
     /**
-     * 将管理员用户设置为普通用户
+     * 将管理员用户设置为普通用户。
      *
      * @throws UserOperationException 限权失败时抛出此异常
      */
@@ -224,7 +224,7 @@ public class BotUser {
     }
 
     /**
-     * 检查用户是否被封禁
+     * 检查用户是否被封禁。
      *
      * @return 已被封禁时返回 {@code true}
      */
@@ -235,14 +235,14 @@ public class BotUser {
     /**
      * 判断用户是否为Premium会员。
      *
-     * @return 如果用户是Premium会员，返回 true；否则返回 false。
+     * @return 如果用户是Premium会员，返回 {@code true} ；否则返回 {@code false} 。
      */
     public boolean isPremium() {
         return premium == 1;
     }
 
     /**
-     * 将用户权限转换为 {@link UserPermission}。
+     * 将用户权限转换为 {@link UserPermission} 。
      *
      * @return 对应的用户权限
      * @deprecated 请使用 {@link #getPermission()} 替代

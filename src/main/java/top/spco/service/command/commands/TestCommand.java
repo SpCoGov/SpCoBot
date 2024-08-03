@@ -32,7 +32,7 @@ import java.util.List;
  * @version 3.0.0
  * @since 0.1.1
  */
-public final class  TestCommand extends AbstractCommand {
+public final class TestCommand extends AbstractCommand {
     @Override
     public String[] getLabels() {
         return new String[]{"test"};

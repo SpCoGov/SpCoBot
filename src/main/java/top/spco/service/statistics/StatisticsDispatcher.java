@@ -17,6 +17,7 @@ package top.spco.service.statistics;
 
 import top.spco.api.Group;
 import top.spco.api.NormalMember;
+import top.spco.core.Manager;
 import top.spco.events.MessageEvents;
 import top.spco.service.RegistrationException;
 
@@ -24,13 +25,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 用于管理{@link Statistics}的单例类
+ * 用于管理 {@link Statistics} 的单例类。
  *
  * @author SpCo
- * @version 2.0.0
+ * @version 4.0.0
  * @since 0.1.1
  */
-public class StatisticsDispatcher {
+public class StatisticsDispatcher extends Manager<Long, Statistics> {
     private static StatisticsDispatcher instance;
     private static boolean registered = false;
     private final Map<Long, Statistics> statistics = new HashMap<>();
@@ -41,17 +42,18 @@ public class StatisticsDispatcher {
         }
         registered = true;
         MessageEvents.GROUP_MESSAGE.register((bot, source, sender, message, time) -> {
-            Statistics s = getInstance().getStatistics(source);
+            Statistics s = getInstance().get(source.getId());
             if (s != null) {
                 s.receive(source, (NormalMember<?>) sender, message);
             }
         });
     }
 
-    public Statistics getStatistics(Group<?> group) {
-        if (statistics.containsKey(group.getId())) {
-            if (statistics.get(group.getId()) != null) {
-                return statistics.get(group.getId());
+    @Override
+    public Statistics get(Long groupId) {
+        if (statistics.containsKey(groupId)) {
+            if (statistics.get(groupId) != null) {
+                return statistics.get(groupId);
             }
         }
         return null;
@@ -64,13 +66,14 @@ public class StatisticsDispatcher {
         return instance;
     }
 
-    public void register(Group<?> group, Statistics statistics) throws RegistrationException {
-        if (this.statistics.containsKey(group.getId())) {
-            if (this.statistics.get(group.getId()) == null) {
-                throw new RegistrationException("Group " + group.getId() + " already has a Statistics instance");
+    @Override
+    public void register(Long groupId, Statistics statistics) throws RegistrationException {
+        if (this.statistics.containsKey(groupId)) {
+            if (this.statistics.get(groupId) == null) {
+                throw new RegistrationException("Group " + groupId + " already has a Statistics instance");
             }
         }
-        this.statistics.put(group.getId(), statistics);
+        this.statistics.put(groupId, statistics);
     }
 
     public void remove(Group<?> group) {

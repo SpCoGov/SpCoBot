@@ -74,7 +74,7 @@ import java.io.IOException;
  * </pre>
  *
  * @author SpCo
- * @version 3.2.3
+ * @version 4.0.0
  * @since 0.1.0
  */
 public class SpCoBot {
@@ -108,9 +108,9 @@ public class SpCoBot {
      * </ul>
      * <b>更新版本号(仅限核心的 Feature)时请不要忘记在 build.gradle 中同步修改版本号</b>
      */
-    public static final String MAIN_VERSION = "3.2.3";
+    public static final String MAIN_VERSION = "4.0.0";
     public static final String VERSION = "v" + MAIN_VERSION + "-4";
-    public static final String UPDATED_TIME = "2023-05-20 19:09";
+    public static final String UPDATED_TIME = "2024-07-21 13:14";
     public static final String OLDEST_SUPPORTED_CONFIG_VERSION = "3.2.3";
 
     private SpCoBot() {
@@ -148,10 +148,10 @@ public class SpCoBot {
     }
 
     private void initModules() {
-        moduleManager.add(new AutoSign(), true);
-        moduleManager.add(new EchoMute(), true);
-        moduleManager.add(new ValorantResponder(), true);
-        moduleManager.add(new CustomReplyModule(), false);
+        moduleManager.register(new AutoSign(), true);
+        moduleManager.register(new EchoMute(), true);
+        moduleManager.register(new ValorantResponder(), true);
+        moduleManager.register(new CustomReplyModule(), false);
     }
 
     private void initEvents() {

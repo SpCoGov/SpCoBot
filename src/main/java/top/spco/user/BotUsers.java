@@ -84,10 +84,10 @@ public class BotUsers {
     }
 
     /**
-     * 检查用户是否已注册
+     * 检查用户是否已注册。
      *
-     * @param id 要检查的QQ号。
-     * @return 如果记录存在，则返回 {@code true} ；否则返回 {@code false}。
+     * @param id 要检查的QQ号
+     * @return 如果记录存在，则返回 {@code true} ；否则返回 {@code false}
      * @throws SQLException 查询数据库发生异常时抛出
      */
     public static boolean isUserExists(long id) throws SQLException {

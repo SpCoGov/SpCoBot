@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 报名统计
+ * 报名统计。
  *
  * @author SpCo
  * @version 2.0.0
@@ -37,7 +37,7 @@ public class Statistics {
     private Map<Integer, String> mapping = new HashMap<>();
     private Map<Integer, Map<Long, Message<?>>> statistics = new HashMap<>();
     /**
-     * 已报名的用户
+     * 已报名的用户。
      */
     private List<Long> users = new ArrayList<>();
     private Group<?> group;
@@ -49,7 +49,7 @@ public class Statistics {
     }
 
     /**
-     * 添加一项需要统计的事项
+     * 添加一项需要统计的事项。
      *
      * @param item 事项内容
      * @return 事项的ID

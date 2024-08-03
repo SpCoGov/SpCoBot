@@ -17,23 +17,20 @@ package top.spco.service.dashscope;
 
 import top.spco.api.Interactive;
 import top.spco.api.message.Message;
+import top.spco.core.Manager;
 import top.spco.service.RegistrationException;
 import top.spco.user.BotUser;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
- * 用于管理{@link DashScope}的单例类
+ * 用于管理 {@link DashScope} 的单例类。
  *
  * @author SpCo
- * @version 2.0.0
+ * @version 4.0.0
  * @since 0.2.1
  */
-public class DashScopeDispatcher {
+public class DashScopeDispatcher extends Manager<Long, DashScope> {
     private static DashScopeDispatcher instance;
     private static boolean registered = false;
-    private final Map<Long, DashScope> dashScopes = new HashMap<>();
 
     private DashScopeDispatcher() {
         if (registered) {
@@ -49,33 +46,35 @@ public class DashScopeDispatcher {
         return instance;
     }
 
-    public void register(BotUser user, DashScope dashScope) throws RegistrationException {
-        if (this.dashScopes.containsKey(user.getId())) {
-            if (this.dashScopes.get(user.getId()) == null) {
-                throw new RegistrationException("Bot User " + user.getId() + " already has a DashScope instance");
+    @Override
+    public void register(Long userId, DashScope dashScope) throws RegistrationException {
+        if (getAllRegistered().containsKey(userId)) {
+            if (getAllRegistered().get(userId) == null) {
+                throw new RegistrationException("Bot User " + userId + " already has a DashScope instance");
             }
         }
-        this.dashScopes.put(user.getId(), dashScope);
+        getAllRegistered().put(userId, dashScope);
     }
 
     public void remove(long userId) {
-        this.dashScopes.remove(userId);
+        this.getAllRegistered().remove(userId);
     }
 
-    public DashScope getDashScope(long userId) {
-        if (dashScopes.containsKey(userId)) {
-            if (dashScopes.get(userId) != null) {
-                return dashScopes.get(userId);
+    @Override
+    public DashScope get(Long userId) {
+        if (getAllRegistered().containsKey(userId)) {
+            if (getAllRegistered().get(userId) != null) {
+                return getAllRegistered().get(userId);
             }
         }
         return null;
     }
 
     public DashScope getDashScopeOrCreate(BotUser user, Interactive<?> from, Message<?> message) throws RegistrationException {
-        var d = getDashScope(user.getId());
+        var d = get(user.getId());
         if (d == null) {
             d = new DashScope(user, from, message);
-            register(user, d);
+            register(user.getId(), d);
         }
         return d;
     }

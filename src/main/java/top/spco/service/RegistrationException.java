@@ -16,7 +16,7 @@
 package top.spco.service;
 
 /**
- * 用于处理对象注册时出现的问题
+ * 用于处理对象注册时出现的问题。
  *
  * @author SpCo
  * @version 0.1.1
@@ -26,7 +26,7 @@ public class RegistrationException extends Exception {
     /**
      * 带有详细消息的构造函数。
      *
-     * @param message 详细的异常信息。
+     * @param message 详细的异常信息
      */
     public RegistrationException(String message) {
         super(message);
@@ -35,8 +35,8 @@ public class RegistrationException extends Exception {
     /**
      * 带有详细消息和原因的构造函数。
      *
-     * @param message 详细的异常信息。
-     * @param cause   引发此异常的原因。
+     * @param message 详细的异常信息
+     * @param cause   引发此异常的原因
      */
     public RegistrationException(String message, Throwable cause) {
         super(message, cause);

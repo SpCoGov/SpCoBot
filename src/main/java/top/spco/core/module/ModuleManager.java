@@ -15,8 +15,13 @@
  */
 package top.spco.core.module;
 
-import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
+import top.spco.core.feature.FeatureManager;
+import top.spco.service.RegistrationException;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * {@code ModuleManager} 是一个单例类，用于管理 {@link AbstractModule} 的生命周期和状态。
@@ -36,20 +41,18 @@ import java.util.concurrent.atomic.AtomicReference;
  * </p>
  *
  * @author SpCo
- * @version 3.0.0
+ * @version 4.0.0
  * @since 2.0.0
  */
-public class ModuleManager {
+public class ModuleManager extends FeatureManager<Class<? extends AbstractModule>, AbstractModule> {
     private static ModuleManager instance;
-    private final List<AbstractModule> modules = new ArrayList<>();
-    private final Map<Class<? extends AbstractModule>, AbstractModule> moduleInstances = new HashMap<>();
     private final List<AbstractModule> active = new ArrayList<>();
 
     /**
      * 获取 {@code ModuleManager} 的单例实例。
      * 如果实例不存在，将创建一个新的实例。
      *
-     * @return {@code ModuleManager} 的单例实例。
+     * @return {@code ModuleManager} 的单例实例
      */
     public static ModuleManager getInstance() {
         if (instance == null) {
@@ -61,23 +64,23 @@ public class ModuleManager {
     /**
      * 根据模块类获取模块实例。
      *
-     * @param klass 模块类的 {@link Class} 对象。
-     * @param <T>   模块的类型。
-     * @return 指定类型的模块实例，如果不存在则返回 {@code null}。
+     * @param klass 模块类的 {@link Class} 对象
+     * @param <T>   模块的类型
+     * @return 指定类型的模块实例，如果不存在则返回 {@code null}
      */
     @SuppressWarnings("unchecked")
     public <T extends AbstractModule> T get(Class<T> klass) {
-        return (T) moduleInstances.get(klass);
+        return (T) getAllRegistered().get(klass);
     }
 
     /**
      * 根据模块名称获取模块实例。
      *
-     * @param name 模块的名称。
-     * @return 与给定名称匹配的模块实例，如果没有找到则返回 {@code null}。
+     * @param name 模块的名称
+     * @return 与给定名称匹配的模块实例，如果没有找到则返回 {@code null}
      */
     public AbstractModule get(String name) {
-        for (AbstractModule module : moduleInstances.values()) {
+        for (AbstractModule module : getAllRegistered().values()) {
             if (module.getName().equalsIgnoreCase(name)) return module;
         }
         return null;
@@ -86,8 +89,8 @@ public class ModuleManager {
     /**
      * 检查指定类的模块是否处于激活状态。
      *
-     * @param klass 模块类的 {@link Class} 对象。
-     * @return 如果模块处于激活状态，则返回 {@code true}；否则返回 {@code false}。
+     * @param klass 模块类的 {@link Class} 对象
+     * @return 如果模块处于激活状态，则返回 {@code true} ；否则返回 {@code false}
      */
     public boolean isActive(Class<? extends AbstractModule> klass) {
         AbstractModule module = get(klass);
@@ -97,34 +100,25 @@ public class ModuleManager {
     /**
      * 获取所有已加载的模块实例的集合。
      *
-     * @return 包含所有模块实例的 {@link Collection}。
+     * @return 包含所有模块实例的 {@link Collection}
      */
     public Collection<AbstractModule> getAll() {
-        return moduleInstances.values();
-    }
-
-    /**
-     * 获取已加载模块的列表。
-     *
-     * @return 包含所有已注册模块的 {@link List}。
-     */
-    public List<AbstractModule> getList() {
-        return modules;
+        return getAllRegistered().values();
     }
 
     /**
      * 获取已加载模块的数量。
      *
-     * @return 已注册模块的数量。
+     * @return 已注册模块的数量
      */
     public int getCount() {
-        return moduleInstances.values().size();
+        return getAllRegistered().values().size();
     }
 
     /**
      * 获取当前激活的模块列表。
      *
-     * @return 包含所有激活模块的 {@link List}。
+     * @return 包含所有激活模块的 {@link List}
      */
     public List<AbstractModule> getActive() {
         synchronized (active) {
@@ -147,54 +141,39 @@ public class ModuleManager {
     }
 
     /**
-     * 禁用所有模块。
-     */
-    public void disableAll() {
-        synchronized (active) {
-            for (AbstractModule module : modules) {
-                if (module.isActive()) module.toggle();
-            }
-        }
-    }
-
-    /**
      * 向模块管理器中添加一个模块。
      *
-     * @param module 要添加的模块。
+     * @param module 要添加的模块
+     * @param active 注册后是否直接激活
      */
-    public void add(AbstractModule module) {
-        add(module, false);
-    }
-
-    /**
-     * 向模块管理器中添加一个模块。
-     *
-     * @param module 要添加的模块。
-     * @param activate 是否添加完模块后直接激活
-     */
-    public void add(AbstractModule module, boolean activate) {
-        AtomicReference<AbstractModule> removedModule = new AtomicReference<>();
-        if (moduleInstances.values().removeIf(module1 -> {
-            if (module1.getName().equals(module.getName())) {
-                removedModule.set(module1);
-                return true;
-            }
-            return false;
-        })) {
-            modules.remove(removedModule.get());
-        }
-        moduleInstances.put(module.getClass(), module);
-        modules.add(module);
-        module.init();
-        if (activate) {
+    public void register(AbstractModule module, boolean active) {
+        register(module);
+        if (active) {
             module.toggle();
         }
     }
 
     /**
+     * 向模块管理器中添加一个模块。
+     *
+     * @param module 要添加的模块
+     */
+    public void register(AbstractModule module) {
+        getAllRegistered().put(module.getClass(), module);
+        module.init();
+    }
+
+
+    @Deprecated
+    @Override
+    public void register(Class<? extends AbstractModule> value, AbstractModule module) throws RegistrationException {
+        register(module);
+    }
+
+    /**
      * 获取模块的迭代器。
      *
-     * @return 模块的迭代器。
+     * @return 模块的迭代器
      */
     public Iterator<AbstractModule> iterator() {
         return new ModuleIterator();

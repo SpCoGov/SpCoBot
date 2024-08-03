@@ -24,6 +24,7 @@ import top.spco.api.Bot;
 import top.spco.api.Interactive;
 import top.spco.api.User;
 import top.spco.api.message.Message;
+import top.spco.core.feature.SimpleFeatureManager;
 import top.spco.events.CommandEvents;
 import top.spco.service.chat.ChatType;
 import top.spco.service.command.commands.HelpCommand;
@@ -52,10 +53,10 @@ import java.util.*;
  * 它负责注册、执行和管理各种命令的权限
  *
  * @author SpCo
- * @version 3.2.2
+ * @version 4.0.0
  * @since 0.1.0
  */
-public class CommandDispatcher {
+public class CommandDispatcher extends SimpleFeatureManager<Command> {
     public static final char PARAMETER_SEPARATOR_CHAR = ' ';
     public static final String COMMAND_START_SYMBOL = "/";
     public static final char USAGE_OPTIONAL_OPEN = '[';
@@ -68,7 +69,6 @@ public class CommandDispatcher {
     private static CommandDispatcher instance;
     private static boolean registered = false;
     private boolean frozen = false;
-    private final Set<Command> allCommands = new HashSet<>();
     private final Map<String, Command> friendCommands = new HashMap<>();
     private final Map<String, Command> groupTempCommands = new HashMap<>();
     private final Map<String, Command> groupCommands = new HashMap<>();
@@ -111,7 +111,7 @@ public class CommandDispatcher {
 
         for (var command : toBeRegistered) {
             try {
-                registerCommand(command);
+                register(command);
             } catch (Exception e) {
                 SpCoBot.LOGGER.error(e);
             }
@@ -271,13 +271,14 @@ public class CommandDispatcher {
      *
      * @param command 待注册的命令
      */
-    public void registerCommand(Command command) throws CommandRegistrationException {
+    @Override
+    public void register(Command command) throws CommandRegistrationException {
         if (frozen) {
             throw new IllegalStateException("Cannot register command after the pre-initialization phase!");
         }
         for (String label : command.getLabels()) {
             label = label.toLowerCase(Locale.ENGLISH);
-            if (label.isEmpty() || label == null) {
+            if (label.isEmpty()) {
                 throw new CommandRegistrationException("The command label is not valid.");
             }
             switch (command.getScope()) {
@@ -333,7 +334,7 @@ public class CommandDispatcher {
             }
         }
         commandCount++;
-        allCommands.add(command);
+        getAllRegistered().put(command, SimpleFeatureManager.PRESENT);
         SpCoBot.getInstance().getRuntimeStatistic().group("命令").add("命令注册");
         command.init();
     }
@@ -412,7 +413,7 @@ public class CommandDispatcher {
      */
     public List<String> getHelpList() {
         List<String> helpList = new ArrayList<>(commandCount);
-        for (Command command : allCommands) {
+        for (Command command : getAllRegistered().keySet()) {
             if (command.isVisible()) {
                 int index = 0;
                 String mainLabel = "";

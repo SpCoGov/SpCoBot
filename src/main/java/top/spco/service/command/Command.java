@@ -17,6 +17,8 @@ package top.spco.service.command;
 
 import top.spco.api.*;
 import top.spco.api.message.Message;
+import top.spco.core.feature.Feature;
+import top.spco.core.feature.FeatureManager;
 import top.spco.events.CommandEvents;
 import top.spco.service.chat.Chat;
 import top.spco.service.chat.Stage;
@@ -29,19 +31,20 @@ import top.spco.user.UserPermission;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
- * {@link Command 命令}是一种用户与机器人交互的方式。<p>
- * 与{@link Chat 对话}可能有以下不同：
+ * {@link Command 命令} 是一种用户与机器人交互的方式。<p>
+ * 与 {@link Chat 对话} 可能有以下不同：
  * <ul>
- * <li>{@link Chat 对话}传递参数时可以有明确的引导</li>
- * <li>{@link Chat 对话}适合传递内容较大的参数</li>
- * <li>{@link Chat 对话}每次传递参数都可以对参数进行校验</li>
- * <li>{@link Chat 对话}支持传入的参数数量或类型取决于{@link Stage 阶段}的处理流程，而{@link Command 命令}支持传入不限量个参数（至多{@link Integer#MAX_VALUE 2<sup>31</sup>-1}个）</li>
+ * <li>{@link Chat 对话} 传递参数时可以有明确的引导。</li>
+ * <li>{@link Chat 对话} 适合传递内容较大的参数。</li>
+ * <li>{@link Chat 对话} 每次传递参数都可以对参数进行校验。</li>
+ * <li>{@link Chat 对话} 支持传入的参数数量或类型取决于 {@link Stage 阶段} 的处理流程，而 {@link Command 命令} 支持传入不限量个参数（至多 {@link Integer#MAX_VALUE 2<sup>31</sup>-1} 个）。</li>
  * </ul>
- * 这个接口代表一个命令的定义，用于处理用户输入的命令。每个命令都包括{@link #getLabels 标签}、{@link #getDescriptions 描述}、{@link #getScope 作用域}、{@link #needPermission 所需权限}等信息，
- * 并提供{@link #init 初始化}和{@link #onCommand 执行命令}的方法。<p>
- * <b>不建议命令实现此接口，而是继承 {@link AbstractCommand}类</b><p>
+ * 这个接口代表一个命令的定义，用于处理用户输入的命令。每个命令都包括 {@link #getLabels 标签} 、 {@link #getDescriptions 描述} 、 {@link #getScope 作用域} 、 {@link #needPermission 所需权限} 等信息，
+ * 并提供 {@link #init 初始化} 和 {@link #onCommand 执行命令} 的方法。<p>
+ * <b>不建议命令实现此接口，而是继承 {@link AbstractCommand} 类。</b><p>
  *
  * <h1>命令创建</h1>
  * 创建一个类，并继承 {@code AbstractCommand}
@@ -102,13 +105,13 @@ import java.util.List;
  * 对命令使用 {@link CommandMarker} 注解即可在注册阶段自动注册该命令。
  *
  * @author SpCo
- * @version 3.0.0
+ * @version 4.0.0
  * @see AbstractCommand
  * @since 0.1.0
  */
-public interface Command {
+public abstract class Command extends Feature {
     /**
-     * 命令的标签（或名称）<p>
+     * 命令的标签（或名称）。<p>
      * 如命令 {@code "/command arg"} 中，{@code "command"} 就是该命令的标签。<p>
      * 命令的标签是一个数组。数组的第一个元素是主标签，其余都是别称。<p>
      * 在使用 {@link HelpCommand} 时，会将别称的描述重定向到主标签。<p>
@@ -118,54 +121,46 @@ public interface Command {
      *     ? -> help
      * </pre>
      */
-    String[] getLabels();
+    public abstract String[] getLabels();
 
-    List<Usage> getUsages();
+    public abstract List<Usage> getUsages();
 
     /**
-     * 命令的描述
+     * 命令的描述。
      *
      * @return 命令的描述
      */
-    String getDescriptions();
+    public abstract String getDescriptions();
 
     /**
-     * 命令的作用域
+     * 命令的作用域。
      *
      * @return 命令的作用域
      * @see CommandScope
      */
-    CommandScope getScope();
+    public abstract CommandScope getScope();
 
     /**
-     * 使用命令所需的最低权限等级<p>
-     * 注意：这里的最低权限指的是{@link BotUser 机器人用户}的{@link UserPermission 用户权限}，而不是群聊中{@link Member 群成员}的{@link MemberPermission 成员权限}。
+     * 使用命令所需的最低权限等级。<p>
+     * 注意：这里的最低权限指的是 {@link BotUser 机器人用户} 的 {@link UserPermission 用户权限} ，而不是群聊中 {@link Member 群成员} 的 {@link MemberPermission 成员权限} 。
      *
      * @return 使用命令所需的最低权限等级
      * @see UserPermission
      */
-    UserPermission needPermission();
+    public abstract UserPermission needPermission();
 
     /**
-     * 命令发送用户是否有足够的权限触发该命令<p>
+     * 命令发送用户是否有足够的权限触发该命令。<p>
      * 默认情况下与 {@link #needPermission()} 有关。<p>
-     * 注意：这里的最低权限指的是{@link BotUser 机器人用户}的{@link UserPermission 用户权限}，而不是群聊中{@link Member 群成员}的{@link MemberPermission 成员权限}
+     * 注意：这里的最低权限指的是 {@link BotUser 机器人用户} 的 {@link UserPermission 用户权限} ，而不是群聊中 {@link Member 群成员} 的 {@link MemberPermission 成员权限} 。
      *
      * @param user 命令发送用户
-     * @return 如果返回 {@code false} 则命令发送用户会被提示：{@code "您无权使用此命令."}
+     * @return 如果返回 {@code false} 则命令发送用户会被提示： {@code "您无权使用此命令."}
      */
-    boolean hasPermission(BotUser user) throws SQLException;
+    public abstract boolean hasPermission(BotUser user) throws SQLException;
 
     /**
-     * 初始化命令<p>
-     * 会在命令被成功注册时被调用。
-     *
-     * @see CommandDispatcher#registerCommand(Command)
-     */
-    void init();
-
-    /**
-     * 命令的操作<p>
+     * 命令的操作。<p>
      * 会在命令被有效触发时被调用。
      *
      * @param bot       收到命令的机器人对象
@@ -179,12 +174,22 @@ public interface Command {
      * @throws CommandSyntaxException 用户调用命令发生语法错误时抛出
      * @see CommandEvents
      */
-    void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, CommandMeta meta, String usageName) throws CommandSyntaxException;
+    public abstract void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, CommandMeta meta, String usageName) throws CommandSyntaxException;
 
     /**
-     * 在帮助列表是否可见
+     * 在帮助列表是否可见。
      *
      * @return 在帮助列表是否可见
      */
-    boolean isVisible();
+    public abstract boolean isVisible();
+
+    @Override
+    public Supplier<FeatureManager<?, ? extends Feature>> manager() {
+        return CommandDispatcher::getInstance;
+    }
+
+    @Override
+    public boolean isAvailable(Interactive<?> where) {
+        return true;
+    }
 }
