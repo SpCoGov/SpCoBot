@@ -52,8 +52,6 @@ public class AutoSign extends AbstractModule {
     @Override
     public void init() {
         Timer autoSign = new Timer("AutoSign");
-        SpCoBot.LOGGER.debug("自动签到任务已创建！首次任务将在{}毫秒后执行，每次执行间隔：{}", TimeUtils.calculateMillisecondToMidnight(), 86400000L);
-
         autoSign.schedule(new TimerTask() {
             @Override
             public void run() {

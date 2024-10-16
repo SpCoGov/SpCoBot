@@ -55,16 +55,8 @@ public class Parser {
         return cursor;
     }
 
-    public int getRemainingLength() {
-        return string.length() - cursor;
-    }
-
     public int getTotalLength() {
         return string.length();
-    }
-
-    public String getRead() {
-        return string.substring(0, cursor);
     }
 
     public String getRemaining() throws CommandSyntaxException {
@@ -84,10 +76,6 @@ public class Parser {
 
     public char peek() {
         return string.charAt(cursor);
-    }
-
-    public char peek(final int offset) {
-        return string.charAt(cursor + offset);
     }
 
     public char read() {
