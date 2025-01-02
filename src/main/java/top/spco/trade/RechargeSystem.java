@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 SpCo
+ * Copyright 2025 SpCo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ import top.spco.user.BotUser;
 import top.spco.user.BotUsers;
 import top.spco.user.UserFetchException;
 import top.spco.user.UserOperationException;
-import top.spco.util.TimeUtils;
+import top.spco.util.TimeUtil;
 
 import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
@@ -240,7 +240,7 @@ public class RechargeSystem {
         PrepayResponse response = WECHAT_PAY.prepay(request);
         try {
             SpCoBot.getInstance().getDataBase().insertData("insert into trade(id,user,date,time,amount) values (?,?,?,?,?)",
-                    tradeNo, caller.getId(), TimeUtils.today(), System.currentTimeMillis(), totalAmount);
+                    tradeNo, caller.getId(), TimeUtil.today(), System.currentTimeMillis(), totalAmount);
             return new WechatPayTrade(tradeNo, caller.getId(), response.getCodeUrl(), totalAmount);
         } catch (SQLException e) {
             return null;
@@ -268,7 +268,7 @@ public class RechargeSystem {
             AlipayTradePrecreateResponse response = result.getResponse();
             try {
                 SpCoBot.getInstance().getDataBase().insertData("insert into trade(id,user,date,time,amount) values (?,?,?,?,?)",
-                        tradeNo, caller.getId(), TimeUtils.today(), System.currentTimeMillis(), totalAmount);
+                        tradeNo, caller.getId(), TimeUtil.today(), System.currentTimeMillis(), totalAmount);
                 return new AlipayTrade(tradeNo, caller.getId(), response.getQrCode(), totalAmount);
             } catch (SQLException e) {
                 return null;

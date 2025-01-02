@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 SpCo
+ * Copyright 2025 SpCo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,8 @@ import top.spco.api.Bot;
 import top.spco.api.Interactive;
 import top.spco.api.User;
 import top.spco.api.message.Message;
+import top.spco.core.feature.DummyFeature;
+import top.spco.core.feature.Feature;
 import top.spco.core.feature.SimpleFeatureManager;
 import top.spco.events.CommandEvents;
 import top.spco.service.chat.ChatType;
@@ -39,7 +41,7 @@ import top.spco.statistics.GroupStatistics;
 import top.spco.user.BotUser;
 import top.spco.user.BotUsers;
 import top.spco.user.UserFetchException;
-import top.spco.util.ExceptionUtils;
+import top.spco.util.ExceptionUtil;
 import top.spco.util.LoggedTimer;
 
 import java.lang.reflect.InvocationTargetException;
@@ -220,6 +222,10 @@ public class CommandDispatcher extends SimpleFeatureManager<Command> {
                     potential.setLast(BuiltInExceptions.dispatcherExpectedArgumentSeparator(parser));
                     potential.remove(usage);
                 } else {
+                    if (object.isAvailable(from)) {
+                        from.quoteReply(message,"该命令被禁用");
+                        return;
+                    }
                     SpCoBot.getInstance().getRuntimeStatistic().group("命令").add("命令调用");
                     object.onCommand(bot, from, sender, user, message, time, meta, usage.name);
                     return;
@@ -227,11 +233,11 @@ public class CommandDispatcher extends SimpleFeatureManager<Command> {
             }
             // 用户提交的参数不符合命令的任何用法
             from.handleException(message, potential.get().getMessage());
-            SpCoBot.LOGGER.debug(ExceptionUtils.getStackTraceAsString(potential.get()));
+            SpCoBot.LOGGER.debug(ExceptionUtil.getStackTraceAsString(potential.get()));
         } catch (UserFetchException e) {
             from.handleException(message, "SpCoBot获取用户时失败", e);
         } catch (Exception e) {
-            SpCoBot.LOGGER.error(ExceptionUtils.getStackTraceAsString(e));
+            SpCoBot.LOGGER.error(ExceptionUtil.getStackTraceAsString(e));
             from.handleException(message, e);
         }
     }
@@ -335,6 +341,7 @@ public class CommandDispatcher extends SimpleFeatureManager<Command> {
         }
         commandCount++;
         getAllRegistered().put(command, SimpleFeatureManager.PRESENT);
+        Feature.addAvailableFeatureId(command);
         SpCoBot.getInstance().getRuntimeStatistic().group("命令").add("命令注册");
         command.init();
     }
@@ -459,5 +466,15 @@ public class CommandDispatcher extends SimpleFeatureManager<Command> {
 
     private void freeze() {
         this.frozen = true;
+    }
+
+    @Override
+    public boolean isFeatureAvailable(Interactive<?> where, Command key, DummyFeature feature) throws SQLException {
+        return Feature.isAvailable(key, where);
+    }
+
+    @Override
+    public String getFeatureType() {
+        return "command";
     }
 }

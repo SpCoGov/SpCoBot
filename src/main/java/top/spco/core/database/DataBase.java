@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 SpCo
+ * Copyright 2025 SpCo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ import java.util.List;
  * 数据库
  *
  * @author SpCo
- * @version 3.2.2
+ * @version 4.0.0
  * @since 0.1.0
  */
 public class DataBase {
@@ -54,13 +54,7 @@ public class DataBase {
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection("jdbc:sqlite:" + dbFilePath);
 
-            createTables();
-            if (!columnExistsInTable("user", "premium")) {
-                addColumn("user", "premium", "INTEGER DEFAULT 0");
-            }
-            if (!columnExistsInTable("user", "star_coin")) {
-                addColumn("user", "star_coin", "INTEGER DEFAULT 0");
-            }
+            checkTables();
         } catch (Exception e) {
             throw new RuntimeException("无法连接至数据库或数据库初始化失败: " + e.getMessage());
         }
@@ -84,58 +78,54 @@ public class DataBase {
         return conn;
     }
 
-    private void createTables() throws SQLException {
-        String createUserTableSql =
-                "CREATE TABLE IF NOT EXISTS user " +
-                        "(id INTEGER NOT NULL PRIMARY KEY, " +
-                        "smf_coin INTEGER DEFAULT 0, " +
-                        "permission INTEGER DEFAULT 1, " +
-                        "sign TEXT DEFAULT '从未签到过')";
-        String createValorantUserTableSql =
-                "CREATE TABLE IF NOT EXISTS valorant_user " +
-                        "(id INTEGER NOT NULL PRIMARY KEY, " +
-                        "username TEXT DEFAULT 'null', " +
-                        "password TEXT DEFAULT 'null', " +
-                        "access_token TEXT DEFAULT 'null', " +
-                        "entitlements TEXT DEFAULT 'null', " +
-                        "uuid TEXT DEFAULT 'null', " +
-                        "name TEXT DEFAULT 'null', " +
-                        "tag TEXT DEFAULT 'null', " +
-                        "create_data TEXT DEFAULT 'null', " +
-                        "ban_type TEXT DEFAULT 'null', " +
-                        "region TEXT DEFAULT 'null')";
-        String mcsTableSql =
-                "CREATE TABLE IF NOT EXISTS mcs " +
-                        "(group_id INTEGER NOT NULL PRIMARY KEY, " +
-                        "host TEXT DEFAULT 'null', " +
-                        "port INTEGER DEFAULT 58964)";
-        String tradeTableSql =
-                "CREATE TABLE IF NOT EXISTS trade " +
-                        "(id TEXT NOT NULL PRIMARY KEY, " +
-                        "user INTEGER NOT NULL, " +
-                        "date TEXT NOT NULL, " +
-                        "time TEXT NOT NULL, " +
-                        "amount INTEGER NOT NULL DEFAULT 0, " +
-                        "state TEXT NOT NULL DEFAULT 'unpaid')";
-        String expensesTableSql =
-                "CREATE TABLE IF NOT EXISTS expenses " +
-                        "(user INTEGER NOT NULL, " +
-                        "date TEXT NOT NULL, " +
-                        "time TEXT NOT NULL, " +
-                        "amount INTEGER NOT NULL, " +
-                        "balance INTEGER NOT NULL, " +
-                        "desc TEXT NOT NULL DEFAULT 'null')";
-        try (PreparedStatement stmt = getConn().prepareStatement(createUserTableSql);
-             PreparedStatement stmt2 = getConn().prepareStatement(createValorantUserTableSql);
-             PreparedStatement stmt3 = getConn().prepareStatement(mcsTableSql);
-             PreparedStatement stmt4 = getConn().prepareStatement(tradeTableSql);
-             PreparedStatement stmt5 = getConn().prepareStatement(expensesTableSql)) {
-            stmt.execute();
-            stmt2.execute();
-            stmt3.execute();
-            stmt4.execute();
-            stmt5.execute();
-        }
+    private void checkTables() throws SQLException {
+        new TableChecker(this, "user")
+                .addColumn(new ColumnBuilder("id", FieldType.INTEGER).notNull().primaryKey())
+                .addColumn(new ColumnBuilder("smf_coin", FieldType.INTEGER).defaultValue("0"))
+                .addColumn(new ColumnBuilder("permission", FieldType.INTEGER).defaultValue("1"))
+                .addColumn(new ColumnBuilder("sign", FieldType.TEXT).defaultValue("从未签到过"))
+                .addColumn(new ColumnBuilder("premium", FieldType.INTEGER).defaultValue("0"))
+                .addColumn(new ColumnBuilder("star_coin", FieldType.INTEGER).defaultValue("0"))
+                .check();
+        new TableChecker(this, "valorant_user")
+                .addColumn(new ColumnBuilder("id", FieldType.INTEGER).notNull().primaryKey())
+                .addColumn(new ColumnBuilder("username", FieldType.TEXT).defaultValue("null"))
+                .addColumn(new ColumnBuilder("password", FieldType.TEXT).defaultValue("null"))
+                .addColumn(new ColumnBuilder("access_token", FieldType.TEXT).defaultValue("null"))
+                .addColumn(new ColumnBuilder("entitlements", FieldType.TEXT).defaultValue("null"))
+                .addColumn(new ColumnBuilder("uuid", FieldType.TEXT).defaultValue("null"))
+                .addColumn(new ColumnBuilder("name", FieldType.TEXT).defaultValue("null"))
+                .addColumn(new ColumnBuilder("tag", FieldType.TEXT).defaultValue("null"))
+                .addColumn(new ColumnBuilder("create_data", FieldType.TEXT).defaultValue("null"))
+                .addColumn(new ColumnBuilder("ban_type", FieldType.TEXT).defaultValue("null"))
+                .addColumn(new ColumnBuilder("region", FieldType.TEXT).defaultValue("null"))
+                .check();
+        new TableChecker(this, "mcs")
+                .addColumn(new ColumnBuilder("group_id", FieldType.INTEGER).notNull().primaryKey())
+                .addColumn(new ColumnBuilder("host", FieldType.TEXT).defaultValue("null"))
+                .addColumn(new ColumnBuilder("port", FieldType.INTEGER).defaultValue("58964"))
+                .check();
+        new TableChecker(this, "trade")
+                .addColumn(new ColumnBuilder("id", FieldType.INTEGER).notNull().primaryKey())
+                .addColumn(new ColumnBuilder("user", FieldType.INTEGER).notNull())
+                .addColumn(new ColumnBuilder("date", FieldType.TEXT).notNull())
+                .addColumn(new ColumnBuilder("time", FieldType.TEXT).notNull())
+                .addColumn(new ColumnBuilder("amount", FieldType.INTEGER).notNull().defaultValue("0"))
+                .addColumn(new ColumnBuilder("state", FieldType.TEXT).defaultValue("unpaid"))
+                .check();
+        new TableChecker(this, "expenses")
+                .addColumn(new ColumnBuilder("user", FieldType.INTEGER).notNull())
+                .addColumn(new ColumnBuilder("date", FieldType.TEXT).notNull())
+                .addColumn(new ColumnBuilder("time", FieldType.TEXT).notNull())
+                .addColumn(new ColumnBuilder("amount", FieldType.INTEGER).notNull())
+                .addColumn(new ColumnBuilder("balance", FieldType.INTEGER).notNull())
+                .addColumn(new ColumnBuilder("desc", FieldType.TEXT).defaultValue("null"))
+                .check();
+        new TableChecker(this, "feature")
+                .addColumn(new ColumnBuilder("id", FieldType.TEXT).notNull().unique())
+                .addColumn(new ColumnBuilder("disable", FieldType.INTEGER).defaultValue("0"))
+                .addColumn(new ColumnBuilder("unavailable", FieldType.TEXT))
+                .check();
     }
 
     /**
@@ -358,5 +348,19 @@ public class DataBase {
         String sql = "ALTER TABLE " + tableName + " ADD COLUMN " + columnName + " " + dataType;
 
         statement.executeUpdate(sql);
+    }
+
+    public boolean isTableExists(String tableName) throws SQLException {
+        DatabaseMetaData metaData = getConn().getMetaData();
+        try (ResultSet rs = metaData.getTables(null, null, tableName, null)) {
+            return rs.next();
+        }
+    }
+
+    public boolean isColumnExists(String tableName, String columnName) throws SQLException {
+        DatabaseMetaData metaData = getConn().getMetaData();
+        try (ResultSet rs = metaData.getColumns(null, null, tableName, columnName)) {
+            return rs.next();
+        }
     }
 }

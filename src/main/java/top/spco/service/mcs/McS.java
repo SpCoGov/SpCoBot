@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 SpCo
+ * Copyright 2025 SpCo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,8 @@ import com.google.gson.JsonPrimitive;
 import top.spco.SpCoBot;
 import top.spco.api.Group;
 import top.spco.api.message.Message;
-import top.spco.util.ExceptionUtils;
-import top.spco.util.TimeUtils;
+import top.spco.util.ExceptionUtil;
+import top.spco.util.TimeUtil;
 import top.spco.util.tuple.MutablePair;
 import top.spco.util.tuple.Pair;
 
@@ -159,12 +159,12 @@ public class McS {
                                                 // 获取50ms后的时间信息
                                                 var time = commandReceivingTime.get(ack);
                                                 long nanos = time.getValue() - time.getKey();
-                                                TimeUnit unit = TimeUtils.chooseUnit(nanos);
+                                                TimeUnit unit = TimeUtil.chooseUnit(nanos);
                                                 double value = (double) nanos / NANOSECONDS.convert(1, unit);
                                                 commandReceivingTime.remove(ack);
                                                 String finalMessage = commandResults.get(ack);
                                                 if (nanos != 300) {
-                                                    finalMessage = finalMessage + "\n\n" + "命令耗时：" + String.format(Locale.ROOT, "%.4g", value) + " " + TimeUtils.abbreviate(unit);
+                                                    finalMessage = finalMessage + "\n\n" + "命令耗时：" + String.format(Locale.ROOT, "%.4g", value) + " " + TimeUtil.abbreviate(unit);
                                                 }
                                                 if (caller == null) {
                                                     this.group.sendMessage(finalMessage + "\n\n命令超时响应，原消息信息已被清理");
@@ -196,7 +196,7 @@ public class McS {
                     }
                 }
             } catch (Exception e) {
-                SpCoBot.LOGGER.error(ExceptionUtils.getStackTraceAsString(e));
+                SpCoBot.LOGGER.error(ExceptionUtil.getStackTraceAsString(e));
                 stopHeartBeat();
                 close(false, "错误发生：" + e.getMessage());
             }

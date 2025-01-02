@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 SpCo
+ * Copyright 2025 SpCo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ import com.google.gson.JsonObject;
 import top.spco.SpCoBot;
 import top.spco.api.Friend;
 import top.spco.core.database.DataBase;
-import top.spco.util.TimeUtils;
+import top.spco.util.TimeUtil;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -112,7 +112,7 @@ public class BotUser {
      */
     public int sign() throws UserOperationException {
         try {
-            LocalDate today = TimeUtils.today();
+            LocalDate today = TimeUtil.today();
             String signDate = SpCoBot.getInstance().getDataBase().selectString("user", "sign", "id", id);
             if (signDate.equals(today.toString())) {
                 return -1;
@@ -137,7 +137,7 @@ public class BotUser {
             db.update("update user set star_coin=? where id=?", starCoin, id);
             // 为用户添加StarCoin变动记录
             db.insertData("insert into expenses(user,date,time,amount,balance,desc) values (?,?,?,?,?,?)",
-                    id, TimeUtils.today(), System.currentTimeMillis(), amount, this.starCoin, tradeNo + " Recharge " + amount + " StarCoin");
+                    id, TimeUtil.today(), System.currentTimeMillis(), amount, this.starCoin, tradeNo + " Recharge " + amount + " StarCoin");
             // 更新充值交易状态
             SpCoBot.getInstance().getDataBase().update("update trade set state=? where id=?", "paid", tradeNo);
             db.getConn().commit();

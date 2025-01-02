@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 SpCo
+ * Copyright 2025 SpCo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,10 +28,10 @@ import static java.util.concurrent.TimeUnit.*;
  * 用于处理日期和时间的工具类。
  *
  * @author SpCo
- * @version 2.0.7
+ * @version 4.0.0
  * @since 0.1.2
  */
-public class TimeUtils {
+public class TimeUtil {
     public static final String DATE_TIME_MINUTE_FORMAT = "yyyy-MM-dd'T'HH:mm";
 
     /**
@@ -58,7 +58,7 @@ public class TimeUtils {
      * @return 具有分钟精度的当前日期和时间。
      */
     public static LocalDateTime nowAtMinutePrecision() {
-        return TimeUtils.now().withSecond(0).withNano(0);
+        return TimeUtil.now().withSecond(0).withNano(0);
     }
 
     /**
@@ -68,7 +68,7 @@ public class TimeUtils {
      * @return 计算得到的未来日期和时间。
      */
     public static LocalDateTime calculateFutureTime(long minutes) {
-        return TimeUtils.calculateFutureTime(TimeUtils.now(), minutes);
+        return TimeUtil.calculateFutureTime(TimeUtil.now(), minutes);
     }
 
     /**
@@ -102,7 +102,7 @@ public class TimeUtils {
      * @return 从起始日期时间到当前日期时间之间的分钟间隔
      */
     public static long calculateMinutesBetween(LocalDateTime startDateTime) {
-        LocalDateTime currentDateTime = TimeUtils.nowAtMinutePrecision();
+        LocalDateTime currentDateTime = TimeUtil.nowAtMinutePrecision();
         Duration duration = Duration.between(startDateTime, currentDateTime);
         return duration.toMinutes();
     }

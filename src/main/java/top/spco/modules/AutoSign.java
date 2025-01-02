@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 SpCo
+ * Copyright 2025 SpCo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ import top.spco.SpCoBot;
 import top.spco.api.Friend;
 import top.spco.core.module.AbstractModule;
 import top.spco.user.BotUsers;
-import top.spco.util.TimeUtils;
+import top.spco.util.TimeUtil;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -63,7 +63,7 @@ public class AutoSign extends AbstractModule {
                     String sql = "SELECT id FROM user WHERE sign != ? AND premium = 1";
                     try (PreparedStatement pstmt = SpCoBot.getInstance().getDataBase().getConn().prepareStatement(sql)) {
                         SpCoBot.LOGGER.info("现在开始自动签到");
-                        pstmt.setString(1, TimeUtils.today().toString());
+                        pstmt.setString(1, TimeUtil.today().toString());
                         SpCoBot.getInstance().getDataBase().setParameters(pstmt);
                         try (ResultSet rs = pstmt.executeQuery()) {
                             while (rs.next()) {
@@ -79,6 +79,6 @@ public class AutoSign extends AbstractModule {
                     friend.handleException("自动签到时抛出了意料之外的异常", e);
                 }
             }
-        }, TimeUtils.calculateMillisecondToMidnight(), 86400000L);
+        }, TimeUtil.calculateMillisecondToMidnight(), 86400000L);
     }
 }

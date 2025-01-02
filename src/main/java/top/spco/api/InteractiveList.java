@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 SpCo
+ * Copyright 2025 SpCo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,9 @@
 package top.spco.api;
 
 import org.jetbrains.annotations.NotNull;
-import top.spco.api.Interactive;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.function.Predicate;
 

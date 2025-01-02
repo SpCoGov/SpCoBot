@@ -15,7 +15,7 @@ import java.util.Map;
  * @author SpCo
  */
 public abstract class Manager<K,V> {
-    private final Map<K, V> registeredObject = new HashMap<>();
+    protected final Map<K, V> registeredObject = new HashMap<>();
 
     protected Manager() {
 

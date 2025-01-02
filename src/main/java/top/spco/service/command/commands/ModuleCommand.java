@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 SpCo
+ * Copyright 2025 SpCo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ import java.util.List;
  * 模块管理命令
  *
  * @author SpCo
- * @version 3.0.0
+ * @version 4.0.0
  * @since 2.0.0
  */
 @CommandMarker
@@ -79,8 +79,12 @@ public final class ModuleCommand extends AbstractCommand {
             }
             case "切换模块状态" -> {
                 AbstractModule module = (AbstractModule) meta.getParams().get("模块");
-                module.toggle();
-                from.quoteReply(message, module.getName() + (module.isActive() ? "已开启" : "已关闭"));
+                try {
+                    module.toggle();
+                    from.quoteReply(message, module.getName() + (module.isActive() ? "已开启" : "已关闭"));
+                } catch (Exception e) {
+                    from.handleException(message, "无法保存模块状态", e);
+                }
             }
         }
     }

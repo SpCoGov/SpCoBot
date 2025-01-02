@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 SpCo
+ * Copyright 2025 SpCo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,9 @@ import org.jetbrains.annotations.NotNull;
 import top.spco.api.Interactive;
 import top.spco.core.feature.Feature;
 import top.spco.core.feature.FeatureManager;
+import top.spco.util.StringUtil;
 
+import java.sql.SQLException;
 import java.util.Objects;
 import java.util.function.Supplier;
 
@@ -83,7 +85,7 @@ public abstract class AbstractModule extends Feature implements Comparable<Abstr
         this.name = name;
     }
 
-    private boolean active;
+    boolean active;
 
     /**
      * 返回模块当前的激活状态。
@@ -109,15 +111,17 @@ public abstract class AbstractModule extends Feature implements Comparable<Abstr
      * 如果模块当前是非激活状态，它将被激活，并调用 {@link #onActivate()}。
      * 如果模块当前是激活状态，它将被停用，并调用 {@link #onDeactivate()}。
      */
-    public void toggle() {
+    public void toggle() throws SQLException {
         if (!active) {
             active = true;
+            Feature.setDisabled(this, false);
             ModuleManager.getInstance().addActive(this);
             onActivate();
         } else {
-            onDeactivate();
             active = false;
+            Feature.setDisabled(this, true);
             ModuleManager.getInstance().removeActive(this);
+            onDeactivate();
         }
     }
 
@@ -144,8 +148,16 @@ public abstract class AbstractModule extends Feature implements Comparable<Abstr
     }
 
     @Override
-    public boolean isAvailable(Interactive<?> where) {
-        return ModuleManager.getInstance().isActive(getClass());
+    public boolean isAvailable(Interactive<?> where) throws SQLException {
+        if (!ModuleManager.getInstance().isActive(getClass())) {
+            return false;
+        }
+        return ((ModuleManager) manager().get()).isFeatureAvailable(where, this.getClass(), this);
+    }
+
+    @Override
+    public String getFeatureName() {
+        return StringUtil.toSnakeCase(getName());
     }
 
     @Override

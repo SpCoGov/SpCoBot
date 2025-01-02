@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 SpCo
+ * Copyright 2025 SpCo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,15 @@
  */
 package top.spco.core.module;
 
+import top.spco.SpCoBot;
+import top.spco.api.Interactive;
+import top.spco.core.feature.Feature;
 import top.spco.core.feature.FeatureManager;
 import top.spco.service.RegistrationException;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -112,7 +118,7 @@ public class ModuleManager extends FeatureManager<Class<? extends AbstractModule
      * @return 已注册模块的数量
      */
     public int getCount() {
-        return getAllRegistered().values().size();
+        return getAllRegistered().size();
     }
 
     /**
@@ -122,7 +128,7 @@ public class ModuleManager extends FeatureManager<Class<? extends AbstractModule
      */
     public List<AbstractModule> getActive() {
         synchronized (active) {
-            return active;
+            return new ArrayList<>(active);
         }
     }
 
@@ -148,8 +154,30 @@ public class ModuleManager extends FeatureManager<Class<? extends AbstractModule
      */
     public void register(AbstractModule module, boolean active) {
         register(module);
-        if (active) {
-            module.toggle();
+        try {
+            String featureId = module.getFeatureId();
+            String sql = "SELECT disable FROM feature WHERE id = ?";
+            try (PreparedStatement stmt = SpCoBot.getInstance().getDataBase().getConn().prepareStatement(sql)) {
+                stmt.setString(1, featureId);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
+                        boolean disabled = rs.getInt("disable") == 1;
+                        if (disabled) {
+                            module.toggle();
+                        }
+                    } else {
+                        if (active) {
+                            try {
+                                module.toggle();
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -160,7 +188,10 @@ public class ModuleManager extends FeatureManager<Class<? extends AbstractModule
      */
     public void register(AbstractModule module) {
         getAllRegistered().put(module.getClass(), module);
+        Feature.addAvailableFeatureId(module);
         module.init();
+        ModuleManager.getInstance().addActive(module);
+        module.onActivate();
     }
 
 
@@ -177,6 +208,16 @@ public class ModuleManager extends FeatureManager<Class<? extends AbstractModule
      */
     public Iterator<AbstractModule> iterator() {
         return new ModuleIterator();
+    }
+
+    @Override
+    public boolean isFeatureAvailable(Interactive<?> where, Class<? extends AbstractModule> key, AbstractModule feature) throws SQLException {
+        return Feature.isAvailable(feature, where);
+    }
+
+    @Override
+    public String getFeatureType() {
+        return "module";
     }
 
     private static class ModuleIterator implements Iterator<AbstractModule> {

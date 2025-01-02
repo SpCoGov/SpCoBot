@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 SpCo
+ * Copyright 2025 SpCo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +26,8 @@ import top.spco.service.command.usage.Usage;
 import top.spco.service.command.usage.UsageBuilder;
 import top.spco.service.command.usage.parameters.StringParameter;
 import top.spco.user.BotUser;
-import top.spco.util.HashUtils;
-import top.spco.util.TimeUtils;
+import top.spco.util.HashUtil;
+import top.spco.util.TimeUtil;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -61,7 +61,7 @@ public class DivineCommand extends AbstractCommand {
     @Override
     public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, CommandMeta meta, String usageName) {
         if (usageName.equals("占卜")) {
-            LocalDate today = TimeUtils.today();
+            LocalDate today = TimeUtil.today();
             try {
                 BigDecimal hundred = new BigDecimal("100.00");
                 StringBuilder sb = new StringBuilder();
@@ -123,7 +123,7 @@ public class DivineCommand extends AbstractCommand {
     }
 
     private boolean randomBoolean(String seed) throws NoSuchAlgorithmException {
-        seed = HashUtils.sha256(seed);
+        seed = HashUtil.sha256(seed);
         return new Random(seed.hashCode()).nextBoolean();
     }
 
