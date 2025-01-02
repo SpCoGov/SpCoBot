@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 SpCo
+ * Copyright 2025 SpCo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,11 +21,13 @@ import top.spco.events.MessageEvents;
 import top.spco.modules.reply.rules.*;
 import top.spco.statistics.ItemStatistics;
 
+import java.sql.SQLException;
+
 /**
  * 三种不同场合的自定义回复
  *
  * @author SpCo
- * @version 3.2.2
+ * @version 4.0.0
  * @since 3.0.0
  */
 public class CustomReplyModule extends AbstractModule {
@@ -57,30 +59,40 @@ public class CustomReplyModule extends AbstractModule {
         replier.add(new BarkRule());
         replier.add(new AskRule());
         MessageEvents.FRIEND_MESSAGE.register((bot, sender, message, time) -> {
-            if (isActive()) {
-                String result = replier.reply(message.toMessageContext());
-                if (result != null) {
-                    SpCoBot.getInstance().getRuntimeStatistic().item("触发自定义回复").add();
-                    sender.quoteReply(message, result);
-                }
+            if (!isActive()) {
+                return;
+            }
+            String result = replier.reply(message.toMessageContext());
+            if (result != null) {
+                SpCoBot.getInstance().getRuntimeStatistic().item("触发自定义回复").add();
+                sender.quoteReply(message, result);
             }
         });
         MessageEvents.GROUP_MESSAGE.register((bot, source, sender, message, time) -> {
-            if (isActive()) {
-                String result = replier.reply(message.toMessageContext());
-                if (result != null) {
-                    SpCoBot.getInstance().getRuntimeStatistic().item("触发自定义回复").add();
-                    source.quoteReply(message, result);
+            if (!isActive()) {
+                return;
+            }
+            try {
+                if (!isAvailable(source)) {
+                    return;
                 }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            String result = replier.reply(message.toMessageContext());
+            if (result != null) {
+                SpCoBot.getInstance().getRuntimeStatistic().item("触发自定义回复").add();
+                source.quoteReply(message, result);
             }
         });
         MessageEvents.GROUP_TEMP_MESSAGE.register((bot, source, sender, message, time) -> {
-            if (isActive()) {
-                String result = replier.reply(message.toMessageContext());
-                if (result != null) {
-                    SpCoBot.getInstance().getRuntimeStatistic().item("触发自定义回复").add();
-                    sender.quoteReply(message, result);
-                }
+            if (!isActive()) {
+                return;
+            }
+            String result = replier.reply(message.toMessageContext());
+            if (result != null) {
+                SpCoBot.getInstance().getRuntimeStatistic().item("触发自定义回复").add();
+                sender.quoteReply(message, result);
             }
         });
     }

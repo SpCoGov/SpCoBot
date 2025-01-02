@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 SpCo
+ * Copyright 2025 SpCo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,10 +22,10 @@ import java.io.StringWriter;
  * 异常工具类。
  *
  * @author SpCo
- * @version 3.2.2
+ * @version 4.0.0
  * @since 0.1.2
  */
-public class ExceptionUtils {
+public class ExceptionUtil {
     /**
      * 将异常的堆栈追踪转换为字符串。
      *

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 SpCo
+ * Copyright 2025 SpCo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,10 +26,10 @@ import java.util.Map;
  * HTTP工具类
  *
  * @author SpCo
- * @version 0.1.2
+ * @version 4.0.0
  * @since 0.1.2
  */
-public class HttpUtils {
+public class HttpUtil {
     public static String get(URL url, Map<String, String> headers) throws IOException {
         HttpURLConnection conn = null;
         try {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 SpCo
+ * Copyright 2025 SpCo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,10 +22,10 @@ import java.security.NoSuchAlgorithmException;
  * 哈希值工具类
  *
  * @author SpCo
- * @version 0.1.0
+ * @version 4.0.0
  * @since 0.1.0
  */
-public class HashUtils {
+public class HashUtil {
     /**
      * 计算输入字符串的 SHA-256 哈希值。
      *

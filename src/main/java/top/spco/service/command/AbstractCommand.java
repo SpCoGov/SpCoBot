@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 SpCo
+ * Copyright 2025 SpCo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,17 @@
  */
 package top.spco.service.command;
 
+import top.spco.api.Interactive;
+import top.spco.core.feature.Feature;
+import top.spco.core.feature.FeatureManager;
 import top.spco.service.command.usage.Usage;
 import top.spco.service.command.usage.UsageBuilder;
 import top.spco.user.BotUser;
 import top.spco.user.UserPermission;
 
+import java.sql.SQLException;
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * {@link AbstractCommand} 是所有命令的抽象基类，实现了{@link Command} 接口。
@@ -55,5 +60,20 @@ public abstract class AbstractCommand extends Command {
     @Override
     public boolean isVisible() {
         return true;
+    }
+
+    @Override
+    public Supplier<FeatureManager<?, ? extends Feature>> manager() {
+        return CommandDispatcher::getInstance;
+    }
+
+    @Override
+    public String getFeatureName() {
+        return getLabels()[0].toLowerCase();
+    }
+
+    @Override
+    public boolean isAvailable(Interactive<?> where) throws SQLException {
+        return ((CommandDispatcher) manager().get()).isFeatureAvailable(where, this, null);
     }
 }

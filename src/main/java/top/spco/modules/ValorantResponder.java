@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 SpCo
+ * Copyright 2025 SpCo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,13 +22,14 @@ import top.spco.events.MessageEvents;
 import top.spco.util.FileManipulation;
 
 import java.io.File;
+import java.sql.SQLException;
 import java.util.Random;
 
 /**
  * 自动“同意”打瓦
  *
  * @author SpCo
- * @version 2.0.0
+ * @version 4.0.0
  * @since 2.0.0
  */
 public class ValorantResponder extends AbstractModule {
@@ -51,6 +52,13 @@ public class ValorantResponder extends AbstractModule {
         MessageEvents.GROUP_MESSAGE.register((bot, source, sender, message, time) -> {
             if (!isActive()) {
                 return;
+            }
+            try {
+                if (!isAvailable(source)) {
+                    return;
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
             if (source.getId() == SpCoBot.getInstance().getSettings().getLongProperty(ValorantGroupSettings.VALORANT_GROUP) || source.getId() == SpCoBot.getInstance().testGroupId) {
                 if (message.toMessageContext().equals("瓦") || message.toMessageContext().endsWith("瓦吗") || message.toMessageContext().endsWith("打不打瓦")

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 SpCo
+ * Copyright 2025 SpCo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ import top.spco.statistics.Statistic;
 import top.spco.trade.RechargeSystem;
 import top.spco.user.BotUser;
 import top.spco.user.BotUsers;
-import top.spco.util.ExceptionUtils;
+import top.spco.util.ExceptionUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -234,7 +234,7 @@ public class SpCoBot {
                         SignCommand.sign(source, botUser, message);
                     }
                 } catch (Exception e) {
-                    source.quoteReply(message, "SpCoBot获取用户时失败: \n" + ExceptionUtils.getStackTraceAsString(e));
+                    source.quoteReply(message, "SpCoBot获取用户时失败: \n" + ExceptionUtil.getStackTraceAsString(e));
                 }
                 return;
             }
@@ -246,7 +246,7 @@ public class SpCoBot {
                         source.quoteReply(message, botUser.toString());
                     }
                 } catch (Exception e) {
-                    source.quoteReply(message, "SpCoBot获取用户时失败: \n" + ExceptionUtils.getStackTraceAsString(e));
+                    source.quoteReply(message, "SpCoBot获取用户时失败: \n" + ExceptionUtil.getStackTraceAsString(e));
                 }
                 return;
             }

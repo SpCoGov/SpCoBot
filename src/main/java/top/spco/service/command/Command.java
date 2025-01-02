@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 SpCo
+ * Copyright 2025 SpCo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package top.spco.service.command;
 import top.spco.api.*;
 import top.spco.api.message.Message;
 import top.spco.core.feature.Feature;
-import top.spco.core.feature.FeatureManager;
 import top.spco.events.CommandEvents;
 import top.spco.service.chat.Chat;
 import top.spco.service.chat.Stage;
@@ -31,7 +30,6 @@ import top.spco.user.UserPermission;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.function.Supplier;
 
 /**
  * {@link Command 命令} 是一种用户与机器人交互的方式。<p>
@@ -182,14 +180,4 @@ public abstract class Command extends Feature {
      * @return 在帮助列表是否可见
      */
     public abstract boolean isVisible();
-
-    @Override
-    public Supplier<FeatureManager<?, ? extends Feature>> manager() {
-        return CommandDispatcher::getInstance;
-    }
-
-    @Override
-    public boolean isAvailable(Interactive<?> where) {
-        return true;
-    }
 }
