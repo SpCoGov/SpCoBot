@@ -170,11 +170,11 @@ public class CommandDispatcher extends SimpleFeatureManager<Command> {
     private void callCommand(Map<String, Command> targetCommands, Interactive<?> from, User<?> sender, Message<?> message, Bot<?> bot, int time, String label, Parser parser) {
         try {
             // 获取命令实例和发送者和发送者的用户实例
-            Command object = targetCommands.get(label);
+            Command command = targetCommands.get(label);
             BotUser user = BotUsers.getOrCreate(sender.getId());
             // 先检测发送者是否有权限
             try {
-                if (!object.hasPermission(user)) {
+                if (!command.hasPermission(user)) {
                     from.quoteReply(message, "您无权使用此命令。");
                     return;
                 }
@@ -186,7 +186,7 @@ public class CommandDispatcher extends SimpleFeatureManager<Command> {
             CommandMeta meta = new CommandMeta(parser.getMessage().toMessageContext(), parser.getMessage(), parser);
             // 判断用户提交的参数是否符合命令的用法
             final int start = parser.getCursor();
-            for (Usage usage : object.getUsages()) {
+            for (Usage usage : command.getUsages()) {
                 meta.setUsage(usage);
                 meta.getParams().clear();
                 parser.setCursor(start);
@@ -222,12 +222,12 @@ public class CommandDispatcher extends SimpleFeatureManager<Command> {
                     potential.setLast(BuiltInExceptions.dispatcherExpectedArgumentSeparator(parser));
                     potential.remove(usage);
                 } else {
-                    if (object.isAvailable(from)) {
-                        from.quoteReply(message,"该命令被禁用");
+                    if (!command.isAvailable(from)) {
+                        from.quoteReply(message,"该命令被禁用。");
                         return;
                     }
                     SpCoBot.getInstance().getRuntimeStatistic().group("命令").add("命令调用");
-                    object.onCommand(bot, from, sender, user, message, time, meta, usage.name);
+                    command.onCommand(bot, from, sender, user, message, time, meta, usage.name);
                     return;
                 }
             }
