@@ -20,7 +20,7 @@ import top.spco.SpCoBot;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * @author SpCo
@@ -30,7 +30,7 @@ import java.util.HashMap;
 public class TableChecker {
     private final DataBase database;
     private final String tableName;
-    private final HashMap<String, ColumnBuilder> columns = new HashMap<>();
+    private final LinkedHashMap<String, ColumnBuilder> columns = new LinkedHashMap<>();
 
     public TableChecker(DataBase database, String tableName) {
         this.database = database;
