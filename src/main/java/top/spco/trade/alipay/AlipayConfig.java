@@ -15,18 +15,17 @@
  */
 package top.spco.trade.alipay;
 
-import top.spco.SpCoBot;
-import top.spco.core.config.PayApiSettings;
+import top.spco.core.config.Configs;
 
 public class AlipayConfig {
     // 支付宝openapi域名
     private static String openApiDomain = "https://openapi.alipay.com/gateway.do";
     // 商户应用id
-    private static String appid = SpCoBot.getInstance().getSettings().getStringProperty(PayApiSettings.ALIPAY_APP_ID);
+    private static String appid = Configs.PAYMENT_API.getAlipayAppId();
     // RSA私钥，用于对商户请求报文加签
-    private static String privateKey = SpCoBot.getInstance().getSettings().getStringProperty(PayApiSettings.ALIPAY_PRIVATE_KEY);
+    private static String privateKey = Configs.PAYMENT_API.getAlipayPrivateKey();
     // 支付宝RSA公钥，用于验签支付宝应答
-    private static String alipayPublicKey = SpCoBot.getInstance().getSettings().getStringProperty(PayApiSettings.ALIPAY_ALIPAY_PUBLIC_KEY);
+    private static String alipayPublicKey = Configs.PAYMENT_API.getAlipayAlipayPublicKey();
     // 签名类型
     private static String signType = "RSA2";
     // 最大查询次数

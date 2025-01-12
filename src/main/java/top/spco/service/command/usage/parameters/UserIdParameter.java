@@ -27,7 +27,7 @@ import java.util.regex.Pattern;
  * 指向一位用户的命令参数
  *
  * @author SpCo
- * @version 3.2.2
+ * @version 4.1.0
  * @since 3.0.0
  */
 public class UserIdParameter extends Parameter<Long> {
@@ -39,26 +39,12 @@ public class UserIdParameter extends Parameter<Long> {
     public Long parse(Parser parser) throws CommandSyntaxException {
         final int start = parser.getCursor();
         String value = parser.readUnquotedString();
-        Matcher atMatcher = Pattern.compile("^@(\\d+)$").matcher(value);
-        if (SpCoBot.getInstance().getMessageService().isAtFormat(value)) {
-            Pattern pattern = Pattern.compile(SpCoBot.getInstance().getMessageService().getAtRegex());
-            Matcher matcher = pattern.matcher(value);
-            return Long.parseLong(matcher.group(1));
-        } else if (atMatcher.find()) {
-            try {
-                String id = atMatcher.group(1);
-                return Long.parseLong(id);
-            } catch (NumberFormatException e) {
-                parser.setCursor(start);
-                throw BuiltInExceptions.createWithContext("需要用户ID或@一位用户", parser);
-            }
+        long at = SpCoBot.getInstance().getMessageService().getFirstMentioned(parser.getMessage(), value);
+        if (at == -1) {
+            parser.setCursor(start);
+            throw BuiltInExceptions.createWithContext("需要用户ID或@一位用户", parser);
         } else {
-            try {
-                return Long.parseLong(value);
-            } catch (NumberFormatException e) {
-                parser.setCursor(start);
-                throw BuiltInExceptions.createWithContext("需要用户ID或@一位用户", parser);
-            }
+            return at;
         }
     }
 }

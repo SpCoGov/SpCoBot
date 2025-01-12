@@ -8,7 +8,7 @@
                     disableAnsi="false"/>
         </Console>
 
-        <!--	latest.log same as vanilla	-->
+        <!--	latest.log	-->
         <RollingRandomAccessFile name="LatestFile" fileName="logs/latest.log"
                                  filePattern="logs/%d{yyyy-MM-dd}-%i.log.gz">
             <PatternLayout pattern="[%d{HH:mm:ss}] [%t/%level] (%logger{1}) %msg%n"/>

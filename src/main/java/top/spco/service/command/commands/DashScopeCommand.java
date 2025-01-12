@@ -22,7 +22,7 @@ import top.spco.api.Bot;
 import top.spco.api.Interactive;
 import top.spco.api.User;
 import top.spco.api.message.Message;
-import top.spco.core.config.DashScopeSettings;
+import top.spco.core.config.Configs;
 import top.spco.service.command.AbstractCommand;
 import top.spco.service.command.CommandMarker;
 import top.spco.service.command.CommandMeta;
@@ -60,7 +60,7 @@ public class DashScopeCommand extends AbstractCommand {
 
     @Override
     public void init() {
-        Constants.apiKey = SpCoBot.getInstance().getSettings().getProperty(DashScopeSettings.API_KET).toString();
+        Constants.apiKey = Configs.DASH_SCOPE.getApiKey();
     }
 
     @Override

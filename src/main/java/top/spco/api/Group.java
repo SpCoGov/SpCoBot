@@ -23,26 +23,26 @@ package top.spco.api;
  * @since 0.1.0
  */
 public abstract class Group<T> extends Interactive<T> {
-    protected Group(T objcet) {
-        super(objcet);
+    protected Group(T object) {
+        super(object);
     }
 
     /**
-     * 获取该群群名称
+     * 获取该群群名称。
      *
      * @return 群名称
      */
     public abstract String getName();
 
     /**
-     * 获取该群群主
+     * 获取该群群主。
      *
      * @return 群主对象
      */
     public abstract NormalMember<?> getOwner();
 
     /**
-     * 让机器人退出这个群
+     * 让机器人退出这个群。
      *
      * @return 退出成功时返回 {@code true}; 已经退出时返回 {@code false}
      */
@@ -51,14 +51,14 @@ public abstract class Group<T> extends Interactive<T> {
     public abstract MemberPermission botPermission();
 
     /**
-     * 获取机器人在群中的成员对象
+     * 获取机器人在群中的成员对象。
      *
      * @return 成员对象
      */
     public abstract NormalMember<?> botAsMember();
 
     /**
-     * 查询群成员对象
+     * 查询群成员对象。
      *
      * @param id 成员Id
      * @return 查询结果. 不存在时返回 {@code null}
@@ -66,7 +66,7 @@ public abstract class Group<T> extends Interactive<T> {
     public abstract NormalMember<?> getMember(long id);
 
     /**
-     * 获取该群的所有群成员
+     * 获取该群的所有群成员。
      *
      * @return 查询结果
      */

@@ -25,7 +25,7 @@ import java.io.File;
 
 /**
  * @author SpCo
- * @version 2.0.0
+ * @version 4.1.0
  * @since 0.1.0
  */
 class MiraiNormalMember extends NormalMember<net.mamoe.mirai.contact.NormalMember> {
@@ -56,11 +56,6 @@ class MiraiNormalMember extends NormalMember<net.mamoe.mirai.contact.NormalMembe
     @Override
     public String getSpecialTitle() {
         return this.wrapped().getSpecialTitle();
-    }
-
-    @Override
-    public void modifyPermission(boolean operation) {
-        this.wrapped().modifyAdmin(operation);
     }
 
     @Override

@@ -41,7 +41,7 @@ public abstract class Image<T> extends Message<T> {
      */
     @Override
     @Deprecated
-    public Message<T> append(Message<?> message) {
+    public Message<T> append(Message<?> appendage) {
         return this;
     }
 
@@ -50,7 +50,7 @@ public abstract class Image<T> extends Message<T> {
      */
     @Override
     @Deprecated
-    public Message<T> append(String message) {
+    public Message<T> append(String appendage) {
         return this;
     }
 

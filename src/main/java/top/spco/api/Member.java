@@ -26,8 +26,8 @@ package top.spco.api;
  * @since 0.1.0
  */
 public abstract class Member<T> extends User<T> {
-    public Member(T objcet) {
-        super(objcet);
+    public Member(T object) {
+        super(object);
     }
 
     /**
@@ -54,7 +54,7 @@ public abstract class Member<T> extends User<T> {
 
     /**
      * 成员的权限<p>
-     * {@link Member} 可能是 {@link NormalMember 普通成员} 或 {@link AnonymousMember 匿名成员}, 要修改群成员权限, 请检查类型为 {@link NormalMember 普通成员} 然后使用 {@link NormalMember#modifyPermission}
+     * {@link Member} 可能是 {@link NormalMember 普通成员} 或 {@link AnonymousMember 匿名成员}。
      *
      * @return 成员的权限
      */

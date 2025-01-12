@@ -25,8 +25,8 @@ package top.spco.api;
  * @since 0.1.0
  */
 public abstract class NormalMember<T> extends Member<T> {
-    public NormalMember(T objcet) {
-        super(objcet);
+    public NormalMember(T object) {
+        super(object);
     }
 
     /**
@@ -40,15 +40,7 @@ public abstract class NormalMember<T> extends Member<T> {
     public abstract String getSpecialTitle();
 
     /**
-     * 给予或移除群成员的管理员权限<p>
-     * 此操作需要 BotSettings 为{@link MemberPermission#OWNER 群主}
-     *
-     * @param operation true 为给予
-     */
-    public abstract void modifyPermission(boolean operation);
-
-    /**
-     * 被禁言剩余时长. 单位为秒
+     * 被禁言剩余时长. 单位为秒。
      */
     public abstract int muteTimeRemaining();
 
@@ -58,21 +50,19 @@ public abstract class NormalMember<T> extends Member<T> {
     public abstract boolean isMuted();
 
     /**
-     * 解除禁言<p>
-     * 管理员可解除成员的禁言, 群主可解除管理员和群员的禁言
+     * 解除禁言。
      */
     public abstract void unmute();
 
     /**
-     * 踢出该成员<p>
-     * 管理员可踢出成员, 群主可踢出管理员和群员
+     * 踢出该成员。
      *
      * @param block 为 {@code true} 时拉黑成员
      */
     public abstract void kick(String message, boolean block);
 
     /**
-     * 判断该群成员是否为机器人的好友
+     * 判断该群成员是否为机器人的好友。
      *
      * @return 是好友返回 {@code true}
      */

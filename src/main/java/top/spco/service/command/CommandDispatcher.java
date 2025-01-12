@@ -130,11 +130,11 @@ public class CommandDispatcher extends SimpleFeatureManager<Command> {
     }
 
     private void init() {
-        CommandEvents.FRIEND_COMMAND.register((bot, interactor, message, time) -> {
-            if (SpCoBot.getInstance().chatDispatcher.isInChat(interactor, ChatType.FRIEND)) {
+        CommandEvents.FRIEND_COMMAND.register((bot, friend, message, time) -> {
+            if (SpCoBot.getInstance().chatDispatcher.isInChat(friend, ChatType.FRIEND)) {
                 return;
             }
-            callCommand(friendCommands, interactor, interactor, message, bot, time);
+            callCommand(friendCommands, friend, friend, message, bot, time);
         });
         CommandEvents.GROUP_COMMAND.register((bot, from, sender, message, time) -> {
             if (SpCoBot.getInstance().chatDispatcher.isInChat(from, ChatType.GROUP)) {

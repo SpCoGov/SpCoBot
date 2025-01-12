@@ -32,10 +32,12 @@ import top.spco.util.tuple.ImmutablePair;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author SpCo
- * @version 3.2.2
+ * @version 4.1.0
  * @since 0.1.0
  */
 class MiraiMessageServiceImpl implements MessageService {
@@ -44,32 +46,38 @@ class MiraiMessageServiceImpl implements MessageService {
         return new MiraiMessage(new MessageChainBuilder().append(new At(id)).build());
     }
 
+    @Deprecated
+    @Override
+    public Message<?> at(long id, String message) {
+        return new MiraiMessage(new MessageChainBuilder().append(new At(id)).build());
+    }
+
     @Override
     public Message<?> atAll() {
         return new MiraiMessage(new MessageChainBuilder().append(net.mamoe.mirai.message.data.AtAll.INSTANCE).build());
     }
 
-    /**
-     * @deprecated 请使用 {@link Message#append(String)}
-     */
     @Override
-    @Deprecated
-    public Message<?> append(Message<?> original, Message<?> other) {
-        return original.append(other);
-    }
-
-    /**
-     * @deprecated 请使用 {@link Message#append(String)}
-     */
-    @Override
-    @Deprecated
-    public Message<?> append(Message<?> original, String other) {
-        return original.append(other);
-    }
-
-    @Override
-    public String getAtRegex() {
-        return "\\[mirai:at:\\d+\\]";
+    public long getFirstMentioned(Message<?> message, String phrase) {
+        Pattern pattern = Pattern.compile("\\[mirai:at:\\d+]");
+        Matcher matcher = pattern.matcher(message.toMessageContext());
+        Matcher atMatcher = Pattern.compile("^@(\\d+)$").matcher(phrase);
+        if (matcher.find()) {
+            return Long.parseLong(matcher.group(1));
+        } else if (atMatcher.find()) {
+            try {
+                String id = atMatcher.group(1);
+                return Long.parseLong(id);
+            } catch (NumberFormatException e) {
+                return -1;
+            }
+        } else {
+            try {
+                return Long.parseLong(phrase);
+            } catch (NumberFormatException e) {
+                return -1;
+            }
+        }
     }
 
     @Override

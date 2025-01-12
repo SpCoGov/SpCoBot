@@ -29,8 +29,8 @@ import java.io.File;
  * @since 0.1.0
  */
 public abstract class AnonymousMember<T> extends Member<T> {
-    public AnonymousMember(T objcet) {
-        super(objcet);
+    public AnonymousMember(T object) {
+        super(object);
     }
 
     /**

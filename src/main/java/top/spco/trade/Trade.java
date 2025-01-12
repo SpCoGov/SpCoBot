@@ -15,7 +15,6 @@
  */
 package top.spco.trade;
 
-
 public abstract class Trade {
     private final String tradeNo;
     private final long callerUser;

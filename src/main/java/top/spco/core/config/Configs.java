@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 SpCo
+ * Copyright 2024 SpCo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,27 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco.api;
+package top.spco.core.config;
 
 /**
- * 代表一位好友
- *
  * @author SpCo
- * @version 2.0.0
- * @since 0.1.0
+ * @version 4.1.0
+ * @since 4.1.0
  */
-public abstract class Friend<T> extends User<T> {
-    public Friend(T object) {
-        super(object);
+public class Configs {
+    public static BotConfig BOT = new BotConfig();
+    public static DashScopeConfig DASH_SCOPE = new DashScopeConfig();
+    public static PaymentApiConfig PAYMENT_API = new PaymentApiConfig();
+
+    public static void init() {
     }
-
-    /**
-     * 该好友所在的好友分组
-     */
-    public abstract FriendGroup<?> getFriendGroup();
-
-    /**
-     * 删除并屏蔽该好友, 屏蔽后对方将无法发送临时会话消息
-     */
-    public abstract void delete();
 }

@@ -26,7 +26,7 @@ import top.spco.core.event.EventFactory;
  * 消息相关事件
  *
  * @author SpCo
- * @version 3.2.1
+ * @version 4.1.0
  * @since 0.1.0
  */
 public class MessageEvents {
@@ -46,6 +46,21 @@ public class MessageEvents {
     @FunctionalInterface
     public interface GroupMessage {
         void onGroupMessage(Bot<?> bot, Group<?> source, Member<?> sender, Message<?> message, int time);
+    }
+
+    /**
+     * Called when a channel message is received.
+     */
+    public static final Event<ChannelMessage> CHANNEL_MESSAGE = EventFactory.createArrayBacked(ChannelMessage.class, callbacks -> (bot, source, sender, message, time) -> {
+        for (ChannelMessage event : callbacks) {
+            SpCoBot.getInstance().getRuntimeStatistic().group("收到消息").add("频道消息");
+            event.onChannelMessage(bot, source, sender, message, time);
+        }
+    });
+
+    @FunctionalInterface
+    public interface ChannelMessage {
+        void onChannelMessage(Bot<?> bot, Channel<?> source, User<?> sender, Message<?> message, int time);
     }
 
     /**

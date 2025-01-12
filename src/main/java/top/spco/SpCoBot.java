@@ -23,9 +23,7 @@ import top.spco.api.Group;
 import top.spco.api.NormalMember;
 import top.spco.api.message.service.MessageService;
 import top.spco.core.CAATP;
-import top.spco.core.config.BotSettings;
-import top.spco.core.config.Settings;
-import top.spco.core.config.SettingsVersion;
+import top.spco.core.config.Configs;
 import top.spco.core.database.DataBase;
 import top.spco.core.module.ModuleManager;
 import top.spco.events.*;
@@ -74,7 +72,7 @@ import java.io.IOException;
  * </pre>
  *
  * @author SpCo
- * @version 4.0.0
+ * @version 4.1.0
  * @since 0.1.0
  */
 public class SpCoBot {
@@ -92,7 +90,6 @@ public class SpCoBot {
     public final DashScopeDispatcher dashScopeDispatcher = DashScopeDispatcher.getInstance();
     public final ModuleManager moduleManager = ModuleManager.getInstance();
     private RechargeSystem rechargeSystem;
-    private Settings settings;
     private MessageService messageService;
     private DataBase dataBase;
     private Bot<?> bot;
@@ -108,10 +105,9 @@ public class SpCoBot {
      * </ul>
      * <b>更新版本号(仅限核心的 Feature)时请不要忘记在 build.gradle 中同步修改版本号</b>
      */
-    public static final String MAIN_VERSION = "4.0.0";
-    public static final String VERSION = "v" + MAIN_VERSION + "-4";
-    public static final String UPDATED_TIME = "2024-07-21 13:14";
-    public static final String OLDEST_SUPPORTED_CONFIG_VERSION = "3.2.3";
+    public static final String MAIN_VERSION = "4.1.0";
+    public static final String VERSION = "v" + MAIN_VERSION + "-2";
+    public static final String UPDATED_TIME = "2025-01-12 18:26";
 
     private SpCoBot() {
         GroupStatistics receiveMessageGroup = new GroupStatistics("收到消息");
@@ -128,22 +124,29 @@ public class SpCoBot {
     }
 
     public void initOthers() {
+        if (!dataFolder.exists() && !dataFolder.mkdirs()) {
+            throw new IllegalArgumentException("Failed to create data folder: " + dataFolder.getAbsolutePath());
+        }
+        if (!configFolder.exists() && !configFolder.mkdirs()) {
+            throw new IllegalArgumentException("Failed to create config folder: " + configFolder.getAbsolutePath());
+        }
+        if (!pluginFile.exists() && !pluginFile.mkdirs()) {
+            throw new IllegalArgumentException("Failed to create plugin folder: " + pluginFile.getAbsolutePath());
+        }
         this.dataBase = new DataBase();
         this.caatp = CAATP.getInstance();
-        this.settings = new Settings(configFolder.getAbsolutePath() + File.separator + "config.yaml");
-        try {
-            rechargeSystem = RechargeSystem.getInstance();
-        } catch (IOException e) {
-            LOGGER.error("创建充值系统失败。", e);
+        Configs.init();
+        if (Configs.BOT.isEnableRechargeSystem()) {
+            try {
+                rechargeSystem = RechargeSystem.getInstance();
+            } catch (IOException e) {
+                LOGGER.error("创建充值系统失败。", e);
+            }
         }
-        if (expired(settings.getStringProperty(SettingsVersion.CONFIG_VERSION))) {
-            LOGGER.error("配置版本过时，请备份配置后删除配置重新启动机器人以生成新配置。");
-            System.exit(-2);
-        }
-        botId = settings.getLongProperty(BotSettings.BOT_ID);
-        botOwnerId = settings.getLongProperty(BotSettings.OWNER_ID);
-        testGroupId = settings.getLongProperty(BotSettings.TEST_GROUP);
-        this.commandDispatcher = CommandDispatcher.getInstance();
+        botId = Configs.BOT.getBotId();
+        botOwnerId = Configs.BOT.getOwnerId();
+        testGroupId = Configs.BOT.getTestGroup();
+        commandDispatcher = CommandDispatcher.getInstance();
         initModules();
     }
 
@@ -224,7 +227,6 @@ public class SpCoBot {
             if (context.startsWith(CommandDispatcher.COMMAND_START_SYMBOL)) {
                 CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time);
                 CommandEvents.GROUP_COMMAND.invoker().onGroupCommand(bot, source, sender, message, time);
-
             }
             if (context.equals("签到")) {
                 Command command = this.commandDispatcher.getGroupCommand("sign");
@@ -250,7 +252,6 @@ public class SpCoBot {
                 }
                 return;
             }
-
         });
         // 处理群临时消息消息
         MessageEvents.GROUP_TEMP_MESSAGE.register((bot, source, sender, message, time) -> {
@@ -299,10 +300,6 @@ public class SpCoBot {
         return messageService;
     }
 
-    public Settings getSettings() {
-        return settings;
-    }
-
     public synchronized static SpCoBot getInstance() {
         if (instance == null) {
             instance = new SpCoBot();
@@ -312,33 +309,5 @@ public class SpCoBot {
 
     public RechargeSystem getRechargeSystem() {
         return rechargeSystem;
-    }
-
-    private static boolean expired(String currentVersion) {
-        if (!isValidVersion(currentVersion) || !isValidVersion(SpCoBot.OLDEST_SUPPORTED_CONFIG_VERSION)) {
-            return true;
-        }
-        var cv = getVersionNumber(currentVersion);
-        var rv = getVersionNumber(SpCoBot.OLDEST_SUPPORTED_CONFIG_VERSION);
-        for (int i = 0; i < 3; i++) {
-            if (cv[i] > rv[i]) {
-                return false;
-            }
-        }
-        return false;
-    }
-
-    private static boolean isValidVersion(String version) {
-        String regex = "\\d+\\.\\d+\\.\\d+";
-        return version.matches(regex);
-    }
-
-    private static int[] getVersionNumber(String version) {
-        String[] v = version.split("\\.");
-        int[] vn = new int[3];
-        for (int i = 0; i < 3; i++) {
-            vn[i] = Integer.parseInt(v[i]);
-        }
-        return vn;
     }
 }

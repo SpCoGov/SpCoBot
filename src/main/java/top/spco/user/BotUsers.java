@@ -64,18 +64,18 @@ public class BotUsers {
      * @throws UserFetchException 获取用户信息失败时抛出的异常
      */
     public static BotUser get(long id) throws UserFetchException {
-        String sql = "SELECT * FROM user WHERE id = ?";
+        String sql = "SELECT smf_coin, permission, sign, premium, star_coin FROM user WHERE id = ?";
         try (PreparedStatement preparedStatement = SpCoBot.getInstance().getDataBase().getConn().prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 if (!rs.isBeforeFirst()) {
                     return null;
                 }
-                int smfCoin = rs.getInt(2);
-                UserPermission permission = UserPermission.byLevel(rs.getInt(3));
-                String signDate = rs.getString(4);
-                int premium = rs.getInt(5);
-                int starCoin = rs.getInt(6);
+                int smfCoin = rs.getInt("smf_coin");
+                UserPermission permission = UserPermission.byLevel(rs.getInt("permission"));
+                String signDate = rs.getString("sign");
+                int premium = rs.getInt("premium");
+                int starCoin = rs.getInt("star_coin");
                 return new BotUser(id, permission, smfCoin, starCoin, signDate, premium);
             }
         } catch (SQLException e) {

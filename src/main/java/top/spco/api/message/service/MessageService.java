@@ -25,19 +25,17 @@ import top.spco.util.tuple.ImmutablePair;
 
 import java.io.File;
 import java.io.InputStream;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * 消息服务
  *
  * @author SpCo
- * @version 3.2.3
+ * @version 4.1.0
  * @since 0.1.1
  */
 public interface MessageService {
     /**
-     * At一位群成员
+     * At一位群成员。
      *
      * @param id 群成员的Id
      * @return 包含At的Message对象
@@ -45,47 +43,30 @@ public interface MessageService {
     Message<?> at(long id);
 
     /**
-     * At全体成员
+     * At一位群成员。
+     *
+     * @param id      群成员的Id
+     * @param message At的内容
+     * @return 包含At的Message对象
+     */
+    Message<?> at(long id, String message);
+
+    /**
+     * At全体成员。
      *
      * @return 包含At全体成员的Message对象
      */
     Message<?> atAll();
 
     /**
-     * 往消息后添加一条消息
+     * 获取第一个提到的Id。
      *
-     * @param original 原始消息
-     * @param other    待添加的消息
-     * @return 操作后的Message对象
-     * @deprecated 请使用 {@link Message#append(String)}
+     * @return 第一个提到的Id，如果未提到Id返回-1
      */
-    @Deprecated
-    Message<?> append(Message<?> original, Message<?> other);
+    long getFirstMentioned(Message<?> message, String phrase);
 
     /**
-     * 往消息后添加一则文本
-     *
-     * @param original 原始消息
-     * @param other    待添加的文本
-     * @return 操作后的Message对象
-     * @deprecated 请使用 {@link Message#append(String)}
-     */
-    @Deprecated
-    Message<?> append(Message<?> original, String other);
-
-    String getAtRegex();
-
-    default boolean isAtFormat(String input) {
-        String regex = getAtRegex();
-        // 编译正则表达式
-        Pattern pattern = Pattern.compile(regex);
-        // 创建匹配器
-        Matcher matcher = pattern.matcher(input);
-        return matcher.find();
-    }
-
-    /**
-     * 获取消息所引用的消息
+     * 获取消息所引用的消息。
      *
      * @param message 源消息
      * @return 如果有引用时返回被引用的消息，如果没有时返回null
@@ -102,14 +83,14 @@ public interface MessageService {
     void recall(MessageSource<?> original);
 
     /**
-     * 将字符串转换为 {@code Message} 对象
+     * 将字符串转换为 {@code Message} 对象。
      *
      * @param content 需要转换的内容
      */
     Message<?> asMessage(String content);
 
     /**
-     * 将文件转换为 {@code Image} 对象
+     * 将文件转换为 {@code Image} 对象。
      *
      * @param image       需要转换的图片
      * @param interactive 发送的对象
@@ -117,7 +98,7 @@ public interface MessageService {
     Image<?> toImage(File image, Interactive<?> interactive);
 
     /**
-     * 将输入流转换为 {@code Image} 对象
+     * 将输入流转换为 {@code Image} 对象。
      *
      * @param image       需要转换的图片
      * @param interactive 发送的对象

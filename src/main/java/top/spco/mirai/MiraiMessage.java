@@ -25,7 +25,7 @@ import java.util.NoSuchElementException;
 
 /**
  * @author SpCo
- * @version 3.0.2
+ * @version 4.1.0
  * @since 0.1.0
  */
 class MiraiMessage extends Message<net.mamoe.mirai.message.data.MessageChain> {
@@ -45,14 +45,14 @@ class MiraiMessage extends Message<net.mamoe.mirai.message.data.MessageChain> {
     }
 
     @Override
-    public Message<net.mamoe.mirai.message.data.MessageChain> append(Message<?> another) {
-        wrap(wrapped().plus((net.mamoe.mirai.message.data.Message) another.wrapped()));
+    public Message<net.mamoe.mirai.message.data.MessageChain> append(Message<?> appendage) {
+        wrap(wrapped().plus((net.mamoe.mirai.message.data.Message) appendage.wrapped()));
         return this;
     }
 
     @Override
-    public Message<net.mamoe.mirai.message.data.MessageChain> append(String another) {
-        wrap(wrapped().plus(another));
+    public Message<net.mamoe.mirai.message.data.MessageChain> append(String appendage) {
+        wrap(wrapped().plus(appendage));
         return this;
     }
 

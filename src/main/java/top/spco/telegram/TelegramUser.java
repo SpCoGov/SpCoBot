@@ -1,0 +1,58 @@
+package top.spco.telegram;
+
+import org.telegram.telegrambots.meta.api.objects.chat.Chat;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import top.spco.api.User;
+import top.spco.api.message.Message;
+
+import java.io.File;
+
+public class TelegramUser extends User<Chat> {
+    public TelegramUser(Chat user) {
+        super(user);
+    }
+
+    @Deprecated
+    @Override
+    public String getRemark() {
+        return "";
+    }
+
+    @Override
+    public void nudge() {
+
+    }
+
+    @Override
+    public String getNick() {
+        return Telegram.getUserNick(wrapped());
+    }
+
+    @Override
+    public void sendMessage(String message) {
+        try {
+            TelegramMessageSender.sendMessage(Telegram.getInstance().telegramClient, String.valueOf(getId()), message);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void sendMessage(Message<?> message) {
+        TelegramMessageSender.sendMessage(Telegram.getInstance().telegramClient, String.valueOf(getId()), (org.telegram.telegrambots.meta.api.objects.message.Message) message.wrapped());
+    }
+
+    @Override
+    public void sendImage(File image) {
+        try {
+            TelegramMessageSender.sendImage(Telegram.getInstance().telegramClient, String.valueOf(getId()), image);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public long getId() {
+        return wrapped().getId();
+    }
+}

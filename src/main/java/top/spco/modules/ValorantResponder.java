@@ -16,7 +16,6 @@
 package top.spco.modules;
 
 import top.spco.SpCoBot;
-import top.spco.core.config.ValorantGroupSettings;
 import top.spco.core.module.AbstractModule;
 import top.spco.events.MessageEvents;
 import top.spco.util.FileManipulation;
@@ -60,17 +59,15 @@ public class ValorantResponder extends AbstractModule {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-            if (source.getId() == SpCoBot.getInstance().getSettings().getLongProperty(ValorantGroupSettings.VALORANT_GROUP) || source.getId() == SpCoBot.getInstance().testGroupId) {
-                if (message.toMessageContext().equals("瓦") || message.toMessageContext().endsWith("瓦吗") || message.toMessageContext().endsWith("打不打瓦")
-                        || message.toMessageContext().endsWith(" 瓦") || message.toMessageContext().equals("有无瓦") || message.toMessageContext().equals("有没有瓦")
-                        || message.toMessageContext().endsWith("瓦不瓦")) {
-                    FileManipulation file = new FileManipulation(SpCoBot.configFolder + File.separator + "valorant.spco");
-                    String str = getRandomLine(file.readFromFile());
-                    if (str == null) {
-                        return;
-                    }
-                    source.quoteReply(message, str);
+            if (message.toMessageContext().equals("瓦") || message.toMessageContext().endsWith("瓦吗") || message.toMessageContext().endsWith("打不打瓦")
+                    || message.toMessageContext().endsWith(" 瓦") || message.toMessageContext().equals("有无瓦") || message.toMessageContext().equals("有没有瓦")
+                    || message.toMessageContext().endsWith("瓦不瓦")) {
+                FileManipulation file = new FileManipulation(SpCoBot.configFolder + File.separator + "valorant.spco");
+                String str = getRandomLine(file.readFromFile());
+                if (str == null) {
+                    return;
                 }
+                source.quoteReply(message, str);
             }
         });
     }

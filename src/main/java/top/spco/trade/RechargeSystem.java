@@ -31,7 +31,7 @@ import com.wechat.pay.java.service.payments.nativepay.model.Amount;
 import com.wechat.pay.java.service.payments.nativepay.model.PrepayRequest;
 import com.wechat.pay.java.service.payments.nativepay.model.PrepayResponse;
 import top.spco.SpCoBot;
-import top.spco.core.config.PayApiSettings;
+import top.spco.core.config.Configs;
 import top.spco.trade.alipay.*;
 import top.spco.user.BotUser;
 import top.spco.user.BotUsers;
@@ -58,18 +58,18 @@ import java.util.*;
 public class RechargeSystem {
     private static RechargeSystem instance;
     private final Config WECHAT_PAY_CONFIG = new RSAAutoCertificateConfig.Builder()
-            .merchantId(SpCoBot.getInstance().getSettings().getStringProperty(PayApiSettings.WECHAT_PAY_MERCHANT_ID))
-            .privateKeyFromPath(SpCoBot.getInstance().getSettings().getStringProperty(PayApiSettings.WECHAT_PAY_PRIVATE_KEY_PATH))
-            .merchantSerialNumber(SpCoBot.getInstance().getSettings().getStringProperty(PayApiSettings.WECHAT_PAY_MERCHANT_SERIAL_NUMBER))
-            .apiV3Key(SpCoBot.getInstance().getSettings().getStringProperty(PayApiSettings.WECHAT_PAY_API_V3_KEY))
+            .merchantId(Configs.PAYMENT_API.getWechatPayMerchantId())
+            .privateKeyFromPath(Configs.PAYMENT_API.getWechatPayPrivateKeyPath())
+            .merchantSerialNumber(Configs.PAYMENT_API.getWechatPayMerchantSerialNumber())
+            .apiV3Key(Configs.PAYMENT_API.getWechatPayApiV3Key())
             .build();
     private final NativePayService WECHAT_PAY = new NativePayService.Builder().config(WECHAT_PAY_CONFIG).build();
     private final AlipayTradeService ALIPAY = new AlipayTradeServiceImpl.ClientBuilder().build();
-    private final byte[] aesKey = SpCoBot.getInstance().getSettings().getStringProperty(PayApiSettings.WECHAT_PAY_API_V3_KEY).getBytes();
+    private final byte[] aesKey = Configs.PAYMENT_API.getWechatPayApiV3Key().getBytes();
     private static final int TAG_LENGTH_BIT = 128;
 
     private RechargeSystem() throws IOException {
-        int port = SpCoBot.getInstance().getSettings().getIntegerProperty(PayApiSettings.NOTIFY_SERVER_PORT);
+        int port = Configs.PAYMENT_API.getNotifyServerPort();
         if (port > 65535 || port < 1) {
             throw new RuntimeException("The port range is 1~65535.");
         }
@@ -225,12 +225,12 @@ public class RechargeSystem {
         Amount amount = new Amount();
         amount.setTotal(totalAmount);
         request.setAmount(amount);
-        request.setAppid(SpCoBot.getInstance().getSettings().getStringProperty(PayApiSettings.WECHAT_PAY_APP_ID));
-        request.setMchid(SpCoBot.getInstance().getSettings().getStringProperty(PayApiSettings.WECHAT_PAY_MERCHANT_ID));
+        request.setAppid(Configs.PAYMENT_API.getWechatPayAppId());
+        request.setMchid(Configs.PAYMENT_API.getWechatPayMerchantId());
         request.setDescription(description);
         String tradeNo = genTradeNo(caller, PaymentMethod.WECHAT_PAY);
         request.setOutTradeNo(tradeNo);
-        String url = SpCoBot.getInstance().getSettings().getStringProperty(PayApiSettings.NOTIFY_URL);
+        String url = Configs.PAYMENT_API.getNotifyUrl();
         if (url.endsWith("/")) {
             url += "wechat_pay";
         } else {
@@ -252,7 +252,7 @@ public class RechargeSystem {
             throw new IllegalArgumentException("Recharge amount must be positive.");
         }
         String tradeNo = genTradeNo(caller, PaymentMethod.ALIPAY);
-        String url = SpCoBot.getInstance().getSettings().getStringProperty(PayApiSettings.NOTIFY_URL);
+        String url = Configs.PAYMENT_API.getNotifyUrl();
         if (url.endsWith("/")) {
             url += "alipay";
         } else {

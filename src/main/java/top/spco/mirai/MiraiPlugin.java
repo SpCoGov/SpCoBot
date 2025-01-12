@@ -25,7 +25,7 @@ import top.spco.util.LoggedTimer;
 
 @SuppressWarnings("ClassInitializerMayBeStatic")
 public final class MiraiPlugin extends JavaPlugin {
-    public static SpCoBot BOT = SpCoBot.getInstance();
+    static final SpCoBot bot = SpCoBot.getInstance();
     @Deprecated
     public static final MiraiPlugin INSTANCE = new MiraiPlugin();
     private static LoggedTimer totalTime;
@@ -40,8 +40,8 @@ public final class MiraiPlugin extends JavaPlugin {
         SpCoBot.dataFolder = getDataFolder();
         SpCoBot.configFolder = getConfigFolder();
         SpCoBot.pluginFile = getJvmPluginClasspath().getPluginFile();
-        BOT.initOthers();
-        BOT.setMessageService(new MiraiMessageServiceImpl());
+        bot.initOthers();
+        bot.setMessageService(new MiraiMessageServiceImpl());
         totalTime.stop();
     }
 
