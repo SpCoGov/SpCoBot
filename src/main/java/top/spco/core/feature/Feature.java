@@ -35,7 +35,7 @@ import java.util.function.Supplier;
  * @since 4.0.0
  */
 public abstract class Feature {
-    private static final HashMap<String,Feature> availableIds = new HashMap<>();
+    private static final HashMap<String, Feature> availableIds = new HashMap<>();
 
     /**
      * 查询该功能在某个可交互的对象中是否可用。
@@ -60,14 +60,16 @@ public abstract class Feature {
 
     public static boolean isAvailable(Feature feature, Interactive<?> where) throws SQLException {
         String featureId = feature.getFeatureId();
-        String sql = "SELECT disable, unavailable FROM feature WHERE id = ?";
+        String sql = "SELECT disable, unavailable, available FROM feature WHERE id = ?";
         try (PreparedStatement stmt = SpCoBot.getInstance().getDataBase().getConn().prepareStatement(sql)) {
             stmt.setString(1, featureId);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     boolean disable = rs.getInt("disable") == 1;
                     if (disable) {
-                        return false;
+                        String available = rs.getString("available");
+                        Set<Long> availableIds = SerializationUtil.deserializeLongSet(available);
+                        return !availableIds.contains(where.getId());
                     }
                     String unavailable = rs.getString("unavailable");
                     Set<Long> unavailableIds = SerializationUtil.deserializeLongSet(unavailable);
@@ -89,6 +91,48 @@ public abstract class Feature {
                 }
                 return false;
             }
+        }
+    }
+
+    public static Set<Long> getAvailableIds(Feature feature) throws SQLException {
+        String featureId = feature.getFeatureId();
+        String sql = "SELECT available FROM feature WHERE id = ?";
+        try (PreparedStatement stmt = SpCoBot.getInstance().getDataBase().getConn().prepareStatement(sql)) {
+            stmt.setString(1, featureId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return SerializationUtil.deserializeLongSet(rs.getString("available"));
+                }
+                return new HashSet<>();
+            }
+        }
+    }
+
+    public static void addAvailable(Feature feature, Interactive<?> where) throws SQLException {
+        Set<Long> availableIds = getAvailableIds(feature);
+        availableIds.add(where.getId());
+        setAvailable(feature, availableIds);
+    }
+
+    public static void removeAvailable(Feature feature, Interactive<?> where) throws SQLException {
+        Set<Long> availableIds = getAvailableIds(feature);
+        availableIds.remove(where.getId());
+        setAvailable(feature, availableIds);
+    }
+
+    public static void setAvailable(Feature feature, Set<Long> available) throws SQLException {
+        checkAvailableIdOrThrow(feature);
+        String featureId = feature.getFeatureId();
+        if (isFeatureExistsInDatabase(feature)) {
+            // 更新记录
+            String updateQuery = "UPDATE feature SET available = ? WHERE id = ?";
+            try (PreparedStatement updateStmt = SpCoBot.getInstance().getDataBase().getConn().prepareStatement(updateQuery)) {
+                updateStmt.setString(1, SerializationUtil.serializeLongSet(available));
+                updateStmt.setString(2, featureId);
+                updateStmt.executeUpdate();
+            }
+        } else {
+            insertFeature(feature, false, null, available);
         }
     }
 
@@ -130,7 +174,7 @@ public abstract class Feature {
                 updateStmt.executeUpdate();
             }
         } else {
-            insertFeature(feature, disable, null);
+            insertFeature(feature, disable, null, null);
         }
     }
 
@@ -146,18 +190,19 @@ public abstract class Feature {
                 updateStmt.executeUpdate();
             }
         } else {
-            insertFeature(feature, false, unavailable);
+            insertFeature(feature, false, unavailable, null);
         }
     }
 
-    public static void insertFeature(Feature feature, boolean disable, Set<Long> unavailable) throws SQLException {
+    public static void insertFeature(Feature feature, boolean disable, Set<Long> unavailable, Set<Long> available) throws SQLException {
         if (!isFeatureExistsInDatabase(feature)) {
             checkAvailableIdOrThrow(feature);
-            String insertQuery = "INSERT INTO feature (id, disable, unavailable) VALUES (?, ?, ?)";
+            String insertQuery = "INSERT INTO feature (id, disable, unavailable, available) VALUES (?, ?, ?, ?)";
             try (PreparedStatement insertStmt = SpCoBot.getInstance().getDataBase().getConn().prepareStatement(insertQuery)) {
                 insertStmt.setString(1, feature.getFeatureId());
                 insertStmt.setInt(2, disable ? 1 : 0);
                 insertStmt.setString(3, SerializationUtil.serializeLongSet(unavailable));
+                insertStmt.setString(4, SerializationUtil.serializeLongSet(available));
                 insertStmt.executeUpdate();
             }
         }
@@ -184,7 +229,7 @@ public abstract class Feature {
         if (feature == DummyFeature.INSTANCE) {
             return;
         }
-        availableIds.put(feature.getFeatureId(),feature);
+        availableIds.put(feature.getFeatureId(), feature);
     }
 
     public static boolean isFeatureIdAvailable(String id) {

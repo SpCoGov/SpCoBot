@@ -27,7 +27,7 @@ import java.util.List;
  * 数据库
  *
  * @author SpCo
- * @version 4.0.0
+ * @version 4.1.0
  * @since 0.1.0
  */
 public class DataBase {
@@ -125,6 +125,7 @@ public class DataBase {
                 .addColumn(new ColumnBuilder("id", FieldType.TEXT).notNull().unique())
                 .addColumn(new ColumnBuilder("disable", FieldType.INTEGER).defaultValue("0"))
                 .addColumn(new ColumnBuilder("unavailable", FieldType.TEXT))
+                .addColumn(new ColumnBuilder("available", FieldType.TEXT))
                 .check();
     }
 

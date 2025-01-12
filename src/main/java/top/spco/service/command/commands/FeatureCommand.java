@@ -96,6 +96,7 @@ public class FeatureCommand extends AbstractCommand {
                         Feature.setDisabled(feature, true);
                     } else {
                         Feature.addUnavailable(feature, from);
+                        Feature.removeAvailable(feature, from);
                     }
                 } catch (SQLException e) {
                     from.handleException(message, "关闭失败", e);
@@ -109,6 +110,7 @@ public class FeatureCommand extends AbstractCommand {
                         Feature.setDisabled(feature, false);
                     } else {
                         Feature.removeUnavailable(feature, from);
+                        Feature.addAvailable(feature, from);
                     }
                 } catch (SQLException e) {
                     from.handleException(message, "开启失败", e);
