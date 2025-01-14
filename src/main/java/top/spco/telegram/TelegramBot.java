@@ -5,7 +5,7 @@ import org.telegram.telegrambots.meta.api.objects.chat.Chat;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import top.spco.api.*;
 
-public class TelegramBot extends Bot<org.telegram.telegrambots.meta.api.objects.User> {
+class TelegramBot extends Bot<org.telegram.telegrambots.meta.api.objects.User> {
     protected TelegramBot(org.telegram.telegrambots.meta.api.objects.User bot) {
         super(bot);
     }

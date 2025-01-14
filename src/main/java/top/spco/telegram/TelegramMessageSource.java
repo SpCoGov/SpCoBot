@@ -3,7 +3,7 @@ package top.spco.telegram;
 import top.spco.api.message.Message;
 import top.spco.api.message.MessageSource;
 
-public class TelegramMessageSource extends MessageSource<org.telegram.telegrambots.meta.api.objects.message.Message> {
+class TelegramMessageSource extends MessageSource<org.telegram.telegrambots.meta.api.objects.message.Message> {
     protected TelegramMessageSource(org.telegram.telegrambots.meta.api.objects.message.Message message) {
         super(message);
     }
@@ -13,7 +13,7 @@ public class TelegramMessageSource extends MessageSource<org.telegram.telegrambo
      */
     @Override
     public long getSenderId() {
-        return wrapped().getForwardFrom().getId();
+        return wrapped().getFrom().getId();
     }
 
     /**
@@ -26,6 +26,6 @@ public class TelegramMessageSource extends MessageSource<org.telegram.telegrambo
 
     @Override
     public Message<?> getOriginalMessage() {
-        return new TelegramMessage(wrapped().getReplyToMessage());
+        return new TelegramMessage(wrapped());
     }
 }

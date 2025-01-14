@@ -3,10 +3,7 @@ package top.spco.telegram;
 import org.telegram.telegrambots.longpolling.util.LongPollingSingleThreadUpdateConsumer;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
-import top.spco.SpCoBot;
 import top.spco.events.MessageEvents;
-
-import java.util.List;
 
 class TelegramLongPolling implements LongPollingSingleThreadUpdateConsumer {
     @Override
@@ -26,13 +23,6 @@ class TelegramLongPolling implements LongPollingSingleThreadUpdateConsumer {
             if (message.isChannelMessage()) {
                 MessageEvents.CHANNEL_MESSAGE.invoker().onChannelMessage(bot, new TelegramChannel(message.getChat()), new TelegramUser(message.getSenderChat()), telegramMessage, message.getDate());
             }
-//            if (message.isUserMessage()) {
-//                SpCoBot.LOGGER.info("{}|{}", message.getText(), message.toString());
-//                List<Message> sentMessage = TelegramMessageSender.sendMessage(Telegram.getInstance().telegramClient, String.valueOf(message.getChatId()), message);
-//                for (Message m : sentMessage) {
-//                    SpCoBot.LOGGER.info("机器人发送：{}", m.toString());
-//                }
-//            }
         }
     }
 }

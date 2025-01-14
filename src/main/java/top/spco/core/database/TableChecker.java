@@ -24,8 +24,8 @@ import java.util.LinkedHashMap;
 
 /**
  * @author SpCo
- * @version 0.1.0
- * @since 0.1.0
+ * @version 4.1.0
+ * @since 4.0.0
  */
 public class TableChecker {
     private final DataBase database;

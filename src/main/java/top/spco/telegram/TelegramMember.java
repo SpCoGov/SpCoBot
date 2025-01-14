@@ -17,7 +17,7 @@ import top.spco.util.tuple.Pair;
 
 import java.io.File;
 
-public class TelegramMember extends NormalMember<Pair<ChatMember, Chat>> {
+class TelegramMember extends NormalMember<Pair<ChatMember, Chat>> {
     public TelegramMember(ChatMember member, Chat chat) {
         super(new ImmutablePair<>(member, chat));
     }
@@ -137,6 +137,11 @@ public class TelegramMember extends NormalMember<Pair<ChatMember, Chat>> {
     @Override
     public String getNick() {
         return Telegram.getUserNick(wrapped().getLeft().getUser());
+    }
+
+    @Override
+    public boolean isBot() {
+        return wrapped().getLeft().getUser().getIsBot();
     }
 
     @Override

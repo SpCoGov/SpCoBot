@@ -38,7 +38,7 @@ import java.util.List;
 
 /**
  * @author SpCo
- * @version 4.0.0
+ * @version 4.1.0
  * @since 4.0.0
  */
 @CommandMarker

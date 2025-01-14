@@ -31,7 +31,7 @@ import java.util.function.Supplier;
  * 该类表示机器人的一个功能。
  *
  * @author SpCo
- * @version 4.0.0
+ * @version 4.1.0
  * @since 4.0.0
  */
 public abstract class Feature {

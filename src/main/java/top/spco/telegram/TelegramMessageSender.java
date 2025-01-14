@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class TelegramMessageSender {
+class TelegramMessageSender {
     private static Message sendMessage(TelegramClient telegramClient, int replyToMessageId, boolean disableNotification, String chatId, Message message) throws TelegramApiException {
         SendMessage sendMessage = SendMessage.builder()
                 .chatId(chatId)
@@ -408,11 +408,17 @@ public class TelegramMessageSender {
         }
         List<MessageEntity> clonedEntities = cloneEntities(appendage.getEntities());
         if (appended.hasText()) {
-            appended.setText(appended.getText() + appendage);
-            for (MessageEntity entity : clonedEntities) {
-                entity.setOffset(entity.getOffset() + appended.getText().length());
+            int originalTextLength = appended.getText().length();
+            appended.setText(appended.getText() + appendage.getText());
+            if (!clonedEntities.isEmpty()) {
+                for (MessageEntity entity : clonedEntities) {
+                    entity.setOffset(entity.getOffset() + originalTextLength);
+                }
+                if (appended.getEntities() == null) {
+                    appended.setEntities(new ArrayList<>());
+                }
+                appended.getEntities().addAll(clonedEntities);
             }
-            appended.getEntities().addAll(clonedEntities);
         } else {
             appended.setText(appendage.getText());
             appended.setEntities(clonedEntities);
@@ -428,6 +434,9 @@ public class TelegramMessageSender {
             appended.setCaption(appended.getCaption() + appendage);
             for (MessageEntity entity : clonedEntities) {
                 entity.setOffset(entity.getOffset() + appended.getCaption().length());
+            }
+            if (appended.getCaptionEntities() == null) {
+                appended.setCaptionEntities(new ArrayList<>());
             }
             appended.getCaptionEntities().addAll(clonedEntities);
         } else {

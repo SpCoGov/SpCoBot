@@ -64,7 +64,7 @@ public abstract class Bot<T> extends Identifiable<T> {
     /**
      * 获取一个好友对象, 在获取失败时返回 {@code null}
      *
-     * @param id 对方 QQ 号码
+     * @param id 好友的id
      */
     public abstract Friend<?> getFriend(long id);
 

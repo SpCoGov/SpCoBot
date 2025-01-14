@@ -141,11 +141,11 @@ public class PermissionsValidator {
     public static boolean verifyBotPermissions(Interactive<?> from, Message<?> message, NormalMember<?> target, boolean prompt) {
         if (from instanceof Group<?> group) {
             if (!group.botPermission().isOperator()) {
-                if (prompt) from.quoteReply(message, "机器人权限不足");
+                if (prompt) from.quoteReply(message, "机器人权限不足。");
                 return false;
             }
             if (target.getPermission().getLevel() >= group.botPermission().getLevel()) {
-                if (prompt) from.quoteReply(message, "大佬，惹不起");
+                if (prompt) from.quoteReply(message, "大佬，惹不起。");
                 return false;
             }
             return true;

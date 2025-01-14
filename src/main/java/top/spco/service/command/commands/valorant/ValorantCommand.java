@@ -54,7 +54,7 @@ import java.util.*;
  * Valorant相关功能
  *
  * @author SpCo
- * @version 3.2.3
+ * @version 4.1.0
  * @since 1.3.0
  */
 @CommandMarker
@@ -92,9 +92,9 @@ public class ValorantCommand extends AbstractCommand {
 
     @Override
     public void init() {
-        agents.addAll(List.of("KAY/O", "アイソ", "アストラ", "ヴァイパー", "オーメン", "キルジョイ", "クローヴ", "ゲッコー", "サイファー",
-                "ジェット", "スカイ", "セージ", "ソーヴァ", "チェンバー", "デッドロック", "ネオン", "ハーバー", "フェイド", "フィニックス", "ブリーチ", "ブリムストーン", "ヨル", "レイズ", "レイナ"));
-        weapons.addAll(List.of("クラシック", "ショーティー", "フレンジー", "ゴースト", "シェリフ", "スティンガー", "スペクター", "バッキー", "ジャッジ", "ブルドック", "ガーディアン", "ファントム", "ヴァンダル", "ムーシャル", "アウトロー"
+        agents.addAll(List.of("KAY/O", "アイソ", "アストラ", "ヴァイス", "ヴァイパー", "オーメン", "キルジョイ", "クローヴ", "ゲッコー", "サイファー",
+                "ジェット", "スカイ", "セージ", "ソーヴァ", "チェンバー", "テホ", "デッドロック", "ネオン", "ハーバー", "フェイド", "フィニックス", "ブリーチ", "ブリムストーン", "ヨル", "レイズ", "レイナ"));
+        weapons.addAll(List.of("アウトロー", "クラシック", "ショーティー", "フレンジー", "ゴースト", "シェリフ", "スティンガー", "スペクター", "バッキー", "ジャッジ", "ブルドック", "ガーディアン", "ファントム", "ヴァンダル", "ムーシャル", "アウトロー"
                 , "オペレーター", "アレス", "オーディン", "ナイフ"));
     }
 
@@ -189,7 +189,7 @@ public class ValorantCommand extends AbstractCommand {
                         request.setHeader("Authorization", "Bearer " + accessToken);
                         request.setHeader("X-Riot-Entitlements-JWT", entitlements);
                         request.setHeader("X-Riot-ClientPlatform", "ew0KCSJwbGF0Zm9ybVR5cGUiOiAiUEMiLA0KCSJwbGF0Zm9ybU9TIjogIldpbmRvd3MiLA0KCSJwbGF0Zm9ybU9TVmVyc2lvbiI6ICIxMC4wLjE5MDQyLjEuMjU2LjY0Yml0IiwNCgkicGxhdGZvcm1DaGlwc2V0IjogIlVua25vd24iDQp9");
-                        request.setHeader("X-Riot-ClientVersion","release-02.01-shipping-6-511946");
+                        request.setHeader("X-Riot-ClientVersion", "release-02.01-shipping-6-511946");
                         String response = EntityUtils.toString(session.execute(request).getEntity());
                         JsonObject json = JsonParser.parseString(response).getAsJsonObject();
 
@@ -232,9 +232,9 @@ public class ValorantCommand extends AbstractCommand {
                                                             newRequest.setHeader("Authorization", "Bearer " + riot.getAccessToken());
                                                             newRequest.setHeader("X-Riot-Entitlements-JWT", riot.getEntitlement());
                                                             newRequest.setHeader("X-Riot-ClientPlatform", "ew0KCSJwbGF0Zm9ybVR5cGUiOiAiUEMiLA0KCSJwbGF0Zm9ybU9TIjogIldpbmRvd3MiLA0KCSJwbGF0Zm9ybU9TVmVyc2lvbiI6ICIxMC4wLjE5MDQyLjEuMjU2LjY0Yml0IiwNCgkicGxhdGZvcm1DaGlwc2V0IjogIlVua25vd24iDQp9");
-                                                            newRequest.setHeader("X-Riot-ClientVersion","release-02.01-shipping-6-511946");
+                                                            newRequest.setHeader("X-Riot-ClientVersion", "release-02.01-shipping-6-511946");
                                                             var newResponse = EntityUtils.toString(conn.execute(newRequest).getEntity());
-                                                            SpCoBot.LOGGER.debug("ValorantShop: {}",newResponse);
+                                                            SpCoBot.LOGGER.debug("ValorantShop: {}", newResponse);
                                                             riot.close();
 
                                                             SkinsPanelLayoutContainer.SkinsPanelLayout store = SkinsPanelLayoutContainer.parseStore(newResponse).getSkinsPanelLayout();
@@ -276,9 +276,9 @@ public class ValorantCommand extends AbstractCommand {
                                 newRequest.setHeader("Authorization", "Bearer " + riot.getAccessToken());
                                 newRequest.setHeader("X-Riot-Entitlements-JWT", riot.getEntitlement());
                                 newRequest.setHeader("X-Riot-ClientPlatform", "ew0KCSJwbGF0Zm9ybVR5cGUiOiAiUEMiLA0KCSJwbGF0Zm9ybU9TIjogIldpbmRvd3MiLA0KCSJwbGF0Zm9ybU9TVmVyc2lvbiI6ICIxMC4wLjE5MDQyLjEuMjU2LjY0Yml0IiwNCgkicGxhdGZvcm1DaGlwc2V0IjogIlVua25vd24iDQp9");
-                                newRequest.setHeader("X-Riot-ClientVersion","release-02.01-shipping-6-511946");
+                                newRequest.setHeader("X-Riot-ClientVersion", "release-02.01-shipping-6-511946");
                                 response = EntityUtils.toString(session.execute(newRequest).getEntity());
-                                SpCoBot.LOGGER.debug("ValorantShop: {}",response);
+                                SpCoBot.LOGGER.debug("ValorantShop: {}", response);
                                 riot.close();
                             } catch (Exception e) {
                                 from.quoteReply(message, "自动登录失败，请在 「私聊」 中使用 " + loginUsage.toString() + " 命令来登录。\n\n" + e.getMessage());

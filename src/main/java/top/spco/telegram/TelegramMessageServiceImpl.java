@@ -3,6 +3,7 @@ package top.spco.telegram;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChat;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.MessageEntity;
 import org.telegram.telegrambots.meta.api.objects.User;
@@ -21,8 +22,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
-public class TelegramMessageServiceImpl implements MessageService {
+class TelegramMessageServiceImpl implements MessageService {
     @Override
     public Message<?> at(long id) {
         return at(id, null);
@@ -50,7 +52,7 @@ public class TelegramMessageServiceImpl implements MessageService {
         org.telegram.telegrambots.meta.api.objects.message.Message atMessage = new org.telegram.telegrambots.meta.api.objects.message.Message();
         atMessage.setText(message);
         MessageEntity atMessageEntity = MessageEntity.builder()
-                .type("mention")
+                .type("text_mention")
                 .user(new User(id, firstName, false))
                 .offset(0)
                 .length(message.length())
@@ -72,10 +74,22 @@ public class TelegramMessageServiceImpl implements MessageService {
     public long getFirstMentioned(Message<?> message, String phrase) {
         List<MessageEntity> entities = ((TelegramMessage) message).wrapped().getEntities();
         if (entities != null && !entities.isEmpty()) {
-            return entities.stream()
-                    .min(Comparator.comparingInt(MessageEntity::getOffset))
-                    .map(MessageEntity::getOffset)
-                    .orElse(-1);
+            Optional<Long> mentionedId = entities.stream()
+                    .filter(entity -> "mention".equals(entity.getType()) || "text_mention".equals(entity.getType())) // 过滤 mention 和 text_mention 类型
+                    .min(Comparator.comparingInt(MessageEntity::getOffset)) // 获取第一个提及的实体
+                    .map(entity -> {
+                        if ("mention".equals(entity.getType())) {
+                            throw new RuntimeException("无法通过@id来选中用户");
+                        } else if ("text_mention".equals(entity.getType())) {
+                            // 如果是 "text_mention"，直接使用 User 的 ID
+                            return entity.getUser().getId();
+                        }
+                        return null;
+                    });
+
+            if (mentionedId.isPresent()) {
+                return mentionedId.get();
+            }
         }
         try {
             return Long.parseLong(phrase);
@@ -93,18 +107,23 @@ public class TelegramMessageServiceImpl implements MessageService {
     @Override
     public @Nullable ImmutablePair<@NotNull MessageSource<?>, @NotNull Message<?>> getQuote(Message<?> message) {
         org.telegram.telegrambots.meta.api.objects.message.Message message1 = ((TelegramMessage) message).wrapped();
-        return new ImmutablePair<>(new TelegramMessageSource(message1), new TelegramMessage(message1.getReplyToMessage()));
+        if (!message1.isReply()) {
+            return null;
+        }
+        return new ImmutablePair<>(new TelegramMessageSource(message1.getReplyToMessage()), new TelegramMessage(message1.getReplyToMessage()));
     }
 
-    /**
-     * 撤回一条消息<p>
-     * 当机器人撤回自己的消息时，不需要权限。
-     *
-     * @param original 需要撤回的消息
-     */
     @Override
     public void recall(MessageSource<?> original) {
-
+        DeleteMessage deleteMessage = DeleteMessage.builder()
+                .chatId(original.getFromId())
+                .messageId(((TelegramMessage) original.getOriginalMessage()).wrapped().getMessageId())
+                .build();
+        try {
+            Telegram.getInstance().telegramClient.execute(deleteMessage);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

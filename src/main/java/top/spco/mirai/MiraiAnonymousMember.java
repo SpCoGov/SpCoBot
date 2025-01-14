@@ -21,7 +21,7 @@ import top.spco.api.MemberPermission;
 
 /**
  * @author SpCo
- * @version 2.0.0
+ * @version 4.1.0
  * @since 0.1.0
  */
 class MiraiAnonymousMember extends AnonymousMember<net.mamoe.mirai.contact.AnonymousMember> {
@@ -67,5 +67,10 @@ class MiraiAnonymousMember extends AnonymousMember<net.mamoe.mirai.contact.Anony
     @Override
     public String getNick() {
         return this.wrapped().getNick();
+    }
+
+    @Override
+    public boolean isBot() {
+        return false;
     }
 }

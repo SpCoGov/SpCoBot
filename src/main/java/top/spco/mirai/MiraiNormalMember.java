@@ -118,6 +118,11 @@ class MiraiNormalMember extends NormalMember<net.mamoe.mirai.contact.NormalMembe
     }
 
     @Override
+    public boolean isBot() {
+        return false;
+    }
+
+    @Override
     public void sendImage(File image) {
         Contact.uploadImage(this.wrapped(), image);
     }

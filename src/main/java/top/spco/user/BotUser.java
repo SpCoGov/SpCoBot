@@ -44,7 +44,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * <p>需要创建或获取用户，可以通过 {@link BotUsers} 类中的方法 {@link BotUsers#get(long)} 或 {@link BotUsers#getOrCreate(long)}
  *
  * @author SpCo
- * @version 3.0.4
+ * @version 4.1.0
  * @see BotUsers
  * @since 0.1.0
  */
@@ -254,6 +254,6 @@ public class BotUser {
 
     @Override
     public String toString() {
-        return "QQ: " + this.id + "\n海绵山币: " + smfCoin + "\n星币: " + starCoin + "\n会员信息: " + (isPremium() ? "Premium会员" : "普通会员") + "\n权限信息: " + permission;
+        return "Id: " + this.id + "\n海绵山币: " + smfCoin + "\n星币: " + starCoin + "\n会员信息: " + (isPremium() ? "Premium会员" : "普通会员") + "\n权限信息: " + permission;
     }
 }

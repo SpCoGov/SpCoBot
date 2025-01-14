@@ -62,7 +62,8 @@ public class GetOtherCommand extends AbstractCommand {
     @Override
     public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user1, Message<?> message, int time, CommandMeta meta, String usageName) {
         try {
-            BotUser user = BotUsers.getOrCreate((Long) meta.getParams().get("目标用户"));
+            long targetId = (Long) meta.getParams().get("目标用户");
+            BotUser user = BotUsers.getOrCreate(targetId);
             from.quoteReply(message, user.toString());
         } catch (UserFetchException e) {
             from.handleException(message, "获取机器人用户时发生异常", e);

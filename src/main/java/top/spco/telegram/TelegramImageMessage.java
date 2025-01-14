@@ -8,7 +8,7 @@ import top.spco.api.message.Message;
 import java.io.File;
 import java.util.ArrayList;
 
-public class TelegramImageMessage extends Image<InputFile> {
+class TelegramImageMessage extends Image<InputFile> {
     TelegramImageMessage(InputFile image) {
         super(image);
     }

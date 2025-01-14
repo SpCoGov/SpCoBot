@@ -38,7 +38,7 @@ import java.util.*;
 
 /**
  * @author SpCo
- * @version 3.0.0
+ * @version 4.1.0
  * @since 0.1.0
  */
 @CommandMarker
@@ -65,7 +65,7 @@ public class DivineCommand extends AbstractCommand {
             try {
                 BigDecimal hundred = new BigDecimal("100.00");
                 StringBuilder sb = new StringBuilder();
-                sb.append("你好，").append(user.getId()).append("\n");
+                sb.append("你好，").append(sender.getNick()).append("\n");
                 String event = (String) meta.getParams().get("所求事件");
                 if (event == null) {
                     BigDecimal probability = getProbability(user.getId() + "在" + today);

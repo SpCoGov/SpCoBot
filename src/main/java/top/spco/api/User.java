@@ -19,7 +19,7 @@ package top.spco.api;
  * 代表一位用户
  *
  * @author SpCo
- * @version 2.0.0
+ * @version 4.1.0
  * @since 0.1.0
  */
 public abstract class User<T> extends Interactive<T> {
@@ -37,14 +37,21 @@ public abstract class User<T> extends Interactive<T> {
     public abstract String getRemark();
 
     /**
-     * 戳一戳
+     * 戳一戳该用户。
      */
     public abstract void nudge();
 
     /**
-     * 昵称
+     * 获取该用户的昵称。
      *
      * @return 昵称
      */
     public abstract String getNick();
+
+    /**
+     * 该用户是否是机器人。
+     *
+     * @return 当该用户是机器人时返回 {@code true}
+     */
+    public abstract boolean isBot();
 }

@@ -17,7 +17,7 @@ import top.spco.api.message.Message;
 import java.io.File;
 import java.util.ArrayList;
 
-public class TelegramGroup extends Group<Chat> {
+class TelegramGroup extends Group<Chat> {
     protected TelegramGroup(Chat group) {
         super(group);
     }
@@ -114,16 +114,22 @@ public class TelegramGroup extends Group<Chat> {
         }
     }
 
-    /**
-     * 获取该群的所有群成员
-     *
-     * @return 查询结果
-     * @deprecated Telegram无此功能
-     */
     @Deprecated
     @Override
     public InteractiveList<NormalMember<?>> getMembers() {
-        return null;
+        InteractiveList<NormalMember<?>> administrators = new InteractiveList<>();
+        GetChatAdministrators getChatAdministrators = GetChatAdministrators.builder()
+                .chatId(getId())
+                .build();
+        try {
+            ArrayList<ChatMember> chatMembers = Telegram.getInstance().telegramClient.execute(getChatAdministrators);
+            for (ChatMember chatMember : chatMembers) {
+                administrators.add(new TelegramMember(chatMember, wrapped()));
+            }
+            return administrators;
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

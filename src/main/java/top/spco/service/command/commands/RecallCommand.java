@@ -34,7 +34,7 @@ import top.spco.util.tuple.ImmutablePair;
  * 撤回一条消息
  *
  * @author SpCo
- * @version 3.2.2
+ * @version 4.1.0
  * @since 3.0.0
  */
 @CommandMarker
@@ -54,17 +54,17 @@ public class RecallCommand extends GroupAbstractCommand {
         if (PermissionsValidator.isMemberAdmin(from, user, message)) {
             ImmutablePair<MessageSource<?>, Message<?>> quote = SpCoBot.getInstance().getMessageService().getQuote(message);
             if (quote == null) {
-                from.quoteReply(message, "请在回复消息时使用该命令");
+                from.quoteReply(message, "请在回复消息时使用该命令。");
                 return;
             }
             if (PermissionsValidator.verifyBotPermissions(from, message, (NormalMember<?>) sender, false)) {
                 SpCoBot.getInstance().getMessageService().recall(quote.getLeft());
-                from.quoteReply(message, "已撤回");
+                from.quoteReply(message, "已撤回。");
             } else if (quote.getLeft().getSenderId() == SpCoBot.getInstance().botId) {
                 SpCoBot.getInstance().getMessageService().recall(quote.getLeft());
-                from.quoteReply(message, "已撤回");
+                from.quoteReply(message, "已撤回。");
             } else {
-                from.quoteReply(message, "机器人权限不足");
+                from.quoteReply(message, "机器人权限不足。");
             }
         }
     }

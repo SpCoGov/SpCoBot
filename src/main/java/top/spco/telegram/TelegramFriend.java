@@ -8,7 +8,7 @@ import top.spco.api.message.Message;
 
 import java.io.File;
 
-public class TelegramFriend extends Friend<User> {
+class TelegramFriend extends Friend<User> {
     public TelegramFriend(User friend) {
         super(friend);
     }
@@ -65,6 +65,11 @@ public class TelegramFriend extends Friend<User> {
     @Override
     public String getNick() {
         return Telegram.getUserNick(wrapped());
+    }
+
+    @Override
+    public boolean isBot() {
+        return wrapped().getIsBot();
     }
 
     @Override

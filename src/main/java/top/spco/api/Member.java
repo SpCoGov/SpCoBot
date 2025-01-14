@@ -61,9 +61,7 @@ public abstract class Member<T> extends User<T> {
     public abstract MemberPermission getPermission();
 
     /**
-     * 禁言这个群成员<p>
-     * QQ 中最小操作和显示的时间都是一分钟. 机器人可以实现精确到秒, 会被客户端显示为 1 分钟但不影响实际禁言时间<p>
-     * 管理员可禁言成员, 群主可禁言管理员和群员
+     * 禁言这个群成员。
      *
      * @param time 持续时间. 精确到秒. 最短 0 秒, 最长 30 天
      */

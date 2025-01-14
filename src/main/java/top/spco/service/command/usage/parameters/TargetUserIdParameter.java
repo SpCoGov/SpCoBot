@@ -51,9 +51,7 @@ public class TargetUserIdParameter extends UserIdParameter {
                 throw BuiltInExceptions.createWithContext("需要用户ID或@一位用户或在回复一条消息时发送该命令", parser);
             }
         } else {
-            long senderId = quote.getLeft().getSenderId();
-            parser.setCursor(parser.getCursor() - 1);
-            return senderId;
+            return quote.getLeft().getSenderId();
         }
     }
 

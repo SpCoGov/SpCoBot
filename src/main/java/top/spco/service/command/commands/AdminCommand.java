@@ -28,7 +28,7 @@ import top.spco.user.BotUser;
  * 呼叫群管理员
  *
  * @author SpCo
- * @version 3.1.0
+ * @version 4.1.0
  * @since 3.1.0
  */
 @CommandMarker
@@ -53,8 +53,11 @@ public class AdminCommand extends GroupAbstractCommand {
                 admins.add(member);
             }
         }
-        Message<?> adminCallMessage = SpCoBot.getInstance().getMessageService().asMessage(sender.getNick() + "呼叫群管理员" + "\n");
+        Message<?> adminCallMessage = SpCoBot.getInstance().getMessageService().at(sender.getId()).append("呼叫群管理员" + "\n");
         for (var admin : admins) {
+            if (admin.isBot()) {
+                continue;
+            }
             adminCallMessage.append("\n").append(SpCoBot.getInstance().getMessageService().at(admin.getId()));
         }
 

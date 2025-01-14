@@ -7,7 +7,7 @@ import top.spco.api.message.Message;
 
 import java.io.File;
 
-public class TelegramUser extends User<Chat> {
+class TelegramUser extends User<Chat> {
     public TelegramUser(Chat user) {
         super(user);
     }
@@ -26,6 +26,12 @@ public class TelegramUser extends User<Chat> {
     @Override
     public String getNick() {
         return Telegram.getUserNick(wrapped());
+    }
+
+    @Deprecated
+    @Override
+    public boolean isBot() {
+        return false;
     }
 
     @Override

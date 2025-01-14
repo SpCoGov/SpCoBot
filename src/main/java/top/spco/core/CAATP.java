@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
  * CAATP
  *
  * @author SpCo
- * @version 2.0.6
+ * @version 4.1.0
  * @since 0.1.0
  */
 public class CAATP {
@@ -51,7 +51,7 @@ public class CAATP {
         registered = true;
         CAATPEvents.RECEIVE.register(message -> {
             if (message.equals("hello")) {
-                this.sendMessage("register qqspcobot");
+                this.sendMessage("register spcobot");
                 startHeartbeat();
                 return;
             }

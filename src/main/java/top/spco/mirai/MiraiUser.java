@@ -23,7 +23,7 @@ import java.io.File;
 
 /**
  * @author SpCo
- * @version 2.0.0
+ * @version 4.1.0
  * @since 0.1.0
  */
 class MiraiUser extends User<net.mamoe.mirai.contact.User> {
@@ -64,5 +64,10 @@ class MiraiUser extends User<net.mamoe.mirai.contact.User> {
     @Override
     public String getNick() {
         return this.wrapped().getNick();
+    }
+
+    @Override
+    public boolean isBot() {
+        return false;
     }
 }
