@@ -94,9 +94,11 @@ public class FeatureCommand extends AbstractCommand {
                 try {
                     if (!currentOnly) {
                         Feature.setDisabled(feature, true);
+                        from.quoteReply(message, "该功能已关闭。");
                     } else {
                         Feature.addUnavailable(feature, from);
                         Feature.removeAvailable(feature, from);
+                        from.quoteReply(message, "该功能已在当前场景关闭。");
                     }
                 } catch (SQLException e) {
                     from.handleException(message, "关闭失败", e);
@@ -108,9 +110,11 @@ public class FeatureCommand extends AbstractCommand {
                 try {
                     if (!currentOnly) {
                         Feature.setDisabled(feature, false);
+                        from.quoteReply(message, "该功能已开启。");
                     } else {
                         Feature.removeUnavailable(feature, from);
                         Feature.addAvailable(feature, from);
+                        from.quoteReply(message, "该功能已在当前场景关闭。");
                     }
                 } catch (SQLException e) {
                     from.handleException(message, "开启失败", e);

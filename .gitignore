@@ -129,6 +129,10 @@ src/test
 /bots
 .run/
 
+/cache
+
+*.png
+
 # Local Test Launch Point working directory
 /debug-sandbox
 

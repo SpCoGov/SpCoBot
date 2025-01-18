@@ -26,7 +26,6 @@ dependencies {
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
     implementation group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.14'
 
-    // Some features
     implementation group: 'com.alipay.sdk', name: 'alipay-sdk-java', version: '4.39.40.ALL'
     implementation group: 'com.github.wechatpay-apiv3', name: 'wechatpay-java', version: '0.2.12'
     implementation('com.alibaba:dashscope-sdk-java:2.8.2') {
@@ -39,17 +38,24 @@ dependencies {
     implementation group: 'com.google.guava', name: 'guava', version: '32.0.0-android'
     implementation group: 'org.xerial', name: 'sqlite-jdbc', version: '3.42.0.0'
     implementation group: 'org.jetbrains', name: 'annotations', version: '24.0.1'
+    implementation group: 'org.jsoup', name: 'jsoup', version: '1.18.3'
 
-    // Config
     implementation group: 'com.electronwill.night-config', name: 'toml', version: '3.8.1'
 
-    // Telegram
     implementation('org.telegram:telegrambots-longpolling:8.2.0') {
         exclude group: 'org.slf4j', module: 'slf4j-simple'
     }
     implementation('org.telegram:telegrambots-client:8.2.0') {
         exclude group: 'org.slf4j', module: 'slf4j-simple'
     }
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.+'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.+'
+}
+
+test {
+    useJUnitPlatform()
 }
 
 mirai {

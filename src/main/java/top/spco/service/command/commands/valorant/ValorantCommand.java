@@ -59,7 +59,7 @@ import java.util.*;
  */
 @CommandMarker
 public class ValorantCommand extends AbstractCommand {
-    public static Usage loginUsage;
+    private static Usage loginUsage;
     private final Set<String> agents = new HashSet<>();
     private final Set<String> weapons = new HashSet<>();
 
@@ -76,7 +76,7 @@ public class ValorantCommand extends AbstractCommand {
     @Override
     public List<Usage> getUsages() {
         SpecifiedParameterSet set = new SpecifiedParameterHelper("行为类型", false).add("login", "shop", "roll").build();
-        return List.of(
+        List<Usage> usages = List.of(
                 new UsageBuilder(getLabels()[0], "登录拳头账户")
                         .add(set.get("login"))
                         .add(new StringParameter("账号", false, null, StringParameter.StringType.QUOTABLE_PHRASE))
@@ -88,6 +88,13 @@ public class ValorantCommand extends AbstractCommand {
                         .add(new SelectionParameter("骰子类型", false, null, "agent", "weapon"))
                         .build()
         );
+        for (Usage usage : usages) {
+            if (usage.name.equals("登录拳头账户")) {
+                loginUsage = usage;
+                break;
+            }
+        }
+        return usages;
     }
 
     @Override
