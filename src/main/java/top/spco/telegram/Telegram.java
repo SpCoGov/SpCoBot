@@ -13,7 +13,7 @@ import org.telegram.telegrambots.meta.generics.TelegramClient;
 import top.spco.SpCoBot;
 import top.spco.core.Platform;
 import top.spco.core.PlatformAdapter;
-import top.spco.core.config.Configs;
+import top.spco.config.Configs;
 
 import java.io.File;
 
@@ -34,6 +34,7 @@ public class Telegram extends PlatformAdapter {
         File directory = new File(System.getProperty("user.dir"));
         SpCoBot.dataFolder = new File(directory, "data");
         SpCoBot.configFolder = new File(directory, "config");
+        SpCoBot.cacheFolder = new File(directory, "cache");
         SpCoBot.pluginFile = directory;
         bot.initOthers();
         bot.setMessageService(new TelegramMessageServiceImpl());

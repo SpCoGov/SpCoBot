@@ -54,8 +54,10 @@ public abstract class Feature {
 
     public abstract String getFeatureName();
 
+    public abstract String getFeatureType();
+
     public String getFeatureId() {
-        return manager().get().getFeatureType() + "." + getFeatureName();
+        return getFeatureType() + "." + getFeatureName();
     }
 
     public static boolean isAvailable(Feature feature, Interactive<?> where) throws SQLException {

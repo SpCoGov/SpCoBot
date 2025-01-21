@@ -27,27 +27,14 @@ import java.sql.SQLException;
  * 三种不同场合的自定义回复
  *
  * @author SpCo
- * @version 4.0.0
+ * @version 4.1.0
  * @since 3.0.0
  */
 public class CustomReplyModule extends AbstractModule {
     private final Replier replier = new Replier();
 
-    /**
-     * 构造一个新的模块。
-     */
     public CustomReplyModule() {
         super("CustomReply");
-    }
-
-    @Override
-    public void onActivate() {
-
-    }
-
-    @Override
-    public void onDeactivate() {
-
     }
 
     @Override
@@ -85,7 +72,7 @@ public class CustomReplyModule extends AbstractModule {
                 source.quoteReply(message, result);
             }
         });
-        MessageEvents.GROUP_TEMP_MESSAGE.register((bot, source, sender, message, time) -> {
+        MessageEvents.MEMBER_MESSAGE.register((bot, source, sender, message, time) -> {
             if (!isActive()) {
                 return;
             }

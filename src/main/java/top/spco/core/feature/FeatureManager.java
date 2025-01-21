@@ -24,11 +24,9 @@ import top.spco.core.Manager;
  *
  * @param <F> 功能的类型
  * @author SpCo
- * @version 4.0.0
+ * @version 4.1.0
  * @since 4.0.0
  */
 public abstract class FeatureManager<K, F extends Feature> extends Manager<K, F> {
     public abstract boolean isFeatureAvailable(Interactive<?> where, K key, F feature) throws Exception;
-
-    public abstract String getFeatureType();
 }

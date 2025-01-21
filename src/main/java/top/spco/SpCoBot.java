@@ -23,13 +23,14 @@ import top.spco.api.Group;
 import top.spco.api.NormalMember;
 import top.spco.api.message.service.MessageService;
 import top.spco.core.CAATP;
-import top.spco.core.config.Configs;
+import top.spco.config.Configs;
 import top.spco.core.database.DataBase;
 import top.spco.core.module.ModuleManager;
 import top.spco.events.*;
 import top.spco.modules.AutoSign;
 import top.spco.modules.EchoMute;
 import top.spco.modules.ValorantResponder;
+import top.spco.modules.WikiRender;
 import top.spco.modules.reply.CustomReplyModule;
 import top.spco.service.chat.ChatDispatcher;
 import top.spco.service.chat.ChatType;
@@ -80,6 +81,7 @@ public class SpCoBot {
     public static final Logger LOGGER = LogManager.getLogger("SpCoBot");
     public static File dataFolder;
     public static File configFolder;
+    public static File cacheFolder;
     public static File pluginFile;
     public long botId;
     public long botOwnerId;
@@ -133,6 +135,9 @@ public class SpCoBot {
         if (!pluginFile.exists() && !pluginFile.mkdirs()) {
             throw new IllegalArgumentException("Failed to create plugin folder: " + pluginFile.getAbsolutePath());
         }
+        if (!cacheFolder.exists() && !cacheFolder.mkdirs()) {
+            throw new IllegalArgumentException("Failed to create cache folder: " + cacheFolder.getAbsolutePath());
+        }
         this.dataBase = new DataBase();
         this.caatp = CAATP.getInstance();
         Configs.init();
@@ -155,6 +160,7 @@ public class SpCoBot {
         moduleManager.register(new EchoMute(), true);
         moduleManager.register(new ValorantResponder(), false);
         moduleManager.register(new CustomReplyModule(), false);
+        //moduleManager.register(new WikiRender(), false);
     }
 
     private void initEvents() {
@@ -254,7 +260,7 @@ public class SpCoBot {
             }
         });
         // 处理群临时消息消息
-        MessageEvents.GROUP_TEMP_MESSAGE.register((bot, source, sender, message, time) -> {
+        MessageEvents.MEMBER_MESSAGE.register((bot, source, sender, message, time) -> {
             String context = message.toMessageContext();
             LOGGER.info("收到了{}({})的{}({})的群临时消息: {}", sender.getNick(), sender.getId(), sender.getGroup().getName(), sender.getGroup().getId(), context);
             if (this.chatDispatcher.isInChat(source, ChatType.GROUP_TEMP)) {

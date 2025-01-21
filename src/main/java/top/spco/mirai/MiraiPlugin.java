@@ -23,6 +23,8 @@ import top.spco.api.message.MessageSource;
 import top.spco.events.*;
 import top.spco.util.LoggedTimer;
 
+import java.io.File;
+
 @SuppressWarnings("ClassInitializerMayBeStatic")
 public final class MiraiPlugin extends JavaPlugin {
     static final SpCoBot bot = SpCoBot.getInstance();
@@ -39,6 +41,7 @@ public final class MiraiPlugin extends JavaPlugin {
         super(new JvmPluginDescriptionBuilder("top.spco.spcobot", SpCoBot.MAIN_VERSION).name("SpCoBot").author("SpCo").build());
         SpCoBot.dataFolder = getDataFolder();
         SpCoBot.configFolder = getConfigFolder();
+        SpCoBot.cacheFolder = new File(SpCoBot.dataFolder, "cache");
         SpCoBot.pluginFile = getJvmPluginClasspath().getPluginFile();
         bot.initOthers();
         bot.setMessageService(new MiraiMessageServiceImpl());
@@ -78,7 +81,7 @@ public final class MiraiPlugin extends JavaPlugin {
         e.subscribeAlways(GroupTempMessageEvent.class, gt -> {
             NormalMember member = gt.getSender();
             MessageChain messages = gt.getMessage();
-            MessageEvents.GROUP_TEMP_MESSAGE.invoker().onGroupTempMessage(new MiraiBot(gt.getBot()), new MiraiNormalMember(member), new MiraiNormalMember(member), new MiraiMessage(messages), gt.getTime());
+            MessageEvents.MEMBER_MESSAGE.invoker().onGroupTempMessage(new MiraiBot(gt.getBot()), new MiraiNormalMember(member), new MiraiNormalMember(member), new MiraiMessage(messages), gt.getTime());
         });
         e.subscribeAlways(NudgeEvent.class, n -> {
             String action = n.getAction();

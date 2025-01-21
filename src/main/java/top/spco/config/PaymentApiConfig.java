@@ -1,4 +1,7 @@
-package top.spco.core.config;
+package top.spco.config;
+
+import top.spco.core.config.Config;
+import top.spco.core.config.ConfigSpecHelper;
 
 /**
  * @author SpCo

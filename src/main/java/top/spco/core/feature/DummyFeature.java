@@ -49,4 +49,9 @@ public final class DummyFeature extends Feature {
     public String getFeatureName() {
         return "dummy";
     }
+
+    @Override
+    public String getFeatureType() {
+        return "dummy";
+    }
 }

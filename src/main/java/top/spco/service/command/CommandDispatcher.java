@@ -472,9 +472,4 @@ public class CommandDispatcher extends SimpleFeatureManager<Command> {
     public boolean isFeatureAvailable(Interactive<?> where, Command key, DummyFeature feature) throws SQLException {
         return Feature.isAvailable(key, where);
     }
-
-    @Override
-    public String getFeatureType() {
-        return "command";
-    }
 }

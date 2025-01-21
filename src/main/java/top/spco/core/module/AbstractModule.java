@@ -70,7 +70,7 @@ import java.util.function.Supplier;
  * }</pre>
  *
  * @author SpCo
- * @version 4.0.0
+ * @version 4.1.0
  * @since 2.0.0
  */
 public abstract class AbstractModule extends Feature implements Comparable<AbstractModule> {
@@ -99,12 +99,16 @@ public abstract class AbstractModule extends Feature implements Comparable<Abstr
     /**
      * 当模块被激活时调用。子类应该覆盖此方法以实现特定的激活行为。
      */
-    public abstract void onActivate();
+    public void onActivate() {
+
+    }
 
     /**
      * 当模块被停用时调用。子类应该覆盖此方法以实现特定的停用行为。
      */
-    public abstract void onDeactivate();
+    public void onDeactivate() {
+
+    }
 
     /**
      * 切换模块的激活状态。
@@ -158,6 +162,11 @@ public abstract class AbstractModule extends Feature implements Comparable<Abstr
     @Override
     public String getFeatureName() {
         return StringUtil.toSnakeCase(getName());
+    }
+
+    @Override
+    public final String getFeatureType() {
+        return "module";
     }
 
     @Override

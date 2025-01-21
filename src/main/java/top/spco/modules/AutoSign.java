@@ -40,16 +40,6 @@ public class AutoSign extends AbstractModule {
     }
 
     @Override
-    public void onActivate() {
-
-    }
-
-    @Override
-    public void onDeactivate() {
-
-    }
-
-    @Override
     public void init() {
         Timer autoSign = new Timer("AutoSign");
         autoSign.schedule(new TimerTask() {

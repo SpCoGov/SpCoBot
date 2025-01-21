@@ -47,7 +47,7 @@ import java.util.List;
  * </p>
  *
  * @author SpCo
- * @version 4.0.0
+ * @version 4.1.0
  * @since 2.0.0
  */
 public class ModuleManager extends FeatureManager<Class<? extends AbstractModule>, AbstractModule> {
@@ -213,11 +213,6 @@ public class ModuleManager extends FeatureManager<Class<? extends AbstractModule
     @Override
     public boolean isFeatureAvailable(Interactive<?> where, Class<? extends AbstractModule> key, AbstractModule feature) throws SQLException {
         return Feature.isAvailable(feature, where);
-    }
-
-    @Override
-    public String getFeatureType() {
-        return "module";
     }
 
     private static class ModuleIterator implements Iterator<AbstractModule> {

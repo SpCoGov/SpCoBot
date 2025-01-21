@@ -15,7 +15,7 @@
  */
 package top.spco.trade.alipay;
 
-import top.spco.core.config.Configs;
+import top.spco.config.Configs;
 
 public class AlipayConfig {
     // 支付宝openapi域名

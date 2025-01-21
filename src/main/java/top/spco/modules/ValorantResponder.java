@@ -37,16 +37,6 @@ public class ValorantResponder extends AbstractModule {
     }
 
     @Override
-    public void onActivate() {
-
-    }
-
-    @Override
-    public void onDeactivate() {
-
-    }
-
-    @Override
     public void init() {
         MessageEvents.GROUP_MESSAGE.register((bot, source, sender, message, time) -> {
             if (!isActive()) {

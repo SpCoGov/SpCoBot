@@ -180,4 +180,9 @@ public abstract class Command extends Feature {
      * @return 在帮助列表是否可见
      */
     public abstract boolean isVisible();
+
+    @Override
+    public final String getFeatureType() {
+        return "command";
+    }
 }

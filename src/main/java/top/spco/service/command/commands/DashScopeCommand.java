@@ -22,7 +22,7 @@ import top.spco.api.Bot;
 import top.spco.api.Interactive;
 import top.spco.api.User;
 import top.spco.api.message.Message;
-import top.spco.core.config.Configs;
+import top.spco.config.Configs;
 import top.spco.service.command.AbstractCommand;
 import top.spco.service.command.CommandMarker;
 import top.spco.service.command.CommandMeta;

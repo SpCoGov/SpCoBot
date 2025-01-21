@@ -27,9 +27,4 @@ public final class DummyFeatureManager extends SimpleFeatureManager<DummyFeature
     public boolean isFeatureAvailable(Interactive<?> where, DummyFeature key, DummyFeature feature) {
         return false;
     }
-
-    @Override
-    public String getFeatureType() {
-        return "dummy";
-    }
 }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco.core.config;
+package top.spco.config;
 
 /**
  * @author SpCo
@@ -24,6 +24,7 @@ public class Configs {
     public static BotConfig BOT = new BotConfig();
     public static DashScopeConfig DASH_SCOPE = new DashScopeConfig();
     public static PaymentApiConfig PAYMENT_API = new PaymentApiConfig();
+    public static WikiRenderConfig WIKI_RENDER = new WikiRenderConfig();
 
     public static void init() {
     }

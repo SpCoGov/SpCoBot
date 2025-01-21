@@ -31,7 +31,7 @@ import com.wechat.pay.java.service.payments.nativepay.model.Amount;
 import com.wechat.pay.java.service.payments.nativepay.model.PrepayRequest;
 import com.wechat.pay.java.service.payments.nativepay.model.PrepayResponse;
 import top.spco.SpCoBot;
-import top.spco.core.config.Configs;
+import top.spco.config.Configs;
 import top.spco.trade.alipay.*;
 import top.spco.user.BotUser;
 import top.spco.user.BotUsers;

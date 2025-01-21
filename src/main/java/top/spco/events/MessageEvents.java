@@ -64,17 +64,17 @@ public class MessageEvents {
     }
 
     /**
-     * Called when a group temp-message is received.
+     * Called when a member message is received.
      */
-    public static final Event<GroupTempMessage> GROUP_TEMP_MESSAGE = EventFactory.createArrayBacked(GroupTempMessage.class, callbacks -> (bot, source, sender, message, time) -> {
-        for (GroupTempMessage event : callbacks) {
-            SpCoBot.getInstance().getRuntimeStatistic().group("收到消息").add("群临时消息");
+    public static final Event<MemberMessage> MEMBER_MESSAGE = EventFactory.createArrayBacked(MemberMessage.class, callbacks -> (bot, source, sender, message, time) -> {
+        for (MemberMessage event : callbacks) {
+            SpCoBot.getInstance().getRuntimeStatistic().group("收到消息").add("群成员消息");
             event.onGroupTempMessage(bot, source, sender, message, time);
         }
     });
 
     @FunctionalInterface
-    public interface GroupTempMessage {
+    public interface MemberMessage {
         void onGroupTempMessage(Bot<?> bot, Member<?> source, Member<?> sender, Message<?> message, int time);
     }
 
