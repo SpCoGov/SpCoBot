@@ -108,7 +108,7 @@ class MiraiMessageServiceImpl implements MessageService {
 
     @Override
     public Message<?> asMessage(String content) {
-        return new MiraiMessageChainBuilder().append(content).build();
+        return new MiraiMessage(new net.mamoe.mirai.message.data.MessageChainBuilder().append(content).build());
     }
 
     @Override
