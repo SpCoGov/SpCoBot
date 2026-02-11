@@ -78,7 +78,7 @@ class TelegramBot extends Bot<org.telegram.telegrambots.meta.api.objects.User> {
             GetChat getChat = GetChat.builder()
                     .chatId(id)
                     .build();
-            Chat chat = Telegram.getInstance().telegramClient.execute(getChat);
+            Chat chat = TelegramAdapter.getInstance().telegramClient.execute(getChat);
             return new TelegramUser(chat);
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
@@ -91,7 +91,7 @@ class TelegramBot extends Bot<org.telegram.telegrambots.meta.api.objects.User> {
             GetChat getChat = GetChat.builder()
                     .chatId(id)
                     .build();
-            Chat chat = Telegram.getInstance().telegramClient.execute(getChat);
+            Chat chat = TelegramAdapter.getInstance().telegramClient.execute(getChat);
             return new TelegramGroup(chat);
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);

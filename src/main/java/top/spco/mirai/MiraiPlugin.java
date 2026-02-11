@@ -42,7 +42,7 @@ public final class MiraiPlugin extends JavaPlugin {
         SpCoBot.dataFolder = getDataFolder();
         SpCoBot.configFolder = getConfigFolder();
         SpCoBot.cacheFolder = new File(SpCoBot.dataFolder, "cache");
-        SpCoBot.pluginFile = getJvmPluginClasspath().getPluginFile();
+        SpCoBot.jarFile = getJvmPluginClasspath().getPluginFile();
         bot.initOthers();
         bot.setMessageService(new MiraiMessageServiceImpl());
         totalTime.stop();

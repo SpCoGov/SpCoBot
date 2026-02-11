@@ -25,7 +25,7 @@ class TelegramUser extends User<Chat> {
 
     @Override
     public String getNick() {
-        return Telegram.getUserNick(wrapped());
+        return TelegramAdapter.getUserNick(wrapped());
     }
 
     @Deprecated
@@ -37,7 +37,7 @@ class TelegramUser extends User<Chat> {
     @Override
     public void sendMessage(String message) {
         try {
-            TelegramMessageSender.sendMessage(Telegram.getInstance().telegramClient, String.valueOf(getId()), message);
+            TelegramMessageSender.sendMessage(TelegramAdapter.getInstance().telegramClient, String.valueOf(getId()), message);
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
@@ -45,13 +45,13 @@ class TelegramUser extends User<Chat> {
 
     @Override
     public void sendMessage(Message<?> message) {
-        TelegramMessageSender.sendMessage(Telegram.getInstance().telegramClient, String.valueOf(getId()), (org.telegram.telegrambots.meta.api.objects.message.Message) message.wrapped());
+        TelegramMessageSender.sendMessage(TelegramAdapter.getInstance().telegramClient, String.valueOf(getId()), (org.telegram.telegrambots.meta.api.objects.message.Message) message.wrapped());
     }
 
     @Override
     public void sendImage(File image) {
         try {
-            TelegramMessageSender.sendImage(Telegram.getInstance().telegramClient, String.valueOf(getId()), image);
+            TelegramMessageSender.sendImage(TelegramAdapter.getInstance().telegramClient, String.valueOf(getId()), image);
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }

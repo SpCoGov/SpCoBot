@@ -10,7 +10,7 @@ class TelegramLongPolling implements LongPollingSingleThreadUpdateConsumer {
     public void consume(Update update) {
         if (update.hasMessage()) {
             Message message = update.getMessage();
-            TelegramBot bot = new TelegramBot(Telegram.getSelf());
+            TelegramBot bot = new TelegramBot(TelegramAdapter.getSelf());
             TelegramMessage telegramMessage = new TelegramMessage(message);
             if (message.isUserMessage()) {
                 MessageEvents.FRIEND_MESSAGE.invoker().onFriendMessage(bot, new TelegramFriend(message.getFrom()), telegramMessage, message.getDate());

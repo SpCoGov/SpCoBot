@@ -96,7 +96,7 @@ public class CommandDispatcher extends SimpleFeatureManager<Command> {
         Set<Command> toBeRegistered = new HashSet<>();
 
         try {
-            URL url = SpCoBot.pluginFile.toURI().toURL();
+            URL url = SpCoBot.jarFile.toURI().toURL();
             Reflections reflections = new Reflections(new ConfigurationBuilder()
                     .setScanners(new SubTypesScanner(false), new TypeAnnotationsScanner())
                     .setUrls(url));

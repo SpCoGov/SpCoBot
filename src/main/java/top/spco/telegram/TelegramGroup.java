@@ -43,7 +43,7 @@ class TelegramGroup extends Group<Chat> {
                 .chatId(getId())
                 .build();
         try {
-            ArrayList<ChatMember> chatMembers = Telegram.getInstance().telegramClient.execute(getChatAdministrators);
+            ArrayList<ChatMember> chatMembers = TelegramAdapter.getInstance().telegramClient.execute(getChatAdministrators);
             for (ChatMember chatMember : chatMembers) {
                 if (chatMember.getStatus().equals("creator")) {
                     return new TelegramMember(chatMember, wrapped());
@@ -66,7 +66,7 @@ class TelegramGroup extends Group<Chat> {
                 .chatId(getId())
                 .build();
         try {
-            return Telegram.getInstance().telegramClient.execute(leaveChat);
+            return TelegramAdapter.getInstance().telegramClient.execute(leaveChat);
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
@@ -87,7 +87,7 @@ class TelegramGroup extends Group<Chat> {
         GetMe getMe = GetMe.builder()
                 .build();
         try {
-            User user = Telegram.getInstance().telegramClient.execute(getMe);
+            User user = TelegramAdapter.getInstance().telegramClient.execute(getMe);
             return getMember(user.getId());
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
@@ -107,7 +107,7 @@ class TelegramGroup extends Group<Chat> {
                 .userId(id)
                 .build();
         try {
-            ChatMember chatMember = Telegram.getInstance().telegramClient.execute(getChatMember);
+            ChatMember chatMember = TelegramAdapter.getInstance().telegramClient.execute(getChatMember);
             return new TelegramMember(chatMember, wrapped());
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
@@ -122,7 +122,7 @@ class TelegramGroup extends Group<Chat> {
                 .chatId(getId())
                 .build();
         try {
-            ArrayList<ChatMember> chatMembers = Telegram.getInstance().telegramClient.execute(getChatAdministrators);
+            ArrayList<ChatMember> chatMembers = TelegramAdapter.getInstance().telegramClient.execute(getChatAdministrators);
             for (ChatMember chatMember : chatMembers) {
                 administrators.add(new TelegramMember(chatMember, wrapped()));
             }
@@ -135,7 +135,7 @@ class TelegramGroup extends Group<Chat> {
     @Override
     public void sendMessage(String message) {
         try {
-            TelegramMessageSender.sendMessage(Telegram.getInstance().telegramClient, String.valueOf(getId()), message);
+            TelegramMessageSender.sendMessage(TelegramAdapter.getInstance().telegramClient, String.valueOf(getId()), message);
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
@@ -143,13 +143,13 @@ class TelegramGroup extends Group<Chat> {
 
     @Override
     public void sendMessage(Message<?> message) {
-        TelegramMessageSender.sendMessage(Telegram.getInstance().telegramClient, String.valueOf(getId()), ((TelegramMessage) message).wrapped());
+        TelegramMessageSender.sendMessage(TelegramAdapter.getInstance().telegramClient, String.valueOf(getId()), ((TelegramMessage) message).wrapped());
     }
 
     @Override
     public void sendImage(File image) {
         try {
-            TelegramMessageSender.sendImage(Telegram.getInstance().telegramClient, String.valueOf(getId()), image);
+            TelegramMessageSender.sendImage(TelegramAdapter.getInstance().telegramClient, String.valueOf(getId()), image);
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }

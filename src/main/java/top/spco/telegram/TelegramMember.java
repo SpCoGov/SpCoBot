@@ -73,7 +73,7 @@ class TelegramMember extends NormalMember<Pair<ChatMember, Chat>> {
                 .senderChatId(wrapped().getLeft().getUser().getId())
                 .build();
         try {
-            Telegram.getInstance().telegramClient.execute(unmute);
+            TelegramAdapter.getInstance().telegramClient.execute(unmute);
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
@@ -86,7 +86,7 @@ class TelegramMember extends NormalMember<Pair<ChatMember, Chat>> {
                 .userId(wrapped().getLeft().getUser().getId())
                 .build();
         try {
-            Telegram.getInstance().telegramClient.execute(banChatMember);
+            TelegramAdapter.getInstance().telegramClient.execute(banChatMember);
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
@@ -116,7 +116,7 @@ class TelegramMember extends NormalMember<Pair<ChatMember, Chat>> {
                 .untilDate(time)
                 .build();
         try {
-            Telegram.getInstance().telegramClient.execute(mute);
+            TelegramAdapter.getInstance().telegramClient.execute(mute);
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
@@ -136,7 +136,7 @@ class TelegramMember extends NormalMember<Pair<ChatMember, Chat>> {
 
     @Override
     public String getNick() {
-        return Telegram.getUserNick(wrapped().getLeft().getUser());
+        return TelegramAdapter.getUserNick(wrapped().getLeft().getUser());
     }
 
     @Override
@@ -147,7 +147,7 @@ class TelegramMember extends NormalMember<Pair<ChatMember, Chat>> {
     @Override
     public void sendMessage(String message) {
         try {
-            TelegramMessageSender.sendMessage(Telegram.getInstance().telegramClient, String.valueOf(getId()), message);
+            TelegramMessageSender.sendMessage(TelegramAdapter.getInstance().telegramClient, String.valueOf(getId()), message);
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
@@ -155,13 +155,13 @@ class TelegramMember extends NormalMember<Pair<ChatMember, Chat>> {
 
     @Override
     public void sendMessage(Message<?> message) {
-        TelegramMessageSender.sendMessage(Telegram.getInstance().telegramClient, String.valueOf(getId()), ((TelegramMessage) message).wrapped());
+        TelegramMessageSender.sendMessage(TelegramAdapter.getInstance().telegramClient, String.valueOf(getId()), ((TelegramMessage) message).wrapped());
     }
 
     @Override
     public void sendImage(File image) {
         try {
-            TelegramMessageSender.sendImage(Telegram.getInstance().telegramClient, String.valueOf(getId()), image);
+            TelegramMessageSender.sendImage(TelegramAdapter.getInstance().telegramClient, String.valueOf(getId()), image);
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }

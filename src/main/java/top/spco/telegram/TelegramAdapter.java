@@ -17,8 +17,8 @@ import top.spco.config.Configs;
 
 import java.io.File;
 
-public class Telegram extends PlatformAdapter {
-    private static Telegram instance;
+public class TelegramAdapter extends PlatformAdapter {
+    private static TelegramAdapter instance;
     static final SpCoBot bot = SpCoBot.getInstance();
     String botToken;
     TelegramBotsLongPollingApplication longPolling;
@@ -29,14 +29,8 @@ public class Telegram extends PlatformAdapter {
         Configurator.setLevel("org.telegram.telegrambots", Level.ERROR);
     }
 
-    private Telegram() {
+    private TelegramAdapter() {
         super(Platform.TELEGRAM);
-        File directory = new File(System.getProperty("user.dir"));
-        SpCoBot.dataFolder = new File(directory, "data");
-        SpCoBot.configFolder = new File(directory, "config");
-        SpCoBot.cacheFolder = new File(directory, "cache");
-        SpCoBot.pluginFile = directory;
-        bot.initOthers();
         bot.setMessageService(new TelegramMessageServiceImpl());
         try {
             botToken = Configs.BOT.getTelegramBotToken();
@@ -48,9 +42,9 @@ public class Telegram extends PlatformAdapter {
         }
     }
 
-    public static Telegram getInstance() {
+    public static TelegramAdapter getInstance() {
         if (instance == null) {
-            instance = new Telegram();
+            instance = new TelegramAdapter();
         }
         return instance;
     }
@@ -75,7 +69,7 @@ public class Telegram extends PlatformAdapter {
         GetMe getMe = GetMe.builder()
                 .build();
         try {
-            return Telegram.getInstance().telegramClient.execute(getMe);
+            return TelegramAdapter.getInstance().telegramClient.execute(getMe);
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }

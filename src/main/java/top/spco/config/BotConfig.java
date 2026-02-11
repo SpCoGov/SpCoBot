@@ -55,6 +55,8 @@ public class BotConfig extends Config {
 
     private final ConfigSpecHelper.ConfigValue<String> TELEGRAM_BOT_TOKEN = builder
             .define("telegram_bot_token", "");
+    private final ConfigSpecHelper.ConfigValue<String> QQ_BOT_TOKEN = builder
+            .define("qq_bot_token", "");
 
     public Long getBotId() {
         return BOT_ID.get();

@@ -30,7 +30,6 @@ import top.spco.events.*;
 import top.spco.modules.AutoSign;
 import top.spco.modules.EchoMute;
 import top.spco.modules.ValorantResponder;
-import top.spco.modules.WikiRender;
 import top.spco.modules.reply.CustomReplyModule;
 import top.spco.service.chat.ChatDispatcher;
 import top.spco.service.chat.ChatType;
@@ -73,7 +72,7 @@ import java.io.IOException;
  * </pre>
  *
  * @author SpCo
- * @version 4.1.0
+ * @version 5.0.0
  * @since 0.1.0
  */
 public class SpCoBot {
@@ -82,7 +81,7 @@ public class SpCoBot {
     public static File dataFolder;
     public static File configFolder;
     public static File cacheFolder;
-    public static File pluginFile;
+    public static File jarFile;
     public long botId;
     public long botOwnerId;
     public long testGroupId;
@@ -107,9 +106,9 @@ public class SpCoBot {
      * </ul>
      * <b>更新版本号(仅限核心的 Feature)时请不要忘记在 build.gradle 中同步修改版本号</b>
      */
-    public static final String MAIN_VERSION = "4.1.0";
-    public static final String VERSION = "v" + MAIN_VERSION + "-2";
-    public static final String UPDATED_TIME = "2025-01-12 18:26";
+    public static final String MAIN_VERSION = "5.0.0";
+    public static final String VERSION = "v" + MAIN_VERSION + "-1";
+    public static final String UPDATED_TIME = "2026-02-12 04:09";
 
     private SpCoBot() {
         GroupStatistics receiveMessageGroup = new GroupStatistics("收到消息");
@@ -132,8 +131,8 @@ public class SpCoBot {
         if (!configFolder.exists() && !configFolder.mkdirs()) {
             throw new IllegalArgumentException("Failed to create config folder: " + configFolder.getAbsolutePath());
         }
-        if (!pluginFile.exists() && !pluginFile.mkdirs()) {
-            throw new IllegalArgumentException("Failed to create plugin folder: " + pluginFile.getAbsolutePath());
+        if (!jarFile.exists() && !jarFile.mkdirs()) {
+            throw new IllegalArgumentException("Failed to create jar folder: " + jarFile.getAbsolutePath());
         }
         if (!cacheFolder.exists() && !cacheFolder.mkdirs()) {
             throw new IllegalArgumentException("Failed to create cache folder: " + cacheFolder.getAbsolutePath());

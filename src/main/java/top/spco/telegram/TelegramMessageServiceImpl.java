@@ -35,7 +35,7 @@ class TelegramMessageServiceImpl implements MessageService {
         GetChat getChat = GetChat.builder().chatId(id).build();
         String firstName = "";
         try {
-            ChatFullInfo chat = Telegram.getInstance().telegramClient.execute(getChat);
+            ChatFullInfo chat = TelegramAdapter.getInstance().telegramClient.execute(getChat);
             if (chat.getFirstName() != null && !chat.getFirstName().isEmpty()) {
                 firstName = chat.getFirstName();
             }
@@ -120,7 +120,7 @@ class TelegramMessageServiceImpl implements MessageService {
                 .messageId(((TelegramMessage) original.getOriginalMessage()).wrapped().getMessageId())
                 .build();
         try {
-            Telegram.getInstance().telegramClient.execute(deleteMessage);
+            TelegramAdapter.getInstance().telegramClient.execute(deleteMessage);
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
