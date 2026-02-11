@@ -21,7 +21,7 @@ class TelegramFriend extends Friend<User> {
     @Override
     @Deprecated
     public FriendGroup<?> getFriendGroup() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -32,6 +32,7 @@ class TelegramFriend extends Friend<User> {
     @Override
     @Deprecated
     public void delete() {
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -54,7 +55,7 @@ class TelegramFriend extends Friend<User> {
     @Override
     @Deprecated
     public void nudge() {
-
+        throw new UnsupportedOperationException();
     }
 
     /**

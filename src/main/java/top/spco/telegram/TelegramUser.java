@@ -15,12 +15,13 @@ class TelegramUser extends User<Chat> {
     @Deprecated
     @Override
     public String getRemark() {
-        return "";
+        throw new UnsupportedOperationException();
     }
 
+    @Deprecated
     @Override
     public void nudge() {
-
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -28,7 +29,6 @@ class TelegramUser extends User<Chat> {
         return TelegramAdapter.getUserNick(wrapped());
     }
 
-    @Deprecated
     @Override
     public boolean isBot() {
         return false;

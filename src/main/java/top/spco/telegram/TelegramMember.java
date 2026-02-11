@@ -25,13 +25,13 @@ class TelegramMember extends NormalMember<Pair<ChatMember, Chat>> {
     @Override
     @Deprecated
     public Group<?> getGroup() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Deprecated
     @Override
     public String getNameCard() {
-        return "";
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -52,7 +52,7 @@ class TelegramMember extends NormalMember<Pair<ChatMember, Chat>> {
     @Deprecated
     @Override
     public int muteTimeRemaining() {
-        return 0;
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -63,7 +63,7 @@ class TelegramMember extends NormalMember<Pair<ChatMember, Chat>> {
     @Override
     @Deprecated
     public boolean isMuted() {
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -95,7 +95,7 @@ class TelegramMember extends NormalMember<Pair<ChatMember, Chat>> {
     @Deprecated
     @Override
     public boolean isFriend() {
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -125,13 +125,13 @@ class TelegramMember extends NormalMember<Pair<ChatMember, Chat>> {
     @Deprecated
     @Override
     public String getRemark() {
-        return "";
+        throw new UnsupportedOperationException();
     }
 
     @Deprecated
     @Override
     public void nudge() {
-
+        throw new UnsupportedOperationException();
     }
 
     @Override

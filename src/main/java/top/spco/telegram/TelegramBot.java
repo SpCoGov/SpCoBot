@@ -38,37 +38,37 @@ class TelegramBot extends Bot<org.telegram.telegrambots.meta.api.objects.User> {
     @Override
     @Deprecated
     public FriendGroups<?> getFriendGroups() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     @Deprecated
     public InteractiveList<Friend<?>> getFriends() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     @Deprecated
     public InteractiveList<Group<?>> getGroups() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     @Deprecated
     public Friend<?> getFriend(long id) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Deprecated
     @Override
     public boolean hasFriend(long id) {
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     @Deprecated
     @Override
     public boolean hasGroup(long id) {
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     @Deprecated
