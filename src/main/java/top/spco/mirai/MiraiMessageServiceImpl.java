@@ -25,9 +25,12 @@ import org.jetbrains.annotations.NotNull;
 import top.spco.SpCoBot;
 import top.spco.api.Image;
 import top.spco.api.Interactive;
+import top.spco.api.exception.PlatformMismatchException;
 import top.spco.api.message.Message;
 import top.spco.api.message.MessageSource;
 import top.spco.api.message.service.MessageService;
+import top.spco.core.Platform;
+import top.spco.core.Wrapper;
 import top.spco.util.tuple.ImmutablePair;
 
 import java.io.File;
@@ -41,6 +44,16 @@ import java.util.regex.Pattern;
  * @since 0.1.0
  */
 class MiraiMessageServiceImpl implements MessageService {
+    private void requireQQ(Object target, String argumentName) {
+        if (!(target instanceof Wrapper<?> wrapper)) {
+            return;
+        }
+        Platform platform = wrapper.getPlatform();
+        if (platform != null && platform != Platform.QQ) {
+            throw new PlatformMismatchException(argumentName, Platform.QQ, platform);
+        }
+    }
+
     @Override
     public Message<?> at(long id) {
         return new MiraiMessage(new MessageChainBuilder().append(new At(id)).build());
@@ -59,6 +72,7 @@ class MiraiMessageServiceImpl implements MessageService {
 
     @Override
     public long getFirstMentioned(Message<?> message, String phrase) {
+        requireQQ(message, "message");
         Pattern pattern = Pattern.compile("\\[mirai:at:\\d+]");
         Matcher matcher = pattern.matcher(message.toMessageContext());
         Matcher atMatcher = Pattern.compile("^@(\\d+)$").matcher(phrase);
@@ -82,6 +96,7 @@ class MiraiMessageServiceImpl implements MessageService {
 
     @Override
     public ImmutablePair<@NotNull MessageSource<?>, @NotNull Message<?>> getQuote(Message<?> message) {
+        requireQQ(message, "message");
         try {
             MiraiMessage miraiMessage = ((MiraiMessage) message);
             for (var singleMessage : miraiMessage.wrapped()) {
@@ -98,12 +113,12 @@ class MiraiMessageServiceImpl implements MessageService {
 
     @Override
     public void recall(MessageSource<?> original) {
+        requireQQ(original, "original");
         try {
             net.mamoe.mirai.message.data.MessageSource.recall(((net.mamoe.mirai.message.data.MessageSource) original.wrapped()));
         } catch (PermissionDeniedException e) {
             throw new top.spco.api.exception.PermissionDeniedException("权限不足");
         }
-
     }
 
     @Override
@@ -113,11 +128,13 @@ class MiraiMessageServiceImpl implements MessageService {
 
     @Override
     public Image<?> toImage(File image, Interactive<?> interactive) {
+        requireQQ(interactive, "interactive");
         return new MiraiImage(ExternalResource.uploadAsImage(image, (Contact) interactive.wrapped()));
     }
 
     @Override
     public Image<?> toImage(InputStream image, Interactive<?> interactive) {
+        requireQQ(interactive, "interactive");
         return new MiraiImage(ExternalResource.uploadAsImage(image, (Contact) interactive.wrapped()));
     }
 }

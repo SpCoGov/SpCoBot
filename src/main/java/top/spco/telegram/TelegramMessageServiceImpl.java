@@ -12,9 +12,12 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import top.spco.SpCoBot;
 import top.spco.api.Image;
 import top.spco.api.Interactive;
+import top.spco.api.exception.PlatformMismatchException;
 import top.spco.api.message.Message;
 import top.spco.api.message.MessageSource;
 import top.spco.api.message.service.MessageService;
+import top.spco.core.Platform;
+import top.spco.core.Wrapper;
 import top.spco.util.tuple.ImmutablePair;
 
 import java.io.File;
@@ -25,6 +28,16 @@ import java.util.List;
 import java.util.Optional;
 
 class TelegramMessageServiceImpl implements MessageService {
+    private void requireTelegram(Object target, String argumentName) {
+        if (!(target instanceof Wrapper<?> wrapper)) {
+            return;
+        }
+        Platform platform = wrapper.getPlatform();
+        if (platform != null && platform != Platform.TELEGRAM) {
+            throw new PlatformMismatchException(argumentName, Platform.TELEGRAM, platform);
+        }
+    }
+
     @Override
     public Message<?> at(long id) {
         return at(id, null);
@@ -72,6 +85,7 @@ class TelegramMessageServiceImpl implements MessageService {
 
     @Override
     public long getFirstMentioned(Message<?> message, String phrase) {
+        requireTelegram(message, "message");
         List<MessageEntity> entities = ((TelegramMessage) message).wrapped().getEntities();
         if (entities != null && !entities.isEmpty()) {
             Optional<Long> mentionedId = entities.stream()
@@ -106,6 +120,7 @@ class TelegramMessageServiceImpl implements MessageService {
      */
     @Override
     public @Nullable ImmutablePair<@NotNull MessageSource<?>, @NotNull Message<?>> getQuote(Message<?> message) {
+        requireTelegram(message, "message");
         org.telegram.telegrambots.meta.api.objects.message.Message message1 = ((TelegramMessage) message).wrapped();
         if (!message1.isReply()) {
             return null;
@@ -115,6 +130,7 @@ class TelegramMessageServiceImpl implements MessageService {
 
     @Override
     public void recall(MessageSource<?> original) {
+        requireTelegram(original, "original");
         DeleteMessage deleteMessage = DeleteMessage.builder()
                 .chatId(original.getFromId())
                 .messageId(((TelegramMessage) original.getOriginalMessage()).wrapped().getMessageId())
@@ -146,6 +162,7 @@ class TelegramMessageServiceImpl implements MessageService {
      */
     @Override
     public Image<?> toImage(File image, Interactive<?> interactive) {
+        requireTelegram(interactive, "interactive");
         return new TelegramImageMessage(image);
     }
 
@@ -157,6 +174,7 @@ class TelegramMessageServiceImpl implements MessageService {
      */
     @Override
     public Image<?> toImage(InputStream image, Interactive<?> interactive) {
+        requireTelegram(interactive, "interactive");
         return new TelegramImageMessage(new InputFile(image, "image"));
     }
 }

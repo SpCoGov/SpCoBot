@@ -76,4 +76,22 @@ public abstract class Wrapper<T> {
     public T wrapped() {
         return object;
     }
+
+    /**
+     * 返回当前封装对象所属的平台。
+     * <p>
+     * 该方法用于运行时的平台一致性校验；无法识别的平台返回 {@code null}。
+     *
+     * @return 当前对象所属平台，无法识别时返回 {@code null}
+     */
+    public Platform getPlatform() {
+        String className = getClass().getName();
+        if (className.startsWith("top.spco.telegram.")) {
+            return Platform.TELEGRAM;
+        }
+        if (className.startsWith("top.spco.mirai.") || className.startsWith("top.spco.qq.")) {
+            return Platform.QQ;
+        }
+        return null;
+    }
 }
