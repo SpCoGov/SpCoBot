@@ -15,6 +15,8 @@
  */
 package top.spco.api;
 
+import java.util.Set;
+
 /**
  * 代表一个群
  *
@@ -39,7 +41,7 @@ public abstract class Group<T> extends Interactive<T> {
      *
      * @return 群主对象
      */
-    public abstract NormalMember<?> getOwner();
+    public abstract User<?> getOwner();
 
     /**
      * 让机器人退出这个群。
@@ -55,7 +57,7 @@ public abstract class Group<T> extends Interactive<T> {
      *
      * @return 成员对象
      */
-    public abstract NormalMember<?> botAsMember();
+    public abstract User<?> botAsMember();
 
     /**
      * 查询群成员对象。
@@ -63,12 +65,12 @@ public abstract class Group<T> extends Interactive<T> {
      * @param id 成员Id
      * @return 查询结果. 不存在时返回 {@code null}
      */
-    public abstract NormalMember<?> getMember(long id);
+    public abstract User<?> getMember(String id);
 
     /**
      * 获取该群的所有群成员。
      *
      * @return 查询结果
      */
-    public abstract InteractiveList<NormalMember<?>> getMembers();
+    public abstract Set<User<?>> getMembers();
 }

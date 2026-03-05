@@ -16,7 +16,7 @@
 package top.spco.trade;
 
 public class WechatPayTrade extends Trade {
-    public WechatPayTrade(String no, long callerUser, String qrCode, int amount) {
+    public WechatPayTrade(String no, String callerUser, String qrCode, int amount) {
         super(no, callerUser, qrCode, amount, PaymentMethod.WECHAT_PAY);
     }
 }

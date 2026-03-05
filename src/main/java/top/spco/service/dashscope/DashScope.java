@@ -43,7 +43,7 @@ import java.util.concurrent.TimeUnit;
  * @since 0.2.1
  */
 public class DashScope {
-    private final long userId;
+    private final String userId;
     private int timer;
     private Generation generation;
     private MessageManager msgManager;

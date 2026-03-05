@@ -105,10 +105,24 @@ public class SerializationUtil {
     }
 
     /**
+     * 序列化 {@code Set<String>}（默认分隔符）。
+     */
+    public static String serializeStringSet(Set<String> set) {
+        return serializeWithDelimiter(set, DEFAULT_DELIMITER);
+    }
+
+    /**
      * 反序列化为 {@code Set<Long>}（默认分隔符）。
      */
     public static Set<Long> deserializeLongSet(String serialized) {
         return deserializeWithDelimiter(serialized, DEFAULT_DELIMITER, Long::valueOf);
+    }
+
+    /**
+     * 反序列化为 {@code Set<String>}（默认分隔符）。
+     */
+    public static Set<String> deserializeStringSet(String serialized) {
+        return deserializeWithDelimiter(serialized, DEFAULT_DELIMITER, String::valueOf);
     }
 
     @FunctionalInterface

@@ -9,13 +9,13 @@ import org.telegram.telegrambots.meta.api.objects.chat.Chat;
 import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMember;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import top.spco.api.Group;
-import top.spco.api.InteractiveList;
 import top.spco.api.MemberPermission;
-import top.spco.api.NormalMember;
 import top.spco.api.message.Message;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 class TelegramGroup extends Group<Chat> {
     protected TelegramGroup(Chat group) {
@@ -38,7 +38,7 @@ class TelegramGroup extends Group<Chat> {
      * @return 群主对象
      */
     @Override
-    public NormalMember<?> getOwner() {
+    public TelegramUser getOwner() {
         GetChatAdministrators getChatAdministrators = GetChatAdministrators.builder()
                 .chatId(getId())
                 .build();
@@ -46,7 +46,7 @@ class TelegramGroup extends Group<Chat> {
             ArrayList<ChatMember> chatMembers = TelegramAdapter.getInstance().telegramClient.execute(getChatAdministrators);
             for (ChatMember chatMember : chatMembers) {
                 if (chatMember.getStatus().equals("creator")) {
-                    return new TelegramMember(chatMember, wrapped());
+                    return new TelegramUser(chatMember.getUser());
                 }
             }
             return null;
@@ -74,7 +74,8 @@ class TelegramGroup extends Group<Chat> {
 
     @Override
     public MemberPermission botPermission() {
-        return botAsMember().getPermission();
+        // TODO: 修复这个
+        return MemberPermission.OWNER;
     }
 
     /**
@@ -83,12 +84,12 @@ class TelegramGroup extends Group<Chat> {
      * @return 成员对象
      */
     @Override
-    public NormalMember<?> botAsMember() {
+    public top.spco.api.User<?> botAsMember() {
         GetMe getMe = GetMe.builder()
                 .build();
         try {
             User user = TelegramAdapter.getInstance().telegramClient.execute(getMe);
-            return getMember(user.getId());
+            return getMember(user.getId() + "");
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
@@ -101,14 +102,14 @@ class TelegramGroup extends Group<Chat> {
      * @return 查询结果. 不存在时返回 {@code null}
      */
     @Override
-    public NormalMember<?> getMember(long id) {
+    public top.spco.api.User<?> getMember(String id) {
         GetChatMember getChatMember = GetChatMember.builder()
                 .chatId(getId())
-                .userId(id)
+                .userId(Long.parseLong(id))
                 .build();
         try {
             ChatMember chatMember = TelegramAdapter.getInstance().telegramClient.execute(getChatMember);
-            return new TelegramMember(chatMember, wrapped());
+            return new TelegramUser(chatMember.getUser());
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
@@ -116,15 +117,15 @@ class TelegramGroup extends Group<Chat> {
 
     @Deprecated
     @Override
-    public InteractiveList<NormalMember<?>> getMembers() {
-        InteractiveList<NormalMember<?>> administrators = new InteractiveList<>();
+    public Set<top.spco.api.User<?>> getMembers() {
+        Set<top.spco.api.User<?>> administrators = new HashSet<>();
         GetChatAdministrators getChatAdministrators = GetChatAdministrators.builder()
                 .chatId(getId())
                 .build();
         try {
             ArrayList<ChatMember> chatMembers = TelegramAdapter.getInstance().telegramClient.execute(getChatAdministrators);
             for (ChatMember chatMember : chatMembers) {
-                administrators.add(new TelegramMember(chatMember, wrapped()));
+                administrators.add(new TelegramUser(chatMember.getUser()));
             }
             return administrators;
         } catch (TelegramApiException e) {
@@ -156,7 +157,7 @@ class TelegramGroup extends Group<Chat> {
     }
 
     @Override
-    public long getId() {
-        return wrapped().getId();
+    public String getId() {
+        return wrapped().getId() + "";
     }
 }

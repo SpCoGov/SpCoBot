@@ -62,7 +62,7 @@ public class GetOtherCommand extends AbstractCommand {
     @Override
     public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user1, Message<?> message, int time, CommandMeta meta, String usageName) {
         try {
-            long targetId = (Long) meta.getParams().get("目标用户");
+            String targetId = (String) meta.getParams().get("目标用户");
             BotUser user = BotUsers.getOrCreate(targetId);
             from.quoteReply(message, user.toString());
         } catch (UserFetchException e) {

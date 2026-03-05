@@ -42,12 +42,11 @@ public class BanMeCommand extends GroupAbstractCommand {
 
     @Override
     public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, CommandMeta meta, String usageName) {
-        if (sender instanceof NormalMember<?> member) {
-            if (PermissionsValidator.verifyBotPermissions(from, message, member)) {
-                int d = new SecureRandom().nextInt(1, 61);
-                member.mute(d);
-                from.quoteReply(message, "恭喜，您已被禁言" + d + "秒");
-            }
-        }
+// TODO: 修复这个
+        //        if (PermissionsValidator.verifyBotPermissions(from, message, member)) {
+//            int d = new SecureRandom().nextInt(1, 61);
+//            member.mute(d);
+//            from.quoteReply(message, "恭喜，您已被禁言" + d + "秒");
+//        }
     }
 }

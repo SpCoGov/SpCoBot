@@ -17,7 +17,6 @@ package top.spco.service.command.commands;
 
 import top.spco.api.Bot;
 import top.spco.api.Interactive;
-import top.spco.api.NormalMember;
 import top.spco.api.User;
 import top.spco.api.message.Message;
 import top.spco.service.command.CommandMarker;
@@ -56,9 +55,10 @@ public class KickCommand extends GroupAbstractCommand {
     @Override
     public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, CommandMeta meta, String usageName) {
         long id = (Long) meta.getParams().get("目标用户");
-        NormalMember<?> target = PermissionsValidator.verifyMemberPermissions(from, user, message, id);
+        User<?> target = PermissionsValidator.verifyMemberPermissions(from, user, message, id);
         if (target != null) {
-            target.kick("您被管理员移出了本群", false);
+            // TODO: 修复这个
+//            target.kick("您被管理员移出了本群", false);
             from.quoteReply(message, "已将 " + target.getNick() + "(" + target.getId() + ")" + " 移出本群");
         }
     }

@@ -1,5 +1,6 @@
 package top.spco.qq;
 
+import top.spco.SpCoBot;
 import top.spco.core.Platform;
 import top.spco.core.PlatformAdapter;
 
@@ -8,6 +9,7 @@ public class QQAdapter extends PlatformAdapter {
 
     private QQAdapter() {
         super(Platform.QQ);
+        QQNTWebSocketClient.runQQNTWebSocketClient();
     }
 
     public static QQAdapter getInstance() {
@@ -16,6 +18,4 @@ public class QQAdapter extends PlatformAdapter {
         }
         return instance;
     }
-
-
 }

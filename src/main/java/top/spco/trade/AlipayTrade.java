@@ -16,7 +16,7 @@
 package top.spco.trade;
 
 public class AlipayTrade extends Trade {
-    public AlipayTrade(String id, long callerUser, String qrCode, int amount) {
+    public AlipayTrade(String id, String callerUser, String qrCode, int amount) {
         super(id, callerUser, qrCode, amount, PaymentMethod.ALIPAY);
     }
 }

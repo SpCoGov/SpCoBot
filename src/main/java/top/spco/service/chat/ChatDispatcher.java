@@ -32,12 +32,12 @@ import java.util.Map;
  * @version 4.0.0
  * @since 0.1.1
  */
-public class ChatDispatcher extends Manager<Long, Chat> {
+public class ChatDispatcher extends Manager<String, Chat> {
     private static ChatDispatcher instance;
     private static boolean registered = false;
-    private final Map<Long, Chat> friendChats = new HashMap<>();
-    private final Map<Long, Chat> groupChats = new HashMap<>();
-    private final Map<Long, Chat> groupTempChats = new HashMap<>();
+    private final Map<String, Chat> friendChats = new HashMap<>();
+    private final Map<String, Chat> groupChats = new HashMap<>();
+    private final Map<String, Chat> groupTempChats = new HashMap<>();
 
     private ChatDispatcher() {
         if (!registered) {
@@ -86,7 +86,7 @@ public class ChatDispatcher extends Manager<Long, Chat> {
      */
     @Deprecated
     @Override
-    public Map<Long, Chat> getAllRegistered() {
+    public Map<String, Chat> getAllRegistered() {
         return null;
     }
 
@@ -95,7 +95,7 @@ public class ChatDispatcher extends Manager<Long, Chat> {
      */
     @Deprecated
     @Override
-    public Chat get(Long id) {
+    public Chat get(String id) {
         return groupChats.get(id);
     }
 
@@ -115,7 +115,7 @@ public class ChatDispatcher extends Manager<Long, Chat> {
     }
 
     @Override
-    public void register(Long value, Chat chat) throws RegistrationException {
+    public void register(String value, Chat chat) throws RegistrationException {
         register(chat);
     }
 
@@ -126,7 +126,7 @@ public class ChatDispatcher extends Manager<Long, Chat> {
      */
     public void register(Chat chat) {
         ChatType chatType = chat.getType();
-        long id = chat.getTarget().getId();
+        String id = chat.getTarget().getId();
         switch (chatType) {
             case GROUP -> this.groupChats.put(id, chat);
             case FRIEND -> this.friendChats.put(id, chat);

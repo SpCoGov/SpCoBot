@@ -45,22 +45,23 @@ public class AdminCommand extends GroupAbstractCommand {
 
     @Override
     public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, CommandMeta meta, String usageName) throws CommandSyntaxException {
-        Group<?> group = (Group<?>) from;
-        InteractiveList<NormalMember<?>> members = group.getMembers();
-        InteractiveList<NormalMember<?>> admins = new InteractiveList<>();
-        for (var member : members) {
-            if (member.getPermission().isOperator() && member.getId() != SpCoBot.getInstance().botId) {
-                admins.add(member);
-            }
-        }
-        Message<?> adminCallMessage = SpCoBot.getInstance().getMessageService().at(sender.getId()).append("呼叫群管理员" + "\n");
-        for (var admin : admins) {
-            if (admin.isBot()) {
-                continue;
-            }
-            adminCallMessage.append("\n").append(SpCoBot.getInstance().getMessageService().at(admin.getId()));
-        }
-
-        from.quoteReply(message, adminCallMessage);
+        // TODO: 修复这个
+//        Group<?> group = (Group<?>) from;
+//        InteractiveList<NormalMember<?>> members = group.getMembers();
+//        InteractiveList<NormalMember<?>> admins = new InteractiveList<>();
+//        for (var member : members) {
+//            if (member.getPermission().isOperator() && member.getId() != SpCoBot.getInstance().botId) {
+//                admins.add(member);
+//            }
+//        }
+//        Message<?> adminCallMessage = SpCoBot.getInstance().getMessageService().at(sender.getId()).append("呼叫群管理员" + "\n");
+//        for (var admin : admins) {
+//            if (admin.isBot()) {
+//                continue;
+//            }
+//            adminCallMessage.append("\n").append(SpCoBot.getInstance().getMessageService().at(admin.getId()));
+//        }
+//
+//        from.quoteReply(message, adminCallMessage);
     }
 }

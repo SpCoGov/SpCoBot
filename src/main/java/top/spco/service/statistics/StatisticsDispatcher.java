@@ -16,7 +16,6 @@
 package top.spco.service.statistics;
 
 import top.spco.api.Group;
-import top.spco.api.NormalMember;
 import top.spco.core.Manager;
 import top.spco.events.MessageEvents;
 import top.spco.service.RegistrationException;
@@ -31,10 +30,10 @@ import java.util.Map;
  * @version 4.0.0
  * @since 0.1.1
  */
-public class StatisticsDispatcher extends Manager<Long, Statistics> {
+public class StatisticsDispatcher extends Manager<String, Statistics> {
     private static StatisticsDispatcher instance;
     private static boolean registered = false;
-    private final Map<Long, Statistics> statistics = new HashMap<>();
+    private final Map<String, Statistics> statistics = new HashMap<>();
 
     private StatisticsDispatcher() {
         if (registered) {
@@ -44,13 +43,13 @@ public class StatisticsDispatcher extends Manager<Long, Statistics> {
         MessageEvents.GROUP_MESSAGE.register((bot, source, sender, message, time) -> {
             Statistics s = getInstance().get(source.getId());
             if (s != null) {
-                s.receive(source, (NormalMember<?>) sender, message);
+                s.receive(source, sender, message);
             }
         });
     }
 
     @Override
-    public Statistics get(Long groupId) {
+    public Statistics get(String groupId) {
         if (statistics.containsKey(groupId)) {
             if (statistics.get(groupId) != null) {
                 return statistics.get(groupId);
@@ -67,7 +66,7 @@ public class StatisticsDispatcher extends Manager<Long, Statistics> {
     }
 
     @Override
-    public void register(Long groupId, Statistics statistics) throws RegistrationException {
+    public void register(String groupId, Statistics statistics) throws RegistrationException {
         if (this.statistics.containsKey(groupId)) {
             if (this.statistics.get(groupId) == null) {
                 throw new RegistrationException("Group " + groupId + " already has a Statistics instance");

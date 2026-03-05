@@ -30,17 +30,17 @@ import java.util.regex.Pattern;
  * @version 4.1.0
  * @since 3.0.0
  */
-public class UserIdParameter extends Parameter<Long> {
-    public UserIdParameter(String name, boolean isOptional, Long defaultValue) {
+public class UserIdParameter extends Parameter<String> {
+    public UserIdParameter(String name, boolean isOptional, String defaultValue) {
         super(name, isOptional, defaultValue);
     }
 
     @Override
-    public Long parse(Parser parser) throws CommandSyntaxException {
+    public String parse(Parser parser) throws CommandSyntaxException {
         final int start = parser.getCursor();
         String value = parser.readUnquotedString();
-        long at = SpCoBot.getInstance().getMessageService().getFirstMentioned(parser.getMessage(), value);
-        if (at == -1) {
+        String at = SpCoBot.getInstance().getMessageService().getFirstMentioned(parser.getMessage(), value);
+        if (at == null) {
             parser.setCursor(start);
             throw BuiltInExceptions.createWithContext("需要用户ID或@一位用户", parser);
         } else {

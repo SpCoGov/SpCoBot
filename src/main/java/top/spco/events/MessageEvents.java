@@ -45,7 +45,7 @@ public class MessageEvents {
 
     @FunctionalInterface
     public interface GroupMessage {
-        void onGroupMessage(Bot<?> bot, Group<?> source, Member<?> sender, Message<?> message, int time);
+        void onGroupMessage(Bot<?> bot, Group<?> source, User<?> sender, Message<?> message, int time);
     }
 
     /**
@@ -64,78 +64,34 @@ public class MessageEvents {
     }
 
     /**
-     * Called when a member message is received.
+     * Called when a private message is received.
      */
-    public static final Event<MemberMessage> MEMBER_MESSAGE = EventFactory.createArrayBacked(MemberMessage.class, callbacks -> (bot, source, sender, message, time) -> {
-        for (MemberMessage event : callbacks) {
-            SpCoBot.getInstance().getRuntimeStatistic().group("收到消息").add("群成员消息");
-            event.onGroupTempMessage(bot, source, sender, message, time);
+    public static final Event<UserMessage> PRIVATE_MESSAGE = EventFactory.createArrayBacked(UserMessage.class, callbacks -> (bot, sender, message, time) -> {
+        for (UserMessage event : callbacks) {
+            SpCoBot.getInstance().getRuntimeStatistic().group("收到消息").add("群私聊消息");
+            event.onPrivateMessage(bot, sender, message, time);
         }
     });
 
     @FunctionalInterface
-    public interface MemberMessage {
-        void onGroupTempMessage(Bot<?> bot, Member<?> source, Member<?> sender, Message<?> message, int time);
+    public interface UserMessage {
+        void onPrivateMessage(Bot<?> bot, User<?> sender, Message<?> message, int time);
     }
 
     /**
-     * Called when a friend message is received.
+     * Called after actively sending a private message.
      */
-    public static final Event<FriendMessage> FRIEND_MESSAGE = EventFactory.createArrayBacked(FriendMessage.class, callbacks -> (bot, sender, message, time) -> {
-        for (FriendMessage event : callbacks) {
-            SpCoBot.getInstance().getRuntimeStatistic().group("收到消息").add("好友消息");
-            event.onFriendMessage(bot, sender, message, time);
+    public static final Event<PrivateMessagePostSend> PRIVATE_MESSAGE_POST_SEND = EventFactory.createArrayBacked(PrivateMessagePostSend.class, callbacks -> (bot, friend, message) -> {
+        for (PrivateMessagePostSend event : callbacks) {
+            SpCoBot.getInstance().getRuntimeStatistic().group("发出消息").add("私聊消息");
+            event.onPrivateMessagePostSend(bot, friend, message);
         }
     });
 
-    @FunctionalInterface
-    public interface FriendMessage {
-        void onFriendMessage(Bot<?> bot, Friend<?> sender, Message<?> message, int time);
-    }
-
-    /**
-     * Called after actively sending a group message.
-     */
-    public static final Event<GroupMessagePostSend> GROUP_MESSAGE_POST_SEND = EventFactory.createArrayBacked(GroupMessagePostSend.class, callbacks -> (bot, group, message) -> {
-        for (GroupMessagePostSend event : callbacks) {
-            SpCoBot.getInstance().getRuntimeStatistic().group("发出消息").add("群消息");
-            event.onGroupMessagePostSend(bot, group, message);
-        }
-    });
-
-    /**
-     * Called after actively sending a friend message.
-     */
-    public static final Event<FriendMessagePostSend> FRIEND_MESSAGE_POST_SEND = EventFactory.createArrayBacked(FriendMessagePostSend.class, callbacks -> (bot, friend, message) -> {
-        for (FriendMessagePostSend event : callbacks) {
-            SpCoBot.getInstance().getRuntimeStatistic().group("发出消息").add("好友消息");
-            event.onFriendMessagePostSend(bot, friend, message);
-        }
-    });
-
-    /**
-     * Called after actively sending a group temp message.
-     */
-    public static final Event<GroupTempMessagePostSend> GROUP_TEMP_MESSAGE_POST_SEND = EventFactory.createArrayBacked(GroupTempMessagePostSend.class, callbacks -> (bot, member, message) -> {
-        for (GroupTempMessagePostSend event : callbacks) {
-            SpCoBot.getInstance().getRuntimeStatistic().group("发出消息").add("群临时消息");
-            event.onGroupTempMessagePostSend(bot, member, message);
-        }
-    });
 
     @FunctionalInterface
-    public interface GroupTempMessagePostSend {
-        void onGroupTempMessagePostSend(Bot<?> bot, NormalMember<?> member, Message<?> message);
-    }
-
-    @FunctionalInterface
-    public interface GroupMessagePostSend {
-        void onGroupMessagePostSend(Bot<?> bot, Group<?> group, Message<?> message);
-    }
-
-    @FunctionalInterface
-    public interface FriendMessagePostSend {
-        void onFriendMessagePostSend(Bot<?> bot, Friend<?> friend, Message<?> message);
+    public interface PrivateMessagePostSend {
+        void onPrivateMessagePostSend(Bot<?> bot, User<?> friend, Message<?> message);
     }
 
     /**
@@ -149,20 +105,20 @@ public class MessageEvents {
 
     @FunctionalInterface
     public interface GroupMessageRecall {
-        void onGroupMessageRecall(Bot<?> bot, Group<?> source, NormalMember<?> sender, NormalMember<?> operator, MessageSource<?> recalledMessage);
+        void onGroupMessageRecall(Bot<?> bot, Group<?> source, User<?> sender, User<?> operator, MessageSource<?> recalledMessage);
     }
 
     /**
-     * Called when a friend message is recalled.
+     * Called when a private message is recalled.
      */
-    public static final Event<FriendMessageRecall> FRIEND_MESSAGE_RECALL = EventFactory.createArrayBacked(FriendMessageRecall.class, callbacks -> (bot, sender, operator, message) -> {
-        for (FriendMessageRecall event : callbacks) {
-            event.onFriendMessageRecall(bot, sender, operator, message);
+    public static final Event<PrivateMessageRecall> PRIVATE_MESSAGE_RECALL = EventFactory.createArrayBacked(PrivateMessageRecall.class, callbacks -> (bot, sender, operator, message) -> {
+        for (PrivateMessageRecall event : callbacks) {
+            event.onPrivateMessageRecall(bot, sender, operator, message);
         }
     });
 
     @FunctionalInterface
-    public interface FriendMessageRecall {
-        void onFriendMessageRecall(Bot<?> bot, Friend<?> sender, Friend<?> operator, MessageSource<?> recalledMessage);
+    public interface PrivateMessageRecall {
+        void onPrivateMessageRecall(Bot<?> bot, User<?> sender, User<?> operator, MessageSource<?> recalledMessage);
     }
 }

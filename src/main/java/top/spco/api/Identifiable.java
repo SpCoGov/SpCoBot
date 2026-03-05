@@ -29,5 +29,5 @@ public abstract class Identifiable<T> extends Wrapper<T> {
         super(object);
     }
 
-    public abstract long getId();
+    public abstract String getId();
 }

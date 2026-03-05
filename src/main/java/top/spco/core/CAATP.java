@@ -16,6 +16,7 @@
 package top.spco.core;
 
 import top.spco.SpCoBot;
+import top.spco.config.Configs;
 import top.spco.events.CAATPEvents;
 
 import java.io.IOException;
@@ -143,6 +144,9 @@ public class CAATP {
     }
 
     public synchronized static CAATP getInstance() {
+        if (!Configs.BOT.isEnableCAATP()) {
+            return null;
+        }
         if (instance == null) {
             instance = new CAATP();
         }

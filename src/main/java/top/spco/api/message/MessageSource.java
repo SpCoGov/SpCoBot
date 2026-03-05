@@ -32,7 +32,7 @@ protected MessageSource(T object) {
     /**
      * 发送人用户 ID
      */
-    public abstract long getSenderId();
+    public abstract String getSenderId();
 
     /**
      * 消息发送目标用户或群号码

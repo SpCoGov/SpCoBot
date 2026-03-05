@@ -23,7 +23,7 @@ import net.mamoe.mirai.message.data.QuoteReply;
 import net.mamoe.mirai.utils.ExternalResource;
 import org.jetbrains.annotations.NotNull;
 import top.spco.SpCoBot;
-import top.spco.api.Image;
+import top.spco.api.message.Image;
 import top.spco.api.Interactive;
 import top.spco.api.exception.PlatformMismatchException;
 import top.spco.api.message.Message;
@@ -71,25 +71,25 @@ class MiraiMessageServiceImpl implements MessageService {
     }
 
     @Override
-    public long getFirstMentioned(Message<?> message, String phrase) {
+    public String getFirstMentioned(Message<?> message, String phrase) {
         requireQQ(message, "message");
         Pattern pattern = Pattern.compile("\\[mirai:at:\\d+]");
         Matcher matcher = pattern.matcher(message.toMessageContext());
         Matcher atMatcher = Pattern.compile("^@(\\d+)$").matcher(phrase);
         if (matcher.find()) {
-            return Long.parseLong(matcher.group(1));
+            return Long.parseLong(matcher.group(1)) + "";
         } else if (atMatcher.find()) {
             try {
                 String id = atMatcher.group(1);
-                return Long.parseLong(id);
+                return Long.parseLong(id) + "";
             } catch (NumberFormatException e) {
-                return -1;
+                return null;
             }
         } else {
             try {
-                return Long.parseLong(phrase);
+                return Long.parseLong(phrase) + "";
             } catch (NumberFormatException e) {
-                return -1;
+                return null;
             }
         }
     }

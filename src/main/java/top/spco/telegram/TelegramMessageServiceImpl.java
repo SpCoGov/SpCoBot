@@ -10,7 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.chat.ChatFullInfo;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import top.spco.SpCoBot;
-import top.spco.api.Image;
+import top.spco.api.message.Image;
 import top.spco.api.Interactive;
 import top.spco.api.exception.PlatformMismatchException;
 import top.spco.api.message.Message;
@@ -84,7 +84,7 @@ class TelegramMessageServiceImpl implements MessageService {
     }
 
     @Override
-    public long getFirstMentioned(Message<?> message, String phrase) {
+    public String getFirstMentioned(Message<?> message, String phrase) {
         requireTelegram(message, "message");
         List<MessageEntity> entities = ((TelegramMessage) message).wrapped().getEntities();
         if (entities != null && !entities.isEmpty()) {
@@ -102,13 +102,13 @@ class TelegramMessageServiceImpl implements MessageService {
                     });
 
             if (mentionedId.isPresent()) {
-                return mentionedId.get();
+                return mentionedId.get() + "";
             }
         }
         try {
-            return Long.parseLong(phrase);
+            return Long.parseLong(phrase)+ "";
         } catch (NumberFormatException e) {
-            return -1;
+            return null;
         }
     }
 

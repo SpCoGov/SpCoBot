@@ -17,14 +17,11 @@ package top.spco.service.statistics;
 
 import top.spco.SpCoBot;
 import top.spco.api.Group;
-import top.spco.api.NormalMember;
+import top.spco.api.User;
 import top.spco.api.message.Message;
 import top.spco.util.function.PentaConsumer;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 报名统计。
@@ -35,15 +32,15 @@ import java.util.Map;
  */
 public class Statistics {
     private Map<Integer, String> mapping = new HashMap<>();
-    private Map<Integer, Map<Long, Message<?>>> statistics = new HashMap<>();
+    private Map<Integer, Map<String , Message<?>>> statistics = new HashMap<>();
     /**
      * 已报名的用户。
      */
-    private List<Long> users = new ArrayList<>();
+    private List<String> users = new ArrayList<>();
     private Group<?> group;
-    private PentaConsumer<Boolean, NormalMember<?>, Message<?>, Integer, Group<?>> received;
+    private PentaConsumer<Boolean, User<?>, Message<?>, Integer, Group<?>> received;
 
-    public Statistics(Group<?> group, PentaConsumer<Boolean, NormalMember<?>, Message<?>, Integer, Group<?>> received) {
+    public Statistics(Group<?> group, PentaConsumer<Boolean, User<?>, Message<?>, Integer, Group<?>> received) {
         this.group = group;
         this.received = received;
     }
@@ -60,8 +57,8 @@ public class Statistics {
         return i;
     }
 
-    public void receive(Group<?> source, NormalMember<?> sender, Message<?> message) {
-        if (group.getId() != source.getId()) {
+    public void receive(Group<?> source, User<?> sender, Message<?> message) {
+        if (!Objects.equals(group.getId(), source.getId())) {
             return;
         }
         try {
@@ -74,15 +71,15 @@ public class Statistics {
         }
     }
 
-    private boolean record(NormalMember<?> sender, int itemId, Message<?> message) {
-        Map<Long, Message<?>> map;
+    private boolean record(User<?> sender, int itemId, Message<?> message) {
+        Map<String, Message<?>> map;
         if (users.contains(sender.getId())) {
             return false;
         }
         if (statistics.containsKey(itemId)) {
             map = statistics.get(itemId);
             for (var record : map.entrySet()) {
-                if (record.getKey() == sender.getId()) {
+                if (record.getKey().equals(sender.getId())) {
                     return false;
                 }
             }
@@ -104,7 +101,7 @@ public class Statistics {
         return null;
     }
 
-    public Map<Long, Message<?>> getRecords(int itemId) {
+    public Map<String, Message<?>> getRecords(int itemId) {
         if (statistics.containsKey(itemId)) {
             return statistics.get(itemId);
         }

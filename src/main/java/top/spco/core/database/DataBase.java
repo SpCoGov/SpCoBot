@@ -80,7 +80,7 @@ public class DataBase {
 
     private void checkTables() throws SQLException {
         new TableChecker(this, "user")
-                .addColumn(new ColumnBuilder("id", FieldType.INTEGER).notNull().primaryKey())
+                .addColumn(new ColumnBuilder("id", FieldType.TEXT).notNull().primaryKey())
                 .addColumn(new ColumnBuilder("smf_coin", FieldType.INTEGER).defaultValue("0"))
                 .addColumn(new ColumnBuilder("permission", FieldType.INTEGER).defaultValue("1"))
                 .addColumn(new ColumnBuilder("sign", FieldType.TEXT).defaultValue("从未签到过"))
@@ -88,7 +88,7 @@ public class DataBase {
                 .addColumn(new ColumnBuilder("star_coin", FieldType.INTEGER).defaultValue("0"))
                 .check();
         new TableChecker(this, "valorant_user")
-                .addColumn(new ColumnBuilder("id", FieldType.INTEGER).notNull().primaryKey())
+                .addColumn(new ColumnBuilder("id", FieldType.TEXT).notNull().primaryKey())
                 .addColumn(new ColumnBuilder("username", FieldType.TEXT).defaultValue("null"))
                 .addColumn(new ColumnBuilder("password", FieldType.TEXT).defaultValue("null"))
                 .addColumn(new ColumnBuilder("access_token", FieldType.TEXT).defaultValue("null"))
@@ -101,12 +101,12 @@ public class DataBase {
                 .addColumn(new ColumnBuilder("region", FieldType.TEXT).defaultValue("null"))
                 .check();
         new TableChecker(this, "mcs")
-                .addColumn(new ColumnBuilder("group_id", FieldType.INTEGER).notNull().primaryKey())
+                .addColumn(new ColumnBuilder("group_id", FieldType.TEXT).notNull().primaryKey())
                 .addColumn(new ColumnBuilder("host", FieldType.TEXT).defaultValue("null"))
                 .addColumn(new ColumnBuilder("port", FieldType.INTEGER).defaultValue("58964"))
                 .check();
         new TableChecker(this, "trade")
-                .addColumn(new ColumnBuilder("id", FieldType.INTEGER).notNull().primaryKey())
+                .addColumn(new ColumnBuilder("id", FieldType.TEXT).notNull().primaryKey())
                 .addColumn(new ColumnBuilder("user", FieldType.INTEGER).notNull())
                 .addColumn(new ColumnBuilder("date", FieldType.TEXT).notNull())
                 .addColumn(new ColumnBuilder("time", FieldType.TEXT).notNull())
@@ -114,7 +114,7 @@ public class DataBase {
                 .addColumn(new ColumnBuilder("state", FieldType.TEXT).defaultValue("unpaid"))
                 .check();
         new TableChecker(this, "expenses")
-                .addColumn(new ColumnBuilder("user", FieldType.INTEGER).notNull())
+                .addColumn(new ColumnBuilder("user", FieldType.TEXT).notNull())
                 .addColumn(new ColumnBuilder("date", FieldType.TEXT).notNull())
                 .addColumn(new ColumnBuilder("time", FieldType.TEXT).notNull())
                 .addColumn(new ColumnBuilder("amount", FieldType.INTEGER).notNull())
@@ -315,6 +315,34 @@ public class DataBase {
         // 处理结果
         while (resultSet.next()) {
             Long fieldValue = resultSet.getLong(fieldName);
+            fieldValues.add(fieldValue);
+        }
+        resultSet.close();
+        statement.close();
+
+        return fieldValues;
+    }
+
+    /**
+     * 获取指定字段的所有记录。
+     *
+     * @param fieldName 要获取的字段名称
+     * @param tableName 数据表名称
+     * @return 包含字段值的列表
+     */
+    public List<String> getStringFieldValues(String fieldName, String tableName) throws SQLException {
+        if (conn == null || conn.isClosed()) {
+            openConn();
+        }
+        List<String> fieldValues = new ArrayList<>();
+        // 创建查询语句
+        String sql = "SELECT " + fieldName + " FROM " + tableName;
+        // 执行查询
+        Statement statement = this.conn.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+        // 处理结果
+        while (resultSet.next()) {
+            String fieldValue = resultSet.getString(fieldName);
             fieldValues.add(fieldValue);
         }
         resultSet.close();

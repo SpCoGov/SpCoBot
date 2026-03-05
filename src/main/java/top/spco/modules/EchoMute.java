@@ -42,26 +42,27 @@ public class EchoMute extends AbstractModule {
 
     @Override
     public void init() {
-        MessageEvents.GROUP_MESSAGE.register((bot, source, sender, message, time) -> {
-            if (!isActive()) {
-                return;
-            }
-            try {
-                if (!isAvailable(source)) {
-                    return;
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-            if (source.botPermission().isOperator() && !sender.getPermission().isOperator()) {
-                if (isRepeating(source.getId(), message.toMessageContext())) {
-                    int i = new Random().nextInt(60, 100);
-                    sender.mute(i);
-                    source.quoteReply(message, String.format("学我说话很好玩\uD83D\uDC34? 劳资反手就是禁言 %d 秒.", i));
-                }
-            }
-        });
-        MessageEvents.GROUP_MESSAGE_POST_SEND.register((bot, group, message) -> record(group.getId(), message.toMessageContext()));
+        // TODO: 修复这个
+//        MessageEvents.GROUP_MESSAGE.register((bot, source, sender, message, time) -> {
+//            if (!isActive()) {
+//                return;
+//            }
+//            try {
+//                if (!isAvailable(source)) {
+//                    return;
+//                }
+//            } catch (SQLException e) {
+//                throw new RuntimeException(e);
+//            }
+//            if (source.botPermission().isOperator() && !sender.getPermission().isOperator()) {
+//                if (isRepeating(source.getId(), message.toMessageContext())) {
+//                    int i = new Random().nextInt(60, 100);
+//                    sender.mute(i);
+//                    source.quoteReply(message, String.format("学我说话很好玩\uD83D\uDC34? 劳资反手就是禁言 %d 秒.", i));
+//                }
+//            }
+//        });
+//        MessageEvents.GROUP_MESSAGE_POST_SEND.register((bot, group, message) -> record(group.getId(), message.toMessageContext()));
     }
 
     public void record(long id, String content) {

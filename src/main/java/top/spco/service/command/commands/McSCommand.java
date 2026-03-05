@@ -66,14 +66,14 @@ public class McSCommand extends GroupAbstractCommand {
             if (mcS != null) {
                 JsonObject data = new JsonObject();
                 data.addProperty("type", "GROUP_MESSAGE");
-                data.addProperty("sender_name", sender.getNameCard());
+                data.addProperty("sender_name", sender.getNick());
                 data.addProperty("message", message.toMessageContext());
                 mcS.send(new Payload(5, data, "DISPATCH"));
             }
         });
         BotEvents.ONLINE_TICK.register(bot -> {
             try {
-                for (Long groupId : SpCoBot.getInstance().getDataBase().getLongFieldValues("group_id", "mcs")) {
+                for (String groupId : SpCoBot.getInstance().getDataBase().getStringFieldValues("group_id", "mcs")) {
                     if (!manager.isConnected(groupId)) {
                         try {
                             manager.connect(bot.getGroup(groupId), null);
@@ -83,7 +83,8 @@ public class McSCommand extends GroupAbstractCommand {
                     }
                 }
             } catch (SQLException e) {
-                bot.getFriend(SpCoBot.getInstance().botOwnerId).handleException("获取McS列表绑定", e);
+                // TODO: 修复这个
+                //bot.getFriend(SpCoBot.getInstance().botOwnerId).handleException("获取McS列表绑定", e);
             }
         });
     }

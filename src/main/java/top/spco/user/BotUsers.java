@@ -20,6 +20,7 @@ import top.spco.SpCoBot;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Objects;
 
 /**
  * 该类提供与机器人用户相关的功能，包括检索或创建 BotUser 对象以及检查用户是否存在的方法。
@@ -39,11 +40,11 @@ public class BotUsers {
      * @return 用户对象
      * @throws UserFetchException 获取用户信息失败时抛出的异常
      */
-    public static BotUser getOrCreate(long id) throws UserFetchException {
+    public static BotUser getOrCreate(String id) throws UserFetchException {
         BotUser botUser = get(id);
         if (botUser == null) {
             UserPermission defaultPermission = UserPermission.NORMAL;
-            if (id == SpCoBot.getInstance().botId || id == SpCoBot.getInstance().botOwnerId) {
+            if (Objects.equals(id, SpCoBot.getInstance().botId) || Objects.equals(id, SpCoBot.getInstance().botOwnerId)) {
                 defaultPermission = UserPermission.OWNER;
             }
             try {
@@ -63,10 +64,10 @@ public class BotUsers {
      * @return 用户对象
      * @throws UserFetchException 获取用户信息失败时抛出的异常
      */
-    public static BotUser get(long id) throws UserFetchException {
+    public static BotUser get(String id) throws UserFetchException {
         String sql = "SELECT smf_coin, permission, sign, premium, star_coin FROM user WHERE id = ?";
         try (PreparedStatement preparedStatement = SpCoBot.getInstance().getDataBase().getConn().prepareStatement(sql)) {
-            preparedStatement.setLong(1, id);
+            preparedStatement.setString(1, id);
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 if (!rs.isBeforeFirst()) {
                     return null;

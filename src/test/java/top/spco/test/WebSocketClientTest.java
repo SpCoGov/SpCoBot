@@ -12,6 +12,7 @@ import java.net.http.WebSocket;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Executors;
@@ -44,7 +45,7 @@ public class WebSocketClientTest {
     static final class ReconnectableWebSocketClient implements WebSocket.Listener {
         private static final long INITIAL_BACKOFF_MS = 1000L;
         private static final long MAX_BACKOFF_MS = 30000L;
-        private static final String AUTHORIZATION_HEADER = "Bearer 4nKq~U-F3bFlzs8~";
+        private static final String AUTHORIZATION_HEADER = "Bearer ";
         private static final String HEARTBEAT_PAYLOAD = "heartbeat";
 
         private final URI uri;
@@ -228,6 +229,7 @@ public class WebSocketClientTest {
         messageList.add(messageObject);
         params.add("message", messageList);
         payload.add("params", params);
+        payload.addProperty("echo", UUID.randomUUID().toString());
         return payload.toString();
     }
 

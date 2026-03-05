@@ -18,12 +18,9 @@ package top.spco;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import top.spco.api.Bot;
-import top.spco.api.Friend;
-import top.spco.api.Group;
-import top.spco.api.NormalMember;
 import top.spco.api.message.service.MessageService;
-import top.spco.core.CAATP;
 import top.spco.config.Configs;
+import top.spco.core.CAATP;
 import top.spco.core.database.DataBase;
 import top.spco.core.module.ModuleManager;
 import top.spco.events.*;
@@ -46,7 +43,7 @@ import top.spco.user.BotUsers;
 import top.spco.util.ExceptionUtil;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.Objects;
 
 /**
  * <pre>
@@ -82,9 +79,9 @@ public class SpCoBot {
     public static File configFolder;
     public static File cacheFolder;
     public static File jarFile;
-    public long botId;
-    public long botOwnerId;
-    public long testGroupId;
+    public String botId;
+    public String botOwnerId;
+    public String testGroupId;
     private CommandDispatcher commandDispatcher;
     public final ChatDispatcher chatDispatcher = ChatDispatcher.getInstance();
     public final StatisticsDispatcher statisticsDispatcher = StatisticsDispatcher.getInstance();
@@ -143,7 +140,7 @@ public class SpCoBot {
         if (Configs.BOT.isEnableRechargeSystem()) {
             try {
                 rechargeSystem = RechargeSystem.getInstance();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 LOGGER.error("创建充值系统失败。", e);
             }
         }
@@ -167,30 +164,17 @@ public class SpCoBot {
             return;
         }
         registered = true;
-        MessageEvents.FRIEND_MESSAGE_RECALL.register((bot1, sender, operator, recalledMessage) -> LOGGER.info("{}({})撤回了一条自己的消息", operator.getRemark(), operator.getId()));
+        MessageEvents.PRIVATE_MESSAGE_RECALL.register((bot1, sender, operator, recalledMessage) -> LOGGER.info("{}({})撤回了一条自己的消息", operator.getNick(), operator.getId()));
         MessageEvents.GROUP_MESSAGE_RECALL.register((bot1, source, sender, operator, recalledMessage) -> LOGGER.info("{}({})在{}({})撤回了一条{}({})的消息", operator.getNick(), operator.getId(), source.getName(), source.getId(), sender.getNick(), sender.getId()));
         BotEvents.ONLINE_TICK.register(bot1 -> {
-            long id = bot1.getId();
+            String id = bot1.getId();
             LOGGER.info("机器人({})上线。", id);
-            if (id != botId) {
+            if (!Objects.equals(id, botId)) {
                 LOGGER.error("登录的账号与配置项不匹配。登录的账号: {}, 配置的账号: {}", id, botId);
                 System.exit(-2);
             }
         });
         BotEvents.OFFLINE_TICK.register(bot1 -> LOGGER.info("机器人({})下线。", bot1.getId()));
-        // 机器人被拍一拍时的提示
-        UserEvents.NUDGED_TICK.register((bot, from, target, interactive, action, suffix) -> {
-            if (interactive instanceof Friend<?>) {
-                LOGGER.info("好友{}({}){}{}({}){}", (from instanceof Bot<?> ? "机器人" : ((Friend<?>) from).getNick()), from.getId(), action, (target instanceof Bot<?> ? "机器人" : ((Friend<?>) target).getNick()), target.getId(), suffix);
-            } else if (interactive instanceof Group<?> group) {
-                LOGGER.info("{}({})在{}({}){}{}({}){}", (from instanceof Bot<?> ? "机器人" : ((NormalMember<?>) from).getNick()), from.getId(), group.getName(), group.getId(), action, (target instanceof Bot<?> ? "机器人" : ((NormalMember<?>) target).getNick()), target.getId(), suffix);
-            } else if (interactive instanceof NormalMember<?>) {
-                LOGGER.info("{}({}){}{}({}){}", (from instanceof Bot<?> ? "机器人" : ((NormalMember<?>) from).getNick()), from.getId(), action, (target instanceof Bot<?> ? "机器人" : ((NormalMember<?>) target).getNick()), target.getId(), suffix);
-            }
-            if (target.getId() == this.botId) {
-                interactive.sendMessage("机器人正常运行中。");
-            }
-        });
         // 自动接受好友请求
         FriendEvents.REQUESTED_AS_FRIEND.register((eventId, message, fromId, fromGroupId, fromGroup, behavior) -> {
             LOGGER.info("收到了{}的好友请求。", fromId);
@@ -204,21 +188,18 @@ public class SpCoBot {
         // 自动接收入群邀请
         GroupEvents.REQUEST_JOIN_GROUP.register((eventId, fromId, group, behavior) -> {
             LOGGER.info("{}申请加入群{}({})。", fromId, group.getName(), group.getId());
-            if (group.getId() != 490656871L) {
-                behavior.accept();
-            }
         });
-        // 处理好友消息
-        MessageEvents.FRIEND_MESSAGE.register((bot, sender, message, time) -> {
+        // 处理私聊消息
+        MessageEvents.PRIVATE_MESSAGE.register((bot, sender, message, time) -> {
             String context = message.toMessageContext();
-            LOGGER.info("收到了{}({})的好友消息: {}", sender.getNick(), sender.getId(), context);
+            LOGGER.info("收到了{}({})的私聊消息: {}", sender.getNick(), sender.getId(), context);
             if (this.chatDispatcher.isInChat(sender, ChatType.FRIEND)) {
                 this.chatDispatcher.onMessage(ChatType.FRIEND, bot, sender, sender, message, time);
                 return;
             }
             if (context.startsWith(CommandDispatcher.COMMAND_START_SYMBOL)) {
                 CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time);
-                CommandEvents.FRIEND_COMMAND.invoker().onFriendCommand(bot, sender, message, time);
+                CommandEvents.FRIEND_COMMAND.invoker().onPrivateCommand(bot, sender, message, time);
             }
         });
         // 处理群聊消息
@@ -256,19 +237,6 @@ public class SpCoBot {
                     source.quoteReply(message, "SpCoBot获取用户时失败: \n" + ExceptionUtil.getStackTraceAsString(e));
                 }
                 return;
-            }
-        });
-        // 处理群临时消息消息
-        MessageEvents.MEMBER_MESSAGE.register((bot, source, sender, message, time) -> {
-            String context = message.toMessageContext();
-            LOGGER.info("收到了{}({})的{}({})的群临时消息: {}", sender.getNick(), sender.getId(), sender.getGroup().getName(), sender.getGroup().getId(), context);
-            if (this.chatDispatcher.isInChat(source, ChatType.GROUP_TEMP)) {
-                this.chatDispatcher.onMessage(ChatType.GROUP_TEMP, bot, source, sender, message, time);
-                return;
-            }
-            if (context.startsWith(CommandDispatcher.COMMAND_START_SYMBOL)) {
-                CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time);
-                CommandEvents.GROUP_TEMP_COMMAND.invoker().onGroupTempCommand(bot, source, message, time);
             }
         });
     }

@@ -71,8 +71,7 @@ public class CommandDispatcher extends SimpleFeatureManager<Command> {
     private static CommandDispatcher instance;
     private static boolean registered = false;
     private boolean frozen = false;
-    private final Map<String, Command> friendCommands = new HashMap<>();
-    private final Map<String, Command> groupTempCommands = new HashMap<>();
+    private final Map<String, Command> privateCommands = new HashMap<>();
     private final Map<String, Command> groupCommands = new HashMap<>();
     private int commandCount;
 
@@ -130,23 +129,18 @@ public class CommandDispatcher extends SimpleFeatureManager<Command> {
     }
 
     private void init() {
-        CommandEvents.FRIEND_COMMAND.register((bot, friend, message, time) -> {
-            if (SpCoBot.getInstance().chatDispatcher.isInChat(friend, ChatType.FRIEND)) {
-                return;
-            }
-            callCommand(friendCommands, friend, friend, message, bot, time);
-        });
+        // TODO: 修复这个
+//        CommandEvents.PRIVATE_COMMAND.register((bot, friend, message, time) -> {
+//            if (SpCoBot.getInstance().chatDispatcher.isInChat(friend, ChatType.FRIEND)) {
+//                return;
+//            }
+//            callCommand(privateCommands, friend, friend, message, bot, time);
+//        });
         CommandEvents.GROUP_COMMAND.register((bot, from, sender, message, time) -> {
             if (SpCoBot.getInstance().chatDispatcher.isInChat(from, ChatType.GROUP)) {
                 return;
             }
             callCommand(groupCommands, from, sender, message, bot, time);
-        });
-        CommandEvents.GROUP_TEMP_COMMAND.register((bot, interactor, message, time) -> {
-            if (SpCoBot.getInstance().chatDispatcher.isInChat(interactor, ChatType.GROUP_TEMP)) {
-                return;
-            }
-            callCommand(groupTempCommands, interactor, interactor, message, bot, time);
         });
     }
 
@@ -291,15 +285,12 @@ public class CommandDispatcher extends SimpleFeatureManager<Command> {
                 case ALL -> {
                     if (groupCommands.containsKey(label)) {
                         throw new CommandRegistrationException("The command: " + label + " is registered in the group command.");
-                    } else if (groupTempCommands.containsKey(label)) {
+                    }  else if (privateCommands.containsKey(label)) {
                         throw new CommandRegistrationException("The command: " + label + " is registered in the private command.");
-                    } else if (friendCommands.containsKey(label)) {
-                        throw new CommandRegistrationException("The command: " + label + " is registered in the friend command.");
                     } else {
                         if (validateCommand(command)) {
                             groupCommands.put(label, command);
-                            friendCommands.put(label, command);
-                            groupTempCommands.put(label, command);
+                            privateCommands.put(label, command);
                         }
                     }
                 }
@@ -312,26 +303,12 @@ public class CommandDispatcher extends SimpleFeatureManager<Command> {
                         }
                     }
                 }
-                case ONLY_FRIEND -> {
-                    if (groupTempCommands.containsKey(label)) {
-                        throw new CommandRegistrationException("The command: " + label + " is registered in the private command.");
-                    } else if (friendCommands.containsKey(label)) {
-                        throw new CommandRegistrationException("The command: " + label + " is registered in the friend command.");
-                    } else {
-                        if (validateCommand(command)) {
-                            friendCommands.put(label, command);
-                        }
-                    }
-                }
                 case ONLY_PRIVATE -> {
-                    if (groupTempCommands.containsKey(label)) {
+                     if (privateCommands.containsKey(label)) {
                         throw new CommandRegistrationException("The command: " + label + " is registered in the private command.");
-                    } else if (friendCommands.containsKey(label)) {
-                        throw new CommandRegistrationException("The command: " + label + " is registered in the friend command.");
                     } else {
                         if (validateCommand(command)) {
-                            friendCommands.put(label, command);
-                            groupTempCommands.put(label, command);
+                            privateCommands.put(label, command);
                         }
                     }
                 }
@@ -447,8 +424,7 @@ public class CommandDispatcher extends SimpleFeatureManager<Command> {
         Map<String, Command> commands;
         switch (scope) {
             case ONLY_GROUP -> commands = groupCommands;
-            case ONLY_FRIEND -> commands = friendCommands;
-            case ONLY_PRIVATE -> commands = groupTempCommands;
+            case ONLY_PRIVATE -> commands = privateCommands;
             default -> {
                 return null;
             }

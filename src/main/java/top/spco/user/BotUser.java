@@ -17,7 +17,6 @@ package top.spco.user;
 
 import com.google.gson.JsonObject;
 import top.spco.SpCoBot;
-import top.spco.api.Friend;
 import top.spco.core.database.DataBase;
 import top.spco.util.TimeUtil;
 
@@ -41,7 +40,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * <p>可以创建具有指定属性或未指定属性的此类实例。
  * 用户可以检索和修改其属性，执行签到等操作，检查Premium会员资格，并将权限级别转换为 {@link UserPermission} 。
  *
- * <p>需要创建或获取用户，可以通过 {@link BotUsers} 类中的方法 {@link BotUsers#get(long)} 或 {@link BotUsers#getOrCreate(long)}
+ * <p>需要创建或获取用户，可以通过 {@link BotUsers} 类中的方法 {@link BotUsers#get(String)} 或 {@link BotUsers#getOrCreate(String)}
  *
  * @author SpCo
  * @version 4.1.0
@@ -49,14 +48,14 @@ import java.util.concurrent.ThreadLocalRandom;
  * @since 0.1.0
  */
 public class BotUser {
-    private final long id;
+    private final String id;
     private UserPermission permission;
     private int smfCoin;
     private int starCoin;
     private String sign;
     private int premium;
 
-    BotUser(long id, UserPermission permission, int smfCoin, int starCoin, String sign, int premium) {
+    BotUser(String id, UserPermission permission, int smfCoin, int starCoin, String sign, int premium) {
         this.id = id;
         this.permission = permission;
         this.smfCoin = smfCoin;
@@ -65,7 +64,7 @@ public class BotUser {
         this.premium = premium;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
@@ -141,10 +140,11 @@ public class BotUser {
             // 更新充值交易状态
             SpCoBot.getInstance().getDataBase().update("update trade set state=? where id=?", "paid", tradeNo);
             db.getConn().commit();
-            Friend<?> friend = SpCoBot.getInstance().getBot().getFriend(getId());
-            if (friend != null) {
-                friend.sendMessage("订单" + tradeNo + "支付成功，已到账" + amount + "星币，账户余额: " + this.starCoin);
-            }
+            // TODO: 修复这个
+//            Friend<?> friend = SpCoBot.getInstance().getBot().getFriend(getId());
+//            if (friend != null) {
+//                friend.sendMessage("订单" + tradeNo + "支付成功，已到账" + amount + "星币，账户余额: " + this.starCoin);
+//            }
         } catch (SQLException e) {
             try {
                 db.getConn().rollback();

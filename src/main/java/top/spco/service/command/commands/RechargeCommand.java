@@ -21,7 +21,6 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import top.spco.SpCoBot;
 import top.spco.api.Bot;
-import top.spco.api.Friend;
 import top.spco.api.Interactive;
 import top.spco.api.User;
 import top.spco.api.message.Message;
@@ -85,7 +84,8 @@ public class RechargeCommand extends AbstractCommand {
             from.quoteReply(message, "充值系统未启用。");
             return;
         }
-        ChatType ct = from instanceof Friend ? ChatType.FRIEND : ChatType.GROUP_TEMP;
+        // TODO: 修复这个
+        ChatType ct = from instanceof User<?> ? ChatType.FRIEND : ChatType.GROUP_TEMP;
         ChatBuilder chatBuilder = new ChatBuilder(ct, sender);
         AtomicReference<String> paymentMethodName = new AtomicReference<>();
         AtomicReference<PaymentMethod> method = new AtomicReference<>();

@@ -17,7 +17,7 @@ package top.spco.api.message.service;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import top.spco.api.Image;
+import top.spco.api.message.Image;
 import top.spco.api.Interactive;
 import top.spco.api.message.Message;
 import top.spco.api.message.MessageSource;
@@ -63,7 +63,7 @@ public interface MessageService {
      *
      * @return 第一个提到的Id，如果未提到Id返回-1
      */
-    long getFirstMentioned(Message<?> message, String phrase);
+    String getFirstMentioned(Message<?> message, String phrase);
 
     /**
      * 获取消息所引用的消息。

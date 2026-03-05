@@ -13,15 +13,16 @@ class TelegramLongPolling implements LongPollingSingleThreadUpdateConsumer {
             TelegramBot bot = new TelegramBot(TelegramAdapter.getSelf());
             TelegramMessage telegramMessage = new TelegramMessage(message);
             if (message.isUserMessage()) {
-                MessageEvents.FRIEND_MESSAGE.invoker().onFriendMessage(bot, new TelegramFriend(message.getFrom()), telegramMessage, message.getDate());
+                MessageEvents.PRIVATE_MESSAGE.invoker().onPrivateMessage(bot, new TelegramUser(message.getFrom()), telegramMessage, message.getDate());
             }
             if (message.isGroupMessage() || message.isSuperGroupMessage()) {
                 TelegramGroup group = new TelegramGroup(message.getChat());
-                TelegramMember member = (TelegramMember) group.getMember(message.getFrom().getId());
+                TelegramUser member = (TelegramUser) group.getMember(message.getFrom().getId() + "");
                 MessageEvents.GROUP_MESSAGE.invoker().onGroupMessage(bot, group, member, telegramMessage, message.getDate());
             }
             if (message.isChannelMessage()) {
-                MessageEvents.CHANNEL_MESSAGE.invoker().onChannelMessage(bot, new TelegramChannel(message.getChat()), new TelegramUser(message.getSenderChat()), telegramMessage, message.getDate());
+                // TODO: 修复这个
+                //MessageEvents.CHANNEL_MESSAGE.invoker().onChannelMessage(bot, new TelegramChannel(message.getChat()), new TelegramUser(message.getSenderChat()), telegramMessage, message.getDate());
             }
         }
     }

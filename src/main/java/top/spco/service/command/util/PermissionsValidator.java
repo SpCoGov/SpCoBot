@@ -15,12 +15,10 @@
  */
 package top.spco.service.command.util;
 
-import top.spco.api.Group;
 import top.spco.api.Interactive;
-import top.spco.api.NormalMember;
+import top.spco.api.User;
 import top.spco.api.message.Message;
 import top.spco.user.BotUser;
-import top.spco.user.UserPermission;
 
 /**
  * 群组成员命令验证器。<p>
@@ -54,23 +52,25 @@ public class PermissionsValidator {
     /**
      * 验证发起命令的用户是否具有管理员权限
      *
-     * @param from 命令来源
-     * @param user 命令发送者
+     * @param from    命令来源
+     * @param user    命令发送者
      * @param message 命令源消息
      * @return 如果发送者有管理员权限返回 {@code true} ，否则返回 {@code false}
      */
     public static boolean isMemberAdmin(Interactive<?> from, BotUser user, Message<?> message) {
-        if (from instanceof Group<?> group) {
-            if (!group.getMember(user.getId()).getPermission().isOperator()) {
-                if (user.getPermission().getLevel() < UserPermission.ADMINISTRATOR.getLevel()) {
-                    from.quoteReply(message, "您无权使用此命令。");
-                    return false;
-                }
-            }
-            return true;
-        } else {
-            return false;
-        }
+        // TODO: 修复这个
+        return false;
+//        if (from instanceof Group<?> group) {
+//            if (!group.getMember(user.getId()).getPermission().isOperator()) {
+//                if (user.getPermission().getLevel() < UserPermission.ADMINISTRATOR.getLevel()) {
+//                    from.quoteReply(message, "您无权使用此命令。");
+//                    return false;
+//                }
+//            }
+//            return true;
+//        } else {
+//            return false;
+//        }
     }
 
     /**
@@ -85,26 +85,28 @@ public class PermissionsValidator {
      * @param targetId 命令操作的目标Id
      * @return 可操作返回被操作的目标对象，不可操作返回 {@code null}
      */
-    public static NormalMember<?> verifyMemberPermissions(Interactive<?> from, BotUser user, Message<?> message, long targetId) {
-        try {
-            if (from instanceof Group<?> group) {
-                if (!group.getMember(user.getId()).getPermission().isOperator()) {
-                    if (user.getPermission().getLevel() < UserPermission.ADMINISTRATOR.getLevel()) {
-                        from.quoteReply(message, "您无权使用此命令。");
-                        return null;
-                    }
-                }
-                NormalMember<?> target = group.getMember(targetId);
-                if (verifyBotPermissions(from, message, target)) {
-                    return target;
-                }
-                return null;
-            }
-        } catch (NullPointerException e) {
-            from.quoteReply(message, "该用户不存在。");
-            return null;
-        }
+    public static User<?> verifyMemberPermissions(Interactive<?> from, BotUser user, Message<?> message, long targetId) {
+        // TODO: 修复这个
         return null;
+//        try {
+//            if (from instanceof Group<?> group) {
+//                if (!group.getMember(user.getId()).getPermission().isOperator()) {
+//                    if (user.getPermission().getLevel() < UserPermission.ADMINISTRATOR.getLevel()) {
+//                        from.quoteReply(message, "您无权使用此命令。");
+//                        return null;
+//                    }
+//                }
+//                NormalMember<?> target = group.getMember(targetId);
+//                if (verifyBotPermissions(from, message, target)) {
+//                    return target;
+//                }
+//                return null;
+//            }
+//        } catch (NullPointerException e) {
+//            from.quoteReply(message, "该用户不存在。");
+//            return null;
+//        }
+//        return null;
     }
 
     /**
@@ -117,9 +119,11 @@ public class PermissionsValidator {
      * @see #verifyBotPermissions(Interactive, Message, NormalMember)
      */
     public static boolean verifyBotPermissions(Interactive<?> from, Message<?> message, long targetId) {
-        if (from instanceof Group<?> group) {
-            return verifyBotPermissions(from, message, group.getMember(targetId));
-        }
+//        if (from instanceof Group<?> group) {
+//            return verifyBotPermissions(from, message, group.getMember(targetId));
+//        }
+//        return false;
+        // TODO: 修复这个
         return false;
     }
 
@@ -134,22 +138,24 @@ public class PermissionsValidator {
      * @param target  命令操作的目标对象
      * @return 可操作返回 {@code true}，不可操作返回 {@code false}
      */
-    public static boolean verifyBotPermissions(Interactive<?> from, Message<?> message, NormalMember<?> target) {
+    public static boolean verifyBotPermissions(Interactive<?> from, Message<?> message, User<?> target) {
         return verifyBotPermissions(from, message, target, true);
     }
 
-    public static boolean verifyBotPermissions(Interactive<?> from, Message<?> message, NormalMember<?> target, boolean prompt) {
-        if (from instanceof Group<?> group) {
-            if (!group.botPermission().isOperator()) {
-                if (prompt) from.quoteReply(message, "机器人权限不足。");
-                return false;
-            }
-            if (target.getPermission().getLevel() >= group.botPermission().getLevel()) {
-                if (prompt) from.quoteReply(message, "大佬，惹不起。");
-                return false;
-            }
-            return true;
-        }
+    public static boolean verifyBotPermissions(Interactive<?> from, Message<?> message, User<?> target, boolean prompt) {
+//        if (from instanceof Group<?> group) {
+//            if (!group.botPermission().isOperator()) {
+//                if (prompt) from.quoteReply(message, "机器人权限不足。");
+//                return false;
+//            }
+//            if (target.getPermission().getLevel() >= group.botPermission().getLevel()) {
+//                if (prompt) from.quoteReply(message, "大佬，惹不起。");
+//                return false;
+//            }
+//            return true;
+//        }
+//        return false;
+        // TODO: 修复这个
         return false;
     }
 }

@@ -38,7 +38,7 @@ import java.util.concurrent.TimeUnit;
  * @version 4.0.0
  * @since 2.0.3
  */
-public class McSManager extends Manager<Long, McS> {
+public class McSManager extends Manager<String, McS> {
     private static McSManager instance;
 
     private McSManager() {
@@ -47,7 +47,7 @@ public class McSManager extends Manager<Long, McS> {
 
     @Deprecated
     @Override
-    public void register(Long value, McS object) throws RegistrationException {
+    public void register(String value, McS object) throws RegistrationException {
 
     }
 
@@ -78,19 +78,19 @@ public class McSManager extends Manager<Long, McS> {
         return mcS;
     }
 
-    public boolean isConnected(long groupId) {
+    public boolean isConnected(String groupId) {
         return getAllRegistered().containsKey(groupId);
     }
 
-    public McS getMcS(long groupId) {
+    public McS getMcS(String groupId) {
         return getAllRegistered().get(groupId);
     }
 
-    public int unbind(long groupId) throws SQLException {
+    public int unbind(String groupId) throws SQLException {
         String sql = "DELETE FROM mcs WHERE group_id = ?";
 
         try (PreparedStatement preparedStatement = SpCoBot.getInstance().getDataBase().getConn().prepareStatement(sql)) {
-            preparedStatement.setLong(1, groupId);
+            preparedStatement.setString(1, groupId);
 
             int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected > 0) {
@@ -104,15 +104,15 @@ public class McSManager extends Manager<Long, McS> {
         }
     }
 
-    public void bind(long groupId, String host, int port) throws SQLException {
+    public void bind(String groupId, String host, int port) throws SQLException {
         SpCoBot.getInstance().getDataBase().insertData("insert into mcs(group_id,host,port) values (?,?,?)", groupId, host, port);
     }
 
-    public Pair<String, Integer> getServer(long groupId) {
+    public Pair<String, Integer> getServer(String groupId) {
         String sql = "SELECT host, port FROM mcs WHERE group_id = ?";
 
         try (PreparedStatement preparedStatement = SpCoBot.getInstance().getDataBase().getConn().prepareStatement(sql)) {
-            preparedStatement.setLong(1, groupId);
+            preparedStatement.setString(1, groupId);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
@@ -129,10 +129,10 @@ public class McSManager extends Manager<Long, McS> {
         return null;
     }
 
-    public boolean isBound(long groupId) {
+    public boolean isBound(String groupId) {
         String sql = "SELECT COUNT(*) FROM mcs WHERE group_id = ?";
         try (PreparedStatement preparedStatement = SpCoBot.getInstance().getDataBase().getConn().prepareStatement(sql)) {
-            preparedStatement.setLong(1, groupId);
+            preparedStatement.setString(1, groupId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     int count = resultSet.getInt(1);

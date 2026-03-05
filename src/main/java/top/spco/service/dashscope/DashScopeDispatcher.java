@@ -28,7 +28,7 @@ import top.spco.user.BotUser;
  * @version 4.0.0
  * @since 0.2.1
  */
-public class DashScopeDispatcher extends Manager<Long, DashScope> {
+public class DashScopeDispatcher extends Manager<String, DashScope> {
     private static DashScopeDispatcher instance;
     private static boolean registered = false;
 
@@ -47,7 +47,7 @@ public class DashScopeDispatcher extends Manager<Long, DashScope> {
     }
 
     @Override
-    public void register(Long userId, DashScope dashScope) throws RegistrationException {
+    public void register(String userId, DashScope dashScope) throws RegistrationException {
         if (getAllRegistered().containsKey(userId)) {
             if (getAllRegistered().get(userId) == null) {
                 throw new RegistrationException("Bot User " + userId + " already has a DashScope instance");
@@ -56,12 +56,12 @@ public class DashScopeDispatcher extends Manager<Long, DashScope> {
         getAllRegistered().put(userId, dashScope);
     }
 
-    public void remove(long userId) {
+    public void remove(String userId) {
         this.getAllRegistered().remove(userId);
     }
 
     @Override
-    public DashScope get(Long userId) {
+    public DashScope get(String userId) {
         if (getAllRegistered().containsKey(userId)) {
             if (getAllRegistered().get(userId) != null) {
                 return getAllRegistered().get(userId);

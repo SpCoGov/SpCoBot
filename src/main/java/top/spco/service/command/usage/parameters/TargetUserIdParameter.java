@@ -29,19 +29,19 @@ import top.spco.service.command.exceptions.CommandSyntaxException;
  * @since 3.0.0
  */
 public class TargetUserIdParameter extends UserIdParameter {
-    public TargetUserIdParameter(String name, boolean isOptional, Long defaultValue) {
+    public TargetUserIdParameter(String name, boolean isOptional, String defaultValue) {
         super(name, isOptional, defaultValue);
     }
 
     @Override
-    public Long parse(Parser parser) throws CommandSyntaxException {
+    public String parse(Parser parser) throws CommandSyntaxException {
         var quote = SpCoBot.getInstance().getMessageService().getQuote(parser.getMessage());
         if (quote == null) {
             final int start = parser.getCursor();
             String value = parser.readUnquotedString();
             try {
-                long at = SpCoBot.getInstance().getMessageService().getFirstMentioned(parser.getMessage(), value);
-                if (at != -1) {
+                String at = SpCoBot.getInstance().getMessageService().getFirstMentioned(parser.getMessage(), value);
+                if (at != null) {
                     return at;
                 } else {
                     throw BuiltInExceptions.createWithContext("需要用户ID或@一位用户", parser);

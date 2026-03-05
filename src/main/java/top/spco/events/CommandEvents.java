@@ -54,14 +54,14 @@ public class CommandEvents {
     /**
      * Called when a friend command is received.
      */
-    public static final Event<FriendCommand> FRIEND_COMMAND = EventFactory.createArrayBacked(FriendCommand.class, callbacks -> (bot, interactor, message, time) -> {
-        for (FriendCommand event : callbacks) {
-            event.onFriendCommand(bot, interactor, message, time);
+    public static final Event<PrivateCommand> FRIEND_COMMAND = EventFactory.createArrayBacked(PrivateCommand.class, callbacks -> (bot, interactor, message, time) -> {
+        for (PrivateCommand event : callbacks) {
+            event.onPrivateCommand(bot, interactor, message, time);
         }
     });
 
     @FunctionalInterface
-    public interface FriendCommand {
+    public interface PrivateCommand {
         /**
          * 假如好友发送了命令 "/command a b c"
          *
@@ -70,7 +70,7 @@ public class CommandEvents {
          * @param message    原始消息
          * @param time       命令发送的时间
          */
-        void onFriendCommand(Bot<?> bot, Friend<?> interactor, Message<?> message, int time);
+        void onPrivateCommand(Bot<?> bot, User<?> interactor, Message<?> message, int time);
     }
 
     /**
@@ -93,28 +93,6 @@ public class CommandEvents {
          * @param time    命令发送的时间
          * @param message 原始消息
          */
-        void onGroupCommand(Bot<?> bot, Group<?> from, Member<?> sender, Message<?> message, int time);
-    }
-
-    /**
-     * Called when a group-temp command is received.
-     */
-    public static final Event<GroupTempCommand> GROUP_TEMP_COMMAND = EventFactory.createArrayBacked(GroupTempCommand.class, callbacks -> (bot, interactor, message, time) -> {
-        for (GroupTempCommand event : callbacks) {
-            event.onGroupTempCommand(bot, interactor, message, time);
-        }
-    });
-
-    @FunctionalInterface
-    public interface GroupTempCommand {
-        /**
-         * 假如好友发送了命令 "/command a b c"
-         *
-         * @param bot        收到命令的机器人
-         * @param interactor 命令的发送者
-         * @param time       命令发送的时间
-         * @param message    原始消息
-         */
-        void onGroupTempCommand(Bot<?> bot, Member<?> interactor, Message<?> message, int time);
+        void onGroupCommand(Bot<?> bot, Group<?> from, User<?> sender, Message<?> message, int time);
     }
 }

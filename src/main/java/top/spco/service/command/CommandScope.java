@@ -26,11 +26,7 @@ import top.spco.api.*;
  */
 public enum CommandScope {
     /**
-     * 仅可以在好友聊天中发送
-     */
-    ONLY_FRIEND,
-    /**
-     * 仅可以在私聊(如好友聊天, 群临时消息)中发送
+     * 仅可以在私聊中发送
      */
     ONLY_PRIVATE,
     /**
@@ -51,9 +47,7 @@ public enum CommandScope {
     public static CommandScope getCommandScope(Interactive<?> interactive) {
         if (interactive instanceof Group) {
             return ONLY_GROUP;
-        } else if (interactive instanceof Friend) {
-            return ONLY_FRIEND;
-        } else if (interactive instanceof NormalMember) {
+        } else if (interactive instanceof User) {
             return ONLY_PRIVATE;
         }
         return null;

@@ -12,8 +12,8 @@ class TelegramMessageSource extends MessageSource<org.telegram.telegrambots.meta
      * 发送人用户 ID
      */
     @Override
-    public long getSenderId() {
-        return wrapped().getFrom().getId();
+    public String getSenderId() {
+        return wrapped().getFrom().getId() + "";
     }
 
     /**

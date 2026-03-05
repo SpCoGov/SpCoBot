@@ -45,7 +45,7 @@ public class CustomReplyModule extends AbstractModule {
         replier.add(new CallFatherRule());
         replier.add(new BarkRule());
         replier.add(new AskRule());
-        MessageEvents.FRIEND_MESSAGE.register((bot, sender, message, time) -> {
+        MessageEvents.PRIVATE_MESSAGE.register((bot, sender, message, time) -> {
             if (!isActive()) {
                 return;
             }
@@ -70,16 +70,6 @@ public class CustomReplyModule extends AbstractModule {
             if (result != null) {
                 SpCoBot.getInstance().getRuntimeStatistic().item("触发自定义回复").add();
                 source.quoteReply(message, result);
-            }
-        });
-        MessageEvents.MEMBER_MESSAGE.register((bot, source, sender, message, time) -> {
-            if (!isActive()) {
-                return;
-            }
-            String result = replier.reply(message.toMessageContext());
-            if (result != null) {
-                SpCoBot.getInstance().getRuntimeStatistic().item("触发自定义回复").add();
-                sender.quoteReply(message, result);
             }
         });
     }

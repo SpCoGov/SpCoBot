@@ -138,7 +138,7 @@ public class RechargeSystem {
                 }
                 if (tradeStatus.equals("TRADE_SUCCESS") && tradeStateDB.equals("unpaid")) {
 
-                    Long userId = SpCoBot.getInstance().getDataBase().selectLong("trade", "user", "id", tradeNo);
+                    String userId = SpCoBot.getInstance().getDataBase().selectString("trade", "user", "id", tradeNo);
                     BotUser user = BotUsers.get(userId);
                     String buyerPayAmount = params.get("buyer_pay_amount");
                     int decimalIndex = buyerPayAmount.indexOf(".");
@@ -179,7 +179,7 @@ public class RechargeSystem {
                         return;
                     }
                     if (tradeState.equals("SUCCESS") && tradeStateDB.equals("unpaid")) {
-                        Long userId = SpCoBot.getInstance().getDataBase().selectLong("trade", "user", "id", tradeNo);
+                        String userId = SpCoBot.getInstance().getDataBase().selectString("trade", "user", "id", tradeNo);
                         BotUser user = BotUsers.get(userId);
                         Objects.requireNonNull(user).recharge(decrypted);
                         StringBuilder response = new StringBuilder();

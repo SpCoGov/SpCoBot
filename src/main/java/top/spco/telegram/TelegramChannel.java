@@ -44,7 +44,7 @@ class TelegramChannel extends Channel<Chat> {
     }
 
     @Override
-    public long getId() {
-        return wrapped().getId();
+    public String getId() {
+        return wrapped().getId() + "";
     }
 }

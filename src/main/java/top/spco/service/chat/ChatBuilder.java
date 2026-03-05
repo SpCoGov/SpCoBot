@@ -64,17 +64,8 @@ public class ChatBuilder implements Builder<Chat> {
                     throw new ChatTypeMismatchException(chatType, target);
                 }
             }
-            case FRIEND -> {
-                boolean isFriend = false;
-                if (target instanceof NormalMember<?> member) {
-                    isFriend = member.isFriend();
-                }
-                if (!isFriend && !(target instanceof Friend)) {
-                    throw new ChatTypeMismatchException(chatType, target);
-                }
-            }
             case GROUP_TEMP -> {
-                if (!(target instanceof NormalMember)) {
+                if (!(target instanceof User<?>)) {
                     throw new ChatTypeMismatchException(chatType, target);
                 }
             }

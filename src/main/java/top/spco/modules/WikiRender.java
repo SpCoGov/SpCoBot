@@ -37,12 +37,10 @@ public class WikiRender extends AbstractModule {
         MessageEvents.GROUP_MESSAGE.register(((bot, source, sender, message, time) -> {
             onMessage(bot, sender, source, message, time);
         }));
-        MessageEvents.FRIEND_MESSAGE.register((bot, source, message, time) -> {
+        MessageEvents.PRIVATE_MESSAGE.register((bot, source, message, time) -> {
             onMessage(bot, source, source, message, time);
         });
-        MessageEvents.MEMBER_MESSAGE.register(((bot, source, sender, message, time) -> {
-            onMessage(bot, sender, source, message, time);
-        }));
+
     }
 
     private void onMessage(Bot<?> bot, Interactive<?> sender, Interactive<?> source, Message<?> message, int time) {

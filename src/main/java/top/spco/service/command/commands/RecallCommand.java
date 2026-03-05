@@ -18,7 +18,6 @@ package top.spco.service.command.commands;
 import top.spco.SpCoBot;
 import top.spco.api.Bot;
 import top.spco.api.Interactive;
-import top.spco.api.NormalMember;
 import top.spco.api.User;
 import top.spco.api.message.Message;
 import top.spco.api.message.MessageSource;
@@ -29,6 +28,8 @@ import top.spco.service.command.exceptions.CommandSyntaxException;
 import top.spco.service.command.util.PermissionsValidator;
 import top.spco.user.BotUser;
 import top.spco.util.tuple.ImmutablePair;
+
+import java.util.Objects;
 
 /**
  * 撤回一条消息
@@ -57,10 +58,10 @@ public class RecallCommand extends GroupAbstractCommand {
                 from.quoteReply(message, "请在回复消息时使用该命令。");
                 return;
             }
-            if (PermissionsValidator.verifyBotPermissions(from, message, (NormalMember<?>) sender, false)) {
+            if (PermissionsValidator.verifyBotPermissions(from, message, sender, false)) {
                 SpCoBot.getInstance().getMessageService().recall(quote.getLeft());
                 from.quoteReply(message, "已撤回。");
-            } else if (quote.getLeft().getSenderId() == SpCoBot.getInstance().botId) {
+            } else if (Objects.equals(quote.getLeft().getSenderId(), SpCoBot.getInstance().botId)) {
                 SpCoBot.getInstance().getMessageService().recall(quote.getLeft());
                 from.quoteReply(message, "已撤回。");
             } else {

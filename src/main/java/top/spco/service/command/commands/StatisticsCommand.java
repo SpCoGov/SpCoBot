@@ -18,6 +18,7 @@ package top.spco.service.command.commands;
 import top.spco.SpCoBot;
 import top.spco.api.*;
 import top.spco.api.message.Message;
+import top.spco.service.command.exceptions.CommandSyntaxException;
 import top.spco.util.NamedThreadFactory;
 import top.spco.service.RegistrationException;
 import top.spco.service.chat.*;
@@ -39,6 +40,10 @@ import java.util.concurrent.TimeUnit;
  * @version 2.0.0
  * @since 0.1.1
  */
+public class StatisticsCommand {
+
+}
+/*
 @CommandMarker
 public class StatisticsCommand extends AbstractCommand {
     @Override
@@ -247,11 +252,12 @@ public class StatisticsCommand extends AbstractCommand {
                                     }
                                     group.sendMessage(sb.toString());
                                     source.sendMessage("消息已发送至目标群");
-                                    Friend<?> friend = SpCoBot.getInstance().getBot().getFriend(SpCoBot.getInstance().botOwnerId);
-                                    friend.sendMessage("有用户在群" + groupId[0] + "中发起了一场报名统计，如果需要重启机器人，请注意这场报名统计的结束情况。");
-                                    SpCoBot.getInstance().statisticsDispatcher.register(group.getId(), statistics[0]);
-                                    statistics[0] = null;
-                                    Statistics statisticsFromManager = SpCoBot.getInstance().statisticsDispatcher.get(bot.getGroup(groupId[0]).getId());
+
+//                                    Friend<?> friend = SpCoBot.getInstance().getBot().getFriend(SpCoBot.getInstance().botOwnerId);
+//                                    friend.sendMessage("有用户在群" + groupId[0] + "中发起了一场报名统计，如果需要重启机器人，请注意这场报名统计的结束情况。");
+//                                    SpCoBot.getInstance().statisticsDispatcher.register(group.getId(), statistics[0]);
+//                                    statistics[0] = null;
+//                                    Statistics statisticsFromManager = SpCoBot.getInstance().statisticsDispatcher.get(bot.getGroup(groupId[0]).getId());
                                     ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1, new NamedThreadFactory("Statistics Timer"));
                                     Runnable delayedTask = () -> {
                                         try {
@@ -306,7 +312,8 @@ public class StatisticsCommand extends AbstractCommand {
         }
     }
 
-    /**
+    */
+/**
      * 从给定的 Map 中随机选择 x 个键值对。
      *
      * @param map 要选择键值对的 Map
@@ -314,7 +321,8 @@ public class StatisticsCommand extends AbstractCommand {
      * @param <K> 键的类型
      * @param <V> 值的类型
      * @return 包含随机选择的键值对的列表
-     */
+     *//*
+
     public static <K, V> Map<K, V> randomSelectFromMap(Map<K, V> map, int x) {
         List<Map.Entry<K, V>> entryList = new ArrayList<>(map.entrySet());
         Collections.shuffle(entryList);
@@ -327,4 +335,4 @@ public class StatisticsCommand extends AbstractCommand {
 
         return result;
     }
-}
+}*/

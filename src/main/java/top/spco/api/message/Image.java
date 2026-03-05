@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco.api;
+package top.spco.api.message;
 
-import top.spco.api.message.Message;
-import top.spco.api.message.MessageSource;
+import java.net.URL;
 
 /**
  * 图片
@@ -35,6 +34,8 @@ public abstract class Image<T> extends Message<T> {
     public abstract int getWidth();
 
     public abstract int getHeight();
+
+    public abstract URL getUrl();
 
     /**
      * @deprecated {@code Image} 表示一张图片，不能在后添加消息。如需添加消息请使用 {@link Message}

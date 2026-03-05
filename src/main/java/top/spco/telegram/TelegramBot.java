@@ -9,12 +9,6 @@ class TelegramBot extends Bot<org.telegram.telegrambots.meta.api.objects.User> {
     protected TelegramBot(org.telegram.telegrambots.meta.api.objects.User bot) {
         super(bot);
     }
-
-    @Override
-    public boolean isOnline() {
-        return true;
-    }
-
     /**
      * 获取机器人的昵称
      *
@@ -25,68 +19,9 @@ class TelegramBot extends Bot<org.telegram.telegrambots.meta.api.objects.User> {
         return wrapped().getFirstName();
     }
 
-    /**
-     * 获取机器人作为好友的实例
-     *
-     * @return 机器人作为好友的实例
-     */
-    @Override
-    public Friend<?> asFriend() {
-        return new TelegramFriend(wrapped());
-    }
 
     @Override
-    @Deprecated
-    public FriendGroups<?> getFriendGroups() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    @Deprecated
-    public InteractiveList<Friend<?>> getFriends() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    @Deprecated
-    public InteractiveList<Group<?>> getGroups() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    @Deprecated
-    public Friend<?> getFriend(long id) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Deprecated
-    @Override
-    public boolean hasFriend(long id) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Deprecated
-    @Override
-    public boolean hasGroup(long id) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Deprecated
-    @Override
-    public User<?> getUser(long id) {
-        try {
-            GetChat getChat = GetChat.builder()
-                    .chatId(id)
-                    .build();
-            Chat chat = TelegramAdapter.getInstance().telegramClient.execute(getChat);
-            return new TelegramUser(chat);
-        } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public Group<?> getGroup(long id) {
+    public Group<?> getGroup(String id) {
         try {
             GetChat getChat = GetChat.builder()
                     .chatId(id)
@@ -99,7 +34,7 @@ class TelegramBot extends Bot<org.telegram.telegrambots.meta.api.objects.User> {
     }
 
     @Override
-    public long getId() {
-        return wrapped().getId();
+    public String getId() {
+        return wrapped().getId() + "";
     }
 }

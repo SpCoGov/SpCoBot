@@ -28,20 +28,6 @@ public abstract class User<T> extends Interactive<T> {
     }
 
     /**
-     * 备注信息<p>
-     * 仅与 {@link User} 存在好友关系的时候才可能存在备注<p>
-     * 与 {@link User} 没有好友关系时永远为空{@link String 字符串} ("")
-     *
-     * @return 备注信息
-     */
-    public abstract String getRemark();
-
-    /**
-     * 戳一戳该用户。
-     */
-    public abstract void nudge();
-
-    /**
      * 获取该用户的昵称。
      *
      * @return 昵称

@@ -15,9 +15,8 @@
  */
 package top.spco.api.message;
 
-import top.spco.api.Image;
 import top.spco.api.Interactive;
-import top.spco.api.Member;
+import top.spco.api.User;
 import top.spco.api.message.service.MessageService;
 import top.spco.core.Wrapper;
 
@@ -38,7 +37,7 @@ import java.io.File;
  * <h1>获取消息对象</h1>
  * 用户可以通过事件等方式获得机器人收到的消息，也可以自行创建消息对象。
  * 如通过 {@link MessageService#asMessage(String)} 来将字符串转换为一个消息对象、
- * 通过 {@link MessageService#at(long)} 获取一个 @{@link Member 某群员} 的消息对象。
+ * 通过 {@link MessageService#at(long)} 获取一个 @{@link User 某群员} 的消息对象。
  *
  * <h1>操作消息对象</h1>
  * 以下列举了一些对消息的操作，如附加、引用等等。

@@ -16,7 +16,6 @@
 package top.spco.modules;
 
 import top.spco.SpCoBot;
-import top.spco.api.Friend;
 import top.spco.core.module.AbstractModule;
 import top.spco.user.BotUsers;
 import top.spco.util.TimeUtil;
@@ -57,7 +56,7 @@ public class AutoSign extends AbstractModule {
                         SpCoBot.getInstance().getDataBase().setParameters(pstmt);
                         try (ResultSet rs = pstmt.executeQuery()) {
                             while (rs.next()) {
-                                long id = rs.getLong("id");
+                                String id = rs.getString("id");
                                 Objects.requireNonNull(BotUsers.get(id)).sign();
                                 SpCoBot.LOGGER.info("已为用户 {} 自动签到", id);
                             }
@@ -65,8 +64,9 @@ public class AutoSign extends AbstractModule {
                     }
                 } catch (Exception e) {
                     SpCoBot.LOGGER.error(e);
-                    Friend<?> friend = SpCoBot.getInstance().getBot().getFriend(SpCoBot.getInstance().botOwnerId);
-                    friend.handleException("自动签到时抛出了意料之外的异常", e);
+                    // TODO: 修复这个
+                    //User<?> friend = SpCoBot.getInstance().getBot().getFriend(SpCoBot.getInstance().botOwnerId);
+                    //friend.handleException("自动签到时抛出了意料之外的异常", e);
                 }
             }
         }, TimeUtil.calculateMillisecondToMidnight(), 86400000L);

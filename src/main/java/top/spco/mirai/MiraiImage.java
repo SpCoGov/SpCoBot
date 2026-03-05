@@ -16,8 +16,10 @@
 package top.spco.mirai;
 
 import net.mamoe.mirai.message.data.MessageChainBuilder;
-import top.spco.api.Image;
+import top.spco.api.message.Image;
 import top.spco.api.message.Message;
+
+import java.net.URL;
 
 /**
  * @author SpCo
@@ -42,6 +44,11 @@ class MiraiImage extends Image<net.mamoe.mirai.message.data.Image> {
     @Override
     public int getHeight() {
         return wrapped().getHeight();
+    }
+
+    @Override
+    public URL getUrl() {
+        return null;
     }
 
     @Override

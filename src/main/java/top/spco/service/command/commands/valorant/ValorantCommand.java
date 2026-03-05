@@ -22,7 +22,10 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import top.spco.SpCoBot;
-import top.spco.api.*;
+import top.spco.api.Bot;
+import top.spco.api.Group;
+import top.spco.api.Interactive;
+import top.spco.api.User;
 import top.spco.api.message.Message;
 import top.spco.service.chat.Chat;
 import top.spco.service.chat.ChatBuilder;
@@ -111,7 +114,7 @@ public class ValorantCommand extends AbstractCommand {
             case "登录拳头账户" -> {
                 if (from instanceof Group) {
                     // 检测机器人是否有权限撤回用户发送的消息
-                    if (PermissionsValidator.verifyBotPermissions(from, message, (NormalMember<?>) sender, false)) {
+                    if (PermissionsValidator.verifyBotPermissions(from, message, sender, false)) {
                         SpCoBot.getInstance().getMessageService().recall(message.getSource());
                         from.sendMessage("为防止您的密码泄露，请在私聊使用该命令。");
                     } else {
@@ -128,7 +131,8 @@ public class ValorantCommand extends AbstractCommand {
                     String[] tokens = riot.authorize();
                     if (tokens[0].equals("x")) {
                         if (tokens[1].equals("2fa_auth")) {
-                            ChatType ct = from instanceof Friend ? ChatType.FRIEND : ChatType.GROUP_TEMP;
+                            // TODO: 修复这个
+                            ChatType ct = ChatType.FRIEND;
                             Chat authChat = new ChatBuilder(ct, from)
                                     .addStage(new Stage(() -> "需要验证，请发送您收到的6位验证码。", (chat, bot1, source, sender1, message1, time1) -> {
                                         String varCode = message1.toMessageContext();
@@ -170,7 +174,7 @@ public class ValorantCommand extends AbstractCommand {
                 // 从数据库中获取登录信息和账号密码
                 String sql = "SELECT username, password, access_token, entitlements, uuid FROM valorant_user WHERE id = ?";
                 try (PreparedStatement pstmt = SpCoBot.getInstance().getDataBase().getConn().prepareStatement(sql)) {
-                    pstmt.setLong(1, user.getId());
+                    pstmt.setString(1, user.getId());
                     ResultSet rs = pstmt.executeQuery();
                     // 如果数据库中没有该用户的数据
                     if (!rs.next()) {
@@ -212,8 +216,10 @@ public class ValorantCommand extends AbstractCommand {
                                 if (tokens[0].equals("x")) {
                                     // 检查是否是由于开启了两步验证需要验证码而导致的登录失败
                                     if (tokens[1].equals("2fa_auth")) {
-                                        // 创建私聊对话 接受验证码
-                                        ChatType ct = sender instanceof Friend || ((NormalMember<?>) sender).isFriend() ? ChatType.FRIEND : ChatType.GROUP_TEMP;
+                                        // 创建私聊对话
+                                        // 接受验证码
+                                        // TODO: 修复这个
+                                        ChatType ct = ChatType.FRIEND;
                                         Chat authChat = new ChatBuilder(ct, sender)
                                                 .addStage(new Stage(() -> "需要验证，请发送您收到的6位验证码。", (chat, bot1, source, sender1, message1, time1) -> {
                                                     String varCode = message1.toMessageContext();
@@ -335,14 +341,14 @@ public class ValorantCommand extends AbstractCommand {
         }
     }
 
-    private void handleToken(RiotAuth riot, String[] tokens, long userId, Interactive<?> from, Message<?> message) {
+    private void handleToken(RiotAuth riot, String[] tokens, String userId, Interactive<?> from, Message<?> message) {
         try {
             riot.parse(tokens);
             String sql = "INSERT INTO valorant_user (id, username, password, access_token, entitlements, uuid, name, tag, create_data, ban_type, region) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
                     "ON CONFLICT(id) DO UPDATE SET username = excluded.username, password = excluded.password, access_token = excluded.access_token, entitlements = excluded.entitlements, " +
                     "uuid = excluded.uuid, name = excluded.name, tag = excluded.tag, create_data = excluded.create_data, ban_type = excluded.ban_type, region = excluded.region";
             try (PreparedStatement pstmt = SpCoBot.getInstance().getDataBase().getConn().prepareStatement(sql)) {
-                pstmt.setLong(1, userId);
+                pstmt.setString(1, userId);
                 pstmt.setString(2, riot.getUsername());
                 pstmt.setString(3, riot.getPassword());
                 pstmt.setString(4, riot.getAccessToken());

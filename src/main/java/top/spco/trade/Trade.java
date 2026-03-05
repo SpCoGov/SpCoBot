@@ -17,12 +17,12 @@ package top.spco.trade;
 
 public abstract class Trade {
     private final String tradeNo;
-    private final long callerUser;
+    private final String callerUser;
     private final String qrCode;
     private final int amount;
     private final PaymentMethod paymentMethod;
 
-    public Trade(String id, long callerUser, String qrCode, int amount, PaymentMethod paymentMethod) {
+    public Trade(String id, String callerUser, String qrCode, int amount, PaymentMethod paymentMethod) {
         this.tradeNo = id;
         this.callerUser = callerUser;
         this.qrCode = qrCode;
@@ -34,7 +34,7 @@ public abstract class Trade {
         return tradeNo;
     }
 
-    public long getCallerUser() {
+    public String getCallerUser() {
         return callerUser;
     }
 

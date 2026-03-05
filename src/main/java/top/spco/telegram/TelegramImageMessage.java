@@ -2,10 +2,11 @@ package top.spco.telegram;
 
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.PhotoSize;
-import top.spco.api.Image;
+import top.spco.api.message.Image;
 import top.spco.api.message.Message;
 
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 
 class TelegramImageMessage extends Image<InputFile> {
@@ -30,6 +31,15 @@ class TelegramImageMessage extends Image<InputFile> {
     @Override
     public int getHeight() {
         return 0;
+    }
+
+    @Override
+    public URL getUrl() {
+        try {
+            return wrapped().getNewMediaFile().toURI().toURL();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @Override

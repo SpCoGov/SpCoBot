@@ -40,33 +40,42 @@ public class BotConfig extends Config {
         init();
     }
 
-    private final ConfigSpecHelper.ConfigValue<Long> BOT_ID = builder
+    private final ConfigSpecHelper.ConfigValue<String> BOT_ID = builder
             .comment("The Id used by the bot.")
-            .define("bot_id", 0L, o -> o instanceof Number);
-    private final ConfigSpecHelper.ConfigValue<Long> OWNER_ID = builder
+            .define("bot_id", "");
+    private final ConfigSpecHelper.ConfigValue<String> OWNER_ID = builder
             .comment("The Id used by the bot owner.")
-            .define("owner_id", 0L, o -> o instanceof Number);
-    private final ConfigSpecHelper.ConfigValue<Long> TEST_GROUP = builder
+            .define("owner_id", "");
+    private final ConfigSpecHelper.ConfigValue<String> TEST_GROUP = builder
             .comment("Group Id for bot functionality.")
-            .define("test_group", 0L,o -> o instanceof Number);
+            .define("test_group", "");
 
     private final ConfigSpecHelper.ConfigValue<Boolean> ENABLE_RECHARGE_SYSTEM = builder
-            .define("enable_recharge_system", true);
+            .define("enable_recharge_system", false);
+
+    private final ConfigSpecHelper.ConfigValue<Boolean> ENABLE_CAATP = builder
+            .define("enable_caatp", false);
 
     private final ConfigSpecHelper.ConfigValue<String> TELEGRAM_BOT_TOKEN = builder
             .define("telegram_bot_token", "");
+    private final ConfigSpecHelper.ConfigValue<String> QQ_SERVER_IP = builder
+            .define("qq_server_ip", "127.0.0.1");
+    private final ConfigSpecHelper.ConfigValue<Integer> QQ_SERVER_PORT = builder
+            .defineInRange("qq_server_port", 3001, 1, 65535);
     private final ConfigSpecHelper.ConfigValue<String> QQ_BOT_TOKEN = builder
             .define("qq_bot_token", "");
+    private final ConfigSpecHelper.ConfigValue<Integer> QQ_SERVER_HEARTBEAT_INTERVAL = builder
+            .defineInRange("qq_server_heartbeat_interval", 30000, 0, Integer.MAX_VALUE);
 
-    public Long getBotId() {
+    public String getBotId() {
         return BOT_ID.get();
     }
 
-    public Long getOwnerId() {
+    public String getOwnerId() {
         return OWNER_ID.get();
     }
 
-    public Long getTestGroup() {
+    public String getTestGroup() {
         return TEST_GROUP.get();
     }
 
@@ -74,7 +83,27 @@ public class BotConfig extends Config {
         return ENABLE_RECHARGE_SYSTEM.get();
     }
 
+    public boolean isEnableCAATP() {
+        return ENABLE_CAATP.get();
+    }
+
     public String getTelegramBotToken() {
         return TELEGRAM_BOT_TOKEN.get();
+    }
+
+    public String getQQServerIp() {
+        return QQ_SERVER_IP.get();
+    }
+
+    public int getQQServerPort() {
+        return QQ_SERVER_PORT.get();
+    }
+
+    public String getQQBotToken() {
+        return QQ_BOT_TOKEN.get();
+    }
+
+    public int getQQServerHeartbeatInterval() {
+        return QQ_SERVER_HEARTBEAT_INTERVAL.get();
     }
 }

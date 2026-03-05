@@ -30,8 +30,8 @@ class MiraiMessageSource extends MessageSource<net.mamoe.mirai.message.data.Mess
     }
 
     @Override
-    public long getSenderId() {
-        return wrapped().getFromId();
+    public String getSenderId() {
+        return wrapped().getFromId() + "";
     }
 
     @Override
