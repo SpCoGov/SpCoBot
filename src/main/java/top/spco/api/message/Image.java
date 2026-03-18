@@ -24,9 +24,9 @@ import java.net.URL;
  * @version 3.0.2
  * @since 1.3.0
  */
-public abstract class Image<T> extends Message<T> {
-    protected Image(T image) {
-        super(image);
+public abstract class Image extends Message {
+    protected Image() {
+        super();
     }
 
     public abstract String getImageId();
@@ -42,8 +42,8 @@ public abstract class Image<T> extends Message<T> {
      */
     @Override
     @Deprecated
-    public Message<T> append(Message<?> appendage) {
-        return this;
+    public MessageChain append(Message appendage) {
+        return new MessageChain().append(appendage);
     }
 
     /**
@@ -51,25 +51,7 @@ public abstract class Image<T> extends Message<T> {
      */
     @Override
     @Deprecated
-    public Message<T> append(String appendage) {
-        return this;
-    }
-
-    /**
-     * @deprecated {@code Image} 表示一张图片，如需引用它先将其转换为普通的 {@code Message}。
-     */
-    @Override
-    @Deprecated
-    public Message<T> quoteReply(Message<?> toQuote) {
-        return this;
-    }
-
-    /**
-     * @deprecated {@code Image} 表示一张图片，没有该属性。
-     */
-    @Override
-    @Deprecated
-    public MessageSource<?> getSource() {
-        return null;
+    public MessageChain append(String appendage) {
+        return new MessageChain().append(appendage);
     }
 }

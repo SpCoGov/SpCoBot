@@ -42,7 +42,7 @@ public class GetMeCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, CommandMeta meta, String usageName) {
+    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message message, int time, CommandMeta meta, String usageName) {
         from.quoteReply(message, user.toString());
     }
 }

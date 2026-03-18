@@ -55,7 +55,7 @@ public class McS {
     private int heartbeatInterval;
     private String name = "undefined";
     private final Group<?> group;
-    private final Map<Integer, Message<?>> commandCaller = new ConcurrentHashMap<>();
+    private final Map<Integer, Message> commandCaller = new ConcurrentHashMap<>();
     private final Set<Integer> heartbeats = new HashSet<>();
     private final Set<Integer> timeoutHeartbeats = new HashSet<>();
     private int timeoutCount;
@@ -69,9 +69,9 @@ public class McS {
     private final boolean hasCaller;
     private boolean debug = false;
     private boolean connected = false;
-    private final Message<?> callerMessage;
+    private final Message callerMessage;
 
-    public McS(String host, int port, Group<?> group, @Nullable Message<?> callerMessage, boolean afterHeartbeatTimeout) throws IOException {
+    public McS(String host, int port, Group<?> group, @Nullable Message callerMessage, boolean afterHeartbeatTimeout) throws IOException {
         this.group = group;
         hasCaller = callerMessage != null;
         this.callerMessage = callerMessage;
@@ -149,7 +149,7 @@ public class McS {
                                             // 如果是第一条消息
                                             commandReceivingTime.put(ack, new MutablePair<>(System.nanoTime(), System.nanoTime()));
                                             ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-                                            Message<?> caller = commandCaller.get(ack);
+                                            Message caller = commandCaller.get(ack);
                                             // 指定毫秒后发送命令返回值
                                             int delay = 100;
                                             scheduler.schedule(() -> {
@@ -204,7 +204,7 @@ public class McS {
         }).start();
     }
 
-    public int executeCommand(String command, Message<?> callerMessage) {
+    public int executeCommand(String command, Message callerMessage) {
         int payloadSyn = syn++;
         JsonObject data = new JsonObject();
         data.addProperty("type", "CALL_COMMAND");

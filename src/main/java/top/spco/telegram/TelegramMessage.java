@@ -1,9 +1,10 @@
 package top.spco.telegram;
 
 import top.spco.api.message.Message;
+import top.spco.api.message.MessageChain;
 import top.spco.api.message.MessageSource;
 
-class TelegramMessage extends Message<org.telegram.telegrambots.meta.api.objects.message.Message> {
+class TelegramMessage extends Message {
     protected TelegramMessage(org.telegram.telegrambots.meta.api.objects.message.Message message) {
         super(message);
     }
@@ -24,7 +25,7 @@ class TelegramMessage extends Message<org.telegram.telegrambots.meta.api.objects
      * @param toQuote 需要引用的消息
      */
     @Override
-    public Message<org.telegram.telegrambots.meta.api.objects.message.Message> quoteReply(Message<?> toQuote) {
+    public MessageChain quoteReply(Message toQuote) {
         wrapped().setReplyToMessage(((TelegramMessage) toQuote).wrapped());
         return this;
     }
@@ -35,7 +36,7 @@ class TelegramMessage extends Message<org.telegram.telegrambots.meta.api.objects
      * @param appendage 需要添加的 {@code Message} 对象
      */
     @Override
-    public Message<org.telegram.telegrambots.meta.api.objects.message.Message> append(Message<?> appendage) {
+    public Message<org.telegram.telegrambots.meta.api.objects.message.Message> append(Message appendage) {
         TelegramMessageSender.appendMessage(wrapped(), (org.telegram.telegrambots.meta.api.objects.message.Message) appendage.wrapped());
         return this;
     }
@@ -46,9 +47,11 @@ class TelegramMessage extends Message<org.telegram.telegrambots.meta.api.objects
      * @param appendage 需要添加的文本
      */
     @Override
-    public Message<org.telegram.telegrambots.meta.api.objects.message.Message> append(String appendage) {
-        TelegramMessageSender.appendText(wrapped(), appendage);
-        return this;
+    public MessageChain append(String appendage) {
+//        TelegramMessageSender.appendText(wrapped(), appendage);
+//        return this;
+        // TODO: FIX THIS
+        return null;
     }
 
     /**
@@ -57,7 +60,7 @@ class TelegramMessage extends Message<org.telegram.telegrambots.meta.api.objects
      * @return 转换的结果
      */
     @Override
-    public Message<?> toMessage() {
+    public MessageChain toMessageChain() {
         return this;
     }
 

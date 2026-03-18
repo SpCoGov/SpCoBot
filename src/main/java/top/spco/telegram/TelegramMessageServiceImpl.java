@@ -39,12 +39,12 @@ class TelegramMessageServiceImpl implements MessageService {
     }
 
     @Override
-    public Message<?> at(long id) {
+    public Message at(long id) {
         return at(id, null);
     }
 
     @Override
-    public Message<?> at(long id, String message) {
+    public Message at(long id, String message) {
         GetChat getChat = GetChat.builder().chatId(id).build();
         String firstName = "";
         try {
@@ -79,12 +79,12 @@ class TelegramMessageServiceImpl implements MessageService {
 
     @Deprecated
     @Override
-    public Message<?> atAll() {
+    public Message atAll() {
         return null;
     }
 
     @Override
-    public String getFirstMentioned(Message<?> message, String phrase) {
+    public String getFirstMentioned(Message message, String phrase) {
         requireTelegram(message, "message");
         List<MessageEntity> entities = ((TelegramMessage) message).wrapped().getEntities();
         if (entities != null && !entities.isEmpty()) {
@@ -119,7 +119,7 @@ class TelegramMessageServiceImpl implements MessageService {
      * @return 如果有引用时返回被引用的消息，如果没有时返回null
      */
     @Override
-    public @Nullable ImmutablePair<@NotNull MessageSource<?>, @NotNull Message<?>> getQuote(Message<?> message) {
+    public @Nullable ImmutablePair<@NotNull MessageSource<?>, @NotNull Message> getQuote(Message message) {
         requireTelegram(message, "message");
         org.telegram.telegrambots.meta.api.objects.message.Message message1 = ((TelegramMessage) message).wrapped();
         if (!message1.isReply()) {
@@ -148,7 +148,7 @@ class TelegramMessageServiceImpl implements MessageService {
      * @param content 需要转换的内容
      */
     @Override
-    public Message<?> asMessage(String content) {
+    public Message asMessage(String content) {
         org.telegram.telegrambots.meta.api.objects.message.Message message = new org.telegram.telegrambots.meta.api.objects.message.Message();
         message.setText(content);
         return new TelegramMessage(message);
@@ -161,7 +161,7 @@ class TelegramMessageServiceImpl implements MessageService {
      * @param interactive 发送的对象
      */
     @Override
-    public Image<?> toImage(File image, Interactive<?> interactive) {
+    public Image toImage(File image, Interactive<?> interactive) {
         requireTelegram(interactive, "interactive");
         return new TelegramImageMessage(image);
     }
@@ -173,7 +173,7 @@ class TelegramMessageServiceImpl implements MessageService {
      * @param interactive 发送的对象
      */
     @Override
-    public Image<?> toImage(InputStream image, Interactive<?> interactive) {
+    public Image toImage(InputStream image, Interactive<?> interactive) {
         requireTelegram(interactive, "interactive");
         return new TelegramImageMessage(new InputFile(image, "image"));
     }

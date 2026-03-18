@@ -64,7 +64,7 @@ public class DashScopeCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, CommandMeta meta, String usageName) {
+    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message message, int time, CommandMeta meta, String usageName) {
         if (usageName.equals(getDescriptions())) {
 //            if (!user.isPremium()) {
 //                from.quoteReply(message, "仅Premium会员可使用此命令。");

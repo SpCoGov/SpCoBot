@@ -57,7 +57,7 @@ public class ReportCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, CommandMeta meta, String usageName) throws CommandSyntaxException {
+    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message message, int time, CommandMeta meta, String usageName) throws CommandSyntaxException {
         from.quoteReply(message, SpCoBot.getInstance().getRuntimeStatistic().genReport());
     }
 }

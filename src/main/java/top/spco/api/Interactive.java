@@ -34,17 +34,17 @@ public abstract class Interactive<T> extends Identifiable<T> {
 
     public abstract void sendMessage(String message);
 
-    public abstract void sendMessage(Message<?> message);
+    public abstract void sendMessage(Message message);
 
-    public void handleException(Message<?> sourceMessage, String message) {
+    public void handleException(Message sourceMessage, String message) {
         this.sendMessage(SpCoBot.getInstance().getMessageService().asMessage("[错误发生] " + message).quoteReply(sourceMessage));
     }
 
-    public void handleException(Message<?> sourceMessage, String message, Throwable throwable) {
+    public void handleException(Message sourceMessage, String message, Throwable throwable) {
         this.sendMessage(SpCoBot.getInstance().getMessageService().asMessage("[错误发生] " + message + ": " + throwable.getMessage()).quoteReply(sourceMessage));
     }
 
-    public void handleException(Message<?> sourceMessage, Throwable throwable) {
+    public void handleException(Message sourceMessage, Throwable throwable) {
         this.sendMessage(SpCoBot.getInstance().getMessageService().asMessage("[错误发生] SpCoBot运行时抛出了意料之外的异常: " + throwable.getMessage()).quoteReply(sourceMessage));
     }
 
@@ -66,7 +66,7 @@ public abstract class Interactive<T> extends Identifiable<T> {
      * @param sourceMessage 源消息，用于引用
      * @param message       要发送的回复消息
      */
-    public void quoteReply(Message<?> sourceMessage, Message<?> message) {
+    public void quoteReply(Message sourceMessage, Message message) {
         this.sendMessage(message.quoteReply(sourceMessage));
     }
 
@@ -76,7 +76,7 @@ public abstract class Interactive<T> extends Identifiable<T> {
      * @param sourceMessage 源消息，用于引用
      * @param message       要发送的回复消息
      */
-    public void quoteReply(Message<?> sourceMessage, String message) {
+    public void quoteReply(Message sourceMessage, String message) {
         this.sendMessage(SpCoBot.getInstance().getMessageService().asMessage(message).quoteReply(sourceMessage));
     }
 

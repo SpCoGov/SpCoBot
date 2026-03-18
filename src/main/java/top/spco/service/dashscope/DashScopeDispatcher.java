@@ -70,7 +70,7 @@ public class DashScopeDispatcher extends Manager<String, DashScope> {
         return null;
     }
 
-    public DashScope getDashScopeOrCreate(BotUser user, Interactive<?> from, Message<?> message) throws RegistrationException {
+    public DashScope getDashScopeOrCreate(BotUser user, Interactive<?> from, Message message) throws RegistrationException {
         var d = get(user.getId());
         if (d == null) {
             d = new DashScope(user, from, message);

@@ -147,7 +147,7 @@ public class Chat {
      * @param message 收到的消息
      * @param time    时间戳
      */
-    public void handleMessage(Bot<?> bot, Interactive<?> source, Interactive<?> sender, Message<?> message, int time) {
+    public void handleMessage(Bot<?> bot, Interactive<?> source, Interactive<?> sender, Message message, int time) {
         if (stopped) {
             return;
         }

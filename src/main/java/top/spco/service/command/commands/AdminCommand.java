@@ -44,7 +44,7 @@ public class AdminCommand extends GroupAbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, CommandMeta meta, String usageName) throws CommandSyntaxException {
+    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message message, int time, CommandMeta meta, String usageName) throws CommandSyntaxException {
         // TODO: 修复这个
 //        Group<?> group = (Group<?>) from;
 //        InteractiveList<NormalMember<?>> members = group.getMembers();
@@ -54,7 +54,7 @@ public class AdminCommand extends GroupAbstractCommand {
 //                admins.add(member);
 //            }
 //        }
-//        Message<?> adminCallMessage = SpCoBot.getInstance().getMessageService().at(sender.getId()).append("呼叫群管理员" + "\n");
+//        Message adminCallMessage = SpCoBot.getInstance().getMessageService().at(sender.getId()).append("呼叫群管理员" + "\n");
 //        for (var admin : admins) {
 //            if (admin.isBot()) {
 //                continue;

@@ -57,7 +57,7 @@ public class PermissionsValidator {
      * @param message 命令源消息
      * @return 如果发送者有管理员权限返回 {@code true} ，否则返回 {@code false}
      */
-    public static boolean isMemberAdmin(Interactive<?> from, BotUser user, Message<?> message) {
+    public static boolean isMemberAdmin(Interactive<?> from, BotUser user, Message message) {
         // TODO: 修复这个
         return false;
 //        if (from instanceof Group<?> group) {
@@ -85,7 +85,7 @@ public class PermissionsValidator {
      * @param targetId 命令操作的目标Id
      * @return 可操作返回被操作的目标对象，不可操作返回 {@code null}
      */
-    public static User<?> verifyMemberPermissions(Interactive<?> from, BotUser user, Message<?> message, long targetId) {
+    public static User<?> verifyMemberPermissions(Interactive<?> from, BotUser user, Message message, long targetId) {
         // TODO: 修复这个
         return null;
 //        try {
@@ -118,7 +118,7 @@ public class PermissionsValidator {
      * @return 可操作返回 {@code true}，不可操作返回 {@code false}
      * @see #verifyBotPermissions(Interactive, Message, NormalMember)
      */
-    public static boolean verifyBotPermissions(Interactive<?> from, Message<?> message, long targetId) {
+    public static boolean verifyBotPermissions(Interactive<?> from, Message message, long targetId) {
 //        if (from instanceof Group<?> group) {
 //            return verifyBotPermissions(from, message, group.getMember(targetId));
 //        }
@@ -138,11 +138,11 @@ public class PermissionsValidator {
      * @param target  命令操作的目标对象
      * @return 可操作返回 {@code true}，不可操作返回 {@code false}
      */
-    public static boolean verifyBotPermissions(Interactive<?> from, Message<?> message, User<?> target) {
+    public static boolean verifyBotPermissions(Interactive<?> from, Message message, User<?> target) {
         return verifyBotPermissions(from, message, target, true);
     }
 
-    public static boolean verifyBotPermissions(Interactive<?> from, Message<?> message, User<?> target, boolean prompt) {
+    public static boolean verifyBotPermissions(Interactive<?> from, Message message, User<?> target, boolean prompt) {
 //        if (from instanceof Group<?> group) {
 //            if (!group.botPermission().isOperator()) {
 //                if (prompt) from.quoteReply(message, "机器人权限不足。");

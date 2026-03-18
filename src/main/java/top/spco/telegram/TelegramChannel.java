@@ -30,7 +30,7 @@ class TelegramChannel extends Channel<Chat> {
     }
 
     @Override
-    public void sendMessage(Message<?> message) {
+    public void sendMessage(Message message) {
         TelegramMessageSender.sendMessage(TelegramAdapter.getInstance().telegramClient, String.valueOf(getId()), (org.telegram.telegrambots.meta.api.objects.message.Message) message.wrapped());
     }
 

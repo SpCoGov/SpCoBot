@@ -30,7 +30,7 @@ import java.util.LinkedHashMap;
  */
 public class CommandMeta {
     private final String command;
-    private final Message<?> sourceMessage;
+    private final Message sourceMessage;
     private final Parser parser;
     private Usage usage;
     private String label;
@@ -62,7 +62,7 @@ public class CommandMeta {
      *
      * @param context 命令的原始文本
      */
-    public CommandMeta(String context, Message<?> sourceMessage, Parser parser) throws CommandSyntaxException {
+    public CommandMeta(String context, Message sourceMessage, Parser parser) throws CommandSyntaxException {
         this.sourceMessage = sourceMessage;
         this.command = context;
         this.parser = parser;
@@ -72,7 +72,7 @@ public class CommandMeta {
         return parser;
     }
 
-    public Message<?> getSourceMessage() {
+    public Message getSourceMessage() {
         return sourceMessage;
     }
 

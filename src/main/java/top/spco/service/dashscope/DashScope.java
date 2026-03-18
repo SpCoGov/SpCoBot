@@ -47,9 +47,9 @@ public class DashScope {
     private int timer;
     private Generation generation;
     private MessageManager msgManager;
-    private final MutablePair<Interactive<?>, Message<?>> lastMessage = new MutablePair<>();
+    private final MutablePair<Interactive<?>, Message> lastMessage = new MutablePair<>();
 
-    public DashScope(BotUser user, Interactive<?> from, Message<?> message) {
+    public DashScope(BotUser user, Interactive<?> from, Message message) {
         this.userId = user.getId();
         setLastMessage(from, message);
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1, new NamedThreadFactory("DashScope Destroyer"));
@@ -63,7 +63,7 @@ public class DashScope {
         }, 0, 1, TimeUnit.SECONDS);
     }
 
-    public void setLastMessage(Interactive<?> from, Message<?> lastMessage) {
+    public void setLastMessage(Interactive<?> from, Message lastMessage) {
         this.lastMessage.setLeft(from);
         this.lastMessage.setRight(lastMessage);
     }

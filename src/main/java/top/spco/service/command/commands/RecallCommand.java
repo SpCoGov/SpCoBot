@@ -51,9 +51,9 @@ public class RecallCommand extends GroupAbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, CommandMeta meta, String usageName) throws CommandSyntaxException {
+    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message message, int time, CommandMeta meta, String usageName) throws CommandSyntaxException {
         if (PermissionsValidator.isMemberAdmin(from, user, message)) {
-            ImmutablePair<MessageSource<?>, Message<?>> quote = SpCoBot.getInstance().getMessageService().getQuote(message);
+            ImmutablePair<MessageSource<?>, Message> quote = SpCoBot.getInstance().getMessageService().getQuote(message);
             if (quote == null) {
                 from.quoteReply(message, "请在回复消息时使用该命令。");
                 return;

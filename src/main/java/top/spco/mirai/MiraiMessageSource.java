@@ -40,7 +40,8 @@ class MiraiMessageSource extends MessageSource<net.mamoe.mirai.message.data.Mess
     }
 
     @Override
-    public Message<?> getOriginalMessage() {
-        return new MiraiMessage(wrapped().getOriginalMessage());
+    public Message getOriginalMessage() {
+//        return new MiraiMessage(wrapped().getOriginalMessage());
+        return null;
     }
 }

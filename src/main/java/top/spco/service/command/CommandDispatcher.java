@@ -144,7 +144,7 @@ public class CommandDispatcher extends SimpleFeatureManager<Command> {
         });
     }
 
-    private void callCommand(Map<String, Command> targetCommands, Interactive<?> from, User<?> sender, Message<?> message, Bot<?> bot, int time) {
+    private void callCommand(Map<String, Command> targetCommands, Interactive<?> from, User<?> sender, Message message, Bot<?> bot, int time) {
         Parser input = new Parser(message, message.toMessageContext().substring(1));
         while (input.canRead() && input.peek() != ' ') {
             input.skip();
@@ -157,11 +157,12 @@ public class CommandDispatcher extends SimpleFeatureManager<Command> {
         if (input.canRead()) {
             input.skip();
         }
-        message.setCommandMessage();
+        // TODO: 修改为MessageChain
+        //message.setCommandMessage();
         callCommand(targetCommands, from, sender, message, bot, time, label, input);
     }
 
-    private void callCommand(Map<String, Command> targetCommands, Interactive<?> from, User<?> sender, Message<?> message, Bot<?> bot, int time, String label, Parser parser) {
+    private void callCommand(Map<String, Command> targetCommands, Interactive<?> from, User<?> sender, Message message, Bot<?> bot, int time, String label, Parser parser) {
         try {
             // 获取命令实例和发送者和发送者的用户实例
             Command command = targetCommands.get(label);

@@ -40,7 +40,7 @@ public interface MessageService {
      * @param id 群成员的Id
      * @return 包含At的Message对象
      */
-    Message<?> at(long id);
+    Message at(long id);
 
     /**
      * At一位群成员。
@@ -49,21 +49,21 @@ public interface MessageService {
      * @param message At的内容
      * @return 包含At的Message对象
      */
-    Message<?> at(long id, String message);
+    Message at(long id, String message);
 
     /**
      * At全体成员。
      *
      * @return 包含At全体成员的Message对象
      */
-    Message<?> atAll();
+    Message atAll();
 
     /**
      * 获取第一个提到的Id。
      *
      * @return 第一个提到的Id，如果未提到Id返回-1
      */
-    String getFirstMentioned(Message<?> message, String phrase);
+    String getFirstMentioned(Message message, String phrase);
 
     /**
      * 获取消息所引用的消息。
@@ -72,7 +72,7 @@ public interface MessageService {
      * @return 如果有引用时返回被引用的消息，如果没有时返回null
      */
     @Nullable
-    ImmutablePair<@NotNull MessageSource<?>, @NotNull Message<?>> getQuote(Message<?> message);
+    ImmutablePair<@NotNull MessageSource<?>, @NotNull Message> getQuote(Message message);
 
     /**
      * 撤回一条消息<p>
@@ -87,7 +87,7 @@ public interface MessageService {
      *
      * @param content 需要转换的内容
      */
-    Message<?> asMessage(String content);
+    Message asMessage(String content);
 
     /**
      * 将文件转换为 {@code Image} 对象。
@@ -95,7 +95,7 @@ public interface MessageService {
      * @param image       需要转换的图片
      * @param interactive 发送的对象
      */
-    Image<?> toImage(File image, Interactive<?> interactive);
+    Image toImage(File image, Interactive<?> interactive);
 
     /**
      * 将输入流转换为 {@code Image} 对象。
@@ -103,5 +103,5 @@ public interface MessageService {
      * @param image       需要转换的图片
      * @param interactive 发送的对象
      */
-    Image<?> toImage(InputStream image, Interactive<?> interactive);
+    Image toImage(InputStream image, Interactive<?> interactive);
 }

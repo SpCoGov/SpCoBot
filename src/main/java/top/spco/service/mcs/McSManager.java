@@ -51,11 +51,11 @@ public class McSManager extends Manager<String, McS> {
 
     }
 
-    public McS connect(Group<?> group, Message<?> caller) throws IOException {
+    public McS connect(Group<?> group, Message caller) throws IOException {
         return connect(group, caller, false);
     }
 
-    public McS connect(Group<?> group, Message<?> caller, boolean afterHeartbeatTimeout) throws IOException {
+    public McS connect(Group<?> group, Message caller, boolean afterHeartbeatTimeout) throws IOException {
         if (!isBound(group.getId())) {
             throw new IllegalStateException("This group is not bound to the Minecraft server");
         }

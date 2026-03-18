@@ -109,7 +109,7 @@ public class ValorantCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message<?> message, int time, CommandMeta meta, String usageName) {
+    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message message, int time, CommandMeta meta, String usageName) {
         switch (usageName) {
             case "登录拳头账户" -> {
                 if (from instanceof Group) {
@@ -254,7 +254,7 @@ public class ValorantCommand extends AbstractCommand {
                                                             int remainingTime = store.getRemainingTime();
                                                             LinkedList<WeaponSkin> skins = store.getSkins();
 
-                                                            Message<?> toReply = ms.asMessage("您今日的每日商店为：\n");
+                                                            Message toReply = ms.asMessage("您今日的每日商店为：\n");
                                                             for (var skin : skins) {
                                                                 try {
                                                                     toReply.append(skin.getDisplayName() + " " + skin.getCost() + "VP");
@@ -304,7 +304,7 @@ public class ValorantCommand extends AbstractCommand {
                         SkinsPanelLayoutContainer.SkinsPanelLayout store = SkinsPanelLayoutContainer.parseStore(response).getSkinsPanelLayout();
                         int remainingTime = store.getRemainingTime();
                         LinkedList<WeaponSkin> skins = store.getSkins();
-                        Message<?> toReply = ms.asMessage("您今日的每日商店为：\n");
+                        Message toReply = ms.asMessage("您今日的每日商店为：\n");
                         for (var skin : skins) {
                             try {
                                 toReply.append(skin.getDisplayName() + " " + skin.getCost() + "VP");
@@ -341,7 +341,7 @@ public class ValorantCommand extends AbstractCommand {
         }
     }
 
-    private void handleToken(RiotAuth riot, String[] tokens, String userId, Interactive<?> from, Message<?> message) {
+    private void handleToken(RiotAuth riot, String[] tokens, String userId, Interactive<?> from, Message message) {
         try {
             riot.parse(tokens);
             String sql = "INSERT INTO valorant_user (id, username, password, access_token, entitlements, uuid, name, tag, create_data, ban_type, region) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +

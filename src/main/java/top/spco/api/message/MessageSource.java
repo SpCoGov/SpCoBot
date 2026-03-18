@@ -39,5 +39,5 @@ protected MessageSource(T object) {
      */
     public abstract long getFromId();
 
-    public abstract Message<?> getOriginalMessage();
+    public abstract Message getOriginalMessage();
 }

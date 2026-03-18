@@ -45,7 +45,7 @@ public class MessageEvents {
 
     @FunctionalInterface
     public interface GroupMessage {
-        void onGroupMessage(Bot<?> bot, Group<?> source, User<?> sender, Message<?> message, int time);
+        void onGroupMessage(Bot<?> bot, Group<?> source, User<?> sender, Message message, int time);
     }
 
     /**
@@ -60,7 +60,7 @@ public class MessageEvents {
 
     @FunctionalInterface
     public interface ChannelMessage {
-        void onChannelMessage(Bot<?> bot, Channel<?> source, User<?> sender, Message<?> message, int time);
+        void onChannelMessage(Bot<?> bot, Channel<?> source, User<?> sender, Message message, int time);
     }
 
     /**
@@ -75,7 +75,7 @@ public class MessageEvents {
 
     @FunctionalInterface
     public interface UserMessage {
-        void onPrivateMessage(Bot<?> bot, User<?> sender, Message<?> message, int time);
+        void onPrivateMessage(Bot<?> bot, User<?> sender, Message message, int time);
     }
 
     /**
@@ -91,7 +91,7 @@ public class MessageEvents {
 
     @FunctionalInterface
     public interface PrivateMessagePostSend {
-        void onPrivateMessagePostSend(Bot<?> bot, User<?> friend, Message<?> message);
+        void onPrivateMessagePostSend(Bot<?> bot, User<?> friend, Message message);
     }
 
     /**

@@ -25,7 +25,7 @@ class TelegramMessageSource extends MessageSource<org.telegram.telegrambots.meta
     }
 
     @Override
-    public Message<?> getOriginalMessage() {
+    public Message getOriginalMessage() {
         return new TelegramMessage(wrapped());
     }
 }

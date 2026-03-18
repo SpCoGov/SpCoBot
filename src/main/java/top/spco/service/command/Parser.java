@@ -30,11 +30,11 @@ public class Parser {
     private static final char SYNTAX_ESCAPE = '\\';
     private static final char SYNTAX_DOUBLE_QUOTE = '"';
     private static final char SYNTAX_SINGLE_QUOTE = '\'';
-    private final Message<?> message;
+    private final Message message;
     private final String string;
     private int cursor;
 
-    public Parser(Message<?> message, final String string) {
+    public Parser(Message message, final String string) {
         this.message = message;
         this.string = string;
     }
@@ -43,7 +43,7 @@ public class Parser {
         return string;
     }
 
-    public Message<?> getMessage() {
+    public Message getMessage() {
         return message;
     }
 

@@ -44,13 +44,13 @@ import java.io.File;
  *
  * <h2>在消息后添加消息</h2>
  * 对于复合消息可以直接使用 {@link #append(Message)} 等方法直接向其末尾添加消息。
- * <p>对于元素消息，需要先使用 {@link #toMessage()} 来将其转换为一个复合消息再进行后续操作。
+ * <p>对于元素消息，需要先使用 {@link #toMessageChain()} 来将其转换为一个复合消息再进行后续操作。
  *
  * <pre>{@code
  * Interactive from = getFrom();
  * File file = new File("./image.png");
- * Image<?> image = SpCoBot.getInstance().getMessageService().toImage(file, from);
- * Message<?> message = image.toMessage();
+ * Image image = SpCoBot.getInstance().getMessageService().toImage(file, from);
+ * Message message = image.toMessage();
  *
  * message.append("这是一张图片。").append(image);
  * from.sendMessage(message);
@@ -58,12 +58,12 @@ import java.io.File;
  *
  * <h2>引用一条消息</h2>
  * 和上面一样，元素消息不能直接引用一条消息，需先进行转换。
- * <p>复合消息可以使用 {@link #quoteReply(Message)} 来进行引用。注意：这里提交的消息不能是用户自己创建的消息。
+ * <p>复合消息可以使用 {@link #quoteReply(Message)} 来进行引用。
  *
  * <pre>{@code
  * Interactive from = getFrom();
- * Message<?> sourceMessage = getMessage();
- * Message<?> message = SpCoBot.getInstance().getMessageService().asMessage("文本。");
+ * Message sourceMessage = getMessage();
+ * Message message = SpCoBot.getInstance().getMessageService().asMessage("文本。");
  *
  * from.sendMessage(message.quoteReply(sourceMessage));
  * }</pre>
@@ -72,7 +72,7 @@ import java.io.File;
  * 除了用户自行创建的消息，都可以使用 {@link MessageService#recall(MessageSource)} 来撤回。
  *
  * <pre>{@code
- * Message<?> message = getMessage();
+ * Message message = getMessage();
  *
  * SpCoBot.getInstance().getMessageService().recall(message);
  * }</pre>
@@ -83,8 +83,8 @@ import java.io.File;
  * <pre>{@code
  * Interactive from = getFrom();
  * File file = new File("./image.png");
- * Message<?> text = SpCoBot.getInstance().getMessageService().asMessage("文本");
- * Image<?> image = SpCoBot.getInstance().getMessageService().toImage(file, from);
+ * Message text = SpCoBot.getInstance().getMessageService().asMessage("文本");
+ * Image image = SpCoBot.getInstance().getMessageService().toImage(file, from);
  *
  * from.sendMessage(text);
  * from.sendMessage(image);
@@ -106,11 +106,9 @@ import java.io.File;
  * @see MessageSource
  * @since 0.1.0
  */
-public abstract class Message<T> extends Wrapper<T> implements Codable {
-    private boolean isCommandMessage = false;
-
-    protected Message(T message) {
-        super(message);
+public abstract class Message<> implements Codable {
+    protected Message() {
+        super();
     }
 
     /**
@@ -121,45 +119,23 @@ public abstract class Message<T> extends Wrapper<T> implements Codable {
     public abstract String toMessageContext();
 
     /**
-     * 引用一条消息
-     *
-     * @param toQuote 需要引用的消息
-     */
-    public abstract Message<T> quoteReply(Message<?> toQuote);
-
-    /**
      * 在这条消息后添加 {@code Message} 对象
      *
      * @param appendage 需要添加的 {@code Message} 对象
      */
-    public abstract Message<T> append(Message<?> appendage);
+    public abstract MessageChain append(Message appendage);
 
     /**
      * 在这条消息后添加文本
      *
      * @param appendage 需要添加的文本
      */
-    public abstract Message<T> append(String appendage);
+    public abstract MessageChain append(String appendage);
 
     /**
      * 将一条消息转换成普通的消息
      *
      * @return 转换的结果
      */
-    public abstract Message<?> toMessage();
-
-    public boolean isCommandMessage() {
-        return isCommandMessage;
-    }
-
-    public void setCommandMessage() {
-        isCommandMessage = true;
-    }
-
-    /**
-     * 获得消息的 {@link MessageSource} （如果有）
-     *
-     * @return 转换的结果
-     */
-    public abstract MessageSource<?> getSource();
+    public abstract MessageChain toMessageChain();
 }

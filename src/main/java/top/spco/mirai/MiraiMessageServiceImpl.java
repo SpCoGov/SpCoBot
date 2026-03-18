@@ -15,17 +15,11 @@
  */
 package top.spco.mirai;
 
-import net.mamoe.mirai.contact.Contact;
 import net.mamoe.mirai.contact.PermissionDeniedException;
-import net.mamoe.mirai.message.data.At;
-import net.mamoe.mirai.message.data.MessageChainBuilder;
-import net.mamoe.mirai.message.data.QuoteReply;
-import net.mamoe.mirai.utils.ExternalResource;
 import org.jetbrains.annotations.NotNull;
-import top.spco.SpCoBot;
-import top.spco.api.message.Image;
 import top.spco.api.Interactive;
 import top.spco.api.exception.PlatformMismatchException;
+import top.spco.api.message.Image;
 import top.spco.api.message.Message;
 import top.spco.api.message.MessageSource;
 import top.spco.api.message.service.MessageService;
@@ -55,23 +49,26 @@ class MiraiMessageServiceImpl implements MessageService {
     }
 
     @Override
-    public Message<?> at(long id) {
-        return new MiraiMessage(new MessageChainBuilder().append(new At(id)).build());
+    public Message at(long id) {
+//        return new MiraiMessage(new MessageChainBuilder().append(new At(id)).build());
+        return null;
     }
 
     @Deprecated
     @Override
-    public Message<?> at(long id, String message) {
-        return new MiraiMessage(new MessageChainBuilder().append(new At(id)).build());
+    public Message at(long id, String message) {
+//        return new MiraiMessage(new MessageChainBuilder().append(new At(id)).build());
+        return null;
     }
 
     @Override
-    public Message<?> atAll() {
-        return new MiraiMessage(new MessageChainBuilder().append(net.mamoe.mirai.message.data.AtAll.INSTANCE).build());
+    public Message atAll() {
+        //return new MiraiMessage(new MessageChainBuilder().append(net.mamoe.mirai.message.data.AtAll.INSTANCE).build());
+        return null;
     }
 
     @Override
-    public String getFirstMentioned(Message<?> message, String phrase) {
+    public String getFirstMentioned(Message message, String phrase) {
         requireQQ(message, "message");
         Pattern pattern = Pattern.compile("\\[mirai:at:\\d+]");
         Matcher matcher = pattern.matcher(message.toMessageContext());
@@ -95,19 +92,19 @@ class MiraiMessageServiceImpl implements MessageService {
     }
 
     @Override
-    public ImmutablePair<@NotNull MessageSource<?>, @NotNull Message<?>> getQuote(Message<?> message) {
-        requireQQ(message, "message");
-        try {
-            MiraiMessage miraiMessage = ((MiraiMessage) message);
-            for (var singleMessage : miraiMessage.wrapped()) {
-                if (singleMessage instanceof QuoteReply quoteReply) {
-                    return new ImmutablePair<>(new MiraiMessageSource(quoteReply.getSource()), new MiraiMessage(quoteReply.getSource().getOriginalMessage()));
-                }
-            }
-            return null;
-        } catch (Exception e) {
-            SpCoBot.LOGGER.error(e);
-        }
+    public ImmutablePair<@NotNull MessageSource<?>, @NotNull Message> getQuote(Message message) {
+//        requireQQ(message, "message");
+//        try {
+//            MiraiMessage miraiMessage = ((MiraiMessage) message);
+//            for (var singleMessage : miraiMessage.wrapped()) {
+//                if (singleMessage instanceof QuoteReply quoteReply) {
+//                    return new ImmutablePair<>(new MiraiMessageSource(quoteReply.getSource()), new MiraiMessage(quoteReply.getSource().getOriginalMessage()));
+//                }
+//            }
+//            return null;
+//        } catch (Exception e) {
+//            SpCoBot.LOGGER.error(e);
+//        }
         return null;
     }
 
@@ -122,19 +119,22 @@ class MiraiMessageServiceImpl implements MessageService {
     }
 
     @Override
-    public Message<?> asMessage(String content) {
-        return new MiraiMessage(new net.mamoe.mirai.message.data.MessageChainBuilder().append(content).build());
+    public Message asMessage(String content) {
+        //return new MiraiMessage(new net.mamoe.mirai.message.data.MessageChainBuilder().append(content).build());
+        return null;
     }
 
     @Override
-    public Image<?> toImage(File image, Interactive<?> interactive) {
+    public Image toImage(File image, Interactive<?> interactive) {
         requireQQ(interactive, "interactive");
-        return new MiraiImage(ExternalResource.uploadAsImage(image, (Contact) interactive.wrapped()));
+//        return new MiraiImage(ExternalResource.uploadAsImage(image, (Contact) interactive.wrapped()));
+        return null;
     }
 
     @Override
-    public Image<?> toImage(InputStream image, Interactive<?> interactive) {
+    public Image toImage(InputStream image, Interactive<?> interactive) {
         requireQQ(interactive, "interactive");
-        return new MiraiImage(ExternalResource.uploadAsImage(image, (Contact) interactive.wrapped()));
+//        return new MiraiImage(ExternalResource.uploadAsImage(image, (Contact) interactive.wrapped()));
+        return null;
     }
 }

@@ -48,7 +48,7 @@ public class CommandEvents {
          * @param message 原始消息
          * @param time    命令发送的时间
          */
-        void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, Message<?> message, int time);
+        void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, Message message, int time);
     }
 
     /**
@@ -70,7 +70,7 @@ public class CommandEvents {
          * @param message    原始消息
          * @param time       命令发送的时间
          */
-        void onPrivateCommand(Bot<?> bot, User<?> interactor, Message<?> message, int time);
+        void onPrivateCommand(Bot<?> bot, User<?> interactor, Message message, int time);
     }
 
     /**
@@ -93,6 +93,6 @@ public class CommandEvents {
          * @param time    命令发送的时间
          * @param message 原始消息
          */
-        void onGroupCommand(Bot<?> bot, Group<?> from, User<?> sender, Message<?> message, int time);
+        void onGroupCommand(Bot<?> bot, Group<?> from, User<?> sender, Message message, int time);
     }
 }

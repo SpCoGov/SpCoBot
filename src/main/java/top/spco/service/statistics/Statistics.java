@@ -32,15 +32,15 @@ import java.util.*;
  */
 public class Statistics {
     private Map<Integer, String> mapping = new HashMap<>();
-    private Map<Integer, Map<String , Message<?>>> statistics = new HashMap<>();
+    private Map<Integer, Map<String , Message>> statistics = new HashMap<>();
     /**
      * 已报名的用户。
      */
     private List<String> users = new ArrayList<>();
     private Group<?> group;
-    private PentaConsumer<Boolean, User<?>, Message<?>, Integer, Group<?>> received;
+    private PentaConsumer<Boolean, User<?>, Message, Integer, Group<?>> received;
 
-    public Statistics(Group<?> group, PentaConsumer<Boolean, User<?>, Message<?>, Integer, Group<?>> received) {
+    public Statistics(Group<?> group, PentaConsumer<Boolean, User<?>, Message, Integer, Group<?>> received) {
         this.group = group;
         this.received = received;
     }
@@ -57,7 +57,7 @@ public class Statistics {
         return i;
     }
 
-    public void receive(Group<?> source, User<?> sender, Message<?> message) {
+    public void receive(Group<?> source, User<?> sender, Message message) {
         if (!Objects.equals(group.getId(), source.getId())) {
             return;
         }
@@ -71,8 +71,8 @@ public class Statistics {
         }
     }
 
-    private boolean record(User<?> sender, int itemId, Message<?> message) {
-        Map<String, Message<?>> map;
+    private boolean record(User<?> sender, int itemId, Message message) {
+        Map<String, Message> map;
         if (users.contains(sender.getId())) {
             return false;
         }
@@ -101,7 +101,7 @@ public class Statistics {
         return null;
     }
 
-    public Map<String, Message<?>> getRecords(int itemId) {
+    public Map<String, Message> getRecords(int itemId) {
         if (statistics.containsKey(itemId)) {
             return statistics.get(itemId);
         }
