@@ -20,6 +20,8 @@ import com.google.gson.JsonPrimitive;
 import top.spco.SpCoBot;
 import top.spco.api.Group;
 import top.spco.api.message.Message;
+import top.spco.api.message.MessageChain;
+import top.spco.api.message.TextMessage;
 import top.spco.util.ExceptionUtil;
 import top.spco.util.TimeUtil;
 import top.spco.util.tuple.MutablePair;
@@ -55,7 +57,7 @@ public class McS {
     private int heartbeatInterval;
     private String name = "undefined";
     private final Group<?> group;
-    private final Map<Integer, Message> commandCaller = new ConcurrentHashMap<>();
+    private final Map<Integer, MessageChain> commandCaller = new ConcurrentHashMap<>();
     private final Set<Integer> heartbeats = new HashSet<>();
     private final Set<Integer> timeoutHeartbeats = new HashSet<>();
     private int timeoutCount;
@@ -69,14 +71,14 @@ public class McS {
     private final boolean hasCaller;
     private boolean debug = false;
     private boolean connected = false;
-    private final Message callerMessage;
+    private final MessageChain callerMessage;
 
-    public McS(String host, int port, Group<?> group, @Nullable Message callerMessage, boolean afterHeartbeatTimeout) throws IOException {
+    public McS(String host, int port, Group<?> group, @Nullable MessageChain callerMessage, boolean afterHeartbeatTimeout) throws IOException {
         this.group = group;
         hasCaller = callerMessage != null;
         this.callerMessage = callerMessage;
         if (hasCaller && !afterHeartbeatTimeout) {
-            group.sendMessage(SpCoBot.getInstance().getMessageService().asMessage("开始尝试连接到Minecraft服务器：" + host + ":" + port).quoteReply(callerMessage));
+            group.sendMessage(new TextMessage("开始尝试连接到Minecraft服务器：" + host + ":" + port).toMessageChain().quoteReply(callerMessage));
         }
         socket = new Socket(host, port);
         this.out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true);
@@ -106,7 +108,7 @@ public class McS {
                                 connected = true;
                                 McSManager.getInstance().getAllRegistered().put(group.getId(), this);
                                 if (hasCaller) {
-                                    group.sendMessage(SpCoBot.getInstance().getMessageService().asMessage("连接成功").quoteReply(callerMessage));
+                                    group.sendMessage(SpCoBot.getInstance().getMessageService().asMessage("连接成功").toMessageChain().quoteReply(callerMessage));
                                 }
                             }
                             case 2 -> {
@@ -149,7 +151,7 @@ public class McS {
                                             // 如果是第一条消息
                                             commandReceivingTime.put(ack, new MutablePair<>(System.nanoTime(), System.nanoTime()));
                                             ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-                                            Message caller = commandCaller.get(ack);
+                                            MessageChain caller = commandCaller.get(ack);
                                             // 指定毫秒后发送命令返回值
                                             int delay = 100;
                                             scheduler.schedule(() -> {
@@ -204,7 +206,7 @@ public class McS {
         }).start();
     }
 
-    public int executeCommand(String command, Message callerMessage) {
+    public int executeCommand(String command, MessageChain callerMessage) {
         int payloadSyn = syn++;
         JsonObject data = new JsonObject();
         data.addProperty("type", "CALL_COMMAND");

@@ -19,6 +19,7 @@ import top.spco.api.Bot;
 import top.spco.api.Identifiable;
 import top.spco.api.Interactive;
 import top.spco.api.message.Message;
+import top.spco.api.message.MessageChain;
 import top.spco.core.Manager;
 import top.spco.service.RegistrationException;
 
@@ -52,7 +53,7 @@ public class ChatDispatcher extends Manager<String, Chat> {
         return instance;
     }
 
-    public void onMessage(ChatType chatType, Bot<?> bot, Interactive<?> source, Interactive<?> sender, Message message, int time) {
+    public void onMessage(ChatType chatType, Bot<?> bot, Interactive<?> source, Interactive<?> sender, MessageChain message, int time) {
         Chat chat = getChat(source, chatType);
         if (chat == null) {
             return;

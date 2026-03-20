@@ -24,6 +24,7 @@ import top.spco.api.Bot;
 import top.spco.api.Interactive;
 import top.spco.api.User;
 import top.spco.api.message.Message;
+import top.spco.api.message.MessageChain;
 import top.spco.service.chat.ChatBuilder;
 import top.spco.service.chat.ChatType;
 import top.spco.service.chat.Stage;
@@ -79,7 +80,7 @@ public class RechargeCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message message, int time, CommandMeta meta, String usageName) throws CommandSyntaxException {
+    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, MessageChain message, int time, CommandMeta meta, String usageName) throws CommandSyntaxException {
         if (SpCoBot.getInstance().getRechargeSystem() == null) {
             from.quoteReply(message, "充值系统未启用。");
             return;
@@ -168,7 +169,7 @@ public class RechargeCommand extends AbstractCommand {
                         ImageIO.write(image, "png", os);
                         InputStream is = new ByteArrayInputStream(os.toByteArray());
 
-                        Message qrCodeMessage = SpCoBot.getInstance().getMessageService().toImage(is, sender1).toMessageChain().append("订单号：" + trade.getTradeNo());
+                        MessageChain qrCodeMessage = SpCoBot.getInstance().getMessageService().toImage(is, sender1).toMessageChain().append("订单号：" + trade.getTradeNo());
                         from.quoteReply(message1, qrCodeMessage);
                         chat.stop();
                     } catch (IOException | WriterException e) {

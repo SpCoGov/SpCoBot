@@ -15,8 +15,9 @@
  */
 package top.spco.api;
 
-import top.spco.SpCoBot;
 import top.spco.api.message.Message;
+import top.spco.api.message.MessageChain;
+import top.spco.api.message.TextMessage;
 
 import java.io.File;
 
@@ -36,16 +37,16 @@ public abstract class Interactive<T> extends Identifiable<T> {
 
     public abstract void sendMessage(Message message);
 
-    public void handleException(Message sourceMessage, String message) {
-        this.sendMessage(SpCoBot.getInstance().getMessageService().asMessage("[错误发生] " + message).quoteReply(sourceMessage));
+    public void handleException(MessageChain sourceMessage, String message) {
+        this.sendMessage(new TextMessage("[错误发生] " + message).toMessageChain().quoteReply(sourceMessage));
     }
 
-    public void handleException(Message sourceMessage, String message, Throwable throwable) {
-        this.sendMessage(SpCoBot.getInstance().getMessageService().asMessage("[错误发生] " + message + ": " + throwable.getMessage()).quoteReply(sourceMessage));
+    public void handleException(MessageChain sourceMessage, String message, Throwable throwable) {
+        this.sendMessage(new TextMessage("[错误发生] " + message + ": " + throwable.getMessage()).toMessageChain().quoteReply(sourceMessage));
     }
 
-    public void handleException(Message sourceMessage, Throwable throwable) {
-        this.sendMessage(SpCoBot.getInstance().getMessageService().asMessage("[错误发生] SpCoBot运行时抛出了意料之外的异常: " + throwable.getMessage()).quoteReply(sourceMessage));
+    public void handleException(MessageChain sourceMessage, Throwable throwable) {
+        this.sendMessage(new TextMessage("[错误发生] SpCoBot运行时抛出了意料之外的异常: " + throwable.getMessage()).toMessageChain().quoteReply(sourceMessage));
     }
 
     public void handleException(String message, Throwable throwable) {
@@ -66,8 +67,10 @@ public abstract class Interactive<T> extends Identifiable<T> {
      * @param sourceMessage 源消息，用于引用
      * @param message       要发送的回复消息
      */
-    public void quoteReply(Message sourceMessage, Message message) {
-        this.sendMessage(message.quoteReply(sourceMessage));
+    public void quoteReply(MessageChain sourceMessage, MessageChain message) {
+        // TODO: 需要修改引用逻辑
+        //this.sendMessage(message.quoteReply(sourceMessage));
+        this.sendMessage(sourceMessage.quoteReply(message));
     }
 
     /**
@@ -76,8 +79,8 @@ public abstract class Interactive<T> extends Identifiable<T> {
      * @param sourceMessage 源消息，用于引用
      * @param message       要发送的回复消息
      */
-    public void quoteReply(Message sourceMessage, String message) {
-        this.sendMessage(SpCoBot.getInstance().getMessageService().asMessage(message).quoteReply(sourceMessage));
+    public void quoteReply(MessageChain sourceMessage, String message) {
+        this.sendMessage(new TextMessage(message).toMessageChain().quoteReply(sourceMessage));
     }
 
     public abstract void sendImage(File image);

@@ -17,6 +17,7 @@ package top.spco.service.dashscope;
 
 import top.spco.api.Interactive;
 import top.spco.api.message.Message;
+import top.spco.api.message.MessageChain;
 import top.spco.core.Manager;
 import top.spco.service.RegistrationException;
 import top.spco.user.BotUser;
@@ -70,7 +71,7 @@ public class DashScopeDispatcher extends Manager<String, DashScope> {
         return null;
     }
 
-    public DashScope getDashScopeOrCreate(BotUser user, Interactive<?> from, Message message) throws RegistrationException {
+    public DashScope getDashScopeOrCreate(BotUser user, Interactive<?> from, MessageChain message) throws RegistrationException {
         var d = get(user.getId());
         if (d == null) {
             d = new DashScope(user, from, message);

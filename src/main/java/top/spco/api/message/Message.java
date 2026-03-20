@@ -106,7 +106,7 @@ import java.io.File;
  * @see MessageSource
  * @since 0.1.0
  */
-public abstract class Message<> implements Codable {
+public abstract class Message implements Codable {
     protected Message() {
         super();
     }

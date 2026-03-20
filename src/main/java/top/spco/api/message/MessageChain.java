@@ -22,6 +22,9 @@ public class MessageChain extends Message {
 
     @Override
     public MessageChain append(Message appendage) {
+        if (appendage instanceof UnsupportedMessage) {
+            throw new UnsupportedOperationException("Unable to append unsupported messages to other messages");
+        }
         messageComponents.add(appendage);
         return this;
     }

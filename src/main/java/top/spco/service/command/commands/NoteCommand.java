@@ -20,6 +20,7 @@ import top.spco.api.Bot;
 import top.spco.api.Interactive;
 import top.spco.api.User;
 import top.spco.api.message.Message;
+import top.spco.api.message.MessageChain;
 import top.spco.service.command.GroupAbstractCommand;
 import top.spco.util.FileManipulation;
 import top.spco.service.command.CommandMarker;
@@ -58,7 +59,7 @@ public class NoteCommand extends GroupAbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message message, int time, CommandMeta meta, String usageName) {
+    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, MessageChain message, int time, CommandMeta meta, String usageName) {
         try {
             String context = Objects.requireNonNull(SpCoBot.getInstance().getMessageService().getQuote(message)).getRight().toMessageContext();
             if (!context.endsWith("，不打")) {

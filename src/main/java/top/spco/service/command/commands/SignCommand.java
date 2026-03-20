@@ -19,6 +19,7 @@ import top.spco.api.Bot;
 import top.spco.api.Interactive;
 import top.spco.api.User;
 import top.spco.api.message.Message;
+import top.spco.api.message.MessageChain;
 import top.spco.service.command.AbstractCommand;
 import top.spco.service.command.CommandMarker;
 import top.spco.service.command.CommandMeta;
@@ -43,11 +44,11 @@ public class SignCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message message, int time, CommandMeta meta, String usageName) {
+    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, MessageChain message, int time, CommandMeta meta, String usageName) {
         sign(from, user, message);
     }
 
-    public static void sign(Interactive<?> from, BotUser user, Message message) {
+    public static void sign(Interactive<?> from, BotUser user, MessageChain message) {
         try {
             int i = user.sign();
             if (i == -1) {

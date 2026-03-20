@@ -26,6 +26,7 @@ import com.alibaba.dashscope.exception.NoApiKeyException;
 import top.spco.SpCoBot;
 import top.spco.api.Interactive;
 import top.spco.api.message.Message;
+import top.spco.api.message.MessageChain;
 import top.spco.util.NamedThreadFactory;
 import top.spco.user.BotUser;
 import top.spco.util.tuple.MutablePair;
@@ -47,9 +48,9 @@ public class DashScope {
     private int timer;
     private Generation generation;
     private MessageManager msgManager;
-    private final MutablePair<Interactive<?>, Message> lastMessage = new MutablePair<>();
+    private final MutablePair<Interactive<?>, MessageChain> lastMessage = new MutablePair<>();
 
-    public DashScope(BotUser user, Interactive<?> from, Message message) {
+    public DashScope(BotUser user, Interactive<?> from, MessageChain message) {
         this.userId = user.getId();
         setLastMessage(from, message);
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1, new NamedThreadFactory("DashScope Destroyer"));
@@ -63,7 +64,7 @@ public class DashScope {
         }, 0, 1, TimeUnit.SECONDS);
     }
 
-    public void setLastMessage(Interactive<?> from, Message lastMessage) {
+    public void setLastMessage(Interactive<?> from, MessageChain lastMessage) {
         this.lastMessage.setLeft(from);
         this.lastMessage.setRight(lastMessage);
     }

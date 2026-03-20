@@ -144,7 +144,7 @@ class TelegramGroup extends Group<Chat> {
 
     @Override
     public void sendMessage(Message message) {
-        TelegramMessageSender.sendMessage(TelegramAdapter.getInstance().telegramClient, String.valueOf(getId()), ((TelegramMessage) message).wrapped());
+        TelegramMessageSender.sendMessage(TelegramAdapter.getInstance().telegramClient, String.valueOf(getId()), ((TelegramMessage) message).getMessage());
     }
 
     @Override

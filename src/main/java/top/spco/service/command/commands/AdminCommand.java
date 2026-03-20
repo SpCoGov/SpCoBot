@@ -18,6 +18,7 @@ package top.spco.service.command.commands;
 import top.spco.SpCoBot;
 import top.spco.api.*;
 import top.spco.api.message.Message;
+import top.spco.api.message.MessageChain;
 import top.spco.service.command.CommandMarker;
 import top.spco.service.command.CommandMeta;
 import top.spco.service.command.GroupAbstractCommand;
@@ -44,7 +45,7 @@ public class AdminCommand extends GroupAbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message message, int time, CommandMeta meta, String usageName) throws CommandSyntaxException {
+    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, MessageChain message, int time, CommandMeta meta, String usageName) throws CommandSyntaxException {
         // TODO: 修复这个
 //        Group<?> group = (Group<?>) from;
 //        InteractiveList<NormalMember<?>> members = group.getMembers();

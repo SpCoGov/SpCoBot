@@ -4,9 +4,12 @@ import top.spco.api.message.Message;
 import top.spco.api.message.MessageChain;
 import top.spco.api.message.MessageSource;
 
+// TODO: 重新实现这个类
 class TelegramMessage extends Message {
+    private final org.telegram.telegrambots.meta.api.objects.message.Message message;
     protected TelegramMessage(org.telegram.telegrambots.meta.api.objects.message.Message message) {
-        super(message);
+        super();
+        this.message = message;
     }
 
     /**
@@ -16,19 +19,19 @@ class TelegramMessage extends Message {
      */
     @Override
     public String toMessageContext() {
-        return wrapped().getText() == null ? "" : wrapped().getText();
+        return this.message.getText() == null ? "" : this.message.getText();
     }
 
-    /**
-     * 引用一条消息
-     *
-     * @param toQuote 需要引用的消息
-     */
-    @Override
-    public MessageChain quoteReply(Message toQuote) {
-        wrapped().setReplyToMessage(((TelegramMessage) toQuote).wrapped());
-        return this;
-    }
+//    /**
+//     * 引用一条消息
+//     *
+//     * @param toQuote 需要引用的消息
+//     */
+//    @Override
+//    public MessageChain quoteReply(Message toQuote) {
+//        this.message.setReplyToMessage(((TelegramMessage) toQuote).message);
+//        return this;
+//    }
 
     /**
      * 在这条消息后添加 {@code Message} 对象
@@ -36,9 +39,10 @@ class TelegramMessage extends Message {
      * @param appendage 需要添加的 {@code Message} 对象
      */
     @Override
-    public Message<org.telegram.telegrambots.meta.api.objects.message.Message> append(Message appendage) {
-        TelegramMessageSender.appendMessage(wrapped(), (org.telegram.telegrambots.meta.api.objects.message.Message) appendage.wrapped());
-        return this;
+    public MessageChain append(Message appendage) {
+        return null;
+//        TelegramMessageSender.appendMessage(this.message, (org.telegram.telegrambots.meta.api.objects.message.Message) appendage.message);
+//        return ;
     }
 
     /**
@@ -48,7 +52,7 @@ class TelegramMessage extends Message {
      */
     @Override
     public MessageChain append(String appendage) {
-//        TelegramMessageSender.appendText(wrapped(), appendage);
+//        TelegramMessageSender.appendText(this.message, appendage);
 //        return this;
         // TODO: FIX THIS
         return null;
@@ -61,18 +65,18 @@ class TelegramMessage extends Message {
      */
     @Override
     public MessageChain toMessageChain() {
-        return this;
+        return null;
     }
 
-    /**
-     * 获得消息的 {@link MessageSource} （如果有）
-     *
-     * @return 转换的结果
-     */
-    @Override
-    public MessageSource<?> getSource() {
-        return new TelegramMessageSource(wrapped());
-    }
+//    /**
+//     * 获得消息的 {@link MessageSource} （如果有）
+//     *
+//     * @return 转换的结果
+//     */
+//    @Override
+//    public MessageSource<?> getSource() {
+//        return new TelegramMessageSource(this.message);
+//    }
 
     /**
      * 序列化
@@ -81,6 +85,10 @@ class TelegramMessage extends Message {
      */
     @Override
     public String serialize() {
-        return wrapped().toString();
+        return this.message.toString();
+    }
+
+    public org.telegram.telegrambots.meta.api.objects.message.Message getMessage() {
+        return message;
     }
 }

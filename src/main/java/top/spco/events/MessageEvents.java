@@ -18,6 +18,7 @@ package top.spco.events;
 import top.spco.SpCoBot;
 import top.spco.api.*;
 import top.spco.api.message.Message;
+import top.spco.api.message.MessageChain;
 import top.spco.api.message.MessageSource;
 import top.spco.core.event.Event;
 import top.spco.core.event.EventFactory;
@@ -45,7 +46,7 @@ public class MessageEvents {
 
     @FunctionalInterface
     public interface GroupMessage {
-        void onGroupMessage(Bot<?> bot, Group<?> source, User<?> sender, Message message, int time);
+        void onGroupMessage(Bot<?> bot, Group<?> source, User<?> sender, MessageChain message, int time);
     }
 
     /**
@@ -60,7 +61,7 @@ public class MessageEvents {
 
     @FunctionalInterface
     public interface ChannelMessage {
-        void onChannelMessage(Bot<?> bot, Channel<?> source, User<?> sender, Message message, int time);
+        void onChannelMessage(Bot<?> bot, Channel<?> source, User<?> sender, MessageChain message, int time);
     }
 
     /**
@@ -75,7 +76,7 @@ public class MessageEvents {
 
     @FunctionalInterface
     public interface UserMessage {
-        void onPrivateMessage(Bot<?> bot, User<?> sender, Message message, int time);
+        void onPrivateMessage(Bot<?> bot, User<?> sender, MessageChain message, int time);
     }
 
     /**
@@ -91,7 +92,7 @@ public class MessageEvents {
 
     @FunctionalInterface
     public interface PrivateMessagePostSend {
-        void onPrivateMessagePostSend(Bot<?> bot, User<?> friend, Message message);
+        void onPrivateMessagePostSend(Bot<?> bot, User<?> friend, MessageChain message);
     }
 
     /**

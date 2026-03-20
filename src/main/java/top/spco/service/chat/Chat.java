@@ -19,6 +19,7 @@ import top.spco.SpCoBot;
 import top.spco.api.Bot;
 import top.spco.api.Interactive;
 import top.spco.api.message.Message;
+import top.spco.api.message.MessageChain;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -147,7 +148,7 @@ public class Chat {
      * @param message 收到的消息
      * @param time    时间戳
      */
-    public void handleMessage(Bot<?> bot, Interactive<?> source, Interactive<?> sender, Message message, int time) {
+    public void handleMessage(Bot<?> bot, Interactive<?> source, Interactive<?> sender, MessageChain message, int time) {
         if (stopped) {
             return;
         }

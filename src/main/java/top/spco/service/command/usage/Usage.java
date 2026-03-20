@@ -65,7 +65,10 @@ public class Usage {
     /**
      * <b>请勿使用本方法构建命令用法。</b>
      * 请使用 {@link UsageBuilder} 或 {@link #Usage(String, String, List)}}
+     *
+     * @deprecated 请使用 {@link UsageBuilder} 或 {@link #Usage(String, String, List)}}
      */
+    @Deprecated()
     public Usage(String label, String name, List<Parameter<?>> params, Dummy ignored) {
         this.params.addAll(params);
         this.label = label;

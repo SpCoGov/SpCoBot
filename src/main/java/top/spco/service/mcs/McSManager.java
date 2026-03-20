@@ -18,6 +18,7 @@ package top.spco.service.mcs;
 import top.spco.SpCoBot;
 import top.spco.api.Group;
 import top.spco.api.message.Message;
+import top.spco.api.message.MessageChain;
 import top.spco.core.Manager;
 import top.spco.service.RegistrationException;
 import top.spco.util.tuple.ImmutablePair;
@@ -51,11 +52,11 @@ public class McSManager extends Manager<String, McS> {
 
     }
 
-    public McS connect(Group<?> group, Message caller) throws IOException {
+    public McS connect(Group<?> group, MessageChain caller) throws IOException {
         return connect(group, caller, false);
     }
 
-    public McS connect(Group<?> group, Message caller, boolean afterHeartbeatTimeout) throws IOException {
+    public McS connect(Group<?> group, MessageChain caller, boolean afterHeartbeatTimeout) throws IOException {
         if (!isBound(group.getId())) {
             throw new IllegalStateException("This group is not bound to the Minecraft server");
         }

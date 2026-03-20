@@ -17,6 +17,7 @@ package top.spco.service.command;
 
 import top.spco.api.*;
 import top.spco.api.message.Message;
+import top.spco.api.message.MessageChain;
 import top.spco.core.feature.Feature;
 import top.spco.events.CommandEvents;
 import top.spco.service.chat.Chat;
@@ -59,7 +60,7 @@ import java.util.List;
  *     }
  *
  *     @Override
- *     public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message message, int time, CommandMeta meta, String usageName) {
+ *     public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, MessageChain message, int time, CommandMeta meta, String usageName) {
  *
  *     }
  * }
@@ -172,7 +173,7 @@ public abstract class Command extends Feature {
      * @throws CommandSyntaxException 用户调用命令发生语法错误时抛出
      * @see CommandEvents
      */
-    public abstract void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, Message message, int time, CommandMeta meta, String usageName) throws CommandSyntaxException;
+    public abstract void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, MessageChain message, int time, CommandMeta meta, String usageName) throws CommandSyntaxException;
 
     /**
      * 在帮助列表是否可见。

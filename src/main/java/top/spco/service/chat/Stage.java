@@ -18,6 +18,7 @@ package top.spco.service.chat;
 import top.spco.api.Bot;
 import top.spco.api.Interactive;
 import top.spco.api.message.Message;
+import top.spco.api.message.MessageChain;
 
 import java.util.function.Supplier;
 
@@ -39,6 +40,6 @@ public class Stage {
     }
 
     public interface StageExecuter {
-        void onMessage(Chat chat, Bot<?> bot, Interactive<?> source, Interactive<?> sender, Message message, int time);
+        void onMessage(Chat chat, Bot<?> bot, Interactive<?> source, Interactive<?> sender, MessageChain message, int time);
     }
 }

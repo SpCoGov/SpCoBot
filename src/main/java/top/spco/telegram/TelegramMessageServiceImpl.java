@@ -86,7 +86,7 @@ class TelegramMessageServiceImpl implements MessageService {
     @Override
     public String getFirstMentioned(Message message, String phrase) {
         requireTelegram(message, "message");
-        List<MessageEntity> entities = ((TelegramMessage) message).wrapped().getEntities();
+        List<MessageEntity> entities = ((TelegramMessage) message).getMessage().getEntities();
         if (entities != null && !entities.isEmpty()) {
             Optional<Long> mentionedId = entities.stream()
                     .filter(entity -> "mention".equals(entity.getType()) || "text_mention".equals(entity.getType())) // 过滤 mention 和 text_mention 类型
@@ -121,7 +121,7 @@ class TelegramMessageServiceImpl implements MessageService {
     @Override
     public @Nullable ImmutablePair<@NotNull MessageSource<?>, @NotNull Message> getQuote(Message message) {
         requireTelegram(message, "message");
-        org.telegram.telegrambots.meta.api.objects.message.Message message1 = ((TelegramMessage) message).wrapped();
+        org.telegram.telegrambots.meta.api.objects.message.Message message1 = ((TelegramMessage) message).getMessage();
         if (!message1.isReply()) {
             return null;
         }
@@ -133,7 +133,7 @@ class TelegramMessageServiceImpl implements MessageService {
         requireTelegram(original, "original");
         DeleteMessage deleteMessage = DeleteMessage.builder()
                 .chatId(original.getFromId())
-                .messageId(((TelegramMessage) original.getOriginalMessage()).wrapped().getMessageId())
+                .messageId(((TelegramMessage) original.getOriginalMessage()).getMessage().getMessageId())
                 .build();
         try {
             TelegramAdapter.getInstance().telegramClient.execute(deleteMessage);
