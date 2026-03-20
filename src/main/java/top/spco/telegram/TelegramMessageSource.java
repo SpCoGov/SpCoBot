@@ -3,29 +3,31 @@ package top.spco.telegram;
 import top.spco.api.message.Message;
 import top.spco.api.message.MessageSource;
 
-class TelegramMessageSource extends MessageSource<org.telegram.telegrambots.meta.api.objects.message.Message> {
+class TelegramMessageSource extends MessageSource {
+    private final org.telegram.telegrambots.meta.api.objects.message.Message message;
     protected TelegramMessageSource(org.telegram.telegrambots.meta.api.objects.message.Message message) {
-        super(message);
+        super();
+        this.message = message;
     }
 
-    /**
+     /**
      * 发送人用户 ID
      */
     @Override
     public String getSenderId() {
-        return wrapped().getFrom().getId() + "";
+        return message.getFrom().getId() + "";
     }
 
     /**
      * 消息发送目标用户或群号码
      */
     @Override
-    public long getFromId() {
-        return wrapped().getChatId();
+    public String getFromId() {
+        return message.getChatId() + "";
     }
 
     @Override
-    public Message getOriginalMessage() {
-        return new TelegramMessage(wrapped());
+    public String getMessageId() {
+        return message.getMessageId() + "";
     }
 }

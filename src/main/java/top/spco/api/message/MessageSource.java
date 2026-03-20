@@ -24,9 +24,9 @@ import top.spco.core.Wrapper;
  * @version 3.2.2
  * @since 0.3.0
  */
-public abstract class MessageSource<T> extends Wrapper<T> {
-protected MessageSource(T object) {
-        super(object);
+public abstract class MessageSource {
+protected MessageSource() {
+        super();
     }
 
     /**
@@ -37,7 +37,7 @@ protected MessageSource(T object) {
     /**
      * 消息发送目标用户或群号码
      */
-    public abstract long getFromId();
+    public abstract String getFromId();
 
-    public abstract Message getOriginalMessage();
+    public abstract String getMessageId();
 }

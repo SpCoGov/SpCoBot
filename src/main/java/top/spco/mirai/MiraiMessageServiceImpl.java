@@ -92,7 +92,7 @@ class MiraiMessageServiceImpl implements MessageService {
     }
 
     @Override
-    public ImmutablePair<@NotNull MessageSource<?>, @NotNull Message> getQuote(Message message) {
+    public ImmutablePair<@NotNull MessageSource, @NotNull Message> getQuote(Message message) {
 //        requireQQ(message, "message");
 //        try {
 //            MiraiMessage miraiMessage = ((MiraiMessage) message);
@@ -109,13 +109,8 @@ class MiraiMessageServiceImpl implements MessageService {
     }
 
     @Override
-    public void recall(MessageSource<?> original) {
-        requireQQ(original, "original");
-        try {
-            net.mamoe.mirai.message.data.MessageSource.recall(((net.mamoe.mirai.message.data.MessageSource) original.wrapped()));
-        } catch (PermissionDeniedException e) {
-            throw new top.spco.api.exception.PermissionDeniedException("权限不足");
-        }
+    public void recall(MessageSource original) {
+
     }
 
     @Override

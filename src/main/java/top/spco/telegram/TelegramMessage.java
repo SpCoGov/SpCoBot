@@ -74,7 +74,7 @@ class TelegramMessage extends Message {
 //     * @return 转换的结果
 //     */
 //    @Override
-//    public MessageSource<?> getSource() {
+//    public MessageSource getSource() {
 //        return new TelegramMessageSource(this.message);
 //    }
 

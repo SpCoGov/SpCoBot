@@ -119,7 +119,7 @@ class TelegramMessageServiceImpl implements MessageService {
      * @return 如果有引用时返回被引用的消息，如果没有时返回null
      */
     @Override
-    public @Nullable ImmutablePair<@NotNull MessageSource<?>, @NotNull Message> getQuote(Message message) {
+    public @Nullable ImmutablePair<@NotNull MessageSource, @NotNull Message> getQuote(Message message) {
         requireTelegram(message, "message");
         org.telegram.telegrambots.meta.api.objects.message.Message message1 = ((TelegramMessage) message).getMessage();
         if (!message1.isReply()) {
@@ -129,11 +129,11 @@ class TelegramMessageServiceImpl implements MessageService {
     }
 
     @Override
-    public void recall(MessageSource<?> original) {
+    public void recall(MessageSource original) {
         requireTelegram(original, "original");
         DeleteMessage deleteMessage = DeleteMessage.builder()
                 .chatId(original.getFromId())
-                .messageId(((TelegramMessage) original.getOriginalMessage()).getMessage().getMessageId())
+                .messageId(Integer.parseInt(original.getMessageId()))
                 .build();
         try {
             TelegramAdapter.getInstance().telegramClient.execute(deleteMessage);

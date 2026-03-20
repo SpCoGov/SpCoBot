@@ -72,7 +72,7 @@ public interface MessageService {
      * @return 如果有引用时返回被引用的消息，如果没有时返回null
      */
     @Nullable
-    ImmutablePair<@NotNull MessageSource<?>, @NotNull Message> getQuote(Message message);
+    ImmutablePair<@NotNull MessageSource, @NotNull Message> getQuote(Message message);
 
     /**
      * 撤回一条消息<p>
@@ -80,7 +80,7 @@ public interface MessageService {
      *
      * @param original 需要撤回的消息
      */
-    void recall(MessageSource<?> original);
+    void recall(MessageSource original);
 
     /**
      * 将字符串转换为 {@code Message} 对象。

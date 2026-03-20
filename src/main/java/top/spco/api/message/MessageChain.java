@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class MessageChain extends Message {
     private boolean isCommandMessage = false;
     private final ArrayList<Message> messageComponents = new ArrayList<>();
-    private MessageSource<?> source;
+    private MessageSource source;
 
     protected MessageChain() {
         super();
@@ -53,7 +53,7 @@ public class MessageChain extends Message {
      *
      * @return 转换的结果
      */
-    public MessageSource<?> getSource() {
+    public MessageSource getSource() {
         return source;
     }
 

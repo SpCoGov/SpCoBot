@@ -106,7 +106,7 @@ public class MessageEvents {
 
     @FunctionalInterface
     public interface GroupMessageRecall {
-        void onGroupMessageRecall(Bot<?> bot, Group<?> source, User<?> sender, User<?> operator, MessageSource<?> recalledMessage);
+        void onGroupMessageRecall(Bot<?> bot, Group<?> source, User<?> sender, User<?> operator, MessageSource recalledMessage);
     }
 
     /**
@@ -120,6 +120,6 @@ public class MessageEvents {
 
     @FunctionalInterface
     public interface PrivateMessageRecall {
-        void onPrivateMessageRecall(Bot<?> bot, User<?> sender, User<?> operator, MessageSource<?> recalledMessage);
+        void onPrivateMessageRecall(Bot<?> bot, User<?> sender, User<?> operator, MessageSource recalledMessage);
     }
 }
