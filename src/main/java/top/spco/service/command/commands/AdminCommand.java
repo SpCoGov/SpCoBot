@@ -45,9 +45,9 @@ public class AdminCommand extends GroupAbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, MessageChain message, int time, CommandMeta meta, String usageName) throws CommandSyntaxException {
+    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, MessageChain message, int time, CommandMeta meta, String usageName) throws CommandSyntaxException {
         // TODO: 修复这个
-//        Group<?> group = (Group<?>) from;
+//        Group group = (Group) from;
 //        InteractiveList<NormalMember<?>> members = group.getMembers();
 //        InteractiveList<NormalMember<?>> admins = new InteractiveList<>();
 //        for (var member : members) {

@@ -145,7 +145,7 @@ public class CommandDispatcher extends SimpleFeatureManager<Command> {
         });
     }
 
-    private void callCommand(Map<String, Command> targetCommands, Interactive<?> from, User<?> sender, MessageChain message, Bot<?> bot, int time) {
+    private void callCommand(Map<String, Command> targetCommands, Interactive from, User sender, MessageChain message, Bot bot, int time) {
         Parser input = new Parser(message, message.toMessageContext().substring(1));
         while (input.canRead() && input.peek() != ' ') {
             input.skip();
@@ -163,7 +163,7 @@ public class CommandDispatcher extends SimpleFeatureManager<Command> {
         callCommand(targetCommands, from, sender, message, bot, time, label, input);
     }
 
-    private void callCommand(Map<String, Command> targetCommands, Interactive<?> from, User<?> sender, MessageChain message, Bot<?> bot, int time, String label, Parser parser) {
+    private void callCommand(Map<String, Command> targetCommands, Interactive from, User sender, MessageChain message, Bot bot, int time, String label, Parser parser) {
         try {
             // 获取命令实例和发送者和发送者的用户实例
             Command command = targetCommands.get(label);
@@ -418,7 +418,7 @@ public class CommandDispatcher extends SimpleFeatureManager<Command> {
         return helpList;
     }
 
-    public List<String> getUsages(String label, Interactive<?> from) {
+    public List<String> getUsages(String label, Interactive from) {
         CommandScope scope = CommandScope.getCommandScope(from);
         if (scope == null) {
             return null;
@@ -447,7 +447,7 @@ public class CommandDispatcher extends SimpleFeatureManager<Command> {
     }
 
     @Override
-    public boolean isFeatureAvailable(Interactive<?> where, Command key, DummyFeature feature) throws SQLException {
+    public boolean isFeatureAvailable(Interactive where, Command key, DummyFeature feature) throws SQLException {
         return Feature.isAvailable(key, where);
     }
 }

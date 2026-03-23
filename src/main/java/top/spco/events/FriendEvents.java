@@ -43,6 +43,6 @@ public class FriendEvents {
 
     @FunctionalInterface
     public interface RequestedAsFriend {
-        void requestedAsFriend(long eventId, String message, long fromId, long fromGroupId, Group<?> fromGroup, Behavior behavior);
+        void requestedAsFriend(long eventId, String message, long fromId, long fromGroupId, Group fromGroup, Behavior behavior);
     }
 }

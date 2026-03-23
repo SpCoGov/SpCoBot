@@ -95,7 +95,7 @@ public interface MessageService {
      * @param image       需要转换的图片
      * @param interactive 发送的对象
      */
-    Image toImage(File image, Interactive<?> interactive);
+    Image toImage(File image, Interactive interactive);
 
     /**
      * 将输入流转换为 {@code Image} 对象。
@@ -103,5 +103,5 @@ public interface MessageService {
      * @param image       需要转换的图片
      * @param interactive 发送的对象
      */
-    Image toImage(InputStream image, Interactive<?> interactive);
+    Image toImage(InputStream image, Interactive interactive);
 }

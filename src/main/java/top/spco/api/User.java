@@ -22,9 +22,8 @@ package top.spco.api;
  * @version 4.1.0
  * @since 0.1.0
  */
-public abstract class User<T> extends Interactive<T> {
-    public User(T user) {
-        super(user);
+public abstract class User extends Interactive {
+    protected User() {
     }
 
     /**

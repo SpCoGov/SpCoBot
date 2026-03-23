@@ -44,6 +44,6 @@ public class UserEvents {
 
     @FunctionalInterface
     public interface NudgedTick {
-        void onNudgedTick(Bot<?> bot, Identifiable<?> from, Identifiable<?> target, Interactive<?> subject, String action, String suffix);
+        void onNudgedTick(Bot bot, Identifiable from, Identifiable target, Interactive subject, String action, String suffix);
     }
 }

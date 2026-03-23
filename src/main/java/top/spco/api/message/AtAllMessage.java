@@ -15,30 +15,30 @@
  */
 package top.spco.api.message;
 
-public class UnsupportedMessage extends Message {
-    public static final UnsupportedMessage INSTANCE = new UnsupportedMessage();
+public class AtAllMessage extends Message {
+    public static final AtAllMessage INSTANCE = new AtAllMessage();
 
-    private UnsupportedMessage() {
+    private AtAllMessage() {
 
     }
 
     @Override
     public String toMessageContext() {
-        return "";
+        return "@所有人";
     }
 
     @Override
     public MessageChain append(Message appendage) {
-        throw new UnsupportedOperationException("Unable to append message to unsupported message");
+        return toMessageChain().append(appendage);
     }
 
     @Override
     public MessageChain append(String appendage) {
-        throw new UnsupportedOperationException("Unable to append message to unsupported message");
+        return toMessageChain().append(appendage);
     }
 
     @Override
     public MessageChain toMessageChain() {
-        throw new UnsupportedOperationException("Unable to convert unsupported messages to MessageChain");
+        return new MessageChain().append(this);
     }
 }

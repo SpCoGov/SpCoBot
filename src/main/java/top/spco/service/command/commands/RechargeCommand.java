@@ -80,13 +80,13 @@ public class RechargeCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, MessageChain message, int time, CommandMeta meta, String usageName) throws CommandSyntaxException {
+    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, MessageChain message, int time, CommandMeta meta, String usageName) throws CommandSyntaxException {
         if (SpCoBot.getInstance().getRechargeSystem() == null) {
             from.quoteReply(message, "充值系统未启用。");
             return;
         }
         // TODO: 修复这个
-        ChatType ct = from instanceof User<?> ? ChatType.FRIEND : ChatType.GROUP_TEMP;
+        ChatType ct = from instanceof User ? ChatType.FRIEND : ChatType.GROUP_TEMP;
         ChatBuilder chatBuilder = new ChatBuilder(ct, sender);
         AtomicReference<String> paymentMethodName = new AtomicReference<>();
         AtomicReference<PaymentMethod> method = new AtomicReference<>();

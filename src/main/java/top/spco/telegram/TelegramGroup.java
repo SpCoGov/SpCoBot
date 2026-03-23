@@ -1,52 +1,42 @@
 package top.spco.telegram;
 
-import org.telegram.telegrambots.meta.api.methods.GetMe;
 import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChatAdministrators;
 import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChatMember;
 import org.telegram.telegrambots.meta.api.methods.groupadministration.LeaveChat;
-import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.chat.Chat;
 import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMember;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import top.spco.api.Group;
 import top.spco.api.MemberPermission;
-import top.spco.api.message.Message;
+import top.spco.api.message.Member;
+import top.spco.api.message.MessageChain;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-class TelegramGroup extends Group<Chat> {
-    protected TelegramGroup(Chat group) {
-        super(group);
+class TelegramGroup extends Group {
+    private final Chat chat;
+
+    TelegramGroup(Chat group) {
+        this.chat = group;
     }
 
-    /**
-     * 获取该群群名称
-     *
-     * @return 群名称
-     */
     @Override
     public String getName() {
-        return wrapped().getTitle();
+        return chat.getTitle();
     }
 
-    /**
-     * 获取该群群主
-     *
-     * @return 群主对象
-     */
     @Override
-    public TelegramUser getOwner() {
+    public TelegramMember getOwner() {
         GetChatAdministrators getChatAdministrators = GetChatAdministrators.builder()
                 .chatId(getId())
                 .build();
         try {
             ArrayList<ChatMember> chatMembers = TelegramAdapter.getInstance().telegramClient.execute(getChatAdministrators);
             for (ChatMember chatMember : chatMembers) {
-                if (chatMember.getStatus().equals("creator")) {
-                    return new TelegramUser(chatMember.getUser());
+                if ("creator".equals(chatMember.getStatus())) {
+                    return new TelegramMember(chat, chatMember);
                 }
             }
             return null;
@@ -55,11 +45,6 @@ class TelegramGroup extends Group<Chat> {
         }
     }
 
-    /**
-     * 让机器人退出这个群
-     *
-     * @return 退出成功时返回 {@code true}; 已经退出时返回 {@code false}
-     */
     @Override
     public boolean quit() {
         LeaveChat leaveChat = LeaveChat.builder()
@@ -74,58 +59,30 @@ class TelegramGroup extends Group<Chat> {
 
     @Override
     public MemberPermission botPermission() {
-        // TODO: 修复这个
-        return MemberPermission.OWNER;
+        return toPermission(fetchChatMember(TelegramAdapter.getSelf().getId() + "").getStatus());
     }
 
-    /**
-     * 获取机器人在群中的成员对象
-     *
-     * @return 成员对象
-     */
     @Override
-    public top.spco.api.User<?> botAsMember() {
-        GetMe getMe = GetMe.builder()
-                .build();
-        try {
-            User user = TelegramAdapter.getInstance().telegramClient.execute(getMe);
-            return getMember(user.getId() + "");
-        } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
-        }
+    public Member botAsMember() {
+        return getMember(TelegramAdapter.getSelf().getId() + "");
     }
 
-    /**
-     * 查询群成员对象
-     *
-     * @param id 成员Id
-     * @return 查询结果. 不存在时返回 {@code null}
-     */
     @Override
-    public top.spco.api.User<?> getMember(String id) {
-        GetChatMember getChatMember = GetChatMember.builder()
-                .chatId(getId())
-                .userId(Long.parseLong(id))
-                .build();
-        try {
-            ChatMember chatMember = TelegramAdapter.getInstance().telegramClient.execute(getChatMember);
-            return new TelegramUser(chatMember.getUser());
-        } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
-        }
+    public Member getMember(String id) {
+        return new TelegramMember(chat, fetchChatMember(id));
     }
 
     @Deprecated
     @Override
-    public Set<top.spco.api.User<?>> getMembers() {
-        Set<top.spco.api.User<?>> administrators = new HashSet<>();
+    public Set<Member> getMembers() {
+        Set<Member> administrators = new HashSet<>();
         GetChatAdministrators getChatAdministrators = GetChatAdministrators.builder()
                 .chatId(getId())
                 .build();
         try {
             ArrayList<ChatMember> chatMembers = TelegramAdapter.getInstance().telegramClient.execute(getChatAdministrators);
             for (ChatMember chatMember : chatMembers) {
-                administrators.add(new TelegramUser(chatMember.getUser()));
+                administrators.add(new TelegramMember(chat, chatMember));
             }
             return administrators;
         } catch (TelegramApiException e) {
@@ -134,23 +91,9 @@ class TelegramGroup extends Group<Chat> {
     }
 
     @Override
-    public void sendMessage(String message) {
+    public void sendMessage(MessageChain message) {
         try {
-            TelegramMessageSender.sendMessage(TelegramAdapter.getInstance().telegramClient, String.valueOf(getId()), message);
-        } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public void sendMessage(Message message) {
-        TelegramMessageSender.sendMessage(TelegramAdapter.getInstance().telegramClient, String.valueOf(getId()), ((TelegramMessage) message).getMessage());
-    }
-
-    @Override
-    public void sendImage(File image) {
-        try {
-            TelegramMessageSender.sendImage(TelegramAdapter.getInstance().telegramClient, String.valueOf(getId()), image);
+            TelegramMessageSender.sendMessage(TelegramAdapter.getInstance().telegramClient, getId(), message.toMessageContext());
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
@@ -158,6 +101,28 @@ class TelegramGroup extends Group<Chat> {
 
     @Override
     public String getId() {
-        return wrapped().getId() + "";
+        return chat.getId() + "";
+    }
+
+    private ChatMember fetchChatMember(String id) {
+        GetChatMember getChatMember = GetChatMember.builder()
+                .chatId(getId())
+                .userId(Long.parseLong(id))
+                .build();
+        try {
+            return TelegramAdapter.getInstance().telegramClient.execute(getChatMember);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    static MemberPermission toPermission(String status) {
+        if ("creator".equals(status)) {
+            return MemberPermission.OWNER;
+        }
+        if ("administrator".equals(status)) {
+            return MemberPermission.ADMINISTRATOR;
+        }
+        return MemberPermission.MEMBER;
     }
 }

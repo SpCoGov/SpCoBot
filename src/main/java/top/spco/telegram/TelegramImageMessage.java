@@ -62,9 +62,4 @@ class TelegramImageMessage extends Image {
         return null;
         //return new MessageChain().append(new TelegramImageMessage(files));
     }
-
-    @Override
-    public String serialize() {
-        return "";
-    }
 }

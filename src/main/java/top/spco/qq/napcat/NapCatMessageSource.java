@@ -13,23 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco.qq.message.parsers;
+package top.spco.qq.napcat;
 
-import com.google.gson.JsonObject;
-import top.spco.api.message.Message;
-import top.spco.api.message.TextMessage;
-import top.spco.qq.message.MessageComponentParser;
-import top.spco.util.JsonUtil;
+import top.spco.api.message.MessageSource;
 
-public class TextMessageParser extends MessageComponentParser {
-    @Override
-    public String componentName() {
-        return "text";
+public class NapCatMessageSource extends MessageSource {
+    public final String senderId;
+    public final String fromId;
+    public final String messageId;
+
+    public NapCatMessageSource(String senderId, String fromId, String messageId) {
+        this.senderId = senderId;
+        this.fromId = fromId;
+        this.messageId = messageId;
     }
 
     @Override
-    public Message parse(JsonObject data,JsonObject raw) {
-        String text = JsonUtil.getAsString(data, "text");
-        return new TextMessage(text);
+    public String getSenderId() {
+        return senderId;
+    }
+
+    @Override
+    public String getFromId() {
+        return fromId;
+    }
+
+    @Override
+    public String getMessageId() {
+        return messageId;
     }
 }

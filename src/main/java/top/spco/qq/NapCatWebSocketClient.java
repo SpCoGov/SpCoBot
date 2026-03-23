@@ -21,14 +21,14 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class QQNTWebSocketClient implements WebSocket.Listener {
+public class NapCatWebSocketClient implements WebSocket.Listener {
     private static final Gson GSON = new Gson();
     private static final String ANSI_RESET = "\u001B[0m";
     private static final String ANSI_LOCAL = "\u001B[33m";
     private static final String ANSI_RECV = "\u001B[36m";
 
-    public static QQNTWebSocketClient runQQNTWebSocketClient() {
-        QQNTWebSocketClient client = new QQNTWebSocketClient(
+    public static NapCatWebSocketClient runNapCatWebSocketClient() {
+        NapCatWebSocketClient client = new NapCatWebSocketClient(
                 Configs.BOT.getQQServerIp(), Configs.BOT.getQQServerPort(), Configs.BOT.getQQServerHeartbeatInterval()
         );
         client.start();
@@ -56,7 +56,7 @@ public class QQNTWebSocketClient implements WebSocket.Listener {
     private volatile ScheduledFuture<?> heartbeatTask;
     private final StringBuilder textPacketBuffer = new StringBuilder();
 
-    QQNTWebSocketClient(String host, int port, long heartbeatIntervalMs) {
+    NapCatWebSocketClient(String host, int port, long heartbeatIntervalMs) {
         this.uri = URI.create("ws://" + host + ":" + port);
         this.heartbeatIntervalMs = heartbeatIntervalMs;
         this.httpClient = HttpClient.newBuilder()

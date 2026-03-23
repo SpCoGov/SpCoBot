@@ -152,7 +152,7 @@ public abstract class AbstractModule extends Feature implements Comparable<Abstr
     }
 
     @Override
-    public boolean isAvailable(Interactive<?> where) throws SQLException {
+    public boolean isAvailable(Interactive where) throws SQLException {
         if (!ModuleManager.getInstance().isActive(getClass())) {
             return false;
         }

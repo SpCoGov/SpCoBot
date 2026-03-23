@@ -46,7 +46,7 @@ public class MessageEvents {
 
     @FunctionalInterface
     public interface GroupMessage {
-        void onGroupMessage(Bot<?> bot, Group<?> source, User<?> sender, MessageChain message, int time);
+        void onGroupMessage(Bot bot, Group source, User sender, MessageChain message, int time);
     }
 
     /**
@@ -61,7 +61,7 @@ public class MessageEvents {
 
     @FunctionalInterface
     public interface ChannelMessage {
-        void onChannelMessage(Bot<?> bot, Channel<?> source, User<?> sender, MessageChain message, int time);
+        void onChannelMessage(Bot bot, Channel source, User sender, MessageChain message, int time);
     }
 
     /**
@@ -76,7 +76,7 @@ public class MessageEvents {
 
     @FunctionalInterface
     public interface UserMessage {
-        void onPrivateMessage(Bot<?> bot, User<?> sender, MessageChain message, int time);
+        void onPrivateMessage(Bot bot, User sender, MessageChain message, int time);
     }
 
     /**
@@ -92,7 +92,7 @@ public class MessageEvents {
 
     @FunctionalInterface
     public interface PrivateMessagePostSend {
-        void onPrivateMessagePostSend(Bot<?> bot, User<?> friend, MessageChain message);
+        void onPrivateMessagePostSend(Bot bot, User friend, MessageChain message);
     }
 
     /**
@@ -106,7 +106,7 @@ public class MessageEvents {
 
     @FunctionalInterface
     public interface GroupMessageRecall {
-        void onGroupMessageRecall(Bot<?> bot, Group<?> source, User<?> sender, User<?> operator, MessageSource recalledMessage);
+        void onGroupMessageRecall(Bot bot, Group source, User sender, User operator, MessageSource recalledMessage);
     }
 
     /**
@@ -120,6 +120,6 @@ public class MessageEvents {
 
     @FunctionalInterface
     public interface PrivateMessageRecall {
-        void onPrivateMessageRecall(Bot<?> bot, User<?> sender, User<?> operator, MessageSource recalledMessage);
+        void onPrivateMessageRecall(Bot bot, User sender, User operator, MessageSource recalledMessage);
     }
 }

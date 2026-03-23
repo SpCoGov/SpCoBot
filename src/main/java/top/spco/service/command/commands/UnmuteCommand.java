@@ -54,7 +54,7 @@ public class UnmuteCommand extends GroupAbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, MessageChain message, int time, CommandMeta meta, String usageName) {
+    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, MessageChain message, int time, CommandMeta meta, String usageName) {
         long id = (Long) meta.getParams().get("目标用户");
         // TODO: 修复这个
 //        NormalMember<?> target = PermissionsValidator.verifyMemberPermissions(from, user, message, id);

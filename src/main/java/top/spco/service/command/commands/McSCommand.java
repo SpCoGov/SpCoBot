@@ -127,8 +127,8 @@ public class McSCommand extends GroupAbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, MessageChain message, int time, CommandMeta meta, String usageName) {
-        Group<?> group = (Group<?>) from;
+    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, MessageChain message, int time, CommandMeta meta, String usageName) {
+        Group group = (Group) from;
         switch (usageName) {
             case "查看此群所绑定的服务器" -> {
                 if (!PermissionsValidator.isMemberAdmin(from, user, message)) {

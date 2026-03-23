@@ -28,5 +28,5 @@ import top.spco.core.Manager;
  * @since 4.0.0
  */
 public abstract class FeatureManager<K, F extends Feature> extends Manager<K, F> {
-    public abstract boolean isFeatureAvailable(Interactive<?> where, K key, F feature) throws Exception;
+    public abstract boolean isFeatureAvailable(Interactive where, K key, F feature) throws Exception;
 }

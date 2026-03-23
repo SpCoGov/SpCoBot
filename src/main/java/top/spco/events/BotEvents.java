@@ -41,7 +41,7 @@ public class BotEvents {
 
     @FunctionalInterface
     public interface OnlineTick {
-        void onOnlineTick(Bot<?> bot);
+        void onOnlineTick(Bot bot);
     }
 
     /**
@@ -55,7 +55,7 @@ public class BotEvents {
 
     @FunctionalInterface
     public interface OfflineTick {
-        void onOfflineTick(Bot<?> bot);
+        void onOfflineTick(Bot bot);
     }
 
     /**
@@ -69,7 +69,7 @@ public class BotEvents {
 
     @FunctionalInterface
     public interface ActiveOfflineTick {
-        void onActiveOfflineTick(Bot<?> bot);
+        void onActiveOfflineTick(Bot bot);
     }
 
     /**
@@ -83,7 +83,7 @@ public class BotEvents {
 
     @FunctionalInterface
     public interface ForceOfflineTick {
-        void onForceOfflineTick(Bot<?> bot);
+        void onForceOfflineTick(Bot bot);
     }
 
     /**
@@ -97,7 +97,7 @@ public class BotEvents {
 
     @FunctionalInterface
     public interface DroppedOfflineTick {
-        void onDroppedOfflineTick(Bot<?> bot);
+        void onDroppedOfflineTick(Bot bot);
     }
 
     /**
@@ -111,6 +111,6 @@ public class BotEvents {
 
     @FunctionalInterface
     public interface RequireReconnectOfflineTick {
-        void onRequireReconnectOfflineTick(Bot<?> bot);
+        void onRequireReconnectOfflineTick(Bot bot);
     }
 }

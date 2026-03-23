@@ -16,7 +16,7 @@
 package top.spco.qq.payload.handler;
 
 import com.google.gson.JsonObject;
-import top.spco.qq.QQNTWebSocketClient;
+import top.spco.qq.NapCatWebSocketClient;
 
 import java.net.http.WebSocket;
 
@@ -24,5 +24,5 @@ public interface PostPayloadHandler {
     PostPayloadHandler EMPTY = (client, webSocket, payload) -> {
     };
 
-    void onPayload(QQNTWebSocketClient client, WebSocket webSocket, JsonObject payload);
+    void onPayload(NapCatWebSocketClient client, WebSocket webSocket, JsonObject payload);
 }

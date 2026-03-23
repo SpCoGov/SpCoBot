@@ -73,7 +73,7 @@ public abstract class AbstractCommand extends Command {
     }
 
     @Override
-    public boolean isAvailable(Interactive<?> where) throws SQLException {
+    public boolean isAvailable(Interactive where) throws SQLException {
         return ((CommandDispatcher) manager().get()).isFeatureAvailable(where, this, null);
     }
 }

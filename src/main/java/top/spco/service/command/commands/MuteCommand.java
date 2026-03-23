@@ -57,9 +57,9 @@ public class MuteCommand extends GroupAbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, MessageChain message, int time, CommandMeta meta, String usageName) {
+    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, MessageChain message, int time, CommandMeta meta, String usageName) {
         long id = (Long) meta.getParams().get("目标用户");
-        User<?> target = PermissionsValidator.verifyMemberPermissions(from, user, message, id);
+        User target = PermissionsValidator.verifyMemberPermissions(from, user, message, id);
         if (target != null) {
             int duration = (Integer) meta.getParams().get("禁言时间");
             // TODO: 修复这个

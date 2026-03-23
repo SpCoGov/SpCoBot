@@ -19,7 +19,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import top.spco.SpCoBot;
-import top.spco.qq.QQNTWebSocketClient;
+import top.spco.qq.NapCatWebSocketClient;
 import top.spco.qq.payload.handler.*;
 import top.spco.qq.payload.handler.message.MessageEventHandler;
 import top.spco.util.Ansi;
@@ -51,7 +51,7 @@ public class NapCatPayloadDispatcher {
         return instance;
     }
 
-    public void onPayloadReceived(QQNTWebSocketClient client, WebSocket webSocket, String raw) {
+    public void onPayloadReceived(NapCatWebSocketClient client, WebSocket webSocket, String raw) {
         JsonObject payload = GSON.fromJson(raw, JsonObject.class);
         boolean isResponse = payload.has("post_type");
         if (!isResponse) {

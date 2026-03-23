@@ -56,7 +56,7 @@ public final class UsageCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, MessageChain message, int time, CommandMeta meta, String usageName) {
+    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, MessageChain message, int time, CommandMeta meta, String usageName) {
         var usages = SpCoBot.getInstance().getCommandDispatcher().getUsages((String) meta.getParams().get("命令名"), from);
         if (usages == null) {
             from.quoteReply(message, "命令不存在或定义域错误");

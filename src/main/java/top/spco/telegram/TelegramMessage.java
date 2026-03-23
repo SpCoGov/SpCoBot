@@ -2,7 +2,6 @@ package top.spco.telegram;
 
 import top.spco.api.message.Message;
 import top.spco.api.message.MessageChain;
-import top.spco.api.message.MessageSource;
 
 // TODO: 重新实现这个类
 class TelegramMessage extends Message {
@@ -77,16 +76,6 @@ class TelegramMessage extends Message {
 //    public MessageSource getSource() {
 //        return new TelegramMessageSource(this.message);
 //    }
-
-    /**
-     * 序列化
-     *
-     * @return 序列化后的结果
-     */
-    @Override
-    public String serialize() {
-        return this.message.toString();
-    }
 
     public org.telegram.telegrambots.meta.api.objects.message.Message getMessage() {
         return message;

@@ -28,14 +28,19 @@ import java.io.File;
  * @version 3.2.2
  * @since 0.1.0
  */
-public abstract class Interactive<T> extends Identifiable<T> {
-    protected Interactive(T interactive) {
-        super(interactive);
+public abstract class Interactive extends Identifiable {
+    protected Interactive() {
     }
 
-    public abstract void sendMessage(String message);
+    public void sendMessage(String message) {
+        sendMessage(new MessageChain());
+    }
 
-    public abstract void sendMessage(Message message);
+    public void sendMessage(Message message) {
+        sendMessage(message.toMessageChain());
+    }
+
+    public abstract void sendMessage(MessageChain message);
 
     public void handleException(MessageChain sourceMessage, String message) {
         this.sendMessage(new TextMessage("[错误发生] " + message).toMessageChain().quoteReply(sourceMessage));
@@ -82,6 +87,4 @@ public abstract class Interactive<T> extends Identifiable<T> {
     public void quoteReply(MessageChain sourceMessage, String message) {
         this.sendMessage(new TextMessage(message).toMessageChain().quoteReply(sourceMessage));
     }
-
-    public abstract void sendImage(File image);
 }

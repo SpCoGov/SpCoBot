@@ -11,13 +11,13 @@ import org.telegram.telegrambots.meta.api.objects.chat.ChatFullInfo;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import top.spco.SpCoBot;
 import top.spco.api.message.Image;
+import top.spco.api.Identifiable;
 import top.spco.api.Interactive;
 import top.spco.api.exception.PlatformMismatchException;
 import top.spco.api.message.Message;
 import top.spco.api.message.MessageSource;
 import top.spco.api.message.service.MessageService;
 import top.spco.core.Platform;
-import top.spco.core.Wrapper;
 import top.spco.util.tuple.ImmutablePair;
 
 import java.io.File;
@@ -29,10 +29,10 @@ import java.util.Optional;
 
 class TelegramMessageServiceImpl implements MessageService {
     private void requireTelegram(Object target, String argumentName) {
-        if (!(target instanceof Wrapper<?> wrapper)) {
+        if (!(target instanceof Identifiable identifiable)) {
             return;
         }
-        Platform platform = wrapper.getPlatform();
+        Platform platform = identifiable.getPlatform();
         if (platform != null && platform != Platform.TELEGRAM) {
             throw new PlatformMismatchException(argumentName, Platform.TELEGRAM, platform);
         }
@@ -161,7 +161,7 @@ class TelegramMessageServiceImpl implements MessageService {
      * @param interactive 发送的对象
      */
     @Override
-    public Image toImage(File image, Interactive<?> interactive) {
+    public Image toImage(File image, Interactive interactive) {
         requireTelegram(interactive, "interactive");
         return new TelegramImageMessage(image);
     }
@@ -173,7 +173,7 @@ class TelegramMessageServiceImpl implements MessageService {
      * @param interactive 发送的对象
      */
     @Override
-    public Image toImage(InputStream image, Interactive<?> interactive) {
+    public Image toImage(InputStream image, Interactive interactive) {
         requireTelegram(interactive, "interactive");
         return new TelegramImageMessage(new InputFile(image, "image"));
     }

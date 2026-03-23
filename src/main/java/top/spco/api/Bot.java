@@ -22,9 +22,8 @@ package top.spco.api;
  * @version 2.0.0
  * @since 0.1.0
  */
-public abstract class Bot<T> extends Identifiable<T> {
-    protected Bot(T bot) {
-        super(bot);
+public abstract class Bot extends Identifiable {
+    protected Bot() {
     }
 
     /**
@@ -35,5 +34,5 @@ public abstract class Bot<T> extends Identifiable<T> {
     public abstract String getNick();
 
 
-    public abstract Group<?> getGroup(String id);
+    public abstract Group getGroup(String id);
 }

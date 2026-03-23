@@ -15,8 +15,6 @@
  */
 package top.spco.api.message;
 
-import top.spco.core.Wrapper;
-
 /**
  * 消息的来源信息
  *

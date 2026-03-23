@@ -15,6 +15,8 @@
  */
 package top.spco.api;
 
+import top.spco.api.message.Member;
+
 import java.util.Set;
 
 /**
@@ -24,9 +26,8 @@ import java.util.Set;
  * @version 3.1.0
  * @since 0.1.0
  */
-public abstract class Group<T> extends Interactive<T> {
-    protected Group(T object) {
-        super(object);
+public abstract class Group extends Interactive {
+    protected Group() {
     }
 
     /**
@@ -41,7 +42,7 @@ public abstract class Group<T> extends Interactive<T> {
      *
      * @return 群主对象
      */
-    public abstract User<?> getOwner();
+    public abstract Member getOwner();
 
     /**
      * 让机器人退出这个群。
@@ -57,7 +58,7 @@ public abstract class Group<T> extends Interactive<T> {
      *
      * @return 成员对象
      */
-    public abstract User<?> botAsMember();
+    public abstract Member botAsMember();
 
     /**
      * 查询群成员对象。
@@ -65,12 +66,12 @@ public abstract class Group<T> extends Interactive<T> {
      * @param id 成员Id
      * @return 查询结果. 不存在时返回 {@code null}
      */
-    public abstract User<?> getMember(String id);
+    public abstract Member getMember(String id);
 
     /**
      * 获取该群的所有群成员。
      *
      * @return 查询结果
      */
-    public abstract Set<User<?>> getMembers();
+    public abstract Set<Member> getMembers();
 }

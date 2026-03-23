@@ -21,5 +21,5 @@ import top.spco.api.message.Message;
 public abstract class MessageComponentParser {
     public abstract String componentName();
 
-    public abstract Message parse(JsonObject data);
+    public abstract Message parse(JsonObject data,JsonObject object);
 }

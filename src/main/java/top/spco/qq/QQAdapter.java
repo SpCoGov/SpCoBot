@@ -5,11 +5,11 @@ import top.spco.core.PlatformAdapter;
 
 public class QQAdapter extends PlatformAdapter {
     private static QQAdapter instance;
-    private final QQNTWebSocketClient client;
+    private final NapCatWebSocketClient client;
 
     private QQAdapter() {
         super(Platform.QQ);
-        this.client = QQNTWebSocketClient.runQQNTWebSocketClient();
+        this.client = NapCatWebSocketClient.runNapCatWebSocketClient();
     }
 
     public static QQAdapter getInstance() {
@@ -19,7 +19,7 @@ public class QQAdapter extends PlatformAdapter {
         return instance;
     }
 
-    public QQNTWebSocketClient getClient() {
+    public NapCatWebSocketClient getClient() {
         return client;
     }
 }

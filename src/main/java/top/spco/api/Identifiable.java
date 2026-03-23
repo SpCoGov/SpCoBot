@@ -15,19 +15,37 @@
  */
 package top.spco.api;
 
-import top.spco.core.Wrapper;
+import top.spco.core.Platform;
 
 /**
- * 表示具有标识号的对象的接口
+ * 表示具有标识号的对象
  *
  * @author SpCo
  * @version 2.0.0
  * @since 0.1.0
  */
-public abstract class Identifiable<T> extends Wrapper<T> {
-    protected Identifiable(T object) {
-        super(object);
+public abstract class Identifiable {
+
+    protected Identifiable() {
     }
 
     public abstract String getId();
+
+    /**
+     * 返回当前对象所属的平台。
+     * <p>
+     * 该方法用于运行时的平台一致性校验；无法识别的平台返回 {@code null}。
+     *
+     * @return 当前对象所属平台，无法识别时返回 {@code null}
+     */
+    public Platform getPlatform() {
+        String className = getClass().getName();
+        if (className.startsWith("top.spco.telegram.")) {
+            return Platform.TELEGRAM;
+        }
+        if (className.startsWith("top.spco.mirai.") || className.startsWith("top.spco.qq.")) {
+            return Platform.QQ;
+        }
+        return null;
+    }
 }

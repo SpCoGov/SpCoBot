@@ -57,7 +57,7 @@ public class GCCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, MessageChain message, int time, CommandMeta meta, String usageName) throws CommandSyntaxException {
+    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, MessageChain message, int time, CommandMeta meta, String usageName) throws CommandSyntaxException {
         System.gc();
         from.quoteReply(message, "完成");
     }

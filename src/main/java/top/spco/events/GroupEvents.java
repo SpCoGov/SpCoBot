@@ -43,7 +43,7 @@ public class GroupEvents {
 
     @FunctionalInterface
     public interface InvitedJoinGroup {
-        void invitedJoinGroup(long eventId, String invitorId, String groupId, User<?> invitor, Behavior behavior);
+        void invitedJoinGroup(long eventId, String invitorId, String groupId, User invitor, Behavior behavior);
     }
 
     /**
@@ -57,6 +57,6 @@ public class GroupEvents {
 
     @FunctionalInterface
     public interface RequestJoinGroup {
-        void requestJoinGroup(long eventId, String fromId, Group<?> group, Behavior behavior);
+        void requestJoinGroup(long eventId, String fromId, Group group, Behavior behavior);
     }
 }

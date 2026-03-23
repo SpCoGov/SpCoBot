@@ -72,7 +72,7 @@ public class StatisticsCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot<?> bot1, Interactive<?> from1, User<?> sender1, BotUser user1, Message message1, int time1, CommandMeta meta, String usageName) {
+    public void onCommand(Bot bot1, Interactive from1, User sender1, BotUser user1, Message message1, int time1, CommandMeta meta, String usageName) {
         // 在每次调用命令时，重置
         StringBuilder sb = new StringBuilder();
         Map<String, Integer> ranks = new HashMap<>();
@@ -242,7 +242,7 @@ public class StatisticsCommand extends AbstractCommand {
                                 }
                                 try {
                                     chat.stop();
-                                    Group<?> group = bot.getGroup(groupId[0]);
+                                    Group group = bot.getGroup(groupId[0]);
                                     if (group == null) {
                                         source.quoteReply(message, "发送失败，无法获取群号为" + groupId[0] + "的群对象");
                                         return;

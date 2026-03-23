@@ -16,11 +16,13 @@
 package top.spco.qq.payload.handler.message;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import top.spco.api.message.Message;
-import top.spco.qq.QQNTWebSocketClient;
+import top.spco.api.message.MessageChain;
+import top.spco.api.message.MessageSource;
+import top.spco.qq.NapCatWebSocketClient;
 import top.spco.qq.message.MessageParser;
+import top.spco.qq.napcat.NapCatMessageSource;
 import top.spco.qq.payload.handler.PostPayloadHandler;
 
 import java.net.http.WebSocket;
@@ -30,21 +32,28 @@ import static top.spco.util.JsonUtil.*;
 
 public class GroupMessagePayloadHandler implements PostPayloadHandler {
     @Override
-    public void onPayload(QQNTWebSocketClient client, WebSocket webSocket, JsonObject payload) {
+    public void onPayload(NapCatWebSocketClient client, WebSocket webSocket, JsonObject payload) {
         String botId = getAsString(payload, "self_id");
         JsonObject senderJsonObject = payload.get("sender").getAsJsonObject();
         String senderId = getAsString(senderJsonObject, "user_id");
         String senderNickName = getAsString(senderJsonObject, "nickname");
         String role = getAsString(senderJsonObject, "role");
         String messageId = getAsString(payload, "message_id");
-        JsonArray messageComponentsArray = payload.get("message").getAsJsonArray();
+        JsonArray elements = payload.get("message").getAsJsonArray();
         String groupId = getAsString(payload, "group_id");
         String groupName = getAsString(payload, "group_name");
 
+        JsonArray elementsRaw = payload.get("raw").getAsJsonObject().get("elements").getAsJsonArray();
         ArrayList<Message> messageComponents = new ArrayList<>();
-        for (JsonElement element: messageComponentsArray) {
-            JsonObject o = element.getAsJsonObject();
-            messageComponents.add(MessageParser.getInstance().parse(o));
+        for (int i = 0; i < elements.size(); i++) {
+            JsonObject element = elements.get(i).getAsJsonObject();
+            JsonObject elementRaw = elementsRaw.get(i).getAsJsonObject();
+            messageComponents.add(MessageParser.getInstance().parse(element, elementRaw));
         }
+        MessageChain messageChain = new MessageChain(messageComponents);
+        MessageSource source = new NapCatMessageSource(senderId, groupId, messageId);
+        messageChain.setSource(source);
+
+
     }
 }

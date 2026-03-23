@@ -42,7 +42,7 @@ public abstract class Feature {
      *
      * @param where 要查询的对象
      */
-    public abstract boolean isAvailable(Interactive<?> where) throws Exception;
+    public abstract boolean isAvailable(Interactive where) throws Exception;
 
     /**
      * 功能的初始化。会在其注册完毕后执行。
@@ -60,7 +60,7 @@ public abstract class Feature {
         return getFeatureType() + "." + getFeatureName();
     }
 
-    public static boolean isAvailable(Feature feature, Interactive<?> where) throws SQLException {
+    public static boolean isAvailable(Feature feature, Interactive where) throws SQLException {
         String featureId = feature.getFeatureId();
         String sql = "SELECT disable, unavailable, available FROM feature WHERE id = ?";
         try (PreparedStatement stmt = SpCoBot.getInstance().getDataBase().getConn().prepareStatement(sql)) {
@@ -110,13 +110,13 @@ public abstract class Feature {
         }
     }
 
-    public static void addAvailable(Feature feature, Interactive<?> where) throws SQLException {
+    public static void addAvailable(Feature feature, Interactive where) throws SQLException {
         Set<String> availableIds = getAvailableIds(feature);
         availableIds.add(where.getId());
         setAvailable(feature, availableIds);
     }
 
-    public static void removeAvailable(Feature feature, Interactive<?> where) throws SQLException {
+    public static void removeAvailable(Feature feature, Interactive where) throws SQLException {
         Set<String> availableIds = getAvailableIds(feature);
         availableIds.remove(where.getId());
         setAvailable(feature, availableIds);
@@ -152,13 +152,13 @@ public abstract class Feature {
         }
     }
 
-    public static void addUnavailable(Feature feature, Interactive<?> where) throws SQLException {
+    public static void addUnavailable(Feature feature, Interactive where) throws SQLException {
         Set<String> unavailableIds = getUnavailableIds(feature);
         unavailableIds.add(where.getId());
         setUnavailable(feature, unavailableIds);
     }
 
-    public static void removeUnavailable(Feature feature, Interactive<?> where) throws SQLException {
+    public static void removeUnavailable(Feature feature, Interactive where) throws SQLException {
         Set<String> unavailableIds = getUnavailableIds(feature);
         unavailableIds.remove(where.getId());
         setUnavailable(feature, unavailableIds);

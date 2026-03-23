@@ -36,7 +36,7 @@ public final class DummyFeature extends Feature {
     }
 
     @Override
-    public boolean isAvailable(Interactive<?> where) {
+    public boolean isAvailable(Interactive where) {
         return false;
     }
 

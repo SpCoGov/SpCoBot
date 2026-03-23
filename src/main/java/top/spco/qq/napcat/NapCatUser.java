@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 SpCo
+ * Copyright 2026 SpCo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,18 +13,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package top.spco.core.feature;
+package top.spco.qq.napcat;
 
-import top.spco.api.Interactive;
+import top.spco.api.User;
+import top.spco.api.message.MessageChain;
 
-public final class DummyFeatureManager extends SimpleFeatureManager<DummyFeature> {
-    public static final DummyFeatureManager INSTANCE = new DummyFeatureManager();
+public class NapCatUser extends User {
+    public final String nickName;
+    public final String id;
 
-    private DummyFeatureManager() {
+    public NapCatUser(String nickName, String id) {
+        this.nickName = nickName;
+        this.id = id;
     }
 
     @Override
-    public boolean isFeatureAvailable(Interactive where, DummyFeature key, DummyFeature feature) {
+    public String getNick() {
+        return nickName;
+    }
+
+    @Override
+    public boolean isBot() {
         return false;
+    }
+
+    @Override
+    public void sendMessage(MessageChain message) {
+
+    }
+
+    @Override
+    public String getId() {
+        return id;
     }
 }

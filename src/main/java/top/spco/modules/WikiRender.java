@@ -43,7 +43,7 @@ public class WikiRender extends AbstractModule {
 
     }
 
-    private void onMessage(Bot<?> bot, Interactive<?> sender, Interactive<?> source, Message message, int time) {
+    private void onMessage(Bot bot, Interactive sender, Interactive source, Message message, int time) {
         if (!isActive()) {
             return;
         }

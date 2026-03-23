@@ -65,7 +65,7 @@ public class AutoSign extends AbstractModule {
                 } catch (Exception e) {
                     SpCoBot.LOGGER.error(e);
                     // TODO: 修复这个
-                    //User<?> friend = SpCoBot.getInstance().getBot().getFriend(SpCoBot.getInstance().botOwnerId);
+                    //User friend = SpCoBot.getInstance().getBot().getFriend(SpCoBot.getInstance().botOwnerId);
                     //friend.handleException("自动签到时抛出了意料之外的异常", e);
                 }
             }

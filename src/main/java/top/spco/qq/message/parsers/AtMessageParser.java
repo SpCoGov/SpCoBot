@@ -16,20 +16,25 @@
 package top.spco.qq.message.parsers;
 
 import com.google.gson.JsonObject;
+import top.spco.api.message.AtAllMessage;
+import top.spco.api.message.AtMessage;
 import top.spco.api.message.Message;
-import top.spco.api.message.TextMessage;
 import top.spco.qq.message.MessageComponentParser;
-import top.spco.util.JsonUtil;
 
-public class TextMessageParser extends MessageComponentParser {
+public class AtMessageParser extends MessageComponentParser {
     @Override
     public String componentName() {
-        return "text";
+        return "at";
     }
 
     @Override
-    public Message parse(JsonObject data,JsonObject raw) {
-        String text = JsonUtil.getAsString(data, "text");
-        return new TextMessage(text);
+    public Message parse(JsonObject data, JsonObject raw) {
+        String at = data.get("qq").getAsString();
+        if (at.equals("qq")) {
+            return AtAllMessage.INSTANCE;
+        }
+        JsonObject textElement = raw.get("textElement").getAsJsonObject();
+        String content = textElement.get("content").getAsString();
+        return new AtMessage(at, content.substring(1));
     }
 }

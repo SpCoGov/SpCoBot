@@ -54,9 +54,9 @@ public class KickCommand extends GroupAbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, MessageChain message, int time, CommandMeta meta, String usageName) {
+    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, MessageChain message, int time, CommandMeta meta, String usageName) {
         long id = (Long) meta.getParams().get("目标用户");
-        User<?> target = PermissionsValidator.verifyMemberPermissions(from, user, message, id);
+        User target = PermissionsValidator.verifyMemberPermissions(from, user, message, id);
         if (target != null) {
             // TODO: 修复这个
 //            target.kick("您被管理员移出了本群", false);

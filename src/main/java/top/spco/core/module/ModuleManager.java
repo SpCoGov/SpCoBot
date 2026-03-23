@@ -211,7 +211,7 @@ public class ModuleManager extends FeatureManager<Class<? extends AbstractModule
     }
 
     @Override
-    public boolean isFeatureAvailable(Interactive<?> where, Class<? extends AbstractModule> key, AbstractModule feature) throws SQLException {
+    public boolean isFeatureAvailable(Interactive where, Class<? extends AbstractModule> key, AbstractModule feature) throws SQLException {
         return Feature.isAvailable(feature, where);
     }
 

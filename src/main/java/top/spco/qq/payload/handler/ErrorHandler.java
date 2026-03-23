@@ -16,12 +16,12 @@
 package top.spco.qq.payload.handler;
 
 import top.spco.SpCoBot;
-import top.spco.qq.QQNTWebSocketClient;
+import top.spco.qq.NapCatWebSocketClient;
 
 import java.net.http.WebSocket;
 
 public interface ErrorHandler {
-    void onError(QQNTWebSocketClient client, WebSocket webSocket, String status, int retCode, String wording);
+    void onError(NapCatWebSocketClient client, WebSocket webSocket, String status, int retCode, String wording);
 
     class Handlers {
         public static final ErrorHandler E_1403 =

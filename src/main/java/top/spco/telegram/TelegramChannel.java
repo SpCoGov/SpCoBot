@@ -3,13 +3,13 @@ package top.spco.telegram;
 import org.telegram.telegrambots.meta.api.objects.chat.Chat;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import top.spco.api.Channel;
-import top.spco.api.message.Message;
+import top.spco.api.message.MessageChain;
 
-import java.io.File;
+class TelegramChannel extends Channel {
+    private final Chat chat;
 
-class TelegramChannel extends Channel<Chat> {
-    protected TelegramChannel(Chat channel) {
-        super(channel);
+    TelegramChannel(Chat channel) {
+        this.chat = channel;
         if (!channel.isChannelChat()) {
             throw new IllegalArgumentException("Not a channel.");
         }
@@ -17,27 +17,13 @@ class TelegramChannel extends Channel<Chat> {
 
     @Override
     public String getName() {
-        return wrapped().getTitle();
+        return chat.getTitle();
     }
 
     @Override
-    public void sendMessage(String message) {
+    public void sendMessage(MessageChain message) {
         try {
-            TelegramMessageSender.sendMessage(TelegramAdapter.getInstance().telegramClient, String.valueOf(getId()), message);
-        } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public void sendMessage(Message message) {
-        TelegramMessageSender.sendMessage(TelegramAdapter.getInstance().telegramClient, String.valueOf(getId()), ((TelegramMessage)message).getMessage());
-    }
-
-    @Override
-    public void sendImage(File image) {
-        try {
-            TelegramMessageSender.sendImage(TelegramAdapter.getInstance().telegramClient, String.valueOf(getId()), image);
+            TelegramMessageSender.sendMessage(TelegramAdapter.getInstance().telegramClient, getId(), message.toMessageContext());
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
@@ -45,6 +31,6 @@ class TelegramChannel extends Channel<Chat> {
 
     @Override
     public String getId() {
-        return wrapped().getId() + "";
+        return chat.getId() + "";
     }
 }

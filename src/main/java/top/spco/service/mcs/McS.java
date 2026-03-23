@@ -56,7 +56,7 @@ public class McS {
     private int syn;
     private int heartbeatInterval;
     private String name = "undefined";
-    private final Group<?> group;
+    private final Group group;
     private final Map<Integer, MessageChain> commandCaller = new ConcurrentHashMap<>();
     private final Set<Integer> heartbeats = new HashSet<>();
     private final Set<Integer> timeoutHeartbeats = new HashSet<>();
@@ -73,7 +73,7 @@ public class McS {
     private boolean connected = false;
     private final MessageChain callerMessage;
 
-    public McS(String host, int port, Group<?> group, @Nullable MessageChain callerMessage, boolean afterHeartbeatTimeout) throws IOException {
+    public McS(String host, int port, Group group, @Nullable MessageChain callerMessage, boolean afterHeartbeatTimeout) throws IOException {
         this.group = group;
         hasCaller = callerMessage != null;
         this.callerMessage = callerMessage;

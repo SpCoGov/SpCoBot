@@ -26,11 +26,6 @@ public class TextMessage extends Message {
     }
 
     @Override
-    public String serialize() {
-        return context;
-    }
-
-    @Override
     public String toString() {
         return context;
     }

@@ -19,6 +19,7 @@ import com.google.gson.JsonObject;
 import top.spco.SpCoBot;
 import top.spco.api.message.Message;
 import top.spco.api.message.UnsupportedMessage;
+import top.spco.qq.message.parsers.AtMessageParser;
 import top.spco.qq.message.parsers.TextMessageParser;
 import top.spco.util.JsonUtil;
 
@@ -38,17 +39,18 @@ public class MessageParser {
 
     private MessageParser() {
         register(new TextMessageParser());
+        register(new AtMessageParser());
     }
 
     public void register(MessageComponentParser parser) {
         componentsParsers.put(parser.componentName(), parser);
     }
 
-    public Message parse(JsonObject object) {
-        String type = JsonUtil.getAsString(object, "type");
+    public Message parse(JsonObject element, JsonObject raw) {
+        String type = JsonUtil.getAsString(element, "type");
         if (componentsParsers.containsKey(type)) {
-            JsonObject data = object.get("data").getAsJsonObject();
-            return componentsParsers.get(type).parse(data);
+            JsonObject data = element.get("data").getAsJsonObject();
+            return componentsParsers.get(type).parse(data, raw);
         }
         SpCoBot.LOGGER.warn("消息解析器发现不支持的消息类型：{}", type);
         return UnsupportedMessage.INSTANCE;

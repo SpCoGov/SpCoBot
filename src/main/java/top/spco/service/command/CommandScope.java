@@ -44,7 +44,7 @@ public enum CommandScope {
      * @param interactive 要推测作用域的 {@link Interactive} 对象
      * @return 对应的指令作用域，或者 {@code null} 如果未能确定作用域
      */
-    public static CommandScope getCommandScope(Interactive<?> interactive) {
+    public static CommandScope getCommandScope(Interactive interactive) {
         if (interactive instanceof Group) {
             return ONLY_GROUP;
         } else if (interactive instanceof User) {

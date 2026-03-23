@@ -31,7 +31,7 @@ public class ChatTypeMismatchException extends RuntimeException {
      * @param chatType 待创建的{@link ChatType 对话类型}
      * @param target   对话作用于的目标
      */
-    public ChatTypeMismatchException(ChatType chatType, Interactive<?> target) {
+    public ChatTypeMismatchException(ChatType chatType, Interactive target) {
         super("Chat type mismatch: Cannot create Chat with " + chatType + " for target " + target);
     }
 }

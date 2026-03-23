@@ -75,7 +75,7 @@ public class StatisticsDispatcher extends Manager<String, Statistics> {
         this.statistics.put(groupId, statistics);
     }
 
-    public void remove(Group<?> group) {
+    public void remove(Group group) {
         this.statistics.remove(group.getId());
     }
 }

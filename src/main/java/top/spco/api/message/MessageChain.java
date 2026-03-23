@@ -7,8 +7,17 @@ public class MessageChain extends Message {
     private final ArrayList<Message> messageComponents = new ArrayList<>();
     private MessageSource source;
 
-    protected MessageChain() {
+    public MessageChain() {
         super();
+    }
+
+    public MessageChain(ArrayList<Message> messageComponents) {
+        this.messageComponents.addAll(messageComponents);
+    }
+
+    public MessageChain(Message message) {
+        super();
+        messageComponents.add(message);
     }
 
     @Override
@@ -39,15 +48,6 @@ public class MessageChain extends Message {
         return this;
     }
 
-    @Override
-    public String serialize() {
-        StringBuilder sb = new StringBuilder();
-        for (Message message : messageComponents) {
-            sb.append(message.serialize());
-        }
-        return sb.toString();
-    }
-
     /**
      * 获得消息的 {@link MessageSource} （如果有）
      *
@@ -72,5 +72,9 @@ public class MessageChain extends Message {
      */
     public MessageChain quoteReply(MessageChain toQuote) {
         return this;
+    }
+
+    public void setSource(MessageSource source) {
+        this.source = source;
     }
 }

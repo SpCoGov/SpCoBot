@@ -17,6 +17,7 @@ package top.spco.mirai;
 
 import net.mamoe.mirai.contact.PermissionDeniedException;
 import org.jetbrains.annotations.NotNull;
+import top.spco.api.Identifiable;
 import top.spco.api.Interactive;
 import top.spco.api.exception.PlatformMismatchException;
 import top.spco.api.message.Image;
@@ -24,7 +25,6 @@ import top.spco.api.message.Message;
 import top.spco.api.message.MessageSource;
 import top.spco.api.message.service.MessageService;
 import top.spco.core.Platform;
-import top.spco.core.Wrapper;
 import top.spco.util.tuple.ImmutablePair;
 
 import java.io.File;
@@ -39,10 +39,10 @@ import java.util.regex.Pattern;
  */
 class MiraiMessageServiceImpl implements MessageService {
     private void requireQQ(Object target, String argumentName) {
-        if (!(target instanceof Wrapper<?> wrapper)) {
+        if (!(target instanceof Identifiable identifiable)) {
             return;
         }
-        Platform platform = wrapper.getPlatform();
+        Platform platform = identifiable.getPlatform();
         if (platform != null && platform != Platform.QQ) {
             throw new PlatformMismatchException(argumentName, Platform.QQ, platform);
         }
@@ -120,14 +120,14 @@ class MiraiMessageServiceImpl implements MessageService {
     }
 
     @Override
-    public Image toImage(File image, Interactive<?> interactive) {
+    public Image toImage(File image, Interactive interactive) {
         requireQQ(interactive, "interactive");
 //        return new MiraiImage(ExternalResource.uploadAsImage(image, (Contact) interactive.wrapped()));
         return null;
     }
 
     @Override
-    public Image toImage(InputStream image, Interactive<?> interactive) {
+    public Image toImage(InputStream image, Interactive interactive) {
         requireQQ(interactive, "interactive");
 //        return new MiraiImage(ExternalResource.uploadAsImage(image, (Contact) interactive.wrapped()));
         return null;

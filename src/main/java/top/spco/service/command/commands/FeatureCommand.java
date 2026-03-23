@@ -79,7 +79,7 @@ public class FeatureCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, MessageChain message, int time, CommandMeta meta, String usageName) throws CommandSyntaxException {
+    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, MessageChain message, int time, CommandMeta meta, String usageName) throws CommandSyntaxException {
         switch (usageName) {
             case "列出所有功能" -> {
                 StringBuilder sb = new StringBuilder("当前有以下功能：\n");

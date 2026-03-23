@@ -90,7 +90,7 @@ public class SpCoBot {
     private RechargeSystem rechargeSystem;
     private MessageService messageService;
     private DataBase dataBase;
-    private Bot<?> bot;
+    private Bot bot;
     private CAATP caatp;
     private final Statistic runtimeStatistic = new Statistic();
     private static boolean registered = false;
@@ -249,11 +249,11 @@ public class SpCoBot {
         return caatp;
     }
 
-    public void setBot(Bot<?> bot) {
+    public void setBot(Bot bot) {
         this.bot = bot;
     }
 
-    public Bot<?> getBot() {
+    public Bot getBot() {
         return bot;
     }
 

@@ -77,7 +77,7 @@ public class Chat {
     private volatile boolean frozen = false;
     private List<Stage> stages = new ArrayList<>();
     private int currentStageIndex = 0;
-    private final Interactive<?> target;
+    private final Interactive target;
     private boolean stopped;
 
     /**
@@ -94,7 +94,7 @@ public class Chat {
      *
      * @return 目标交互对象
      */
-    public Interactive<?> getTarget() {
+    public Interactive getTarget() {
         return target;
     }
 
@@ -104,7 +104,7 @@ public class Chat {
      * @param type   对话的类型
      * @param target 对话的目标交互对象
      */
-    Chat(ChatType type, Interactive<?> target) {
+    Chat(ChatType type, Interactive target) {
         this.type = type;
         this.target = target;
     }
@@ -148,7 +148,7 @@ public class Chat {
      * @param message 收到的消息
      * @param time    时间戳
      */
-    public void handleMessage(Bot<?> bot, Interactive<?> source, Interactive<?> sender, MessageChain message, int time) {
+    public void handleMessage(Bot bot, Interactive source, Interactive sender, MessageChain message, int time) {
         if (stopped) {
             return;
         }

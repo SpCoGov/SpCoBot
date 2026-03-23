@@ -110,7 +110,7 @@ public class ValorantCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot<?> bot, Interactive<?> from, User<?> sender, BotUser user, MessageChain message, int time, CommandMeta meta, String usageName) {
+    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, MessageChain message, int time, CommandMeta meta, String usageName) {
         switch (usageName) {
             case "登录拳头账户" -> {
                 if (from instanceof Group) {
@@ -342,7 +342,7 @@ public class ValorantCommand extends AbstractCommand {
         }
     }
 
-    private void handleToken(RiotAuth riot, String[] tokens, String userId, Interactive<?> from, MessageChain message) {
+    private void handleToken(RiotAuth riot, String[] tokens, String userId, Interactive from, MessageChain message) {
         try {
             riot.parse(tokens);
             String sql = "INSERT INTO valorant_user (id, username, password, access_token, entitlements, uuid, name, tag, create_data, ban_type, region) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +

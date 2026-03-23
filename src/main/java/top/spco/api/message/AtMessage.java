@@ -15,30 +15,43 @@
  */
 package top.spco.api.message;
 
-public class UnsupportedMessage extends Message {
-    public static final UnsupportedMessage INSTANCE = new UnsupportedMessage();
+public class AtMessage extends Message {
+    private final String target;
+    private final String display;
 
-    private UnsupportedMessage() {
+    public AtMessage(String target, String display) {
+        this.target = target;
+        this.display = display;
+    }
 
+    public String getTarget() {
+        return target;
+    }
+
+    public String getDisplay() {
+        return display;
     }
 
     @Override
     public String toMessageContext() {
-        return "";
+        if (display != null) {
+            return "@" + display;
+        }
+        return "@" + target;
     }
 
     @Override
     public MessageChain append(Message appendage) {
-        throw new UnsupportedOperationException("Unable to append message to unsupported message");
+        return toMessageChain().append(appendage);
     }
 
     @Override
     public MessageChain append(String appendage) {
-        throw new UnsupportedOperationException("Unable to append message to unsupported message");
+        return toMessageChain().append(appendage);
     }
 
     @Override
     public MessageChain toMessageChain() {
-        throw new UnsupportedOperationException("Unable to convert unsupported messages to MessageChain");
+        return new MessageChain().append(this);
     }
 }

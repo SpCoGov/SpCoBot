@@ -7,9 +7,8 @@ package top.spco.api;
  * @version 4.1.0
  * @since 4.1.0
  */
-public abstract class Channel<T> extends Interactive<T> {
-    protected Channel(T channel) {
-        super(channel);
+public abstract class Channel extends Interactive {
+    protected Channel() {
     }
 
     /**
