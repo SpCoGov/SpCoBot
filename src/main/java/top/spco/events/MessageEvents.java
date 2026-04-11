@@ -69,7 +69,7 @@ public class MessageEvents {
      */
     public static final Event<UserMessage> PRIVATE_MESSAGE = EventFactory.createArrayBacked(UserMessage.class, callbacks -> (bot, sender, message, time) -> {
         for (UserMessage event : callbacks) {
-            SpCoBot.getInstance().getRuntimeStatistic().group("收到消息").add("群私聊消息");
+            SpCoBot.getInstance().getRuntimeStatistic().group("收到消息").add("私聊消息");
             event.onPrivateMessage(bot, sender, message, time);
         }
     });

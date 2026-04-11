@@ -1,14 +1,12 @@
 package top.spco.qq;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import top.spco.SpCoBot;
 import top.spco.config.Configs;
 import top.spco.qq.payload.NapCatPacketManager;
 import top.spco.qq.payload.NapCatPayloadDispatcher;
 import top.spco.util.Ansi;
-import top.spco.util.JsonUtil;
 import top.spco.util.NamedThreadFactory;
 
 import java.net.URI;
@@ -190,7 +188,6 @@ public class NapCatWebSocketClient implements WebSocket.Listener {
                 eventExecutor.execute(() -> {
                     try {
                         dispatcher.onPayloadReceived(this, webSocket, packet);
-                        handleEventPacket(json);
                     } catch (Exception e) {
                         SpCoBot.LOGGER.error("处理推送事件时发生错误", e);
                         SpCoBot.LOGGER.error("收到的完整文本封包（长度={}）: {}", packet.length(), packet);
@@ -204,85 +201,6 @@ public class NapCatWebSocketClient implements WebSocket.Listener {
             webSocket.request(1);
         }
         return CompletableFuture.completedFuture(null);
-    }
-
-    private void handleEventPacket(JsonObject json) {
-        if (!json.has("post_type")) {
-            return;
-        }
-        String postType = getAsString(json, "post_type");
-        if (!"message".equals(postType)) {
-            return;
-        }
-        handleMessageEvent(json);
-    }
-
-    private void handleMessageEvent(JsonObject event) {
-        String messageType = getAsString(event, "message_type");
-        if ("group".equals(messageType)) {
-            return;
-        }
-        if ("private".equals(messageType)) {
-            handlePrivateMessageEvent(event);
-        }
-    }
-
-    private void handlePrivateMessageEvent(JsonObject event) {
-        if (!hasRequiredPrivateMessageFields(event)) {
-            SpCoBot.LOGGER.warn("[QQNT] 私聊消息事件缺少必须字段: {}", event);
-            return;
-        }
-        String userId = getAsString(event, "user_id");
-        String subType = getAsString(event, "sub_type");
-        String text = getAsString(event, "raw_message");
-        int time = getAsInt(event, "time", 0);
-
-        JsonObject sender = event.has("sender") && event.get("sender").isJsonObject() ? event.getAsJsonObject("sender") : null;
-        String nick = sender == null ? "" : getAsString(sender, "nickname");
-
-        if ("friend".equals(subType)) {
-            SpCoBot.LOGGER.info("[QQNT] 好友私聊 sender={}({}) time={} text={}", nick, userId, time, text);
-            return;
-        }
-        if ("group".equals(subType)) {
-            String groupId = getAsString(event, "group_id");
-            String tempSource = getAsString(event, "temp_source");
-            SpCoBot.LOGGER.info("[QQNT] 群临时会话 sender={}({}) group={} temp_source={} time={} text={}",
-                    nick, userId, groupId, tempSource, time, text);
-            return;
-        }
-        SpCoBot.LOGGER.info("[QQNT] 私聊消息 sender={}({}) sub_type={} time={} text={}", nick, userId, subType, time, text);
-    }
-
-    private boolean hasRequiredPrivateMessageFields(JsonObject event) {
-        return event.has("self_id")
-                && event.has("time")
-                && event.has("message_id")
-                && event.has("message_type")
-                && event.has("user_id")
-                && event.has("raw_message")
-                && event.has("message")
-                && event.has("sender")
-                && event.has("post_type");
-    }
-
-    private String getAsString(JsonObject json, String key) {
-        return JsonUtil.getAsString(json, key);
-    }
-
-    private int getAsInt(JsonObject json, String key, int fallback) {
-        if (json == null || !json.has(key)) {
-            return fallback;
-        }
-        JsonElement element = json.get(key);
-        if (element == null || element.isJsonNull()) {
-            return fallback;
-        }
-        try {
-            return element.getAsInt();
-        } catch (Exception e) {
-            return fallback;
-        }
     }
 
     @Override

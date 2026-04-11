@@ -25,5 +25,6 @@ public class MessageEventHandler extends EventTypeHandler {
 
     public MessageEventHandler() {
         register("group", new GroupMessagePayloadHandler());
+        register("private", new PrivateMessagePayloadHandler());
     }
 }

@@ -26,7 +26,6 @@ import top.spco.core.module.ModuleManager;
 import top.spco.events.*;
 import top.spco.modules.AutoSign;
 import top.spco.modules.EchoMute;
-import top.spco.modules.ValorantResponder;
 import top.spco.modules.reply.CustomReplyModule;
 import top.spco.service.chat.ChatDispatcher;
 import top.spco.service.chat.ChatType;
@@ -110,13 +109,13 @@ public class SpCoBot {
     private SpCoBot() {
         GroupStatistics receiveMessageGroup = new GroupStatistics("收到消息");
         receiveMessageGroup.start("群消息", "条");
-        receiveMessageGroup.start("好友消息", "条");
-        receiveMessageGroup.start("群临时消息", "条");
+        receiveMessageGroup.start("私聊消息", "条");
+        receiveMessageGroup.start("频道消息", "条");
         runtimeStatistic.add(receiveMessageGroup);
         GroupStatistics sendMessageGroup = new GroupStatistics("发出消息");
         sendMessageGroup.start("群消息", "条");
-        sendMessageGroup.start("好友消息", "条");
-        sendMessageGroup.start("群临时消息", "条");
+        sendMessageGroup.start("私聊消息", "条");
+        sendMessageGroup.start("频道消息", "条");
         runtimeStatistic.add(sendMessageGroup);
         initEvents();
     }
