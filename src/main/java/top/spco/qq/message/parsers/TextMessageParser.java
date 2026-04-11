@@ -28,8 +28,25 @@ public class TextMessageParser extends MessageComponentParser {
     }
 
     @Override
-    public Message parse(JsonObject data,JsonObject raw) {
+    public TextMessage parse(JsonObject data,JsonObject raw) {
         String text = JsonUtil.getAsString(data, "text");
         return new TextMessage(text);
+    }
+
+    @Override
+    public boolean supports(Message message) {
+        return message instanceof TextMessage;
+    }
+
+    @Override
+    public JsonObject serialize(Message message) {
+        TextMessage textMessage = (TextMessage) message;
+        JsonObject segment = new JsonObject();
+        segment.addProperty("type", componentName());
+
+        JsonObject data = new JsonObject();
+        data.addProperty("text", textMessage.toMessageContext());
+        segment.add("data", data);
+        return segment;
     }
 }

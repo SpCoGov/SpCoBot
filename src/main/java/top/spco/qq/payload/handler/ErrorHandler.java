@@ -30,5 +30,10 @@ public interface ErrorHandler {
                     client.setAuthFailed();
                     SpCoBot.LOGGER.error("鉴权失败，已关闭连接且不再重连");
                 };
+
+        public static final ErrorHandler E_1200 =
+                (client, webSocket, status, retCode, wording) -> {
+                    SpCoBot.LOGGER.error("处理消息失败：{}", wording);
+                };
     }
 }

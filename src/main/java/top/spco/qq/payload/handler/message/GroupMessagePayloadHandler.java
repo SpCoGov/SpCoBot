@@ -17,10 +17,15 @@ package top.spco.qq.payload.handler.message;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import top.spco.SpCoBot;
 import top.spco.api.message.Message;
 import top.spco.api.message.MessageChain;
 import top.spco.api.message.MessageSource;
+import top.spco.events.MessageEvents;
 import top.spco.qq.NapCatWebSocketClient;
+import top.spco.qq.QQBot;
+import top.spco.qq.napcat.NapCatGroup;
+import top.spco.qq.napcat.NapCatMember;
 import top.spco.qq.message.MessageParser;
 import top.spco.qq.napcat.NapCatMessageSource;
 import top.spco.qq.payload.handler.PostPayloadHandler;
@@ -34,7 +39,9 @@ public class GroupMessagePayloadHandler implements PostPayloadHandler {
     @Override
     public void onPayload(NapCatWebSocketClient client, WebSocket webSocket, JsonObject payload) {
         String botId = getAsString(payload, "self_id");
+        QQBot bot = new QQBot("SpCoBot", botId);
         JsonObject senderJsonObject = payload.get("sender").getAsJsonObject();
+        long time = getAsLong(senderJsonObject, "time");
         String senderId = getAsString(senderJsonObject, "user_id");
         String senderNickName = getAsString(senderJsonObject, "nickname");
         String role = getAsString(senderJsonObject, "role");
@@ -42,6 +49,9 @@ public class GroupMessagePayloadHandler implements PostPayloadHandler {
         JsonArray elements = payload.get("message").getAsJsonArray();
         String groupId = getAsString(payload, "group_id");
         String groupName = getAsString(payload, "group_name");
+
+        NapCatGroup group = new NapCatGroup(groupId, groupName);
+        NapCatMember member = new NapCatMember(senderId, senderNickName, group);
 
         JsonArray elementsRaw = payload.get("raw").getAsJsonObject().get("elements").getAsJsonArray();
         ArrayList<Message> messageComponents = new ArrayList<>();
@@ -54,6 +64,6 @@ public class GroupMessagePayloadHandler implements PostPayloadHandler {
         MessageSource source = new NapCatMessageSource(senderId, groupId, messageId);
         messageChain.setSource(source);
 
-
+        MessageEvents.GROUP_MESSAGE.invoker().onGroupMessage(bot, group, member, messageChain, time);
     }
 }

@@ -53,7 +53,7 @@ public class ChatDispatcher extends Manager<String, Chat> {
         return instance;
     }
 
-    public void onMessage(ChatType chatType, Bot bot, Interactive source, Interactive sender, MessageChain message, int time) {
+    public void onMessage(ChatType chatType, Bot bot, Interactive source, Interactive sender, MessageChain message, long time) {
         Chat chat = getChat(source, chatType);
         if (chat == null) {
             return;

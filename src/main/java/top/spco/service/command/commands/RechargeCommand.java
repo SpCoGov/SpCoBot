@@ -80,7 +80,7 @@ public class RechargeCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, MessageChain message, int time, CommandMeta meta, String usageName) throws CommandSyntaxException {
+    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, MessageChain message, long time, CommandMeta meta, String usageName) throws CommandSyntaxException {
         if (SpCoBot.getInstance().getRechargeSystem() == null) {
             from.quoteReply(message, "充值系统未启用。");
             return;

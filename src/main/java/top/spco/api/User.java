@@ -27,13 +27,6 @@ public abstract class User extends Interactive {
     }
 
     /**
-     * 获取该用户的昵称。
-     *
-     * @return 昵称
-     */
-    public abstract String getNick();
-
-    /**
      * 该用户是否是机器人。
      *
      * @return 当该用户是机器人时返回 {@code true}

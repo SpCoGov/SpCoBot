@@ -16,12 +16,17 @@
 package top.spco.qq.payload.handler;
 
 import com.google.gson.JsonObject;
+import top.spco.SpCoBot;
 import top.spco.qq.NapCatWebSocketClient;
 
 import java.net.http.WebSocket;
 
 public interface PostPayloadHandler {
     PostPayloadHandler EMPTY = (client, webSocket, payload) -> {
+    };
+
+    PostPayloadHandler PRINT = (client, webSocket, payload) -> {
+        SpCoBot.LOGGER.info(payload.toString());
     };
 
     void onPayload(NapCatWebSocketClient client, WebSocket webSocket, JsonObject payload);

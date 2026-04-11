@@ -164,8 +164,8 @@ public class SpCoBot {
             return;
         }
         registered = true;
-        MessageEvents.PRIVATE_MESSAGE_RECALL.register((bot1, sender, operator, recalledMessage) -> LOGGER.info("{}({})撤回了一条自己的消息", operator.getNick(), operator.getId()));
-        MessageEvents.GROUP_MESSAGE_RECALL.register((bot1, source, sender, operator, recalledMessage) -> LOGGER.info("{}({})在{}({})撤回了一条{}({})的消息", operator.getNick(), operator.getId(), source.getName(), source.getId(), sender.getNick(), sender.getId()));
+        MessageEvents.PRIVATE_MESSAGE_RECALL.register((bot1, sender, operator, recalledMessage) -> LOGGER.info("{}({})撤回了一条自己的消息", operator.getName(), operator.getId()));
+        MessageEvents.GROUP_MESSAGE_RECALL.register((bot1, source, sender, operator, recalledMessage) -> LOGGER.info("{}({})在{}({})撤回了一条{}({})的消息", operator.getName(), operator.getId(), source.getName(), source.getId(), sender.getName(), sender.getId()));
         BotEvents.ONLINE_TICK.register(bot1 -> {
             String id = bot1.getId();
             LOGGER.info("机器人({})上线。", id);
@@ -182,7 +182,7 @@ public class SpCoBot {
         });
         // 自动接受群邀请
         GroupEvents.INVITED_JOIN_GROUP.register((eventId, invitorId, groupId, invitor, behavior) -> {
-            LOGGER.info("收到了{}({})的加入群{}的请求。", invitor.getNick(), invitorId, groupId);
+            LOGGER.info("收到了{}({})的加入群{}的请求。", invitor.getName(), invitorId, groupId);
             behavior.accept();
         });
         // 自动接收入群邀请
@@ -192,7 +192,7 @@ public class SpCoBot {
         // 处理私聊消息
         MessageEvents.PRIVATE_MESSAGE.register((bot, sender, message, time) -> {
             String context = message.toMessageContext();
-            LOGGER.info("收到了{}({})的私聊消息: {}", sender.getNick(), sender.getId(), context);
+            LOGGER.info("收到了{}({})的私聊消息: {}", sender.getName(), sender.getId(), context);
             if (this.chatDispatcher.isInChat(sender, ChatType.FRIEND)) {
                 this.chatDispatcher.onMessage(ChatType.FRIEND, bot, sender, sender, message, time);
                 return;
@@ -205,7 +205,7 @@ public class SpCoBot {
         // 处理群聊消息
         MessageEvents.GROUP_MESSAGE.register((bot, source, sender, message, time) -> {
             String context = message.toMessageContext();
-            LOGGER.info("在{}({})收到了{}({})的消息: {}", source.getName(), source.getId(), sender.getNick(), sender.getId(), context);
+            LOGGER.info("在{}({})收到了{}({})的消息: {}", source.getName(), source.getId(), sender.getName(), sender.getId(), context);
             if (this.chatDispatcher.isInChat(source, ChatType.GROUP)) {
                 this.chatDispatcher.onMessage(ChatType.GROUP, bot, source, sender, message, time);
                 return;

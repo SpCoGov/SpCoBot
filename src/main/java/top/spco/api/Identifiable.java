@@ -31,6 +31,8 @@ public abstract class Identifiable {
 
     public abstract String getId();
 
+    public abstract String getName();
+
     /**
      * 返回当前对象所属的平台。
      * <p>

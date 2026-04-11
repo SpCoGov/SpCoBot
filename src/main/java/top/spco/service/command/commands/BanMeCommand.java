@@ -42,7 +42,7 @@ public class BanMeCommand extends GroupAbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, MessageChain message, int time, CommandMeta meta, String usageName) {
+    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, MessageChain message, long time, CommandMeta meta, String usageName) {
 // TODO: 修复这个
         //        if (PermissionsValidator.verifyBotPermissions(from, message, member)) {
 //            int d = new SecureRandom().nextInt(1, 61);

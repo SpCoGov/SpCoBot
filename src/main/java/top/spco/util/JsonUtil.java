@@ -33,4 +33,19 @@ public class JsonUtil {
             return element.toString();
         }
     }
+
+    public static Long getAsLong(JsonObject json, String key) {
+        if (json == null || !json.has(key)) {
+            return 0L;
+        }
+        JsonElement element = json.get(key);
+        if (element == null || element.isJsonNull()) {
+            return 0L;
+        }
+        try {
+            return element.getAsLong();
+        } catch (Exception e) {
+            return element.getAsLong();
+        }
+    }
 }

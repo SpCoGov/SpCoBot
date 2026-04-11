@@ -1,15 +1,23 @@
 package top.spco.qq.napcat;
 
-import top.spco.api.User;
+import top.spco.api.Group;
+import top.spco.api.message.Member;
 import top.spco.api.message.MessageChain;
 
-public class NapCatUser extends User {
+public class NapCatMember extends Member {
     private final String id;
     private final String name;
+    private final NapCatGroup group;
 
-    public NapCatUser(String id, String name) {
+    public NapCatMember(String id, String name, NapCatGroup group) {
         this.id = id;
         this.name = name;
+        this.group = group;
+    }
+
+    @Override
+    public Group getGroup() {
+        return group;
     }
 
     @Override

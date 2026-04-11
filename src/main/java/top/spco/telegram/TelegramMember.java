@@ -1,6 +1,7 @@
 package top.spco.telegram;
 
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import top.spco.api.Group;
 import top.spco.api.MemberPermission;
 import top.spco.api.message.Member;
 import top.spco.api.message.MessageChain;
@@ -17,12 +18,13 @@ class TelegramMember extends Member {
     }
 
     @Override
-    public String getGroup() {
-        return chat.getId() + "";
+    public Group getGroup() {
+        // TODO: 实现getGroup
+        return null;
     }
 
     @Override
-    public String getNick() {
+    public String getName() {
         return TelegramAdapter.getUserNick(chatMember.getUser());
     }
 

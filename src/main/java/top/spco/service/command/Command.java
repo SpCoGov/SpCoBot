@@ -60,7 +60,7 @@ import java.util.List;
  *     }
  *
  *     @Override
- *     public void onCommand(Bot bot, Interactive from, User sender, BotUser user, MessageChain message, int time, CommandMeta meta, String usageName) {
+ *     public void onCommand(Bot bot, Interactive from, User sender, BotUser user, MessageChain message, long time, CommandMeta meta, String usageName) {
  *
  *     }
  * }
@@ -173,7 +173,7 @@ public abstract class Command extends Feature {
      * @throws CommandSyntaxException 用户调用命令发生语法错误时抛出
      * @see CommandEvents
      */
-    public abstract void onCommand(Bot bot, Interactive from, User sender, BotUser user, MessageChain message, int time, CommandMeta meta, String usageName) throws CommandSyntaxException;
+    public abstract void onCommand(Bot bot, Interactive from, User sender, BotUser user, MessageChain message, long time, CommandMeta meta, String usageName) throws CommandSyntaxException;
 
     /**
      * 在帮助列表是否可见。

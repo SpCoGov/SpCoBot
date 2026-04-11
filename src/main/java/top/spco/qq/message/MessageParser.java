@@ -15,11 +15,15 @@
  */
 package top.spco.qq.message;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import top.spco.SpCoBot;
 import top.spco.api.message.Message;
+import top.spco.api.message.MessageChain;
+import top.spco.api.message.TextMessage;
 import top.spco.api.message.UnsupportedMessage;
 import top.spco.qq.message.parsers.AtMessageParser;
+import top.spco.qq.message.parsers.ReplyMessageParser;
 import top.spco.qq.message.parsers.TextMessageParser;
 import top.spco.util.JsonUtil;
 
@@ -40,6 +44,7 @@ public class MessageParser {
     private MessageParser() {
         register(new TextMessageParser());
         register(new AtMessageParser());
+        register(new ReplyMessageParser());
     }
 
     public void register(MessageComponentParser parser) {
@@ -56,4 +61,36 @@ public class MessageParser {
         return UnsupportedMessage.INSTANCE;
     }
 
+    /**
+     * 将单个消息对象序列化为 QQ/NapCat 消息段。
+     *
+     * @param message 待序列化的消息对象
+     * @return 消息段 JsonObject
+     */
+    public JsonObject serialize(Message message) {
+        for (MessageComponentParser parser : componentsParsers.values()) {
+            if (parser.supports(message)) {
+                return parser.serialize(message);
+            }
+        }
+        SpCoBot.LOGGER.warn("消息解析器发现暂不支持序列化的消息类型：{}，将退化为文本消息", message.getClass().getName());
+        return componentsParsers.get("text").serialize(new TextMessage(message.toMessageContext()));
+    }
+
+    /**
+     * 将一条消息链序列化为 QQ/NapCat 消息段数组。
+     *
+     * @param messageChain 待序列化消息链
+     * @return 消息段数组
+     */
+    public JsonArray serialize(MessageChain messageChain) {
+        JsonArray result = new JsonArray();
+        if (messageChain.getReplySource() != null) {
+            result.add(serialize(new ReplyMessage(messageChain.getReplySource().getMessageId())));
+        }
+        for (Message component : messageChain.getComponents()) {
+            result.add(serialize(component));
+        }
+        return result;
+    }
 }

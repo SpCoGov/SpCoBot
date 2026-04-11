@@ -33,7 +33,7 @@ public abstract class Interactive extends Identifiable {
     }
 
     public void sendMessage(String message) {
-        sendMessage(new MessageChain());
+        sendMessage(new TextMessage(message));
     }
 
     public void sendMessage(Message message) {
@@ -73,9 +73,7 @@ public abstract class Interactive extends Identifiable {
      * @param message       要发送的回复消息
      */
     public void quoteReply(MessageChain sourceMessage, MessageChain message) {
-        // TODO: 需要修改引用逻辑
-        //this.sendMessage(message.quoteReply(sourceMessage));
-        this.sendMessage(sourceMessage.quoteReply(message));
+        sendMessage(message.quoteReply(sourceMessage));
     }
 
     /**

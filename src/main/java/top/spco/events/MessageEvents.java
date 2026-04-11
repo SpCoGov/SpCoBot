@@ -46,7 +46,7 @@ public class MessageEvents {
 
     @FunctionalInterface
     public interface GroupMessage {
-        void onGroupMessage(Bot bot, Group source, User sender, MessageChain message, int time);
+        void onGroupMessage(Bot bot, Group source, User sender, MessageChain message, long time);
     }
 
     /**

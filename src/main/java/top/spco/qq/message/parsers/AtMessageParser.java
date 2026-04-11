@@ -30,11 +30,32 @@ public class AtMessageParser extends MessageComponentParser {
     @Override
     public Message parse(JsonObject data, JsonObject raw) {
         String at = data.get("qq").getAsString();
-        if (at.equals("qq")) {
+        if ("all".equals(at) || "qq".equals(at)) {
             return AtAllMessage.INSTANCE;
         }
         JsonObject textElement = raw.get("textElement").getAsJsonObject();
         String content = textElement.get("content").getAsString();
         return new AtMessage(at, content.substring(1));
+    }
+
+    @Override
+    public boolean supports(Message message) {
+        return message instanceof AtMessage || message instanceof AtAllMessage;
+    }
+
+    @Override
+    public JsonObject serialize(Message message) {
+        JsonObject segment = new JsonObject();
+        segment.addProperty("type", componentName());
+
+        JsonObject data = new JsonObject();
+        if (message instanceof AtAllMessage) {
+            data.addProperty("qq", "all");
+        } else {
+            AtMessage atMessage = (AtMessage) message;
+            data.addProperty("qq", atMessage.getTarget());
+        }
+        segment.add("data", data);
+        return segment;
     }
 }

@@ -31,13 +31,6 @@ public abstract class Group extends Interactive {
     }
 
     /**
-     * 获取该群群名称。
-     *
-     * @return 群名称
-     */
-    public abstract String getName();
-
-    /**
      * 获取该群群主。
      *
      * @return 群主对象

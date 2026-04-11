@@ -18,7 +18,6 @@ package top.spco.service.command.commands;
 import top.spco.api.Bot;
 import top.spco.api.Interactive;
 import top.spco.api.User;
-import top.spco.api.message.Message;
 import top.spco.api.message.MessageChain;
 import top.spco.service.command.AbstractCommand;
 import top.spco.service.command.CommandMarker;
@@ -60,13 +59,13 @@ public class DivineCommand extends AbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, MessageChain message, int time, CommandMeta meta, String usageName) {
+    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, MessageChain message, long time, CommandMeta meta, String usageName) {
         if (usageName.equals("占卜")) {
             LocalDate today = TimeUtil.today();
             try {
                 BigDecimal hundred = new BigDecimal("100.00");
                 StringBuilder sb = new StringBuilder();
-                sb.append("你好，").append(sender.getNick()).append("\n");
+                sb.append("你好，").append(sender.getName()).append("\n");
                 String event = (String) meta.getParams().get("所求事件");
                 if (event == null) {
                     BigDecimal probability = getProbability(user.getId() + "在" + today);

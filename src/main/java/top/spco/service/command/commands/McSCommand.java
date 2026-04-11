@@ -21,7 +21,6 @@ import top.spco.api.Bot;
 import top.spco.api.Group;
 import top.spco.api.Interactive;
 import top.spco.api.User;
-import top.spco.api.message.Message;
 import top.spco.api.message.MessageChain;
 import top.spco.events.BotEvents;
 import top.spco.events.MessageEvents;
@@ -67,7 +66,7 @@ public class McSCommand extends GroupAbstractCommand {
             if (mcS != null) {
                 JsonObject data = new JsonObject();
                 data.addProperty("type", "GROUP_MESSAGE");
-                data.addProperty("sender_name", sender.getNick());
+                data.addProperty("sender_name", sender.getName());
                 data.addProperty("message", message.toMessageContext());
                 mcS.send(new Payload(5, data, "DISPATCH"));
             }
@@ -127,7 +126,7 @@ public class McSCommand extends GroupAbstractCommand {
     }
 
     @Override
-    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, MessageChain message, int time, CommandMeta meta, String usageName) {
+    public void onCommand(Bot bot, Interactive from, User sender, BotUser user, MessageChain message, long time, CommandMeta meta, String usageName) {
         Group group = (Group) from;
         switch (usageName) {
             case "查看此群所绑定的服务器" -> {

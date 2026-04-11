@@ -1,33 +1,21 @@
-/*
- * Copyright 2026 SpCo
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package top.spco.qq.napcat;
 
+import top.spco.SpCoBot;
 import top.spco.api.Group;
 import top.spco.api.MemberPermission;
-import top.spco.api.User;
 import top.spco.api.message.Member;
 import top.spco.api.message.MessageChain;
+import top.spco.qq.message.MessageSender;
 
 import java.util.Set;
 
 public class NapCatGroup extends Group {
+    private final String id;
+    private final String name;
 
-    @Override
-    public String getName() {
-        return "";
+    public NapCatGroup(String id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
     @Override
@@ -62,11 +50,20 @@ public class NapCatGroup extends Group {
 
     @Override
     public void sendMessage(MessageChain message) {
-
+        try {
+            SpCoBot.LOGGER.info(MessageSender.sendSyncGroupMessage(id, message));
+        } catch (Exception e) {
+            SpCoBot.LOGGER.error(e);
+        }
     }
 
     @Override
     public String getId() {
-        return "";
+        return id;
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 }

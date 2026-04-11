@@ -17,7 +17,7 @@ class TelegramBot extends Bot {
      * @return 机器人的昵称
      */
     @Override
-    public String getNick() {
+    public String getName() {
         return user.getFirstName();
     }
 

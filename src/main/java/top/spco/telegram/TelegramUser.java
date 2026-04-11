@@ -12,7 +12,7 @@ class TelegramUser extends User {
     }
 
     @Override
-    public String getNick() {
+    public String getName() {
         return TelegramAdapter.getUserNick(tgUser);
     }
 

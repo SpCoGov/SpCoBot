@@ -15,8 +15,9 @@
  */
 package top.spco.api.message;
 
+import top.spco.api.Group;
 import top.spco.api.User;
 
 public abstract class Member extends User {
-    public abstract String getGroup();
+    public abstract Group getGroup();
 }

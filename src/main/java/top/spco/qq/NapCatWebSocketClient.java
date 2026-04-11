@@ -6,9 +6,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import top.spco.SpCoBot;
 import top.spco.config.Configs;
+import top.spco.qq.payload.NapCatPacketManager;
 import top.spco.qq.payload.NapCatPayloadDispatcher;
 import top.spco.util.Ansi;
 import top.spco.util.JsonUtil;
+import top.spco.util.NamedThreadFactory;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -44,8 +46,10 @@ public class NapCatWebSocketClient implements WebSocket.Listener {
     private final long heartbeatIntervalMs;
     private final HttpClient httpClient;
     private final ScheduledExecutorService scheduler;
+    private final ExecutorService eventExecutor;
 
     private final NapCatPayloadDispatcher dispatcher = NapCatPayloadDispatcher.getInstance();
+    private final NapCatPacketManager packetManager = new NapCatPacketManager(this);
 
     private final AtomicBoolean started = new AtomicBoolean(false);
     private final AtomicBoolean reconnectScheduled = new AtomicBoolean(false);
@@ -67,6 +71,7 @@ public class NapCatWebSocketClient implements WebSocket.Listener {
             t.setDaemon(true);
             return t;
         });
+        this.eventExecutor = Executors.newCachedThreadPool(new NamedThreadFactory("QQ-Event-Dispatcher"));
     }
 
     void start() {
@@ -79,12 +84,14 @@ public class NapCatWebSocketClient implements WebSocket.Listener {
     void stop() {
         started.set(false);
         cancelHeartbeat();
+        packetManager.shutdown();
         WebSocket ws = webSocket;
         webSocket = null;
         if (ws != null && !ws.isOutputClosed()) {
             ws.sendClose(WebSocket.NORMAL_CLOSURE, "manual stop");
         }
         scheduler.shutdownNow();
+        eventExecutor.shutdownNow();
     }
 
     private void connect() {
@@ -176,13 +183,22 @@ public class NapCatWebSocketClient implements WebSocket.Listener {
             textPacketBuffer.setLength(0);
         }
         try {
-            dispatcher.onPayloadReceived(this, webSocket,packet);
             JsonObject json = GSON.fromJson(packet, JsonObject.class);
             if (json.has("status")) {
-
+                // 主动请求的回包必须立即在收包线程内处理，这样才能及时唤醒正在同步等待结果的业务线程。
+                dispatcher.onPayloadReceived(this, webSocket, packet);
             } else {
-                // 推送
-                handleEventPacket(json);
+                // 推送事件不要在 WebSocket 收包回调线程里直接执行业务逻辑，
+                // 否则业务里如果再次同步发包，会把收包线程卡住，导致回包只能等当前回调结束后才能处理。
+                eventExecutor.execute(() -> {
+                    try {
+                        dispatcher.onPayloadReceived(this, webSocket, packet);
+                        handleEventPacket(json);
+                    } catch (Exception e) {
+                        SpCoBot.LOGGER.error("处理推送事件时发生错误", e);
+                        SpCoBot.LOGGER.error("收到的完整文本封包（长度={}）: {}", packet.length(), packet);
+                    }
+                });
             }
             webSocket.request(1);
         } catch (Exception e) {
@@ -207,31 +223,11 @@ public class NapCatWebSocketClient implements WebSocket.Listener {
     private void handleMessageEvent(JsonObject event) {
         String messageType = getAsString(event, "message_type");
         if ("group".equals(messageType)) {
-            handleGroupMessageEvent(event);
             return;
         }
         if ("private".equals(messageType)) {
             handlePrivateMessageEvent(event);
         }
-    }
-
-    private void handleGroupMessageEvent(JsonObject event) {
-        if (!hasRequiredGroupMessageFields(event)) {
-            SpCoBot.LOGGER.warn("[QQNT] 群消息事件缺少必须字段: {}", event);
-            return;
-        }
-        String groupId = getAsString(event, "group_id");
-        String groupName = getAsString(event, "group_name");
-        String userId = getAsString(event, "user_id");
-        String text = getAsString(event, "raw_message");
-        int time = getAsInt(event, "time", 0);
-
-        JsonObject sender = event.has("sender") && event.get("sender").isJsonObject() ? event.getAsJsonObject("sender") : null;
-        String nick = sender == null ? "" : getAsString(sender, "nickname");
-        String role = sender == null ? "" : getAsString(sender, "role");
-
-        SpCoBot.LOGGER.info("[QQNT] 群消息 group={}({}) sender={}({}) role={} time={} text={}",
-                groupName, groupId, nick, userId, role, time, text);
     }
 
     private boolean hasRequiredGroupMessageFields(JsonObject event) {
@@ -330,6 +326,7 @@ public class NapCatWebSocketClient implements WebSocket.Listener {
     public CompletionStage<?> onClose(WebSocket webSocket, int statusCode, String reason) {
         logRecv("CLOSE code={}, reason={}", statusCode, reason);
         this.webSocket = null;
+        packetManager.failAllPending(new IllegalStateException("NapCat WebSocket 已关闭: " + statusCode + " / " + reason));
         synchronized (textPacketBuffer) {
             textPacketBuffer.setLength(0);
         }
@@ -345,6 +342,7 @@ public class NapCatWebSocketClient implements WebSocket.Listener {
     public void onError(WebSocket webSocket, Throwable error) {
         logLocal("ERROR {}", error.getMessage());
         this.webSocket = null;
+        packetManager.failAllPending(error);
         synchronized (textPacketBuffer) {
             textPacketBuffer.setLength(0);
         }
@@ -367,10 +365,38 @@ public class NapCatWebSocketClient implements WebSocket.Listener {
         authFailed.set(true);
         started.set(false);
         cancelHeartbeat();
-        if (!webSocket.isOutputClosed()) {
-            webSocket.sendClose(WebSocket.NORMAL_CLOSURE, "auth failed");
+        // 鉴权失败后，所有正在等待回包的请求都不可能再成功返回。
+        packetManager.failAllPending(new SecurityException("NapCat 鉴权失败"));
+        WebSocket ws = this.webSocket;
+        if (ws != null && !ws.isOutputClosed()) {
+            ws.sendClose(WebSocket.NORMAL_CLOSURE, "auth failed");
         }
         this.webSocket = null;
+    }
+
+    /**
+     * 直接向当前 NapCat WebSocket 发送文本包。
+     *
+     * <p>该方法只负责发送，不负责 echo 关联、超时和回包等待；这些由 {@link NapCatPacketManager} 统一管理。</p>
+     *
+     * @param packet 已序列化好的文本 payload
+     * @return 发送完成后的 Future；如果当前未连接则直接返回失败 Future
+     */
+    public CompletableFuture<WebSocket> sendPacket(String packet) {
+        WebSocket ws = this.webSocket;
+        if (ws == null || ws.isOutputClosed()) {
+            return CompletableFuture.failedFuture(new IllegalStateException("NapCat WebSocket 当前未连接"));
+        }
+        return ws.sendText(packet, true).toCompletableFuture().thenApply(ignored -> ws);
+    }
+
+    /**
+     * 获取当前 WebSocket 客户端对应的发包管理器。
+     *
+     * @return NapCat 发包管理器
+     */
+    public NapCatPacketManager getPacketManager() {
+        return packetManager;
     }
 
     @Deprecated

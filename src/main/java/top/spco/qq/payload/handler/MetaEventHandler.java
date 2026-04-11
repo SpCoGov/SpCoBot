@@ -22,7 +22,7 @@ public class MetaEventHandler extends EventTypeHandler {
     }
 
     public MetaEventHandler() {
-        register("lifecycle", PostPayloadHandler.EMPTY);
+        register("lifecycle", PostPayloadHandler.PRINT);
         register("heartbeat", PostPayloadHandler.EMPTY);
     }
 }

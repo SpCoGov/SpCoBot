@@ -26,13 +26,6 @@ public abstract class Bot extends Identifiable {
     protected Bot() {
     }
 
-    /**
-     * 获取机器人的昵称
-     *
-     * @return 机器人的昵称
-     */
-    public abstract String getNick();
-
 
     public abstract Group getGroup(String id);
 }

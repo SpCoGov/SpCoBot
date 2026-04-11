@@ -40,6 +40,6 @@ public class Stage {
     }
 
     public interface StageExecuter {
-        void onMessage(Chat chat, Bot bot, Interactive source, Interactive sender, MessageChain message, int time);
+        void onMessage(Chat chat, Bot bot, Interactive source, Interactive sender, MessageChain message, long time);
     }
 }
