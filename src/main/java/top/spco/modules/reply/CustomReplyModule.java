@@ -18,7 +18,6 @@ package top.spco.modules.reply;
 import top.spco.SpCoBot;
 import top.spco.core.module.AbstractModule;
 import top.spco.events.MessageEvents;
-import top.spco.modules.reply.rules.*;
 import top.spco.statistics.ItemStatistics;
 
 import java.sql.SQLException;
@@ -40,11 +39,6 @@ public class CustomReplyModule extends AbstractModule {
     @Override
     public void init() {
         SpCoBot.getInstance().getRuntimeStatistic().add(new ItemStatistics("触发自定义回复", "次"));
-        replier.add(new ScoldedRule());
-        replier.add(new BotRule());
-        replier.add(new CallFatherRule());
-        replier.add(new BarkRule());
-        replier.add(new AskRule());
         MessageEvents.PRIVATE_MESSAGE.register((bot, sender, message, time) -> {
             if (!isActive()) {
                 return;
