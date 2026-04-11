@@ -5,13 +5,25 @@ import top.spco.api.message.MessageChain;
 
 public class ReplyMessage extends Message {
     private final String replyId;
+    private final String senderId;
+    private final String fromId;
 
-    public ReplyMessage(String replyId) {
+    public ReplyMessage(String replyId, String senderId, String fromId) {
         this.replyId = replyId;
+        this.senderId = senderId;
+        this.fromId = fromId;
     }
 
     public String getReplyId() {
         return replyId;
+    }
+
+    public String getFromId() {
+        return fromId;
+    }
+
+    public String getSenderId() {
+        return senderId;
     }
 
     @Override

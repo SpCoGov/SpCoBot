@@ -15,7 +15,7 @@
  */
 package top.spco.service.command;
 
-import top.spco.api.message.Message;
+import top.spco.api.message.MessageChain;
 import top.spco.service.command.exceptions.BuiltInExceptions;
 import top.spco.service.command.exceptions.CommandSyntaxException;
 
@@ -30,11 +30,11 @@ public class Parser {
     private static final char SYNTAX_ESCAPE = '\\';
     private static final char SYNTAX_DOUBLE_QUOTE = '"';
     private static final char SYNTAX_SINGLE_QUOTE = '\'';
-    private final Message message;
+    private final MessageChain message;
     private final String string;
     private int cursor;
 
-    public Parser(Message message, final String string) {
+    public Parser(MessageChain message, final String string) {
         this.message = message;
         this.string = string;
     }
@@ -43,7 +43,7 @@ public class Parser {
         return string;
     }
 
-    public Message getMessage() {
+    public MessageChain getMessageChain() {
         return message;
     }
 

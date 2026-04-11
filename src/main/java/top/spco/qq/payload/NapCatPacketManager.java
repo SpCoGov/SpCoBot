@@ -7,7 +7,6 @@ import top.spco.SpCoBot;
 import top.spco.qq.NapCatWebSocketClient;
 import top.spco.util.NamedThreadFactory;
 
-import java.net.http.WebSocket;
 import java.time.Duration;
 import java.util.Objects;
 import java.util.UUID;

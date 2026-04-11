@@ -28,7 +28,7 @@ public class TextMessageParser extends MessageComponentParser {
     }
 
     @Override
-    public TextMessage parse(JsonObject data,JsonObject raw) {
+    public TextMessage parse(JsonObject data,JsonObject raw, String fromId) {
         String text = JsonUtil.getAsString(data, "text");
         return new TextMessage(text);
     }

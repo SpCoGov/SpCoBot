@@ -28,14 +28,17 @@ public class AtMessageParser extends MessageComponentParser {
     }
 
     @Override
-    public Message parse(JsonObject data, JsonObject raw) {
+    public Message parse(JsonObject data, JsonObject raw, String fromId) {
         String at = data.get("qq").getAsString();
         if ("all".equals(at) || "qq".equals(at)) {
             return AtAllMessage.INSTANCE;
         }
-        JsonObject textElement = raw.get("textElement").getAsJsonObject();
-        String content = textElement.get("content").getAsString();
-        return new AtMessage(at, content.substring(1));
+        if (raw.has("textElement")) {
+            JsonObject textElement = raw.get("textElement").getAsJsonObject();
+            String content = textElement.get("content").getAsString();
+            return new AtMessage(at, content.substring(1));
+        }
+        return new AtMessage(at, null);
     }
 
     @Override

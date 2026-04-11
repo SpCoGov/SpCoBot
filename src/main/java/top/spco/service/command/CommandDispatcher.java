@@ -179,7 +179,7 @@ public class CommandDispatcher extends SimpleFeatureManager<Command> {
             }
             Potential potential = new Potential();
             potential.setLast(BuiltInExceptions.dispatcherUnknownCommand(parser));
-            CommandMeta meta = new CommandMeta(parser.getMessage().toMessageContext(), parser.getMessage(), parser);
+            CommandMeta meta = new CommandMeta(parser.getMessageChain().toMessageContext(), parser.getMessageChain(), parser);
             // 判断用户提交的参数是否符合命令的用法
             final int start = parser.getCursor();
             for (Usage usage : command.getUsages()) {

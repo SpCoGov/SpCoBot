@@ -18,10 +18,7 @@ package top.spco.qq.message;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import top.spco.SpCoBot;
-import top.spco.api.message.Message;
-import top.spco.api.message.MessageChain;
-import top.spco.api.message.TextMessage;
-import top.spco.api.message.UnsupportedMessage;
+import top.spco.api.message.*;
 import top.spco.qq.message.parsers.AtMessageParser;
 import top.spco.qq.message.parsers.ReplyMessageParser;
 import top.spco.qq.message.parsers.TextMessageParser;
@@ -51,11 +48,11 @@ public class MessageParser {
         componentsParsers.put(parser.componentName(), parser);
     }
 
-    public Message parse(JsonObject element, JsonObject raw) {
+    public Message parse(JsonObject element, JsonObject raw, String fromId) {
         String type = JsonUtil.getAsString(element, "type");
         if (componentsParsers.containsKey(type)) {
             JsonObject data = element.get("data").getAsJsonObject();
-            return componentsParsers.get(type).parse(data, raw);
+            return componentsParsers.get(type).parse(data, raw, fromId);
         }
         SpCoBot.LOGGER.warn("消息解析器发现不支持的消息类型：{}", type);
         return UnsupportedMessage.INSTANCE;
@@ -86,7 +83,8 @@ public class MessageParser {
     public JsonArray serialize(MessageChain messageChain) {
         JsonArray result = new JsonArray();
         if (messageChain.getReplySource() != null) {
-            result.add(serialize(new ReplyMessage(messageChain.getReplySource().getMessageId())));
+            MessageSource replySource = messageChain.getReplySource();
+            result.add(serialize(new ReplyMessage(replySource.getMessageId(), replySource.getSenderId(), replySource.getFromId())));
         }
         for (Message component : messageChain.getComponents()) {
             result.add(serialize(component));

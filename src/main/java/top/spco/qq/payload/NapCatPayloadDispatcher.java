@@ -20,7 +20,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import top.spco.SpCoBot;
 import top.spco.qq.NapCatWebSocketClient;
-import top.spco.qq.payload.handler.*;
+import top.spco.qq.payload.handler.ErrorHandler;
+import top.spco.qq.payload.handler.EventTypeHandler;
+import top.spco.qq.payload.handler.MetaEventHandler;
+import top.spco.qq.payload.handler.PostPayloadHandler;
 import top.spco.qq.payload.handler.message.MessageEventHandler;
 import top.spco.qq.payload.handler.message.MessageSentEventHandler;
 import top.spco.util.Ansi;
@@ -29,7 +32,8 @@ import java.net.http.WebSocket;
 import java.util.HashMap;
 import java.util.Map;
 
-import static top.spco.qq.payload.handler.ErrorHandler.Handlers.*;
+import static top.spco.qq.payload.handler.ErrorHandler.Handlers.E_1200;
+import static top.spco.qq.payload.handler.ErrorHandler.Handlers.E_1403;
 
 /**
  * NapCat payload 分发器。

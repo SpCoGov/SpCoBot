@@ -1,6 +1,8 @@
 package top.spco.qq.message.parsers;
 
 import com.google.gson.JsonObject;
+import org.apache.logging.log4j.Logger;
+import top.spco.SpCoBot;
 import top.spco.api.message.Message;
 import top.spco.qq.message.MessageComponentParser;
 import top.spco.qq.message.ReplyMessage;
@@ -13,8 +15,10 @@ public class ReplyMessageParser extends MessageComponentParser {
     }
 
     @Override
-    public Message parse(JsonObject data, JsonObject object) {
-        return new ReplyMessage(JsonUtil.getAsString(data, "id"));
+    public Message parse(JsonObject data, JsonObject raw, String fromId) {
+        JsonObject replyElement = raw.get("replyElement").getAsJsonObject();
+        String senderId = replyElement.get("senderUid").getAsString();
+        return new ReplyMessage(JsonUtil.getAsString(data, "id"), senderId, fromId);
     }
 
     @Override

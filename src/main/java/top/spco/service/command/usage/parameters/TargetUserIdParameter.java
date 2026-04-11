@@ -35,12 +35,12 @@ public class TargetUserIdParameter extends UserIdParameter {
 
     @Override
     public String parse(Parser parser) throws CommandSyntaxException {
-        var quote = SpCoBot.getInstance().getMessageService().getQuote(parser.getMessage());
+        var quote = SpCoBot.getInstance().getMessageService().getQuote(parser.getMessageChain());
         if (quote == null) {
             final int start = parser.getCursor();
             String value = parser.readUnquotedString();
             try {
-                String at = SpCoBot.getInstance().getMessageService().getFirstMentioned(parser.getMessage(), value);
+                String at = SpCoBot.getInstance().getMessageService().getFirstMentioned(parser.getMessageChain(), value);
                 if (at != null) {
                     return at;
                 } else {

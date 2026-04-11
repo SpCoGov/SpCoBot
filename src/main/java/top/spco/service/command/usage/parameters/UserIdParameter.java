@@ -39,7 +39,7 @@ public class UserIdParameter extends Parameter<String> {
     public String parse(Parser parser) throws CommandSyntaxException {
         final int start = parser.getCursor();
         String value = parser.readUnquotedString();
-        String at = SpCoBot.getInstance().getMessageService().getFirstMentioned(parser.getMessage(), value);
+        String at = SpCoBot.getInstance().getMessageService().getFirstMentioned(parser.getMessageChain(), value);
         if (at == null) {
             parser.setCursor(start);
             throw BuiltInExceptions.createWithContext("需要用户ID或@一位用户", parser);

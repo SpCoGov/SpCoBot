@@ -1,7 +1,6 @@
 package top.spco.qq;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import top.spco.SpCoBot;
@@ -18,7 +17,6 @@ import java.net.http.WebSocket;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
-import java.util.UUID;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -40,7 +38,6 @@ public class NapCatWebSocketClient implements WebSocket.Listener {
     private static final long INITIAL_BACKOFF_MS = 1000L;
     private static final long MAX_BACKOFF_MS = 120000L;
     private static final String AUTHORIZATION_HEADER = "Bearer " + Configs.BOT.getQQBotToken();
-    private static final String HEARTBEAT_PAYLOAD = "heartbeat";
 
     private final URI uri;
     private final long heartbeatIntervalMs;
@@ -230,19 +227,6 @@ public class NapCatWebSocketClient implements WebSocket.Listener {
         }
     }
 
-    private boolean hasRequiredGroupMessageFields(JsonObject event) {
-        return event.has("self_id")
-                && event.has("time")
-                && event.has("message_id")
-                && event.has("message_type")
-                && event.has("user_id")
-                && event.has("raw_message")
-                && event.has("message")
-                && event.has("sender")
-                && event.has("group_id")
-                && event.has("post_type");
-    }
-
     private void handlePrivateMessageEvent(JsonObject event) {
         if (!hasRequiredPrivateMessageFields(event)) {
             SpCoBot.LOGGER.warn("[QQNT] 私聊消息事件缺少必须字段: {}", event);
@@ -397,25 +381,5 @@ public class NapCatWebSocketClient implements WebSocket.Listener {
      */
     public NapCatPacketManager getPacketManager() {
         return packetManager;
-    }
-
-    @Deprecated
-    @SuppressWarnings("unused")
-    private static String sendGroupMessage(String message, long group) {
-        JsonObject payload = new JsonObject();
-        payload.addProperty("action", "send_group_msg");
-        JsonObject params = new JsonObject();
-        params.addProperty("group_id", group);
-        JsonArray messageList = new JsonArray();
-        JsonObject messageObject = new JsonObject();
-        messageObject.addProperty("type", "text");
-        JsonObject messageData = new JsonObject();
-        messageData.addProperty("text", message);
-        messageObject.add("data", messageData);
-        messageList.add(messageObject);
-        params.add("message", messageList);
-        payload.add("params", params);
-        payload.addProperty("echo", UUID.randomUUID().toString());
-        return payload.toString();
     }
 }

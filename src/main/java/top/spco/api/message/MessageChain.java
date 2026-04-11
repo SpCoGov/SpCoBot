@@ -92,6 +92,10 @@ public class MessageChain extends Message {
         return this;
     }
 
+    public void setReplySource(MessageSource source) {
+        this.replySource = source;
+    }
+
     public void setSource(MessageSource source) {
         this.source = source;
     }
