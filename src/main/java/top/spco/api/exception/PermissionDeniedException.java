@@ -16,7 +16,7 @@
 package top.spco.api.exception;
 
 /**
- * 机器人进行群的某些操作时权限不足
+ * 机器人进行某些操作时权限不足
  *
  * @author SpCo
  * @version 3.0.0

@@ -154,7 +154,6 @@ public class SpCoBot {
     private void initModules() {
         moduleManager.register(new AutoSign(), true);
         moduleManager.register(new EchoMute(), true);
-        moduleManager.register(new ValorantResponder(), false);
         moduleManager.register(new CustomReplyModule(), false);
         //moduleManager.register(new WikiRender(), false);
     }
