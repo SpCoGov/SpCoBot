@@ -1,6 +1,7 @@
 package top.spco.telegram;
 
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import top.spco.api.PlatformPermission;
 import top.spco.api.User;
 import top.spco.api.message.MessageChain;
 
@@ -19,6 +20,11 @@ class TelegramUser extends User {
     @Override
     public boolean isBot() {
         return tgUser.getIsBot();
+    }
+
+    @Override
+    public PlatformPermission getPlatformPermission() {
+        return PlatformPermission.UNKNOWN;
     }
 
     @Override

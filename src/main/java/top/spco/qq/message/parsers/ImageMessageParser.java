@@ -16,48 +16,43 @@
 package top.spco.qq.message.parsers;
 
 import com.google.gson.JsonObject;
-import top.spco.api.message.AtAllMessage;
-import top.spco.api.message.AtMessage;
+import org.jetbrains.annotations.Nullable;
+import top.spco.api.message.ImageMessage;
 import top.spco.api.message.Message;
 import top.spco.qq.message.MessageComponentParser;
 
-public class AtMessageParser extends MessageComponentParser {
+import java.net.MalformedURLException;
+import java.net.URL;
+
+public class ImageMessageParser extends MessageComponentParser {
     @Override
     public String componentName() {
-        return "at";
+        return "image";
     }
 
     @Override
-    public Message parse(JsonObject data, JsonObject raw, String fromId) {
-        String at = data.get("qq").getAsString();
-        if ("all".equals(at) || "qq".equals(at)) {
-            return AtAllMessage.INSTANCE;
+    public Message parse(JsonObject data, @Nullable JsonObject raw, String fromId) {
+        try {
+            String url = data.get("url").getAsString();
+            return new ImageMessage(new URL(url));
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
         }
-        if (raw != null && raw.has("textElement")) {
-            JsonObject textElement = raw.get("textElement").getAsJsonObject();
-            String content = textElement.get("content").getAsString();
-            return new AtMessage(at, content.substring(1));
-        }
-        return new AtMessage(at, null);
     }
 
     @Override
     public boolean supports(Message message) {
-        return message instanceof AtMessage || message instanceof AtAllMessage;
+        return message instanceof ImageMessage;
     }
 
     @Override
     public JsonObject serialize(Message message) {
+        ImageMessage imageMessage = (ImageMessage) message;
         JsonObject segment = new JsonObject();
         segment.addProperty("type", componentName());
 
         JsonObject data = new JsonObject();
-        if (message instanceof AtAllMessage) {
-            data.addProperty("qq", "all");
-        } else {
-            AtMessage atMessage = (AtMessage) message;
-            data.addProperty("qq", atMessage.getTarget());
-        }
+        data.addProperty("url", imageMessage.getUrl().toString());
         segment.add("data", data);
         return segment;
     }

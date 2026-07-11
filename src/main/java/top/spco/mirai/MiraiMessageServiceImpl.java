@@ -15,12 +15,11 @@
  */
 package top.spco.mirai;
 
-import net.mamoe.mirai.contact.PermissionDeniedException;
 import org.jetbrains.annotations.NotNull;
 import top.spco.api.Identifiable;
 import top.spco.api.Interactive;
 import top.spco.api.exception.PlatformMismatchException;
-import top.spco.api.message.Image;
+import top.spco.api.message.ImageMessage;
 import top.spco.api.message.Message;
 import top.spco.api.message.MessageSource;
 import top.spco.api.message.service.MessageService;
@@ -120,14 +119,14 @@ class MiraiMessageServiceImpl implements MessageService {
     }
 
     @Override
-    public Image toImage(File image, Interactive interactive) {
+    public ImageMessage toImage(File image, Interactive interactive) {
         requireQQ(interactive, "interactive");
 //        return new MiraiImage(ExternalResource.uploadAsImage(image, (Contact) interactive.wrapped()));
         return null;
     }
 
     @Override
-    public Image toImage(InputStream image, Interactive interactive) {
+    public ImageMessage toImage(InputStream image, Interactive interactive) {
         requireQQ(interactive, "interactive");
 //        return new MiraiImage(ExternalResource.uploadAsImage(image, (Contact) interactive.wrapped()));
         return null;

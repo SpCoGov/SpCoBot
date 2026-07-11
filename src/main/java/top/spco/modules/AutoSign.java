@@ -16,6 +16,7 @@
 package top.spco.modules;
 
 import top.spco.SpCoBot;
+import top.spco.api.User;
 import top.spco.core.module.AbstractModule;
 import top.spco.user.BotUsers;
 import top.spco.util.TimeUtil;
@@ -64,9 +65,6 @@ public class AutoSign extends AbstractModule {
                     }
                 } catch (Exception e) {
                     SpCoBot.LOGGER.error(e);
-                    // TODO: 修复这个
-                    //User friend = SpCoBot.getInstance().getBot().getFriend(SpCoBot.getInstance().botOwnerId);
-                    //friend.handleException("自动签到时抛出了意料之外的异常", e);
                 }
             }
         }, TimeUtil.calculateMillisecondToMidnight(), 86400000L);

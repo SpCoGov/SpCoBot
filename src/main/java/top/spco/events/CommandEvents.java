@@ -16,7 +16,6 @@
 package top.spco.events;
 
 import top.spco.api.*;
-import top.spco.api.message.Message;
 import top.spco.api.message.MessageChain;
 import top.spco.core.event.Event;
 import top.spco.core.event.EventFactory;
@@ -55,7 +54,7 @@ public class CommandEvents {
     /**
      * Called when a friend command is received.
      */
-    public static final Event<PrivateCommand> FRIEND_COMMAND = EventFactory.createArrayBacked(PrivateCommand.class, callbacks -> (bot, interactor, message, time) -> {
+    public static final Event<PrivateCommand> PRIVATE_COMMAND = EventFactory.createArrayBacked(PrivateCommand.class, callbacks -> (bot, interactor, message, time) -> {
         for (PrivateCommand event : callbacks) {
             event.onPrivateCommand(bot, interactor, message, time);
         }

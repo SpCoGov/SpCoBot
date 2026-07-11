@@ -15,62 +15,21 @@
  */
 package top.spco.qq.payload.handler.message;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import top.spco.SpCoBot;
-import top.spco.api.message.Message;
-import top.spco.api.message.MessageChain;
-import top.spco.api.message.MessageSource;
 import top.spco.events.MessageEvents;
 import top.spco.qq.NapCatWebSocketClient;
-import top.spco.qq.QQBot;
-import top.spco.qq.message.MessageParser;
-import top.spco.qq.message.ReplyMessage;
-import top.spco.qq.napcat.NapCatMessageSource;
-import top.spco.qq.napcat.NapCatUser;
 import top.spco.qq.payload.handler.PostPayloadHandler;
 
 import java.net.http.WebSocket;
-import java.util.ArrayList;
-
-import static top.spco.util.JsonUtil.getAsLong;
-import static top.spco.util.JsonUtil.getAsString;
 
 public class PrivateMessagePayloadHandler implements PostPayloadHandler {
     @Override
     public void onPayload(NapCatWebSocketClient client, WebSocket webSocket, JsonObject payload) {
-        String botId = getAsString(payload, "self_id");
-        QQBot bot = new QQBot("SpCoBot", botId);
-        JsonObject senderJsonObject = payload.get("sender").getAsJsonObject();
-        int time = getAsLong(payload, "time").intValue();
-        String senderId = getAsString(payload, "user_id");
-        String senderNickName = getAsString(senderJsonObject, "nickname");
-        String messageId = getAsString(payload, "message_id");
-        JsonArray elements = payload.get("message").getAsJsonArray();
-
-        NapCatUser sender = new NapCatUser(senderId, senderNickName);
-
-        JsonArray elementsRaw = payload.get("raw").getAsJsonObject().get("elements").getAsJsonArray();
-        ArrayList<Message> messageComponents = new ArrayList<>();
-        MessageSource replySource = null;
-        for (int i = 0; i < elements.size(); i++) {
-            JsonObject element = elements.get(i).getAsJsonObject();
-            JsonObject elementRaw = elementsRaw.get(i).getAsJsonObject();
-            Message component = MessageParser.getInstance().parse(element, elementRaw, senderId);
-
-            if (component instanceof ReplyMessage replyMessage) {
-                replySource = new NapCatMessageSource(replyMessage.getSenderId(), replyMessage.getFromId(), replyMessage.getReplyId());
-            } else {
-                messageComponents.add(component);
-            }
-        }
-        MessageChain messageChain = new MessageChain(messageComponents);
-        if (replySource != null) {
-            messageChain.setReplySource(replySource);
-        }
-        MessageSource source = new NapCatMessageSource(senderId, senderId, messageId);
-        messageChain.setSource(source);
-
-        MessageEvents.PRIVATE_MESSAGE.invoker().onPrivateMessage(bot, sender, messageChain, time);
+        ParsedPrivateMessage parsed = NapCatMessagePayloadParser.parsePrivateMessage(payload);
+        MessageEvents.PRIVATE_MESSAGE.invoker().onPrivateMessage(
+                parsed.getBot(),
+                parsed.getSender(),
+                parsed.getMessage(),
+                parsed.getTime());
     }
 }

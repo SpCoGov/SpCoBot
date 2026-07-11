@@ -26,6 +26,8 @@ public abstract class User extends Interactive {
     protected User() {
     }
 
+    public abstract PlatformPermission getPlatformPermission();
+
     /**
      * 该用户是否是机器人。
      *

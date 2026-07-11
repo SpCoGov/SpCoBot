@@ -27,6 +27,7 @@ import top.spco.events.*;
 import top.spco.modules.AutoSign;
 import top.spco.modules.EchoMute;
 import top.spco.modules.reply.CustomReplyModule;
+import top.spco.permission.PermissionService;
 import top.spco.service.chat.ChatDispatcher;
 import top.spco.service.chat.ChatType;
 import top.spco.service.command.Command;
@@ -36,7 +37,6 @@ import top.spco.service.dashscope.DashScopeDispatcher;
 import top.spco.service.statistics.StatisticsDispatcher;
 import top.spco.statistics.GroupStatistics;
 import top.spco.statistics.Statistic;
-import top.spco.trade.RechargeSystem;
 import top.spco.user.BotUser;
 import top.spco.user.BotUsers;
 import top.spco.util.ExceptionUtil;
@@ -45,28 +45,6 @@ import java.io.File;
 import java.util.Objects;
 
 /**
- * <pre>
- *                   _oo0oo_
- *                  o8888888o
- *                  88" . "88
- *                  (| -_- |)
- *                  0\  =  /0
- *                ___/`---'\___
- *              .' \\|     |// '.
- *             / \\|||  :  |||// \
- *            / _||||| -:- |||||- \
- *           |   | \\\  -  /// |   |
- *           | \_|  ''\---/''  |_/ |
- *           \  .-\__  '-'  ___/-. /
- *         ___'. .'  /--.--\  `. .'___
- *      ."" '<  `.___\_<|>_/___.' >' "".
- *     | | :  `- \`.;`\ _ /`;.`/ - ` : | |
- *     \  \ `_.   \_ __\ /__ _/   .-` /  /
- * =====`-.____`.___ \_____/___.-`___.-'=====
- *                   `=---='
- *            佛祖保佑机器人不被腾讯风控
- * </pre>
- *
  * @author SpCo
  * @version 5.0.0
  * @since 0.1.0
@@ -86,7 +64,6 @@ public class SpCoBot {
     public final StatisticsDispatcher statisticsDispatcher = StatisticsDispatcher.getInstance();
     public final DashScopeDispatcher dashScopeDispatcher = DashScopeDispatcher.getInstance();
     public final ModuleManager moduleManager = ModuleManager.getInstance();
-    private RechargeSystem rechargeSystem;
     private MessageService messageService;
     private DataBase dataBase;
     private Bot bot;
@@ -96,11 +73,11 @@ public class SpCoBot {
     /**
      * 版本号格式采用语义版本号(X.Y.Z)
      * <ul>
-     * <li>X: 主版本号 (表示重大的、不兼容的变更)</li>
-     * <li>Y: 次版本号 (表示向后兼容的新功能或改进)</li>
-     * <li>Z: 修订号 (表示向后兼容的错误修复或小的改进)</li>
+     * <li>X: major version</li>
+     * <li>Y: minor version</li>
+     * <li>Z: patch version</li>
      * </ul>
-     * <b>更新版本号(仅限核心的 Feature)时请不要忘记在 build.gradle 中同步修改版本号</b>
+     * <b>Keep build.gradle version in sync when updating core version.</b>
      */
     public static final String MAIN_VERSION = "5.0.0";
     public static final String VERSION = "v" + MAIN_VERSION + "-1";
@@ -108,14 +85,14 @@ public class SpCoBot {
 
     private SpCoBot() {
         GroupStatistics receiveMessageGroup = new GroupStatistics("收到消息");
-        receiveMessageGroup.start("群消息", "条");
-        receiveMessageGroup.start("私聊消息", "条");
-        receiveMessageGroup.start("频道消息", "条");
+        receiveMessageGroup.start("Group messages", "count");
+        receiveMessageGroup.start("Private messages", "count");
+        receiveMessageGroup.start("Channel messages", "count");
         runtimeStatistic.add(receiveMessageGroup);
         GroupStatistics sendMessageGroup = new GroupStatistics("发出消息");
-        sendMessageGroup.start("群消息", "条");
-        sendMessageGroup.start("私聊消息", "条");
-        sendMessageGroup.start("频道消息", "条");
+        sendMessageGroup.start("Group messages", "count");
+        sendMessageGroup.start("Private messages", "count");
+        sendMessageGroup.start("Channel messages", "count");
         runtimeStatistic.add(sendMessageGroup);
         initEvents();
     }
@@ -136,16 +113,14 @@ public class SpCoBot {
         this.dataBase = new DataBase();
         this.caatp = CAATP.getInstance();
         Configs.init();
-        if (Configs.BOT.isEnableRechargeSystem()) {
-            try {
-                rechargeSystem = RechargeSystem.getInstance();
-            } catch (Exception e) {
-                LOGGER.error("创建充值系统失败。", e);
-            }
-        }
         botId = Configs.BOT.getBotId();
         botOwnerId = Configs.BOT.getOwnerId();
         testGroupId = Configs.BOT.getTestGroup();
+        try {
+            PermissionService.getInstance().initialize();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to initialize permission service.", e);
+        }
         commandDispatcher = CommandDispatcher.getInstance();
         initModules();
     }
@@ -162,48 +137,46 @@ public class SpCoBot {
             return;
         }
         registered = true;
-        MessageEvents.PRIVATE_MESSAGE_RECALL.register((bot1, sender, operator, recalledMessage) -> LOGGER.info("{}({})撤回了一条自己的消息", operator.getName(), operator.getId()));
-        MessageEvents.GROUP_MESSAGE_RECALL.register((bot1, source, sender, operator, recalledMessage) -> LOGGER.info("{}({})在{}({})撤回了一条{}({})的消息", operator.getName(), operator.getId(), source.getName(), source.getId(), sender.getName(), sender.getId()));
+        MessageEvents.PRIVATE_MESSAGE_RECALL.register((bot1, sender, operator, recalledMessage) -> LOGGER.info("{}({}) recalled a private message", operator.getName(), operator.getId()));
+        MessageEvents.GROUP_MESSAGE_RECALL.register((bot1, source, sender, operator, recalledMessage) -> LOGGER.info("{}({}) recalled a message from {}({}) in {}({})", operator.getName(), operator.getId(), sender.getName(), sender.getId(), source.getName(), source.getId()));
         BotEvents.ONLINE_TICK.register(bot1 -> {
             String id = bot1.getId();
-            LOGGER.info("机器人({})上线。", id);
+            LOGGER.info("Bot({}) online.", id);
             if (!Objects.equals(id, botId)) {
-                LOGGER.error("登录的账号与配置项不匹配。登录的账号: {}, 配置的账号: {}", id, botId);
+                LOGGER.error("Logged in account does not match config. logged: {}, configured: {}", id, botId);
                 System.exit(-2);
             }
         });
-        BotEvents.OFFLINE_TICK.register(bot1 -> LOGGER.info("机器人({})下线。", bot1.getId()));
-        // 自动接受好友请求
+        BotEvents.OFFLINE_TICK.register(bot1 -> LOGGER.info("Bot({}) offline.", bot1.getId()));
         FriendEvents.REQUESTED_AS_FRIEND.register((eventId, message, fromId, fromGroupId, fromGroup, behavior) -> {
-            LOGGER.info("收到了{}的好友请求。", fromId);
+            LOGGER.info("Received friend request from {}.", fromId);
             behavior.accept();
         });
-        // 自动接受群邀请
+        // Automatically accept group invitations
         GroupEvents.INVITED_JOIN_GROUP.register((eventId, invitorId, groupId, invitor, behavior) -> {
-            LOGGER.info("收到了{}({})的加入群{}的请求。", invitor.getName(), invitorId, groupId);
+            LOGGER.info("Received group invitation from {}({}) for group {}.", invitor.getName(), invitorId, groupId);
             behavior.accept();
         });
-        // 自动接收入群邀请
+        // Log group join requests
         GroupEvents.REQUEST_JOIN_GROUP.register((eventId, fromId, group, behavior) -> {
-            LOGGER.info("{}申请加入群{}({})。", fromId, group.getName(), group.getId());
+            LOGGER.info("{} requested to join group {}({}).", fromId, group.getName(), group.getId());
         });
-        // 处理私聊消息
         MessageEvents.PRIVATE_MESSAGE.register((bot, sender, message, time) -> {
             String context = message.toMessageContext();
-            LOGGER.info("收到了{}({})的私聊消息: {}", sender.getName(), sender.getId(), context);
-            if (this.chatDispatcher.isInChat(sender, ChatType.FRIEND)) {
-                this.chatDispatcher.onMessage(ChatType.FRIEND, bot, sender, sender, message, time);
+            LOGGER.info("Received private message from {}({}): {}", sender.getName(), sender.getId(), context);
+            if (this.chatDispatcher.isInChat(sender, ChatType.PRIVATE)) {
+                this.chatDispatcher.onMessage(ChatType.PRIVATE, bot, sender, sender, message, time);
                 return;
             }
             if (context.startsWith(CommandDispatcher.COMMAND_START_SYMBOL)) {
                 CommandEvents.COMMAND.invoker().onCommand(bot, sender, sender, message, time);
-                CommandEvents.FRIEND_COMMAND.invoker().onPrivateCommand(bot, sender, message, time);
+                CommandEvents.PRIVATE_COMMAND.invoker().onPrivateCommand(bot, sender, message, time);
             }
         });
         // 处理群聊消息
         MessageEvents.GROUP_MESSAGE.register((bot, source, sender, message, time) -> {
             String context = message.toMessageContext();
-            LOGGER.info("在{}({})收到了{}({})的消息: {}", source.getName(), source.getId(), sender.getName(), sender.getId(), context);
+            LOGGER.info("Received group message in {}({}) from {}({}): {}", source.getName(), source.getId(), sender.getName(), sender.getId(), context);
             if (this.chatDispatcher.isInChat(source, ChatType.GROUP)) {
                 this.chatDispatcher.onMessage(ChatType.GROUP, bot, source, sender, message, time);
                 return;
@@ -220,7 +193,7 @@ public class SpCoBot {
                         SignCommand.sign(source, botUser, message);
                     }
                 } catch (Exception e) {
-                    source.quoteReply(message, "SpCoBot获取用户时失败: \n" + ExceptionUtil.getStackTraceAsString(e));
+                    source.quoteReply(message, "SpCoBot failed to get user.\n" + ExceptionUtil.getStackTraceAsString(e));
                 }
                 return;
             }
@@ -232,7 +205,7 @@ public class SpCoBot {
                         source.quoteReply(message, botUser.toString());
                     }
                 } catch (Exception e) {
-                    source.quoteReply(message, "SpCoBot获取用户时失败: \n" + ExceptionUtil.getStackTraceAsString(e));
+                    source.quoteReply(message, "SpCoBot failed to get user.\n" + ExceptionUtil.getStackTraceAsString(e));
                 }
                 return;
             }
@@ -276,9 +249,5 @@ public class SpCoBot {
             instance = new SpCoBot();
         }
         return instance;
-    }
-
-    public RechargeSystem getRechargeSystem() {
-        return rechargeSystem;
     }
 }

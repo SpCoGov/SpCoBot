@@ -17,7 +17,7 @@ package top.spco.api.message.service;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import top.spco.api.message.Image;
+import top.spco.api.message.ImageMessage;
 import top.spco.api.Interactive;
 import top.spco.api.message.Message;
 import top.spco.api.message.MessageSource;
@@ -95,7 +95,7 @@ public interface MessageService {
      * @param image       需要转换的图片
      * @param interactive 发送的对象
      */
-    Image toImage(File image, Interactive interactive);
+    ImageMessage toImage(File image, Interactive interactive);
 
     /**
      * 将输入流转换为 {@code Image} 对象。
@@ -103,5 +103,5 @@ public interface MessageService {
      * @param image       需要转换的图片
      * @param interactive 发送的对象
      */
-    Image toImage(InputStream image, Interactive interactive);
+    ImageMessage toImage(InputStream image, Interactive interactive);
 }

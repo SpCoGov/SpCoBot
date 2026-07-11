@@ -27,6 +27,7 @@ import top.spco.service.command.CommandMeta;
 import top.spco.service.command.GroupAbstractCommand;
 import top.spco.service.command.exceptions.CommandSyntaxException;
 import top.spco.service.command.util.PermissionsValidator;
+import top.spco.permission.BotPermissionNodes;
 import top.spco.user.BotUser;
 import top.spco.util.tuple.ImmutablePair;
 
@@ -53,7 +54,7 @@ public class RecallCommand extends GroupAbstractCommand {
 
     @Override
     public void onCommand(Bot bot, Interactive from, User sender, BotUser user, MessageChain message, long time, CommandMeta meta, String usageName) throws CommandSyntaxException {
-        if (PermissionsValidator.isMemberAdmin(from, user, message)) {
+        if (PermissionsValidator.verifyBotUserPermission(from, user, message, BotPermissionNodes.GROUP_RECALL)) {
             ImmutablePair<MessageSource, Message> quote = SpCoBot.getInstance().getMessageService().getQuote(message);
             if (quote == null) {
                 from.quoteReply(message, "请在回复消息时使用该命令。");

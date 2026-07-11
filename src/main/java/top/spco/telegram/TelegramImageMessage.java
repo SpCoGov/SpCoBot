@@ -2,39 +2,28 @@ package top.spco.telegram;
 
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.PhotoSize;
-import top.spco.api.message.Image;
-import top.spco.api.message.Message;
+import top.spco.api.message.ImageMessage;
 import top.spco.api.message.MessageChain;
 
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 
-class TelegramImageMessage extends Image {
+class TelegramImageMessage extends ImageMessage {
     private final InputFile inputFile;
 
     TelegramImageMessage(InputFile image) {
+        // TODO: 修复这个
+        super(null);
         this.inputFile = image;
     }
 
     TelegramImageMessage(File image) {
+        // TODO: 修复这个
+        super(null);
         this.inputFile = new InputFile(image);
     }
 
-    @Override
-    public String getImageId() {
-        return inputFile.getAttachName();
-    }
-
-    @Override
-    public int getWidth() {
-        return 0;
-    }
-
-    @Override
-    public int getHeight() {
-        return 0;
-    }
 
     @Override
     public URL getUrl() {

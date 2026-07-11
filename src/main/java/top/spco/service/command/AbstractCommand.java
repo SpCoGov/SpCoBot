@@ -18,6 +18,7 @@ package top.spco.service.command;
 import top.spco.api.Interactive;
 import top.spco.core.feature.Feature;
 import top.spco.core.feature.FeatureManager;
+import top.spco.permission.PermissionService;
 import top.spco.service.command.usage.Usage;
 import top.spco.service.command.usage.UsageBuilder;
 import top.spco.user.BotUser;
@@ -53,8 +54,9 @@ public abstract class AbstractCommand extends Command {
     }
 
     @Override
-    public boolean hasPermission(BotUser user) {
-        return user.getPermission().getLevel() >= needPermission().getLevel();
+    public boolean hasPermission(BotUser user) throws SQLException {
+        return PermissionService.getInstance().has(user, requiredPermissionNode())
+                || user.getPermission().getLevel() >= needPermission().getLevel();
     }
 
     @Override

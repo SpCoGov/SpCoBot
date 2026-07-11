@@ -36,6 +36,12 @@ class TelegramBot extends Bot {
     }
 
     @Override
+    public User getUser(String id) {
+        // TODO: 实现这个
+        return null;
+    }
+
+    @Override
     public String getId() {
         return user.getId() + "";
     }

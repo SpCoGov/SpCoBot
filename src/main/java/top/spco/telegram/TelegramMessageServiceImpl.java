@@ -10,7 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.chat.ChatFullInfo;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import top.spco.SpCoBot;
-import top.spco.api.message.Image;
+import top.spco.api.message.ImageMessage;
 import top.spco.api.Identifiable;
 import top.spco.api.Interactive;
 import top.spco.api.exception.PlatformMismatchException;
@@ -161,7 +161,7 @@ class TelegramMessageServiceImpl implements MessageService {
      * @param interactive 发送的对象
      */
     @Override
-    public Image toImage(File image, Interactive interactive) {
+    public ImageMessage toImage(File image, Interactive interactive) {
         requireTelegram(interactive, "interactive");
         return new TelegramImageMessage(image);
     }
@@ -173,7 +173,7 @@ class TelegramMessageServiceImpl implements MessageService {
      * @param interactive 发送的对象
      */
     @Override
-    public Image toImage(InputStream image, Interactive interactive) {
+    public ImageMessage toImage(InputStream image, Interactive interactive) {
         requireTelegram(interactive, "interactive");
         return new TelegramImageMessage(new InputFile(image, "image"));
     }

@@ -24,18 +24,22 @@ import java.net.URL;
  * @version 3.0.2
  * @since 1.3.0
  */
-public abstract class Image extends Message {
-    protected Image() {
+public class ImageMessage extends Message {
+    private final URL url;
+
+    public ImageMessage(URL url) {
         super();
+        this.url = url;
     }
 
-    public abstract String getImageId();
+    public URL getUrl() {
+        return url;
+    }
 
-    public abstract int getWidth();
-
-    public abstract int getHeight();
-
-    public abstract URL getUrl();
+    @Override
+    public String toMessageContext() {
+        return "[图片]";
+    }
 
     /**
      * @deprecated {@code Image} 表示一张图片，不能在后添加消息。如需添加消息请使用 {@link Message}
@@ -53,5 +57,10 @@ public abstract class Image extends Message {
     @Deprecated
     public MessageChain append(String appendage) {
         return new MessageChain().append(appendage);
+    }
+
+    @Override
+    public MessageChain toMessageChain() {
+        return new MessageChain().append(this);
     }
 }

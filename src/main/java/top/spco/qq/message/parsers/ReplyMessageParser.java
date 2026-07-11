@@ -16,8 +16,12 @@ public class ReplyMessageParser extends MessageComponentParser {
 
     @Override
     public Message parse(JsonObject data, JsonObject raw, String fromId) {
-        JsonObject replyElement = raw.get("replyElement").getAsJsonObject();
-        String senderId = replyElement.get("senderUid").getAsString();
+        String senderId = null;
+        if (raw != null) {
+            JsonObject replyElement = raw.get("replyElement").getAsJsonObject();
+
+            senderId = replyElement.get("senderUid").getAsString();
+        }
         return new ReplyMessage(JsonUtil.getAsString(data, "id"), senderId, fromId);
     }
 

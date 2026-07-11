@@ -16,10 +16,14 @@
 package top.spco.service.command.usage.parameters;
 
 import top.spco.SpCoBot;
+import top.spco.api.message.AtMessage;
+import top.spco.api.message.Message;
 import top.spco.service.command.CommandDispatcher;
 import top.spco.service.command.Parser;
 import top.spco.service.command.exceptions.BuiltInExceptions;
 import top.spco.service.command.exceptions.CommandSyntaxException;
+
+import java.util.Optional;
 
 /**
  * 指向一位用户的命令参数。通常用于表示命令执行的对象。
@@ -35,14 +39,14 @@ public class TargetUserIdParameter extends UserIdParameter {
 
     @Override
     public String parse(Parser parser) throws CommandSyntaxException {
-        var quote = SpCoBot.getInstance().getMessageService().getQuote(parser.getMessageChain());
+        var quote = parser.getMessageChain().getReplySource();
         if (quote == null) {
             final int start = parser.getCursor();
-            String value = parser.readUnquotedString();
+            parser.readUnquotedString();
             try {
-                String at = SpCoBot.getInstance().getMessageService().getFirstMentioned(parser.getMessageChain(), value);
-                if (at != null) {
-                    return at;
+                Optional<Message> at = parser.getMessageChain().getComponents().stream().filter((message -> message instanceof AtMessage)).findFirst();
+                if (at.isPresent()) {
+                    return ((AtMessage) at.get()).getTarget();
                 } else {
                     throw BuiltInExceptions.createWithContext("需要用户ID或@一位用户", parser);
                 }
@@ -51,7 +55,8 @@ public class TargetUserIdParameter extends UserIdParameter {
                 throw BuiltInExceptions.createWithContext("需要用户ID或@一位用户或在回复一条消息时发送该命令", parser);
             }
         } else {
-            return quote.getLeft().getSenderId();
+            parser.setCursor(parser.getCursor() - 1);
+            return quote.getSenderId();
         }
     }
 

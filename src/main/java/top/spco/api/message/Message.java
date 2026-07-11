@@ -100,7 +100,7 @@ import java.io.File;
  *
  * @author SpCo
  * @version 3.0.2
- * @see Image
+ * @see ImageMessage
  * @see MessageService
  * @see MessageSource
  * @since 0.1.0

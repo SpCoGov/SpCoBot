@@ -964,7 +964,7 @@ public class ConfigSpecHelper extends UnmodifiableConfigWrapper<UnmodifiableConf
 
         @SuppressWarnings("unchecked")
         protected T getRaw(Config config, List<String> path, Supplier<T> defaultSupplier) {
-            Object value = config.getOrElse(path,defaultSupplier);
+            Object value = config.getOrElse(path, defaultSupplier);
 
             if (defaultSupplier.get() instanceof Long && value instanceof Integer) {
                 return (T) Long.valueOf((Integer) value);

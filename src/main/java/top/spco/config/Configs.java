@@ -23,7 +23,6 @@ package top.spco.config;
 public class Configs {
     public static BotConfig BOT = new BotConfig();
     public static DashScopeConfig DASH_SCOPE = new DashScopeConfig();
-    public static PaymentApiConfig PAYMENT_API = new PaymentApiConfig();
     public static WikiRenderConfig WIKI_RENDER = new WikiRenderConfig();
 
     public static void init() {

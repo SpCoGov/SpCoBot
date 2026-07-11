@@ -24,7 +24,7 @@ public class UnsupportedMessage extends Message {
 
     @Override
     public String toMessageContext() {
-        return "";
+        return "[不支持]";
     }
 
     @Override

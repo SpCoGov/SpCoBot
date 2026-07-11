@@ -18,10 +18,12 @@ package top.spco.qq.message;
 import com.google.gson.JsonObject;
 import top.spco.api.message.Message;
 
+import javax.annotation.Nullable;
+
 public abstract class MessageComponentParser {
     public abstract String componentName();
 
-    public abstract Message parse(JsonObject data, JsonObject raw, String fromId);
+    public abstract Message parse(JsonObject data, @Nullable JsonObject raw, String fromId);
 
     public abstract boolean supports(Message message);
 

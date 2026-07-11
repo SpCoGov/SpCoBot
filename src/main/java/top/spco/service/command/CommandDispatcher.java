@@ -15,10 +15,6 @@
  */
 package top.spco.service.command;
 
-import org.reflections.Reflections;
-import org.reflections.scanners.SubTypesScanner;
-import org.reflections.scanners.TypeAnnotationsScanner;
-import org.reflections.util.ConfigurationBuilder;
 import top.spco.SpCoBot;
 import top.spco.api.Bot;
 import top.spco.api.Interactive;
@@ -45,11 +41,16 @@ import top.spco.user.UserFetchException;
 import top.spco.util.ExceptionUtil;
 import top.spco.util.LoggedTimer;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.net.MalformedURLException;
+import java.net.JarURLConnection;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 /**
  * 一个用于处理机器人应用中命令的系统<p>
@@ -69,6 +70,7 @@ public class CommandDispatcher extends SimpleFeatureManager<Command> {
     public static final char USAGE_TARGET_USER_ID_OPEN = '{';
     public static final char USAGE_TARGET_USER_ID_CLOSE = '}';
     public static final char USAGE_OR = '|';
+    private static final String COMMAND_PACKAGE = "top.spco.service.command.commands";
     private static CommandDispatcher instance;
     private static boolean registered = false;
     private boolean frozen = false;
@@ -96,18 +98,14 @@ public class CommandDispatcher extends SimpleFeatureManager<Command> {
         Set<Command> toBeRegistered = new HashSet<>();
 
         try {
-            URL url = SpCoBot.jarFile.toURI().toURL();
-            Reflections reflections = new Reflections(new ConfigurationBuilder()
-                    .setScanners(new SubTypesScanner(false), new TypeAnnotationsScanner())
-                    .setUrls(url));
-            Set<Class<?>> annotatedClasses = reflections.getTypesAnnotatedWith(CommandMarker.class);
+            Set<Class<?>> annotatedClasses = getCommandClasses();
             for (Class<?> cls : annotatedClasses) {
                 Command command = (Command) cls.getDeclaredConstructor().newInstance();
                 toBeRegistered.add(command);
             }
 
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException |
-                 InvocationTargetException | MalformedURLException e) {
+                 InvocationTargetException | IOException | URISyntaxException e) {
             throw new RuntimeException(e);
         }
 
@@ -122,6 +120,65 @@ public class CommandDispatcher extends SimpleFeatureManager<Command> {
         SpCoBot.LOGGER.info("已注册{}个命令。", toBeRegistered.size());
     }
 
+    private Set<Class<?>> getCommandClasses() throws IOException, URISyntaxException {
+        Set<Class<?>> commandClasses = new HashSet<>();
+        String packagePath = COMMAND_PACKAGE.replace('.', '/');
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        if (classLoader == null) {
+            classLoader = CommandDispatcher.class.getClassLoader();
+        }
+
+        Enumeration<URL> resources = classLoader.getResources(packagePath);
+        while (resources.hasMoreElements()) {
+            URL resource = resources.nextElement();
+            switch (resource.getProtocol()) {
+                case "file" -> findFileCommandClasses(commandClasses, new File(resource.toURI()), COMMAND_PACKAGE, classLoader);
+                case "jar" -> findJarCommandClasses(commandClasses, resource, packagePath, classLoader);
+                default -> SpCoBot.LOGGER.debug("Unsupported command scan protocol: {}", resource);
+            }
+        }
+        return commandClasses;
+    }
+
+    private void findFileCommandClasses(Set<Class<?>> commandClasses, File directory, String packageName, ClassLoader classLoader) {
+        File[] files = directory.listFiles();
+        if (files == null) {
+            return;
+        }
+        for (File file : files) {
+            if (file.isDirectory()) {
+                findFileCommandClasses(commandClasses, file, packageName + "." + file.getName(), classLoader);
+            } else if (file.getName().endsWith(".class")) {
+                addCommandClass(commandClasses, packageName + "." + file.getName().replaceFirst("\\.class$", ""), classLoader);
+            }
+        }
+    }
+
+    private void findJarCommandClasses(Set<Class<?>> commandClasses, URL resource, String packagePath, ClassLoader classLoader) throws IOException {
+        JarURLConnection connection = (JarURLConnection) resource.openConnection();
+        try (JarFile jarFile = connection.getJarFile()) {
+            Enumeration<JarEntry> entries = jarFile.entries();
+            while (entries.hasMoreElements()) {
+                JarEntry entry = entries.nextElement();
+                String name = entry.getName();
+                if (!entry.isDirectory() && name.startsWith(packagePath) && name.endsWith(".class")) {
+                    addCommandClass(commandClasses, name.replace('/', '.').replaceFirst("\\.class$", ""), classLoader);
+                }
+            }
+        }
+    }
+
+    private void addCommandClass(Set<Class<?>> commandClasses, String className, ClassLoader classLoader) {
+        try {
+            Class<?> cls = Class.forName(className, false, classLoader);
+            if (Command.class.isAssignableFrom(cls) && cls.isAnnotationPresent(CommandMarker.class)) {
+                commandClasses.add(cls);
+            }
+        } catch (ClassNotFoundException e) {
+            SpCoBot.LOGGER.error("Failed to load command class: {}", className, e);
+        }
+    }
+
     /**
      * 获取所有已注册的群组命令
      */
@@ -130,13 +187,12 @@ public class CommandDispatcher extends SimpleFeatureManager<Command> {
     }
 
     private void init() {
-        // TODO: 修复这个
-//        CommandEvents.PRIVATE_COMMAND.register((bot, friend, message, time) -> {
-//            if (SpCoBot.getInstance().chatDispatcher.isInChat(friend, ChatType.FRIEND)) {
-//                return;
-//            }
-//            callCommand(privateCommands, friend, friend, message, bot, time);
-//        });
+        CommandEvents.PRIVATE_COMMAND.register((bot, user, message, time) -> {
+            if (SpCoBot.getInstance().chatDispatcher.isInChat(user, ChatType.PRIVATE)) {
+                return;
+            }
+            callCommand(privateCommands, user, user, message, bot, time);
+        });
         CommandEvents.GROUP_COMMAND.register((bot, from, sender, message, time) -> {
             if (SpCoBot.getInstance().chatDispatcher.isInChat(from, ChatType.GROUP)) {
                 return;
@@ -158,8 +214,7 @@ public class CommandDispatcher extends SimpleFeatureManager<Command> {
         if (input.canRead()) {
             input.skip();
         }
-        // TODO: 修改为MessageChain
-        //message.setCommandMessage();
+        message.setCommandMessage();
         callCommand(targetCommands, from, sender, message, bot, time, label, input);
     }
 

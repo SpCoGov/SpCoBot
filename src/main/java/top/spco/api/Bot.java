@@ -28,4 +28,6 @@ public abstract class Bot extends Identifiable {
 
 
     public abstract Group getGroup(String id);
+
+    public abstract User getUser(String id);
 }

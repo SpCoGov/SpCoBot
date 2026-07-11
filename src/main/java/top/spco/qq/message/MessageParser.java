@@ -20,6 +20,7 @@ import com.google.gson.JsonObject;
 import top.spco.SpCoBot;
 import top.spco.api.message.*;
 import top.spco.qq.message.parsers.AtMessageParser;
+import top.spco.qq.message.parsers.ImageMessageParser;
 import top.spco.qq.message.parsers.ReplyMessageParser;
 import top.spco.qq.message.parsers.TextMessageParser;
 import top.spco.util.JsonUtil;
@@ -42,6 +43,7 @@ public class MessageParser {
         register(new TextMessageParser());
         register(new AtMessageParser());
         register(new ReplyMessageParser());
+        register(new ImageMessageParser());
     }
 
     public void register(MessageComponentParser parser) {

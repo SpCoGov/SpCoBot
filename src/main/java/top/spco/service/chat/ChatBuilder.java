@@ -53,7 +53,7 @@ public class ChatBuilder implements Builder<Chat> {
     /**
      * 创建一个{@code ChatBuilder}实例，根据给定的{@link ChatType}和目标{@link Interactive}对象。
      *
-     * @param chatType {@link ChatType 聊天类型}，可以是{@link ChatType#GROUP}、{@link ChatType#FRIEND}或{@link ChatType#GROUP_TEMP}之一
+     * @param chatType {@link ChatType 聊天类型}，可以是{@link ChatType#GROUP}、{@link ChatType#PRIVATE}或{@link ChatType#GROUP_TEMP}之一
      * @param target   目标{@link Interactive}对象，根据{@link ChatType 聊天类型}的不同可以是{@link Group}、{@link Friend}或{@link NormalMember}
      * @throws ChatTypeMismatchException 如果{@link ChatType 聊天类型}与目标{@link Interactive}对象不匹配时抛出异常
      */

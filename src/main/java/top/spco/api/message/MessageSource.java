@@ -38,4 +38,6 @@ protected MessageSource() {
     public abstract String getFromId();
 
     public abstract String getMessageId();
+
+    public abstract MessageChain getMessageChain();
 }

@@ -51,14 +51,14 @@ public class QuoteCommand extends AbstractCommand {
 
     @Override
     public void onCommand(Bot bot, Interactive from, User sender, BotUser user, MessageChain message, long time, CommandMeta meta, String usageName) throws CommandSyntaxException {
-        var quote = SpCoBot.getInstance().getMessageService().getQuote(message);
+        var quote = message.getReplySource();
         if (quote == null) {
             from.quoteReply(message, "该消息没有引用一条消息");
         } else {
             from.quoteReply(message,
-                    "引用消息的发送者: " + quote.getKey().getSenderId() +
-                            "\n引用消息的来源: " + quote.getKey().getFromId() +
-                            "\n引用消息的内容: " + quote.getRight().toMessageContext());
+                    "引用消息的发送者: " + quote.getSenderId() +
+                            "\n引用消息的来源: " + quote.getFromId() +
+                            "\n引用消息的内容: " + quote.getMessageChain().toMessageContext());
         }
     }
 }

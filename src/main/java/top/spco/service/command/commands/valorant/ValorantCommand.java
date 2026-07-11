@@ -26,7 +26,6 @@ import top.spco.api.Bot;
 import top.spco.api.Group;
 import top.spco.api.Interactive;
 import top.spco.api.User;
-import top.spco.api.message.Message;
 import top.spco.api.message.MessageChain;
 import top.spco.service.chat.Chat;
 import top.spco.service.chat.ChatBuilder;
@@ -133,7 +132,7 @@ public class ValorantCommand extends AbstractCommand {
                     if (tokens[0].equals("x")) {
                         if (tokens[1].equals("2fa_auth")) {
                             // TODO: 修复这个
-                            ChatType ct = ChatType.FRIEND;
+                            ChatType ct = ChatType.PRIVATE;
                             Chat authChat = new ChatBuilder(ct, from)
                                     .addStage(new Stage(() -> "需要验证，请发送您收到的6位验证码。", (chat, bot1, source, sender1, message1, time1) -> {
                                         String varCode = message1.toMessageContext();
@@ -220,7 +219,7 @@ public class ValorantCommand extends AbstractCommand {
                                         // 创建私聊对话
                                         // 接受验证码
                                         // TODO: 修复这个
-                                        ChatType ct = ChatType.FRIEND;
+                                        ChatType ct = ChatType.PRIVATE;
                                         Chat authChat = new ChatBuilder(ct, sender)
                                                 .addStage(new Stage(() -> "需要验证，请发送您收到的6位验证码。", (chat, bot1, source, sender1, message1, time1) -> {
                                                     String varCode = message1.toMessageContext();

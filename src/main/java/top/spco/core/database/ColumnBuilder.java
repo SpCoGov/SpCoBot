@@ -37,6 +37,11 @@ public class ColumnBuilder implements Builder<String> {
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Column name cannot be null or empty");
         }
+        try {
+            DataBase.validateIdentifier(name);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Invalid column name: " + name, e);
+        }
         if (type == null) {
             throw new IllegalArgumentException("Column type cannot be null");
         }
@@ -93,7 +98,12 @@ public class ColumnBuilder implements Builder<String> {
             throw new IllegalStateException("Column type must be specified.");
         }
 
-        StringBuilder columnDef = new StringBuilder(name);
+        StringBuilder columnDef;
+        try {
+            columnDef = new StringBuilder(DataBase.quoteIdentifier(name));
+        } catch (Exception e) {
+            throw new IllegalStateException("Invalid column name: " + name, e);
+        }
 
         columnDef.append(" ").append(type);
 
@@ -111,7 +121,7 @@ public class ColumnBuilder implements Builder<String> {
         }
         if (defaultValue != null) {
             if (type == FieldType.TEXT) {
-                columnDef.append(" DEFAULT '").append(defaultValue).append("'");
+                columnDef.append(" DEFAULT '").append(defaultValue.replace("'", "''")).append("'");
             } else {
                 if (type == FieldType.INTEGER) {
                     try {
@@ -127,6 +137,11 @@ public class ColumnBuilder implements Builder<String> {
             columnDef.append(" CHECK (").append(checkConstraint).append(")");
         }
         if (collate != null) {
+            try {
+                DataBase.validateIdentifier(collate);
+            } catch (Exception e) {
+                throw new IllegalArgumentException("Invalid collation name: " + collate, e);
+            }
             columnDef.append(" COLLATE ").append(collate);
         }
 

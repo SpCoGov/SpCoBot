@@ -18,7 +18,6 @@ package top.spco.service.chat;
 import top.spco.api.Bot;
 import top.spco.api.Identifiable;
 import top.spco.api.Interactive;
-import top.spco.api.message.Message;
 import top.spco.api.message.MessageChain;
 import top.spco.core.Manager;
 import top.spco.service.RegistrationException;
@@ -68,7 +67,7 @@ public class ChatDispatcher extends Manager<String, Chat> {
                     return true;
                 }
             }
-            case FRIEND -> {
+            case PRIVATE -> {
                 if (this.friendChats.containsKey(where.getId()) && this.friendChats.get(where.getId()) != null) {
                     return true;
                 }
@@ -110,7 +109,7 @@ public class ChatDispatcher extends Manager<String, Chat> {
     public Chat getChat(Identifiable where, ChatType chatType) {
         return switch (chatType) {
             case GROUP -> groupChats.get(where.getId());
-            case FRIEND -> friendChats.get(where.getId());
+            case PRIVATE -> friendChats.get(where.getId());
             case GROUP_TEMP -> groupTempChats.get(where.getId());
         };
     }
@@ -130,7 +129,7 @@ public class ChatDispatcher extends Manager<String, Chat> {
         String id = chat.getTarget().getId();
         switch (chatType) {
             case GROUP -> this.groupChats.put(id, chat);
-            case FRIEND -> this.friendChats.put(id, chat);
+            case PRIVATE -> this.friendChats.put(id, chat);
             case GROUP_TEMP -> this.groupTempChats.put(id, chat);
         }
     }
@@ -144,7 +143,7 @@ public class ChatDispatcher extends Manager<String, Chat> {
     public void stopChat(Identifiable where, ChatType chatType) {
         switch (chatType) {
             case GROUP -> this.groupChats.remove(where.getId());
-            case FRIEND -> this.friendChats.remove(where.getId());
+            case PRIVATE -> this.friendChats.remove(where.getId());
             case GROUP_TEMP -> this.groupTempChats.remove(where.getId());
         }
     }

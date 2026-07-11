@@ -1,8 +1,6 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.8.10'
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.8.10'
-
-    id 'net.mamoe.mirai-console' version '2.16.0'
 }
 
 group = 'top.spco'
@@ -14,33 +12,30 @@ javadoc {
 }
 
 repositories {
-    mavenCentral()
     maven { url 'https://maven.aliyun.com/repository/public' }
+    maven { url 'https://maven.aliyun.com/repository/central' }
 }
 
 dependencies {
-    implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.20.0'
-    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.20.0'
-    implementation group: 'org.apache.logging.log4j', name: 'log4j-slf4j2-impl', version: '2.20.0'
-    implementation group: 'org.slf4j', name: 'slf4j-api', version: '2.0.7'
-    implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
-    implementation group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.14'
+    implementation "org.apache.logging.log4j:log4j-core:2.20.0"
+    implementation "org.apache.logging.log4j:log4j-api:2.20.0"
+    implementation "org.apache.logging.log4j:log4j-slf4j2-impl:2.20.0"
+    implementation "org.slf4j:slf4j-api:2.0.7"
+    implementation "org.apache.httpcomponents:httpclient:4.5.13"
+    implementation "org.apache.httpcomponents:httpcore:4.4.14"
 
-    implementation group: 'com.alipay.sdk', name: 'alipay-sdk-java', version: '4.39.40.ALL'
-    implementation group: 'com.github.wechatpay-apiv3', name: 'wechatpay-java', version: '0.2.12'
     implementation('com.alibaba:dashscope-sdk-java:2.8.2') {
         exclude group: 'org.slf4j', module: 'slf4j-simple'
     }
 
-    implementation group: 'com.google.zxing', name: 'core', version: '3.5.3'
-    implementation group: 'org.reflections', name: 'reflections', version: '0.9.12'
-    implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
-    implementation group: 'com.google.guava', name: 'guava', version: '32.0.0-android'
-    implementation group: 'org.xerial', name: 'sqlite-jdbc', version: '3.42.0.0'
-    implementation group: 'org.jetbrains', name: 'annotations', version: '24.0.1'
-    implementation group: 'org.jsoup', name: 'jsoup', version: '1.18.3'
+    implementation "com.google.zxing:core:3.5.3"
+    implementation "com.google.code.gson:gson:2.10.1"
+    implementation "com.google.guava:guava:32.0.0-android"
+    implementation "org.xerial:sqlite-jdbc:3.42.0.0"
+    implementation "org.jetbrains:annotations:24.0.1"
+    implementation "org.jsoup:jsoup:1.18.3"
 
-    implementation group: 'com.electronwill.night-config', name: 'toml', version: '3.8.1'
+    implementation "com.electronwill.night-config:toml:3.8.1"
 
     implementation('org.telegram:telegrambots-longpolling:8.2.0') {
         exclude group: 'org.slf4j', module: 'slf4j-simple'
@@ -56,8 +51,4 @@ dependencies {
 
 test {
     useJUnitPlatform()
-}
-
-mirai {
-    jvmTarget JavaVersion.VERSION_17
 }

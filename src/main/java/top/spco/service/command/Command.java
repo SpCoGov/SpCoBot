@@ -148,6 +148,10 @@ public abstract class Command extends Feature {
      */
     public abstract UserPermission needPermission();
 
+    public String requiredPermissionNode() {
+        return "command." + getLabels()[0].toLowerCase() + ".use";
+    }
+
     /**
      * 命令发送用户是否有足够的权限触发该命令。<p>
      * 默认情况下与 {@link #needPermission()} 有关。<p>

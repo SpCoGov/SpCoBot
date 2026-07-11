@@ -15,8 +15,6 @@ public class MessageSender {
     /**
      * 同步发送群消息。
      *
-     * <p>当前实现会先将 {@link MessageChain} 转换为纯文本内容，再以 NapCat 标准消息段格式发送。</p>
-     *
      * @param groupId      群号
      * @param messageChain 要发送的消息链
      * @return NapCat 返回的完整回包
@@ -24,6 +22,18 @@ public class MessageSender {
     public static JsonObject sendSyncGroupMessage(String groupId, MessageChain messageChain)
             throws ExecutionException, InterruptedException, TimeoutException {
         return QQAdapter.getInstance().getClient().getPacketManager().sendSync(buildGroupMessagePayload(groupId, messageChain));
+    }
+
+    /**
+     * 同步发送私聊消息。
+     *
+     * @param userId       私聊Id
+     * @param messageChain 要发送的消息链
+     * @return NapCat 返回的完整回包
+     */
+    public static JsonObject sendSyncPrivateMessage(String userId, MessageChain messageChain)
+            throws ExecutionException, InterruptedException, TimeoutException {
+        return QQAdapter.getInstance().getClient().getPacketManager().sendSync(buildPrivateMessagePayload(userId, messageChain));
     }
 
     /**
@@ -44,6 +54,14 @@ public class MessageSender {
         JsonArray messageSegments = MessageParser.getInstance().serialize(messageChain);
         return NapCatPacketBuilder.create("send_group_msg")
                 .param("group_id", groupId)
+                .param("message", messageSegments)
+                .build();
+    }
+
+    private static JsonObject buildPrivateMessagePayload(String userId, MessageChain messageChain) {
+        JsonArray messageSegments = MessageParser.getInstance().serialize(messageChain);
+        return NapCatPacketBuilder.create("send_private_msg")
+                .param("user_id", userId)
                 .param("message", messageSegments)
                 .build();
     }

@@ -35,6 +35,11 @@ public class TableChecker {
     public TableChecker(DataBase database, String tableName) {
         this.database = database;
         this.tableName = tableName;
+        try {
+            DataBase.validateIdentifier(tableName);
+        } catch (SQLException e) {
+            throw new IllegalArgumentException("Invalid table name: " + tableName, e);
+        }
     }
 
     public TableChecker addColumn(ColumnBuilder column) {
@@ -49,7 +54,7 @@ public class TableChecker {
         try {
             if (!database.isTableExists(tableName)) {
                 StringBuilder sqlBuilder = new StringBuilder();
-                sqlBuilder.append("CREATE TABLE IF NOT EXISTS ").append(tableName).append(" (");
+                sqlBuilder.append("CREATE TABLE IF NOT EXISTS ").append(DataBase.quoteIdentifier(tableName)).append(" (");
                 for (ColumnBuilder column : columns.values()) {
                     sqlBuilder.append(column.build()).append(", ");
                 }
@@ -66,7 +71,7 @@ public class TableChecker {
                 if (database.isColumnExists(tableName, column.getName())) {
                     continue;
                 }
-                String alterSql = "ALTER TABLE " + tableName + " ADD COLUMN " + column.build();
+                String alterSql = "ALTER TABLE " + DataBase.quoteIdentifier(tableName) + " ADD COLUMN " + column.build();
                 try (Statement stmt = database.getConn().createStatement()) {
                     stmt.execute(alterSql);
                     SpCoBot.LOGGER.info("{}列不存在，已成功创建。", column.getName());

@@ -15,9 +15,7 @@
  */
 package top.spco.user;
 
-import com.google.gson.JsonObject;
 import top.spco.SpCoBot;
-import top.spco.core.database.DataBase;
 import top.spco.util.TimeUtil;
 
 import java.sql.SQLException;
@@ -124,47 +122,6 @@ public class BotUser {
         } catch (SQLException e) {
             throw new UserOperationException("An error occurred while reading or saving data.", e);
         }
-    }
-
-    public void recharge(String tradeNo, int amount) throws UserOperationException {
-        DataBase db = SpCoBot.getInstance().getDataBase();
-        try {
-            int baseAmount = db.selectInt("user", "star_coin", "id", id);
-            this.starCoin = baseAmount + amount;
-            db.getConn().setAutoCommit(false);
-            // 更新用户StarCoin数量
-            db.update("update user set star_coin=? where id=?", starCoin, id);
-            // 为用户添加StarCoin变动记录
-            db.insertData("insert into expenses(user,date,time,amount,balance,desc) values (?,?,?,?,?,?)",
-                    id, TimeUtil.today(), System.currentTimeMillis(), amount, this.starCoin, tradeNo + " Recharge " + amount + " StarCoin");
-            // 更新充值交易状态
-            SpCoBot.getInstance().getDataBase().update("update trade set state=? where id=?", "paid", tradeNo);
-            db.getConn().commit();
-            // TODO: 修复这个
-//            Friend<?> friend = SpCoBot.getInstance().getBot().getFriend(getId());
-//            if (friend != null) {
-//                friend.sendMessage("订单" + tradeNo + "支付成功，已到账" + amount + "星币，账户余额: " + this.starCoin);
-//            }
-        } catch (SQLException e) {
-            try {
-                db.getConn().rollback();
-            } catch (SQLException rollbackException) {
-                SpCoBot.LOGGER.error("Rollback failed.", rollbackException);
-            }
-            throw new UserOperationException("An error occurred while reading or saving data.", e);
-        } finally {
-            try {
-                db.getConn().setAutoCommit(true);
-            } catch (SQLException e) {
-                SpCoBot.LOGGER.error(e);
-            }
-        }
-    }
-
-    public void recharge(JsonObject decrypted) throws UserOperationException {
-        String tradeNo = decrypted.get("out_trade_no").getAsString();
-        int totalAmount = (decrypted.get("amount").getAsJsonObject().get("total").getAsInt()) / 100;
-        recharge(tradeNo, totalAmount);
     }
 
     /**

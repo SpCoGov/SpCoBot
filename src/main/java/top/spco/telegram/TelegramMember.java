@@ -3,6 +3,7 @@ package top.spco.telegram;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import top.spco.api.Group;
 import top.spco.api.MemberPermission;
+import top.spco.api.PlatformPermission;
 import top.spco.api.message.Member;
 import top.spco.api.message.MessageChain;
 import org.telegram.telegrambots.meta.api.objects.chat.Chat;
@@ -31,6 +32,11 @@ class TelegramMember extends Member {
     @Override
     public boolean isBot() {
         return chatMember.getUser().getIsBot();
+    }
+
+    @Override
+    public PlatformPermission getPlatformPermission() {
+        return PlatformPermission.fromMemberPermission(getPermission());
     }
 
     @Override

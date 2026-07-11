@@ -26,7 +26,7 @@ public enum ChatType {
     /**
      * 对话在好友聊天中发生
      */
-    FRIEND,
+    PRIVATE,
     /**
      * 对话在群组聊天中发生
      */

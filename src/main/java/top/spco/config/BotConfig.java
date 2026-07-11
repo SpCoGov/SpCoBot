@@ -50,9 +50,6 @@ public class BotConfig extends Config {
             .comment("Group Id for bot functionality.")
             .define("test_group", "");
 
-    private final ConfigSpecHelper.ConfigValue<Boolean> ENABLE_RECHARGE_SYSTEM = builder
-            .define("enable_recharge_system", false);
-
     private final ConfigSpecHelper.ConfigValue<Boolean> ENABLE_CAATP = builder
             .define("enable_caatp", false);
 
@@ -77,10 +74,6 @@ public class BotConfig extends Config {
 
     public String getTestGroup() {
         return TEST_GROUP.get();
-    }
-
-    public boolean isEnableRechargeSystem() {
-        return ENABLE_RECHARGE_SYSTEM.get();
     }
 
     public boolean isEnableCAATP() {
